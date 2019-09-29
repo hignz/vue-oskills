@@ -1,0 +1,115 @@
+import axios from 'axios';
+import router from '../../router';
+
+export default {
+  state: {
+    user: null,
+    accessToken: localStorage.getItem('accessToken') || null
+  },
+  getters: {
+    getUser: state => state.user,
+    accessToken: state => state.accessToken
+  },
+  mutations: {
+    setUser: (state, user) => (state.user = user),
+    updateAccessToken: (state, accessToken) => {
+      state.accessToken = accessToken;
+      localStorage.setItem('accessToken', accessToken);
+    },
+    loginStop: (state, errorMessage) => {
+      state.loggingIn = false;
+      state.loginError = errorMessage;
+    }
+  },
+  actions: {
+    doLogin({ commit }, loginData) {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+      return new Promise((resolve, reject) => {
+        axios
+          .post('http://localhost:1111/login', loginData, config)
+          .then(response => {
+            commit('updateAccessToken', response.data.token);
+            console.log(response.data);
+            commit('setUser', response.data);
+            resolve(response);
+          })
+          .catch(error => {
+            console.log(error);
+            commit('updateAccessToken', null);
+            reject(error);
+          });
+      });
+    },
+    doRegister({ commit }, registerData) {
+      console.log(registerData);
+      const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+      axios
+        .post('http://localhost:1111/register', registerData, config)
+        .then(response => {
+          console.log(response);
+          router.push('/login');
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    fetchAccessToken({ commit }) {
+      commit(
+        'updateAccessToken',
+        JSON.parse(localStorage.getItem('accessToken'))
+      );
+    },
+    doLogout({ commit }) {
+      commit('updateAccessToken', null);
+      localStorage.removeItem('accessToken');
+      router.push('/');
+    },
+    fetchUser({ commit }, id) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
+      console.log(this.state.accessToken);
+      return new Promise((resolve, reject) => {
+        axios
+          .get(
+            id
+              ? 'http://localhost:1111/user/' + id
+              : 'http://localhost:1111/user'
+          )
+          .then(response => {
+            commit('setUser', response.data);
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    getAllUsers({ commit }, token) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
+      return new Promise((resolve, reject) => {
+        axios
+          .get('http://localhost:1111/users')
+          .then(response => {
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+            console.log(error);
+          });
+      });
+    }
+  }
+};

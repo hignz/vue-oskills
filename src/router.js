@@ -1,24 +1,88 @@
-import Vue from "vue";
-import Router from "vue-router";
-import Home from "./views/Home.vue";
+import Vue from 'vue';
+import Router from 'vue-router';
+
+import store from './state/store';
 
 Vue.use(Router);
 
-export default new Router({
-  routes: [
-    {
-      path: "/",
-      name: "home",
-      component: Home
-    },
-    {
-      path: "/about",
-      name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/About.vue")
-    }
-  ]
+const routes = [
+  {
+    path: '/',
+    redirect: '/login'
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: () => import('./views/Dashboard'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/Account',
+    name: 'account',
+    component: () => import('./views/AccountSettings'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/appearance',
+    name: 'AppearanceSettings',
+    component: () => import('./views/AppearanceSettings'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/browse',
+    name: 'browse',
+    component: () => import('./views/Browse'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('./views/Login'),
+    meta: { requiresVisitor: true }
+  },
+  {
+    path: '/profile/:id',
+    name: 'profile',
+    component: () => import('./views/Profile'),
+    props: true,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '*',
+    redirect: '/'
+  }
+];
+
+const router = new Router({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes
 });
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    if (!store.getters.accessToken) {
+      next({
+        path: '/login'
+      });
+    } else {
+      next();
+    }
+  } else if (to.matched.some(record => record.meta.requiresVisitor)) {
+    // this route requires visitor, check if NOT logged in
+    // if not, redirect to dashboard.
+    if (store.getters.accessToken) {
+      next({
+        path: '/dashboard'
+      });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
+
+export default router;
