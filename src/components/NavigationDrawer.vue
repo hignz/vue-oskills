@@ -1,11 +1,6 @@
 <template>
   <v-card>
-    <v-navigation-drawer
-      v-if="test"
-      v-model="showDrawer"
-      :mini-variant.sync="mini"
-      app
-    >
+    <v-navigation-drawer v-model="showDrawer" :mini-variant.sync="mini" app>
       <v-list-item>
         <v-list-item-avatar>
           <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
@@ -77,9 +72,6 @@ export default {
     };
   },
   computed: {
-    test() {
-      return this.$store.state.accessToken;
-    },
     getUserName() {
       return this.$store.state.user;
     }

@@ -61,7 +61,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    // this route requires auth, check if logged in
+    // this route requires auth, check if authenticated in
     // if not, redirect to login page.
     if (!store.getters.accessToken) {
       next({
@@ -71,7 +71,7 @@ router.beforeEach((to, from, next) => {
       next();
     }
   } else if (to.matched.some(record => record.meta.requiresVisitor)) {
-    // this route requires visitor, check if NOT logged in
+    // this route requires visitor, check if NOT authenticated
     // if not, redirect to dashboard.
     if (store.getters.accessToken) {
       next({

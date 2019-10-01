@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <NavigationDrawer />
+    <NavigationDrawer v-if="showNavDrawer" />
     <Navbar />
     <v-content>
       <router-view :key="$route.fullPath"></router-view>
@@ -12,6 +12,7 @@
 import Navbar from './components/Navbar';
 import NavigationDrawer from './components/NavigationDrawer';
 import vuetify from './plugins/vuetify';
+import axios from 'axios';
 
 export default {
   name: 'App',
@@ -27,9 +28,26 @@ export default {
   computed: {
     isDark() {
       return this.$store.state.isDark;
+    },
+    showNavDrawer() {
+      return this.$store.getters.showNavigationBar;
     }
   },
   created() {
+    axios.interceptors.response.use(
+      response => {
+        return response;
+      },
+      error => {
+        if (401 === error.response.status) {
+          localStorage.removeItem('accessToken');
+          this.$store.dispatch('toggleDrawer', false);
+          this.$router.push({ path: '/login' });
+        }
+        return Promise.reject(error);
+      }
+    );
+
     vuetify.framework.theme.dark = this.$store.state.isDark;
     if (!localStorage.getItem('accentColor')) {
       localStorage.setItem('accentColor', '#ee44aa');
