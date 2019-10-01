@@ -99,6 +99,28 @@ export default new Vuex.Store({
           });
       });
     },
+    fetchUsersByName({ commit }, searchTerm) {
+      console.log(searchTerm);
+      const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+
+      const body = {
+        name: searchTerm
+      }
+
+      return new Promise((resolve, reject) => {
+        axios.post('http://localhost:1111/findusersbyname', body, config)
+          .then(response => {
+            resolve(response);
+          })
+          .catch(error => {
+            console.log(error)
+          });
+      })
+    },
     doRegister({ commit }, registerData) {
       console.log(registerData);
       const config = {
