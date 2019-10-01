@@ -4,10 +4,11 @@
       <router-link to="/">
         <v-toolbar-title class="text-uppercase grey--text">
           <span class="primary--text">O</span>
-          <span class="font-weight-light ">Skills</span>
+          <span class="font-weight-light">Skills</span>
         </v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
+      <SearchBar></SearchBar>
       <ProfileMenu v-if="accessToken && getUser" />
       <v-btn v-else to="/login" text color="primary">
         <span>Login</span>
@@ -20,10 +21,12 @@
 <script>
 import { mapGetters } from 'vuex';
 import ProfileMenu from './ProfileMenu';
+import SearchBar from './SearchBar';
 
 export default {
   components: {
-    ProfileMenu
+    ProfileMenu,
+    SearchBar
   },
   data() {
     return {

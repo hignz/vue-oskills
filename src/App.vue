@@ -41,7 +41,7 @@ export default {
       error => {
         if (401 === error.response.status) {
           localStorage.removeItem('accessToken');
-          this.$store.dispatch('toggleDrawer', false);
+          this.$store.state.accessToken = null;
           this.$router.push({ path: '/login' });
         }
         return Promise.reject(error);
