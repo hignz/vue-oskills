@@ -23,8 +23,8 @@ export default {
 
       this.$store
         .dispatch('fetchUsersByName', this.searchedName)
-        .then(resposne => {
-          console.log(resposne);
+        .then(response => {
+          console.log(response);
           this.results = response.data;
         })
         .catch(error => {
