@@ -67,7 +67,7 @@ export default {
       mini: true,
       links: [
         { icon: 'mdi-bulletin-board', text: 'Dashboard', route: '/dashboard' },
-        { icon: 'mdi-magnify', text: 'Browse', route: '/browse' }
+        { icon: 'mdi-magnify', text: 'Explore', route: '/explore' }
       ]
     };
   },
