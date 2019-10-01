@@ -1,6 +1,6 @@
 <template>
   <v-container grid-list-lg fluid class="page">
-    <p class="subheading grey--text">Browse</p>
+    <p class="subheading grey--text">Explore</p>
     <v-layout align-content-start justify-space-between row wrap>
       <v-flex v-for="user in users.data" :key="user._id" xs12 md6 mb-3>
         <MiniProfile v-if="loaded" :user="user" />

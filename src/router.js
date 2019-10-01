@@ -29,9 +29,9 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/browse',
-    name: 'browse',
-    component: () => import('./views/Browse'),
+    path: '/explore',
+    name: 'explore',
+    component: () => import('./views/Explore'),
     meta: { requiresAuth: true }
   },
   {
