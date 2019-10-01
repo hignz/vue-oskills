@@ -109,17 +109,18 @@ export default new Vuex.Store({
 
       const body = {
         name: searchTerm
-      }
+      };
 
       return new Promise((resolve, reject) => {
-        axios.post('http://localhost:1111/findusersbyname', body, config)
+        axios
+          .post('http://localhost:1111/findusersbyname', body, config)
           .then(response => {
             resolve(response);
           })
           .catch(error => {
-            console.log(error)
+            console.log(error);
           });
-      })
+      });
     },
     doRegister({ commit }, registerData) {
       console.log(registerData);

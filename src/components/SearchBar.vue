@@ -1,10 +1,10 @@
 <template>
   <v-text-field
-    prepend-inner-icon="mdi-magnify"
-    @keyup.enter="logName()"
     v-model="searchedName"
+    prepend-inner-icon="mdi-magnify"
     placeholder="Search"
     :clearable="true"
+    @keyup.enter="logName()"
   ></v-text-field>
 </template>
 
@@ -35,5 +35,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
