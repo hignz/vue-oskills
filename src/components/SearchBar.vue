@@ -1,10 +1,10 @@
 <template>
   <v-text-field
-    prepend-inner-icon="mdi-magnify"
-    @keyup.enter="logName()"
     v-model="searchedName"
+    prepend-inner-icon="mdi-magnify"
     placeholder="Search"
     :clearable="true"
+    @keyup.enter="logName()"
   ></v-text-field>
 </template>
 
@@ -23,8 +23,8 @@ export default {
 
       this.$store
         .dispatch('fetchUsersByName', this.searchedName)
-        .then(resposne => {
-          console.log(resposne);
+        .then(response => {
+          console.log(response);
           this.results = response.data;
         })
         .catch(error => {
@@ -35,5 +35,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

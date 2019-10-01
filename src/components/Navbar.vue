@@ -8,7 +8,8 @@
         </v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
-      <SearchBar></SearchBar>
+      <SearchBar class="mt-4"></SearchBar>
+      <v-spacer></v-spacer>
       <ProfileMenu v-if="accessToken && getUser" />
       <v-btn v-else to="/login" text color="primary">
         <span>Login</span>
