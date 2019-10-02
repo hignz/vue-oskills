@@ -6,7 +6,7 @@
       <v-tooltip top>
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on">
-            <v-icon>mdi-dots-vertical</v-icon>
+            <v-icon>mdi-chevron-down</v-icon>
           </v-btn>
         </template>
         <span>Change view</span>
@@ -20,7 +20,9 @@
         link
       >
         <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+          <v-img
+            :src="`https://randomuser.me/api/portraits/men/${i}.jpg`"
+          ></v-img>
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title v-text="item.name"></v-list-item-title>
