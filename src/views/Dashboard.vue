@@ -1,15 +1,25 @@
 <template>
   <v-container v-if="user.skills">
+    <p class="subheading grey--text">Dashboard</p>
     <v-row>
       <v-col cols="12">
         <v-card class="pa-2" outlined tile>
-          .col-12
           <v-container>
             <v-row>
-              <v-col cols="3">Welcome, {{ user.name }}</v-col>
-              <v-col cols="3">{{ sortedSkills[0].name }}</v-col>
-              <v-col cols="3">{{ sortedSkills[1].name }}</v-col>
-              <v-col cols="3">{{ sortedSkills[2].name }}</v-col>
+              <v-col cols="3">Welcome, {{ user.name.split(' ')[0] }}</v-col>
+              <v-col cols="3">
+                <v-row>
+                  {{ sortedSkills[0].name }}
+                </v-row>
+                <v-row>
+                  <v-icon
+                    class="ml-4"
+                    :color="sortedSkills[0].esteem <= 1 ? 'orange' : 'green'"
+                  >
+                    mdi-circle
+                  </v-icon>
+                </v-row>
+              </v-col>
             </v-row>
           </v-container>
         </v-card>
@@ -24,20 +34,27 @@
       </v-col>
       <v-col cols="12" md="4" sm="12">
         <v-card class="pa-2" outlined tile>
-          .col-6 .col-md-4
+          <div id="chart">
+            <apexcharts
+              type="radialBar"
+              height="350"
+              :options="getChartOptions"
+              :series="getChartSeries"
+            />
+          </div>
         </v-card>
       </v-col>
     </v-row>
 
     <v-row>
       <v-col cols="12" md="4" sm="12">
-        <v-card flat>
+        <v-card>
           <SimilarUsers :users="similarUsers" />
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
         <v-card>
-          .col-6 .col-md-4
+          <SkillList :skills="user.skills"></SkillList>
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
@@ -49,10 +66,14 @@
 
 <script>
 import SimilarUsers from '../components/SimilarUsers';
+import SkillList from '../components/SkillList';
+import VueApexCharts from 'vue-apexcharts';
 
 export default {
   components: {
-    SimilarUsers
+    SimilarUsers,
+    SkillList,
+    apexcharts: VueApexCharts
   },
   data() {
     return {
@@ -66,7 +87,33 @@ export default {
     sortedSkills() {
       return this.user.skills.concat().sort((a, b) => b.rating - a.rating);
     },
-
+    getChartSeries() {
+      return this.user.skills.map(e => {
+        return e.rating;
+      });
+    },
+    getChartOptions() {
+      return {
+        plotOptions: {
+          radialBar: {
+            dataLabels: {
+              name: {
+                fontSize: '22px'
+              },
+              value: {
+                fontSize: '16px',
+                formatter: val => {
+                  return val;
+                }
+              }
+            }
+          }
+        },
+        labels: this.user.skills.map(e => {
+          return e.name;
+        })
+      };
+    },
     randomUserImg() {
       return `https://randomuser.me/api/portraits/men/${Math.floor(
         Math.random() * (Math.floor(65) - Math.ceil(1) + 1)

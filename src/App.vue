@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <NavigationDrawer v-if="showNavDrawer" />
-    <Navbar />
+    <Navbar v-if="showNavDrawer" />
     <v-content>
       <router-view :key="$route.fullPath"></router-view>
     </v-content>
