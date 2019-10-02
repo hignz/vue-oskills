@@ -1,161 +1,6 @@
 <template>
-  <!-- <v-container class="page" grid-list-lg fluid>
-    <p class="subheading grey--text">Profile</p>
-    <v-layout v-if="user" justify-space-between row fill-height wrap>
-      <v-flex xs12 sm2>
-        <v-card>
-          <v-img :src="randomUserImg" height="300px">
-            <v-layout column fill-height>
-              <v-card-title>
-                <v-spacer></v-spacer>
-                <v-btn dark icon class="mr-3" color="primary">
-                  <v-icon>message</v-icon>
-                </v-btn>
-              </v-card-title>
-
-              <v-spacer></v-spacer>
-              <v-card-title class="white--text pl-5 pt-5">
-                <div class="display-1 pl-1 pt-5">{{ user.name }}</div>
-              </v-card-title>
-            </v-layout>
-          </v-img>
-
-          <v-list two-line="">
-            <v-list-item >
-              <v-list-item-action>
-                <v-icon color="primary">accessibility</v-icon>
-              </v-list-item-action>
-
-              <v-list-item-content>
-                <v-list-item-title>{{ user.role }}</v-list-item-title>
-                <v-list-item-subtitle>Role</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-divider inset></v-divider>
-
-            <v-list-item >
-              <v-list-item-action>
-                <v-icon color="primary">phone</v-icon>
-              </v-list-item-action>
-
-              <v-list-item-content>
-                <v-list-item-title>083 555-1234</v-list-item-title>
-                <v-list-item-subtitle>Number</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-divider inset></v-divider>
-
-            <v-list-item >
-              <v-list-item-action>
-                <v-icon color="primary">mail</v-icon>
-              </v-list-item-action>
-
-              <v-list-item-content>
-                <v-list-item-title>{{ user.email }}</v-list-item-title>
-                <v-list-item-subtitle>E-Mail</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-divider inset></v-divider>
-
-            <v-list-item >
-              <v-list-item-action>
-                <v-icon color="primary">star</v-icon>
-              </v-list-item-action>
-
-              <v-list-item-content>
-                <v-list-item-subtitle>{{
-                  getBestSkill.name
-                }}</v-list-item-subtitle>
-                <v-list-item-title>{{ getBestSkill.rating }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-divider inset></v-divider>
-
-            <v-list-item >
-              <v-list-item-action>
-                <v-icon color="primary">date_range</v-icon>
-              </v-list-item-action>
-
-              <v-list-item-content>
-                <v-list-item-title>{{
-                  user.date | moment('MMMM Do YYYY')
-                }}</v-list-item-title>
-                <v-list-item-subtitle>Joined</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-card>
-      </v-flex>
-      <v-flex v-if="user" xs12 sm5>
-        <v-card>
-          <v-toolbar color="primary" dark dense flat>
-            <v-toolbar-title v-if="user">Top Skills</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn icon="">
-              <v-icon>expand_more</v-icon>
-            </v-btn>
-          </v-toolbar>
-
-          <v-list>
-            <template v-for="(item, index) in user.skills">
-              <v-list-item
-                :key="item.name"
-                avatar
-                ripple
-                @click="toggle(index)"
-              >
-                <v-list-item-content>
-                  <v-list-item-title>{{ item.name }}</v-list-item-title>
-                </v-list-item-content>
-
-                <v-list-item-action>
-                  <v-list-item-action-text>{{
-                    item.rating
-                  }}</v-list-item-action-text>
-                  <v-icon
-                    v-if="
-                      selected.indexOf(index) < 0 &&
-                        !user.skills[index].votedFor
-                    "
-                    color="grey lighten-1"
-                  >
-                    plus_one
-                  </v-icon>
-
-                  <v-icon v-else color="yellow darken-2">
-                    plus_one
-                  </v-icon>
-                </v-list-item-action>
-              </v-list-item>
-              <v-divider
-                v-if="index + 1 < sortedSkills.length"
-                :key="index"
-              ></v-divider>
-            </template>
-          </v-list>
-        </v-card>
-      </v-flex>
-      <v-flex xs12 sm5>
-        <v-card>
-          <v-card-text>
-            <DoughnutChart
-              v-if="loaded"
-              :chart-data="chartData"
-              :chart-labels="chartLabels"
-              height="205"
-            />
-          </v-card-text>
-        </v-card>
-      </v-flex>
-    </v-layout>
-  </v-container> -->
   <v-container v-if="user" fluid grid-list-md>
     <p class="subheading grey--text">Profile</p>
-
     <v-layout row wrap>
       <v-flex d-flex xs12 sm6 md2>
         <v-card>
@@ -234,7 +79,9 @@
               </v-list-item-action>
 
               <v-list-item-content>
-                <v-list-item-title>{{ user.date }}</v-list-item-title>
+                <v-list-item-title>{{
+                  moment(user.dateJoined).format('DD-MM-YYYY')
+                }}</v-list-item-title>
                 <v-list-item-subtitle>Joined</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
@@ -268,7 +115,7 @@
 
                         <v-list-item-action>
                           <v-list-item-action-text>{{
-                            item.rating
+                            item.esteem
                           }}</v-list-item-action-text>
                           <v-icon
                             v-if="
@@ -319,7 +166,6 @@
 
 <script>
 import DoughnutChart from '../charts/DoughnutChart';
-
 import SimilarUsers from '../components/SimilarUsers';
 
 export default {
