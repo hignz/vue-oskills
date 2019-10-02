@@ -34,7 +34,14 @@
       </v-col>
       <v-col cols="12" md="4" sm="12">
         <v-card class="pa-2" outlined tile>
-          .col-6 .col-md-4
+          <div id="chart">
+            <apexcharts
+              type="radialBar"
+              height="350"
+              :options="getChartOptions"
+              :series="getChartSeries"
+            />
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -60,11 +67,13 @@
 <script>
 import SimilarUsers from '../components/SimilarUsers';
 import SkillList from '../components/SkillList';
+import VueApexCharts from 'vue-apexcharts';
 
 export default {
   components: {
     SimilarUsers,
-    SkillList
+    SkillList,
+    apexcharts: VueApexCharts
   },
   data() {
     return {
@@ -78,7 +87,33 @@ export default {
     sortedSkills() {
       return this.user.skills.concat().sort((a, b) => b.rating - a.rating);
     },
-
+    getChartSeries() {
+      return this.user.skills.map(e => {
+        return e.rating;
+      });
+    },
+    getChartOptions() {
+      return {
+        plotOptions: {
+          radialBar: {
+            dataLabels: {
+              name: {
+                fontSize: '22px'
+              },
+              value: {
+                fontSize: '16px',
+                formatter: val => {
+                  return val;
+                }
+              }
+            }
+          }
+        },
+        labels: this.user.skills.map(e => {
+          return e.name;
+        })
+      };
+    },
     randomUserImg() {
       return `https://randomuser.me/api/portraits/men/${Math.floor(
         Math.random() * (Math.floor(65) - Math.ceil(1) + 1)
