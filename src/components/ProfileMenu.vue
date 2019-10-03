@@ -1,6 +1,6 @@
 <template>
   <v-menu
-    v-if="user.data"
+    v-if="user"
     v-model="menu"
     :close-on-content-click="false"
     :nudge-width="200"
@@ -20,8 +20,8 @@
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title>{{ user.data.name }}</v-list-item-title>
-            <v-list-item-subtitle>{{ user.data.role }}</v-list-item-subtitle>
+            <v-list-item-title>{{ user.name }}</v-list-item-title>
+            <v-list-item-subtitle>{{ user.role }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -48,18 +48,15 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   data: () => ({
     available: true,
     menu: false
   }),
   computed: {
-    user: {
-      get() {
-        return this.$store.getters.getUser;
-      },
-      set(value) {}
-    },
+    ...mapState(['user']),
     darkMode: {
       get() {
         return this.$store.state.isDark;

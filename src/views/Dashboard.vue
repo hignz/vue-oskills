@@ -7,14 +7,14 @@
           <v-container>
             <v-row>
               <v-col cols="3">Welcome, {{ user.name.split(' ')[0] }}</v-col>
-              <v-col cols="3">
+              <v-col v-for="i in 3" :key="i" cols="3">
                 <v-row>
-                  {{ sortedSkills[0].name }}
+                  {{ sortedSkills[i].name }}
                 </v-row>
                 <v-row>
                   <v-icon
                     class="ml-4"
-                    :color="sortedSkills[0].esteem <= 1 ? 'orange' : 'green'"
+                    :color="sortedSkills[i].esteem <= 1 ? 'orange' : 'green'"
                   >
                     mdi-circle
                   </v-icon>
@@ -48,17 +48,17 @@
 
     <v-row>
       <v-col cols="12" md="4" sm="12">
-        <v-card>
+        <v-card :height="292">
           <SimilarUsers :users="similarUsers" />
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <v-card>
-          <SkillList :skills="user.skills"></SkillList>
+        <v-card :height="292">
+          <SkillList :skills="sortedSkills"></SkillList>
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <v-card> .col-6 .col-md-4 </v-card>
+        <v-card :height="292"> .col-6 .col-md-4 </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -79,6 +79,7 @@ export default {
     return {
       user: {},
       similarUsers: [],
+      skills: [],
       loaded: false,
       now: new Date().toLocaleDateString()
     };
@@ -135,9 +136,7 @@ export default {
       .dispatch('fetchUser')
       .then(response => {
         this.user = response.data.data;
-        this.chartLabels = this.user.skills.map(a => a.name);
-        this.chartData = this.user.skills.map(a => a.rating);
-        this.loaded = true;
+        this.$store.dispatch('updateUser', this.user);
       })
       .catch(err => {
         console.log(err);
@@ -151,17 +150,6 @@ export default {
       .catch(err => {
         console.log(err);
       });
-  },
-  methods: {
-    toggle(index) {
-      const i = this.selected.indexOf(index);
-
-      if (i > -1) {
-        this.selected.splice(i, 1);
-      } else {
-        this.selected.push(index);
-      }
-    }
   }
 };
 </script>
