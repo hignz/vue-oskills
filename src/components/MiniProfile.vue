@@ -13,7 +13,7 @@
     <v-list dense rounded>
       <v-subheader>Skills</v-subheader>
       <v-list-item-group color="primary">
-        <v-list-item v-for="(item, i) in user.skills" :key="i">
+        <v-list-item v-for="(item, i) in sortedSkills" :key="i">
           <v-list-item-icon>
             <v-icon>mdi-circle</v-icon>
           </v-list-item-icon>
@@ -25,12 +25,9 @@
     </v-list>
 
     <v-card-actions>
+      <v-spacer></v-spacer>
       <v-btn text @click="openProfile">
         View Profile
-      </v-btn>
-      <div class="flex-grow-1"></div>
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -52,6 +49,12 @@ export default {
     };
   },
   computed: {
+    sortedSkills() {
+      return this.user.skills
+        .concat()
+        .slice(0, 3)
+        .sort((a, b) => b.rating - a.rating);
+    },
     randomUserImg() {
       return `https://randomuser.me/api/portraits/men/${Math.floor(
         Math.random() * (Math.floor(65) - Math.ceil(1) + 1)

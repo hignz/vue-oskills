@@ -1,5 +1,5 @@
 <template>
-  <v-list rounded dense>
+  <v-list rounded dense flat>
     <v-subheader
       >SIMILAR USERS
       <v-spacer></v-spacer>
@@ -36,8 +36,7 @@
 export default {
   props: {
     users: {
-      type: Object,
-      required: true
+      require: true
     }
   },
   methods: {

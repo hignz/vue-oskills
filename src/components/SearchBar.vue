@@ -1,10 +1,10 @@
 <template>
   <v-text-field
-    v-model="searchedName"
+    v-model="searchTerm"
     prepend-inner-icon="mdi-magnify"
     placeholder="Search"
     :clearable="true"
-    @keyup.enter="logName()"
+    @keyup.enter="search()"
   ></v-text-field>
 </template>
 
@@ -12,24 +12,17 @@
 export default {
   data() {
     return {
-      searchedName: '',
-      results: {}
+      searchTerm: ''
     };
   },
   methods: {
-    logName() {
-      //Replace with dispatch to store
-      console.log(this.searchedName);
-
-      this.$store
-        .dispatch('fetchUsersByName', this.searchedName)
-        .then(response => {
-          console.log(response);
-          this.results = response.data;
-        })
-        .catch(error => {
-          console.error(error);
-        });
+    search() {
+      this.$router.push({
+        name: 'results',
+        query: {
+          search: this.searchTerm.trim()
+        }
+      });
     }
   }
 };

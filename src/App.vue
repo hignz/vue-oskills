@@ -3,7 +3,9 @@
     <NavigationDrawer v-if="showNavDrawer" />
     <Navbar v-if="showNavDrawer" />
     <v-content>
-      <router-view :key="$route.fullPath"></router-view>
+      <transition name="fade">
+        <router-view :key="$route.fullPath"></router-view>
+      </transition>
     </v-content>
   </v-app>
 </template>
@@ -21,9 +23,7 @@ export default {
     NavigationDrawer
   },
   data() {
-    return {
-      user: {}
-    };
+    return {};
   },
   computed: {
     isDark() {
@@ -63,8 +63,7 @@ export default {
       this.$store
         .dispatch('fetchUser')
         .then(response => {
-          this.user = response.data.data;
-          console.log(this.user);
+          this.$store.state.user = response.data.data;
         })
         .catch(err => {
           console.log(err);
@@ -74,10 +73,4 @@ export default {
 };
 </script>
 
-<style>
-@import 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css';
-
-.page {
-  position: absolute;
-}
-</style>
+<style></style>

@@ -8,7 +8,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    user: null,
+    user: {},
     accessToken: localStorage.getItem('accessToken') || null,
     loggingIn: false,
     loginError: null,
@@ -72,8 +72,8 @@ export default new Vuex.Store({
             resolve(response);
           })
           .catch(error => {
-            reject(error);
             console.log(error);
+            reject(error);
           });
       });
     },
@@ -88,7 +88,6 @@ export default new Vuex.Store({
           .post('http://localhost:1111/login', loginData, config)
           .then(response => {
             commit('updateAccessToken', response.data.token);
-            console.log(response.data);
             commit('setUser', response.data);
             resolve(response);
           })
@@ -100,7 +99,6 @@ export default new Vuex.Store({
       });
     },
     fetchUsersByName({ commit }, searchTerm) {
-      console.log(searchTerm);
       const config = {
         headers: {
           'Content-Type': 'application/json'
@@ -118,12 +116,67 @@ export default new Vuex.Store({
             resolve(response);
           })
           .catch(error => {
-            console.log(error);
+            reject(error);
+          });
+      });
+    },
+    fetchCategories() {
+      return new Promise((resolve, reject) => {
+        axios
+          .get('http://localhost:1111/get-all-categories')
+          .then(response => {
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    fetchSkillsById({ commit }, categoryId) {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+
+      return new Promise((resolve, reject) => {
+        axios
+          .post(
+            'http://localhost:1111/get-skills-by-id',
+            { categoryId },
+            config
+          )
+          .then(response => {
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    addSkillToUser({ commit }, { skillId, userId }) {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+
+      return new Promise((resolve, reject) => {
+        axios
+          .post(
+            'http://localhost:1111/add-skill-to-user',
+            { skillId, userId },
+            config
+          )
+          .then(response => {
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
           });
       });
     },
     doRegister({ commit }, registerData) {
-      console.log(registerData);
       const config = {
         headers: {
           'Content-Type': 'application/json'
@@ -132,7 +185,6 @@ export default new Vuex.Store({
       axios
         .post('http://localhost:1111/register', registerData, config)
         .then(response => {
-          console.log(response);
           router.push('/login');
         })
         .catch(error => {
@@ -144,6 +196,9 @@ export default new Vuex.Store({
         'updateAccessToken',
         JSON.parse(localStorage.getItem('accessToken'))
       );
+    },
+    updateUser({ commit }, user) {
+      commit('setUser', user);
     },
     doLogout({ commit }) {
       commit('updateAccessToken', null);
