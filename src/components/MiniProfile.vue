@@ -6,7 +6,7 @@
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="headline">{{ user.name }}</v-list-item-title>
-        <v-list-item-subtitle>{{ user.role }}</v-list-item-subtitle>
+        <!-- <v-list-item-subtitle>{{ user.role }}</v-list-item-subtitle> -->
       </v-list-item-content>
     </v-list-item>
 
@@ -49,22 +49,19 @@ export default {
     };
   },
   computed: {
-    sortedSkills() {
-      return this.user.skills
-        .concat()
-        .slice(0, 3)
-        .sort((a, b) => b.rating - a.rating);
-    },
+    // sortedSkills() {
+    //   return this.user.skills
+    //     .concat()
+    //     .slice(0, 3)
+    //     .sort((a, b) => b.rating - a.rating);
+    // },
     randomUserImg() {
       return `https://randomuser.me/api/portraits/men/${Math.floor(
         Math.random() * (Math.floor(65) - Math.ceil(1) + 1)
       ) + 1}.jpg`;
     }
   },
-  created() {
-    this.chartData = this.user.skills.map(a => a.rating);
-    this.chartLabels = this.user.skills.map(a => a.name);
-  },
+  created() {},
   methods: {
     openProfile() {
       this.$router.push({
