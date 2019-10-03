@@ -6,7 +6,12 @@
         <v-card class="pa-2" outlined tile>
           <v-container>
             <v-row>
-              <v-col cols="3">Welcome, {{ user.name.split(' ')[0] }}</v-col>
+              <v-col cols="3">
+                <v-row class="subtitle-2 ml-2"
+                  >Hello, {{ user.name.split(' ')[0] }}</v-row
+                >
+                <v-row class="caption grey--text ml-2">{{ user.role }}</v-row>
+              </v-col>
               <v-col v-for="i in 3" :key="i" cols="3">
                 <v-row>
                   {{ sortedSkills[i].name }}

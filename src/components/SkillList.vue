@@ -25,6 +25,7 @@
         <v-list-item-content>
           View All
         </v-list-item-content>
+        <v-spacer></v-spacer>
       </v-list-item>
     </v-list-item-group>
   </v-list>

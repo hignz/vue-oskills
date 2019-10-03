@@ -20,7 +20,7 @@ export default {
       this.$router.push({
         name: 'results',
         query: {
-          search: this.searchTerm
+          search: this.searchTerm.trim()
         }
       });
     }

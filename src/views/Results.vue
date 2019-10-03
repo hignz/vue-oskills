@@ -1,12 +1,10 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <p class="subheading grey--text">Results</p>
-    <v-row v-if="results">
-      <MiniProfile
-        v-for="(result, i) in results.data"
-        :key="i"
-        :user="result"
-      ></MiniProfile>
+    <v-row v-for="(result, i) in results.data" :key="i" :user="result">
+      <v-col sm12>
+        <MiniProfile v-if="results" :user="result"></MiniProfile>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -29,6 +27,7 @@ export default {
       .dispatch('fetchUsersByName', searchTerm)
       .then(response => {
         this.results = response.data;
+        console.log(this.results);
       })
       .catch(error => {
         console.error(error);
