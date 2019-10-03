@@ -48,6 +48,13 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/results',
+    name: 'results',
+    component: () => import('./views/Results'),
+    props: true,
+    meta: { requiresAuth: true }
+  },
+  {
     path: '*',
     redirect: '/'
   }
