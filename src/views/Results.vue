@@ -27,7 +27,6 @@ export default {
       .dispatch('fetchUsersByName', searchTerm)
       .then(response => {
         this.results = response.data;
-        console.log(this.results);
       })
       .catch(error => {
         console.error(error);
