@@ -10,11 +10,7 @@
       <v-spacer></v-spacer>
       <SearchBar class="mt-4"></SearchBar>
       <v-spacer></v-spacer>
-      <ProfileMenu v-if="accessToken && getUser" />
-      <v-btn v-else to="/login" text color="primary">
-        <span>Login</span>
-        <v-icon right>mdi-account-circle</v-icon>
-      </v-btn>
+      <ProfileMenu v-if="accessToken" />
     </v-app-bar>
   </nav>
 </template>

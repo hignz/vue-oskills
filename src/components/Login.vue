@@ -11,16 +11,18 @@
           <v-text-field
             v-model="email"
             label="E-mail"
-            prepend-icon="mdi-account"
+            prepend-inner-icon="mdi-account"
             required
           >
           </v-text-field>
           <v-text-field
             v-model="password"
             label="Password"
-            type="password"
-            prepend-icon="mdi-lock"
+            prepend-inner-icon="mdi-lock"
+            :append-icon="value ? 'mdi-eye-off' : 'mdi-eye'"
+            :type="value ? 'password' : 'text'"
             required
+            @click:append="() => (value = !value)"
           >
           </v-text-field>
         </v-form>
@@ -39,7 +41,7 @@
       :bottom="true"
     >
       {{ snackbarText }}
-      <v-btn dark flat @click="showSnackbar = false">
+      <v-btn dark text @click="showSnackbar = false">
         Close
       </v-btn>
     </v-snackbar>
@@ -54,7 +56,8 @@ export default {
       email: '',
       password: '',
       showSnackbar: false,
-      snackbarText: ''
+      snackbarText: '',
+      value: String
     };
   },
   methods: {
@@ -69,6 +72,7 @@ export default {
             this.$router.push('/dashboard');
           })
           .catch(err => {
+            console.log(err);
             this.snackbarText = err.message;
             this.showSnackbar = true;
           });
