@@ -10,8 +10,8 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-list dense rounded>
-      <v-subheader>Skills</v-subheader>
+    <v-list>
+      <v-subheader>Top Skills</v-subheader>
       <v-list-item-group color="primary">
         <v-list-item v-for="(item, i) in sortedSkills" :key="i">
           <v-list-item-icon>
@@ -29,6 +29,11 @@
           <v-list-item-content>
             <v-list-item-title v-text="item.name"></v-list-item-title>
           </v-list-item-content>
+          <v-list-item-action>
+            <v-btn icon>
+              <v-icon color="grey lighten-1">mdi-thumb-up</v-icon>
+            </v-btn>
+          </v-list-item-action>
         </v-list-item>
       </v-list-item-group>
     </v-list>
