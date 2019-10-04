@@ -1,6 +1,11 @@
 <template>
   <v-card>
-    <v-navigation-drawer v-model="showDrawer" :mini-variant.sync="mini" app>
+    <v-navigation-drawer
+      v-model="showDrawer"
+      :mini-variant.sync="mini"
+      :width="220"
+      app
+    >
       <v-list-item>
         <v-list-item-avatar>
           <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
