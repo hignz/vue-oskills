@@ -1,14 +1,22 @@
 <template>
   <v-container>
+    <p class="subheading grey--text">Appearance</p>
     <v-card class="pt-4 pl-4">
-      <v-card-title>Appearance</v-card-title>
-      <v-switch v-model="darkMode" label="Dark Mode" color="primary"></v-switch>
-      <v-color-picker
-        v-model="color"
-        mode="hexa"
-        :hide-mode-switch="true"
-        :show-swatches="true"
-      ></v-color-picker>
+      <v-container>
+        <p class="subheading grey--text">Theme</p>
+        <v-switch
+          v-model="darkMode"
+          label="Dark Mode"
+          color="primary"
+        ></v-switch>
+        <p class="subheading grey--text">Accent</p>
+        <v-color-picker
+          v-model="color"
+          mode="hexa"
+          :hide-mode-switch="true"
+          :show-swatches="true"
+        ></v-color-picker>
+      </v-container>
     </v-card>
   </v-container>
 </template>
