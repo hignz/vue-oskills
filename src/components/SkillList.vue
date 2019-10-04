@@ -1,5 +1,5 @@
 <template>
-  <v-list rounded dense link>
+  <v-list rounded dense>
     <v-subheader
       >SKILLS
       <v-spacer></v-spacer>
@@ -10,7 +10,14 @@
     </v-subheader>
 
     <v-list-item-group color="primary">
-      <v-list-item v-for="i in 3" :key="i">
+      <v-list-item
+        v-for="i in 3"
+        :key="i"
+        :to="{
+          name: 'skillprofile',
+          params: { id: skills[i].skillId }
+        }"
+      >
         <v-list-item-content>
           <v-list-item-title v-text="skills[i].name"></v-list-item-title>
         </v-list-item-content>
@@ -19,15 +26,7 @@
         </v-list-item-avatar>
       </v-list-item>
     </v-list-item-group>
-    <v-list-item-group color="primary">
-      <v-list-item>
-        <v-spacer></v-spacer>
-        <v-list-item-content>
-          View All
-        </v-list-item-content>
-        <v-spacer></v-spacer>
-      </v-list-item>
-    </v-list-item-group>
+    <v-btn block text rounded @click="openAllSkills">All</v-btn>
   </v-list>
 </template>
 
@@ -46,8 +45,14 @@ export default {
   },
   data: () => {
     return {
-      dialog: false
+      dialog: false,
+      selectedSkill: {}
     };
+  },
+  methods: {
+    openAllSkills() {
+      this.$router.push({ name: 'skills' });
+    }
   }
 };
 </script>
