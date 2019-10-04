@@ -1,22 +1,18 @@
 <template>
   <v-container fluid>
     <p class="subheading grey--text">Results</p>
-    <v-card flat>
-      <v-card-title class="subtitle-1">Users</v-card-title>
-      <div v-if="results.data">
-        <v-col>
-          <v-row v-for="i in rowCount" :key="i" justify="end">
-            <v-col
-              v-for="(result, j) in results.data.slice(calcIndex(i))"
-              :key="j"
-              sm12
-            >
-              <MiniProfile :user="results.data[j]"></MiniProfile>
-            </v-col>
-          </v-row>
+    <v-card-title class="subtitle-1">Users</v-card-title>
+    <div v-if="results.data">
+      <v-row v-for="i in rowCount" :key="i" justify="end">
+        <v-col
+          v-for="(result, j) in results.data.slice(calcIndex(i))"
+          :key="j"
+          sm12
+        >
+          <MiniProfile :user="results.data[j]"></MiniProfile>
         </v-col>
-      </div>
-    </v-card>
+      </v-row>
+    </div>
   </v-container>
 </template>
 
