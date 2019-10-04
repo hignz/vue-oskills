@@ -15,7 +15,16 @@
       <v-list-item-group color="primary">
         <v-list-item v-for="(item, i) in sortedSkills" :key="i">
           <v-list-item-icon>
-            <v-icon>mdi-circle</v-icon>
+            <v-icon
+              :color="
+                item.esteem === 1
+                  ? 'red'
+                  : item.esteem === 2
+                  ? 'orange'
+                  : 'green'
+              "
+              >mdi-circle</v-icon
+            >
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title v-text="item.name"></v-list-item-title>
@@ -60,10 +69,6 @@ export default {
         Math.random() * (Math.floor(65) - Math.ceil(1) + 1)
       ) + 1}.jpg`;
     }
-  },
-  created() {
-    this.chartData = this.user.skills.map(a => a.rating);
-    this.chartLabels = this.user.skills.map(a => a.name);
   },
   methods: {
     openProfile() {
