@@ -19,7 +19,13 @@
                 <v-row>
                   <v-icon
                     class="ml-4"
-                    :color="sortedSkills[i].esteem <= 1 ? 'orange' : 'green'"
+                    :color="
+                      sortedSkills[i].esteem === 1
+                        ? 'red'
+                        : sortedSkills[i].esteem === 2
+                        ? 'orange'
+                        : 'green'
+                    "
                   >
                     mdi-circle
                   </v-icon>
