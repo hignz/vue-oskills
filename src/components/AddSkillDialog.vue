@@ -114,7 +114,6 @@ export default {
         .then(response => {
           // TODO: commit response to store.user
           this.$refs.form.reset();
-          console.log(response.data.user);
           this.snackbarText = 'Skill added!';
           this.showSnackbar = true;
           this.$store.dispatch('updateUser', response.data.user);
