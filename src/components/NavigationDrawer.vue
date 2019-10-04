@@ -72,6 +72,7 @@ export default {
       mini: true,
       links: [
         { icon: 'mdi-bulletin-board', text: 'Dashboard', route: '/dashboard' },
+        { icon: 'mdi-star-circle', text: 'Skills', route: '/skills' },
         { icon: 'mdi-magnify', text: 'Explore', route: '/explore' }
       ]
     };
