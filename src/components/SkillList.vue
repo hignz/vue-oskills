@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import AddSkillDialog from './AddSkillDialog';
+const AddSkillDialog = () => import('./AddSkillDialog');
 
 export default {
   components: {

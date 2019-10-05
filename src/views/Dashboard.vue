@@ -147,7 +147,6 @@ export default {
       .dispatch('fetchUser')
       .then(response => {
         this.user = response.data.data;
-        this.$store.dispatch('updateUser', this.user);
       })
       .catch(err => {
         console.log(err);

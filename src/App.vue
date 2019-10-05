@@ -15,6 +15,7 @@ import Navbar from './components/Navbar';
 import NavigationDrawer from './components/NavigationDrawer';
 import vuetify from './plugins/vuetify';
 import axios from 'axios';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'App',
@@ -31,7 +32,8 @@ export default {
     },
     showNavDrawer() {
       return this.$store.getters.showNavigationBar;
-    }
+    },
+    ...mapGetters(['getUser'])
   },
   created() {
     axios.interceptors.response.use(
@@ -59,12 +61,10 @@ export default {
       'accentColor'
     );
 
-    if (this.$store.state.accessToken) {
+    if (!this.getUser.data) {
       this.$store
         .dispatch('fetchUser')
-        .then(response => {
-          this.$store.state.user = response.data.data;
-        })
+        .then(() => {})
         .catch(err => {
           console.log(err);
         });
