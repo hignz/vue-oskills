@@ -13,7 +13,8 @@ export default new Vuex.Store({
     loggingIn: false,
     loginError: null,
     showNavigationBar: true,
-    isDark: JSON.parse(localStorage.getItem('darkMode')) || false
+    isDark: JSON.parse(localStorage.getItem('darkMode')) || false,
+    skills: []
   },
   mutations: {
     updateAccessToken: (state, accessToken) => {
@@ -31,12 +32,14 @@ export default new Vuex.Store({
       state.isDark = value;
       vuetify.framework.theme.dark = value;
     },
-    setUser: (state, user) => (state.user = user)
+    setUser: (state, user) => (state.user = user),
+    updateSkills: (state, skills) => (state.skills = skills)
   },
   getters: {
     accessToken: state => state.accessToken,
     showNavigationBar: state => state.accessToken && state.showNavigationBar,
-    getUser: state => state.user
+    getUser: state => state.user,
+    skills: state => state.skills
   },
   actions: {
     fetchUser({ commit }, id) {
@@ -169,6 +172,7 @@ export default new Vuex.Store({
             config
           )
           .then(response => {
+            commit('updateSkills', response.data.skills);
             resolve(response);
           })
           .catch(error => {
@@ -195,6 +199,24 @@ export default new Vuex.Store({
       commit(
         'updateAccessToken',
         JSON.parse(localStorage.getItem('accessToken'))
+      );
+    },
+    fetchSkills({ commit }) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
+      return new Promise((resolve, reject) =>
+        axios
+          .get('http://localhost:1111/get-all-user-skills')
+          .then(response => {
+            commit('updateSkills', response.data.skills);
+            resolve(response.data);
+          })
+          .catch(err => {
+            console.log(err);
+            reject(err);
+          })
       );
     },
     updateUser({ commit }, user) {
