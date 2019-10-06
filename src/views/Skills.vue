@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-if="loaded">
     <v-data-table
       :headers="headers"
       :items="skills"
@@ -9,8 +9,7 @@
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title>Skill List</v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
-          <div class="flex-grow-1"></div>
+          <v-spacer></v-spacer>
           <AddSkillDialog />
         </v-toolbar>
       </template>
@@ -23,11 +22,27 @@
     <v-dialog v-model="deleteDialog" width="500">
       <v-card>
         <v-card-title class="headline" primary-title>
-          Delete skill
+          Confirm deletion
         </v-card-title>
 
         <v-card-text>
-          Are you sure you want to delete {{ selectedSkill.name }} ? This action
+          <v-data-table
+            v-if="loaded"
+            class="mb-4"
+            :headers="[
+              {
+                text: 'Skill',
+                align: 'center',
+                value: 'name'
+              },
+              { text: 'Rating', value: 'rating', align: 'center' },
+              { text: 'Esteem', value: 'esteem', align: 'center' }
+            ]"
+            :items="[selectedSkill]"
+            hide-default-footer
+          >
+          </v-data-table>
+          Are you sure you want to delete {{ selectedSkill.name }}? This action
           is irreversible, all esteem gained will be lost.
         </v-card-text>
 
@@ -38,12 +53,18 @@
             Close
           </v-btn>
           <div class="flex-grow-1"></div>
-          <v-btn color="primary" text @click="deleteDialog = false">
+          <v-btn color="primary" text @click="deleteSkill()">
             Delete
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-snackbar v-model="showSnackbar" color="success">
+      {{ snackbarText }}
+      <v-btn color="white" text @click="showSnackbar = false">
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -70,7 +91,9 @@ export default {
         { text: 'Rating', value: 'rating', align: 'center' },
         { text: 'Esteem', value: 'esteem', align: 'center' },
         { text: 'Actions', value: 'action', sortable: false, align: 'center' }
-      ]
+      ],
+      showSnackbar: false,
+      snackbarText: ''
     };
   },
   computed: {
@@ -79,9 +102,9 @@ export default {
   created() {
     this.$store
       .dispatch('fetchSkills')
-      .then(response => {
-        this.loaded = true;
+      .then(() => {
         this.initialize();
+        this.loaded = true;
       })
       .catch(err => console.log(err));
   },
@@ -91,6 +114,16 @@ export default {
     showDeleteDialog(item) {
       this.selectedSkill = item;
       this.deleteDialog = true;
+    },
+    deleteSkill() {
+      this.$store
+        .dispatch('fetchDeleteSkill', this.selectedSkill.skillId)
+        .then(() => {
+          this.deleteDialog = false;
+          this.showSnackbar = true;
+          this.snackbarText = 'Skill deleted!';
+        })
+        .catch(err => console.log(err));
     }
   }
 };

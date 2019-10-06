@@ -1,6 +1,6 @@
 <template>
   <v-menu
-    v-if="getUser.data"
+    v-if="getUser"
     v-model="menu"
     :close-on-content-click="false"
     :nudge-width="200"
@@ -20,10 +20,10 @@
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title v-if="getUser.data.name">{{
-              getUser.data.name
+            <v-list-item-title v-if="getUser.name">{{
+              getUser.name
             }}</v-list-item-title>
-            <v-list-item-subtitle>{{ getUser.data.role }}</v-list-item-subtitle>
+            <v-list-item-subtitle>{{ getUser.role }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-list>

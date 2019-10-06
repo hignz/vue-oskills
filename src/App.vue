@@ -61,7 +61,7 @@ export default {
       'accentColor'
     );
 
-    if (!this.getUser.data) {
+    if (!this.getUser) {
       this.$store
         .dispatch('fetchUser')
         .then(() => {})
