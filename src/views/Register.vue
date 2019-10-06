@@ -33,7 +33,8 @@
                     >
                     </v-text-field>
                     <v-autocomplete
-                      :items="categories"
+                      v-model="selectedSkills"
+                      :items="skills"
                       item-text="text"
                       item-value="value"
                       attach
@@ -130,7 +131,8 @@ export default {
         v => !!v || 'Required',
         v => v.length > 2 || 'Name must be at least 3 characters'
       ],
-      categories: ['frameworks', 'data', 'langages']
+      skills: {},
+      selectedSkills: []
     };
   },
   computed: {
@@ -155,6 +157,21 @@ export default {
         this.$store.dispatch('toggleDarkMode', value);
       }
     }
+  },
+  created() {
+    this.$store
+      .dispatch('fetchSkills')
+      .then(response => {
+        this.skills = response.data.skills.map(o => {
+          return {
+            text: o.name,
+            value: o._id
+          };
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 };
 </script>

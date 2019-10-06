@@ -135,6 +135,18 @@ export default new Vuex.Store({
           });
       });
     },
+    fetchSkills() {
+      return new Promise((resolve, reject) => {
+        axios
+          .get('http://localhost:1111/get-all-skills')
+          .then(response => {
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
     fetchSkillsById({ commit }, categoryId) {
       const config = {
         headers: {
