@@ -43,7 +43,7 @@ const routes = [
   {
     path: '/profile/:id',
     name: 'profile',
-    component: () => import('./views/Profile'),
+    component: () => import('./views/UserProfile'),
     props: true,
     meta: { requiresAuth: true }
   },
@@ -51,6 +51,20 @@ const routes = [
     path: '/results',
     name: 'results',
     component: () => import('./views/Results'),
+    props: true,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/skill/:id',
+    name: 'skillprofile',
+    component: () => import('./views/SkillProfile'),
+    props: true,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/skills',
+    name: 'skills',
+    component: () => import('./views/Skills'),
     props: true,
     meta: { requiresAuth: true }
   },

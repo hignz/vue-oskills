@@ -19,7 +19,13 @@
                 <v-row>
                   <v-icon
                     class="ml-4"
-                    :color="sortedSkills[i].esteem <= 1 ? 'orange' : 'green'"
+                    :color="
+                      sortedSkills[i].esteem === 1
+                        ? 'red'
+                        : sortedSkills[i].esteem === 2
+                        ? 'orange'
+                        : 'green'
+                    "
                   >
                     mdi-circle
                   </v-icon>
@@ -141,7 +147,6 @@ export default {
       .dispatch('fetchUser')
       .then(response => {
         this.user = response.data.data;
-        this.$store.dispatch('updateUser', this.user);
       })
       .catch(err => {
         console.log(err);
