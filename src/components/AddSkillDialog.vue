@@ -110,18 +110,18 @@ export default {
     addSkill() {
       this.$store
         .dispatch('addSkillToUser', {
-          skillId: this.selectedSkill,
-          userId: this.user
+          skillId: this.selectedSkill
         })
         .then(response => {
           // TODO: commit response to store.user
           this.$refs.form.reset();
           this.snackbarText = 'Skill added!';
           this.showSnackbar = true;
-          this.$store.dispatch('updateUser', response.data.user);
         })
         .catch(err => {
           console.log(err);
+          this.snackbarText = 'Something went wrong';
+          this.showSnackbar = true;
         });
     }
   }

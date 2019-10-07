@@ -2,7 +2,7 @@
   <v-card>
     <v-navigation-drawer
       v-model="showDrawer"
-      :mini-variant.sync="mini"
+      :mini-variant.sync="showNavigationDrawer"
       :width="220"
       app
     >
@@ -12,10 +12,6 @@
         </v-list-item-avatar>
 
         <v-list-item-title>Welcome</v-list-item-title>
-
-        <v-btn icon @click.stop="mini = !mini">
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
       </v-list-item>
 
       <v-divider></v-divider>
@@ -65,6 +61,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   data() {
     return {
@@ -78,9 +76,7 @@ export default {
     };
   },
   computed: {
-    getUserName() {
-      return this.$store.state.user;
-    }
+    ...mapGetters(['showNavigationDrawer'])
   }
 };
 </script>

@@ -86,9 +86,8 @@ export default {
 };
 </script>
 
-<style>
-.detailsSection {
+<style scoped>
+.title:hover {
   cursor: pointer;
-  border-right: 0.5px solid black;
 }
 </style>

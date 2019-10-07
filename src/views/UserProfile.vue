@@ -2,8 +2,31 @@
   <v-container v-if="user" fluid>
     <p class="subheading grey--text">Profile</p>
 
-    <v-row></v-row>
-    <v-row></v-row>
+    <v-row style="height: 300px" class="primary darken-5">
+      <v-col cols="12" sm="12" md="6">
+        <v-card>
+          <v-col cols="12"></v-col>
+          <v-col></v-col>
+        </v-card>
+      </v-col>
+      <v-col cols="12" sm="12" md="6">
+        <v-card>
+          2
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row align="stretch" style="height: 500px;" class="success darken-5">
+      <v-col cols="12" sm="12" md="6">
+        <v-card>
+          1
+        </v-card>
+      </v-col>
+      <v-col cols="12" sm="12" md="6">
+        <v-card>
+          2
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
