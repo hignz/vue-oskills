@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <NavigationDrawer v-if="showNavDrawer" />
-    <Navbar v-if="showNavDrawer" />
+    <NavigationDrawer />
+    <Navbar />
     <v-content>
       <transition name="fade">
         <router-view :key="$route.fullPath"></router-view>
@@ -31,7 +31,7 @@ export default {
       return this.$store.state.isDark;
     },
     showNavDrawer() {
-      return this.$store.getters.showNavigationBar;
+      return this.$store.getters.showNavigationDrawer;
     },
     ...mapGetters(['getUser'])
   },
@@ -52,7 +52,7 @@ export default {
 
     vuetify.framework.theme.dark = this.$store.state.isDark;
     if (!localStorage.getItem('accentColor')) {
-      localStorage.setItem('accentColor', '#ee44aa');
+      localStorage.setItem('accentColor', '#ff1f2c');
     }
     vuetify.framework.theme.themes.dark.primary = localStorage.getItem(
       'accentColor'
@@ -73,4 +73,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+a {
+  text-decoration: none;
+  color: white;
+}
+</style>

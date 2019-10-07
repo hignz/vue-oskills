@@ -12,7 +12,7 @@ export default new Vuex.Store({
     accessToken: localStorage.getItem('accessToken') || null,
     loggingIn: false,
     loginError: null,
-    showNavigationBar: true,
+    showNavigationDrawer: true,
     isDark: JSON.parse(localStorage.getItem('darkMode')) || false,
     skills: []
   },
@@ -26,7 +26,7 @@ export default new Vuex.Store({
       state.loginError = errorMessage;
     },
     toggleDrawer: (state, showDrawer) => {
-      state.showNavigationBar = showDrawer;
+      state.showNavigationDrawer = showDrawer;
     },
     toogleIsDark: (state, value) => {
       state.isDark = value;
@@ -37,7 +37,8 @@ export default new Vuex.Store({
   },
   getters: {
     accessToken: state => state.accessToken,
-    showNavigationBar: state => state.accessToken && state.showNavigationBar,
+    showNavigationDrawer: state =>
+      state.accessToken && state.showNavigationDrawer,
     getUser: state => state.user,
     skills: state => state.skills,
     sortedSkills: state =>
