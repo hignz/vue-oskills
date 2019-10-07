@@ -76,10 +76,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['showNavigationDrawer']),
-    getUserName() {
-      return this.$store.state.user;
-    }
+    ...mapGetters(['showNavigationDrawer'])
   }
 };
 </script>
