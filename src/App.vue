@@ -73,4 +73,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+a {
+  text-decoration: none;
+  color: white;
+}
+</style>
