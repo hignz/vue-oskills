@@ -1,6 +1,7 @@
 <template>
   <nav>
     <v-app-bar flat app>
+      <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
       <router-link to="/dashboard">
         <v-toolbar-title class="text-uppercase grey--text">
           <span class="primary--text">O</span>
@@ -30,7 +31,7 @@ export default {
       showDrawer: true
     };
   },
-  computed: mapGetters(['showNavigationBar', 'accessToken', 'getUser']),
+  computed: mapGetters(['showNavigationDrawer', 'accessToken', 'getUser']),
   methods: {
     toggleDrawer() {
       this.showDrawer = !this.showDrawer;
