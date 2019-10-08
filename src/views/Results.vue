@@ -42,7 +42,7 @@ export default {
     const searchTerm = this.$route.query.search;
 
     this.$store
-      .dispatch('fetchUsersByName', searchTerm)
+      .dispatch('fetchByName', searchTerm)
       .then(response => {
         this.results = response.data;
       })
