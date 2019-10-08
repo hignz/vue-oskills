@@ -1,7 +1,8 @@
 <template>
   <nav>
     <v-app-bar flat app>
-      <router-link to="/">
+      <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
+      <router-link to="/dashboard">
         <v-toolbar-title class="text-uppercase grey--text">
           <span class="primary--text">O</span>
           <span class="font-weight-light">Skills</span>
@@ -10,7 +11,7 @@
       <v-spacer></v-spacer>
       <SearchBar class="mt-4"></SearchBar>
       <v-spacer></v-spacer>
-      <ProfileMenu v-if="accessToken" />
+      <ProfileMenu />
     </v-app-bar>
   </nav>
 </template>
@@ -30,7 +31,7 @@ export default {
       showDrawer: true
     };
   },
-  computed: mapGetters(['showNavigationBar', 'accessToken', 'getUser']),
+  computed: mapGetters(['showNavigationDrawer', 'accessToken', 'getUser']),
   methods: {
     toggleDrawer() {
       this.showDrawer = !this.showDrawer;
@@ -40,9 +41,4 @@ export default {
 };
 </script>
 
-<style>
-a {
-  text-decoration: none;
-  color: white;
-}
-</style>
+<style></style>
