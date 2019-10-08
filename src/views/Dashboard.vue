@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="user.skills">
+  <v-container v-if="loaded">
     <p class="subheading grey--text">Dashboard</p>
     <v-row>
       <v-col cols="12">
@@ -79,6 +79,7 @@
 import SimilarUsers from '../components/SimilarUsers';
 import SkillList from '../components/SkillList';
 import VueApexCharts from 'vue-apexcharts';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -96,14 +97,13 @@ export default {
     };
   },
   computed: {
-    sortedSkills() {
-      return this.user.skills.concat().sort((a, b) => b.rating - a.rating);
-    },
+    ...mapGetters(['sortedSkills']),
     getChartSeries() {
-      return this.user.skills.map(e => {
+      return this.sortedSkills.map(e => {
         return e.rating;
       });
     },
+    // TODO: make chart reactive
     getChartOptions() {
       return {
         plotOptions: {
@@ -121,7 +121,7 @@ export default {
             }
           }
         },
-        labels: this.user.skills.map(e => {
+        labels: this.sortedSkills.map(e => {
           return e.name;
         })
       };
@@ -146,8 +146,8 @@ export default {
     this.$store
       .dispatch('fetchUser')
       .then(response => {
-        this.user = response.data.data;
-        this.$store.dispatch('updateUser', this.user);
+        this.user = response;
+        this.loaded = true;
       })
       .catch(err => {
         console.log(err);

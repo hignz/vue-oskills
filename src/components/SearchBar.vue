@@ -1,11 +1,13 @@
 <template>
-  <v-text-field
-    v-model="searchTerm"
-    prepend-inner-icon="mdi-magnify"
-    placeholder="Search"
-    :clearable="true"
-    @keyup.enter="search()"
-  ></v-text-field>
+  <v-form @submit.prevent>
+    <v-text-field
+      v-model="searchTerm"
+      prepend-inner-icon="mdi-magnify"
+      placeholder="Search"
+      :clearable="true"
+      @keyup.enter="search()"
+    ></v-text-field>
+  </v-form>
 </template>
 
 <script>

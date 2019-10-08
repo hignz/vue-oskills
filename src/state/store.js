@@ -12,8 +12,9 @@ export default new Vuex.Store({
     accessToken: localStorage.getItem('accessToken') || null,
     loggingIn: false,
     loginError: null,
-    showNavigationBar: true,
-    isDark: JSON.parse(localStorage.getItem('darkMode')) || false
+    showNavigationDrawer: true,
+    isDark: JSON.parse(localStorage.getItem('darkMode')) || false,
+    skills: []
   },
   mutations: {
     updateAccessToken: (state, accessToken) => {
@@ -25,18 +26,23 @@ export default new Vuex.Store({
       state.loginError = errorMessage;
     },
     toggleDrawer: (state, showDrawer) => {
-      state.showNavigationBar = showDrawer;
+      state.showNavigationDrawer = showDrawer;
     },
     toogleIsDark: (state, value) => {
       state.isDark = value;
       vuetify.framework.theme.dark = value;
     },
-    setUser: (state, user) => (state.user = user)
+    setUser: (state, user) => (state.user = user),
+    updateSkills: (state, skills) => (state.skills = skills)
   },
   getters: {
     accessToken: state => state.accessToken,
-    showNavigationBar: state => state.accessToken && state.showNavigationBar,
-    getUser: state => state.user
+    showNavigationDrawer: state =>
+      state.accessToken && state.showNavigationDrawer,
+    getUser: state => state.user,
+    skills: state => state.skills,
+    sortedSkills: state =>
+      state.user.skills.concat().sort((a, b) => b.rating - a.rating)
   },
   actions: {
     fetchUser({ commit }, id) {
@@ -52,8 +58,8 @@ export default new Vuex.Store({
               : 'http://localhost:1111/user'
           )
           .then(response => {
-            commit('setUser', response.data);
-            resolve(response);
+            commit('setUser', response.data.data);
+            resolve(response.data.data);
           })
           .catch(error => {
             reject(error);
@@ -92,13 +98,16 @@ export default new Vuex.Store({
             resolve(response);
           })
           .catch(error => {
-            console.log(error);
             commit('updateAccessToken', null);
             reject(error);
           });
       });
     },
     fetchUsersByName({ commit }, searchTerm) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
       const config = {
         headers: {
           'Content-Type': 'application/json'
@@ -154,7 +163,11 @@ export default new Vuex.Store({
           });
       });
     },
-    addSkillToUser({ commit }, { skillId, userId }) {
+    addSkillToUser({ commit }, { skillId }) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
       const config = {
         headers: {
           'Content-Type': 'application/json'
@@ -163,13 +176,10 @@ export default new Vuex.Store({
 
       return new Promise((resolve, reject) => {
         axios
-          .post(
-            'http://localhost:1111/add-skill-to-user',
-            { skillId, userId },
-            config
-          )
+          .post('http://localhost:1111/add-skill-to-user', { skillId }, config)
           .then(response => {
-            resolve(response);
+            commit('updateSkills', response.data.skills);
+            resolve(response.data.skills);
           })
           .catch(error => {
             reject(error);
@@ -195,6 +205,41 @@ export default new Vuex.Store({
       commit(
         'updateAccessToken',
         JSON.parse(localStorage.getItem('accessToken'))
+      );
+    },
+    fetchSkills({ commit }) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
+      return new Promise((resolve, reject) =>
+        axios
+          .get('http://localhost:1111/get-all-user-skills')
+          .then(response => {
+            commit('updateSkills', response.data.skills);
+            resolve(response.data.skills);
+          })
+          .catch(err => {
+            console.log(err);
+            reject(err);
+          })
+      );
+    },
+    fetchDeleteSkill({ commit }, skillId) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
+      return new Promise((resolve, reject) =>
+        axios
+          .post('http://localhost:1111/remove-user-skill', { skillId })
+          .then(response => {
+            commit('updateSkills', response.data.skills);
+            resolve(response.data.skills);
+          })
+          .catch(err => {
+            reject(err);
+          })
       );
     },
     updateUser({ commit }, user) {

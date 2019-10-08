@@ -43,7 +43,7 @@ const routes = [
   {
     path: '/profile/:id',
     name: 'profile',
-    component: () => import('./views/Profile'),
+    component: () => import('./views/UserProfile'),
     props: true,
     meta: { requiresAuth: true }
   },
