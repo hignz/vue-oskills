@@ -60,7 +60,7 @@ export default {
     vuetify.framework.theme.themes.light.primary = localStorage.getItem(
       'accentColor'
     );
-
+    
     if (!this.getUser) {
       this.$store
         .dispatch('fetchUser')
@@ -68,7 +68,7 @@ export default {
         .catch(err => {
           console.log(err);
         });
-    }
+    } */
   }
 };
 </script>

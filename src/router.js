@@ -41,6 +41,12 @@ const routes = [
     meta: { requiresVisitor: true }
   },
   {
+    path: '/register/:token',
+    name: 'register',
+    component: () => import('./views/Register'),
+    meta: { requiresVisitor: true }
+  },
+  {
     path: '/profile/:id',
     name: 'profile',
     component: () => import('./views/UserProfile'),

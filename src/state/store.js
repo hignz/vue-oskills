@@ -141,6 +141,36 @@ export default new Vuex.Store({
           });
       });
     },
+    fetchAllSkills() {
+      return new Promise((resolve, reject) => {
+        axios
+          .get('http://localhost:1111/get-all-skills')
+          .then(response => {
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    fetchSkills({ commit }) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
+      return new Promise((resolve, reject) =>
+        axios
+          .get('http://localhost:1111/get-all-user-skills')
+          .then(response => {
+            commit('updateSkills', response.data.skills);
+            resolve(response.data.skills);
+          })
+          .catch(err => {
+            console.log(err);
+            reject(err);
+          })
+      );
+    },
     fetchSkillsById({ commit }, categoryId) {
       const config = {
         headers: {
@@ -207,24 +237,7 @@ export default new Vuex.Store({
         JSON.parse(localStorage.getItem('accessToken'))
       );
     },
-    fetchSkills({ commit }) {
-      axios.defaults.headers.common = {
-        Authorization: `Bearer ${this.getters.accessToken}`
-      };
 
-      return new Promise((resolve, reject) =>
-        axios
-          .get('http://localhost:1111/get-all-user-skills')
-          .then(response => {
-            commit('updateSkills', response.data.skills);
-            resolve(response.data.skills);
-          })
-          .catch(err => {
-            console.log(err);
-            reject(err);
-          })
-      );
-    },
     fetchDeleteSkill({ commit }, skillId) {
       axios.defaults.headers.common = {
         Authorization: `Bearer ${this.getters.accessToken}`
@@ -256,6 +269,28 @@ export default new Vuex.Store({
     toggleDarkMode({ commit }, value) {
       commit('toogleIsDark', value);
       localStorage.setItem('darkMode', value);
+    },
+    verifyUser({ commit }, verificationToken) {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+
+      return new Promise((resolve, reject) => {
+        axios
+          .post(
+            'http://localhost:1111/verify-user',
+            { verificationToken },
+            config
+          )
+          .then(response => {
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
     }
   }
 });
