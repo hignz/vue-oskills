@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <NavigationDrawer />
-    <Navbar />
+    <NavigationDrawer v-if="accessToken" />
+    <Navbar v-if="accessToken" />
     <v-content>
       <transition name="fade">
         <router-view :key="$route.fullPath"></router-view>
@@ -33,7 +33,7 @@ export default {
     showNavDrawer() {
       return this.$store.getters.showNavigationDrawer;
     },
-    ...mapGetters(['getUser'])
+    ...mapGetters(['getUser', 'accessToken'])
   },
   created() {
     axios.interceptors.response.use(
