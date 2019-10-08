@@ -41,8 +41,11 @@ export default new Vuex.Store({
       state.accessToken && state.showNavigationDrawer,
     getUser: state => state.user,
     skills: state => state.skills,
-    sortedSkills: state =>
-      state.user.skills.concat().sort((a, b) => b.rating - a.rating)
+    topThreeSkills: state =>
+      state.user.skills
+        .concat()
+        .sort((a, b) => b.rating - a.rating)
+        .slice(0, 3)
   },
   actions: {
     fetchUser({ commit }, id) {

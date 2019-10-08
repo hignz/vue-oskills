@@ -12,17 +12,17 @@
                 >
                 <v-row class="caption grey--text ml-2">{{ user.role }}</v-row>
               </v-col>
-              <v-col v-for="i in 3" :key="i" cols="3">
+              <v-col v-for="(skill, i) in topThreeSkills" :key="i" cols="3">
                 <v-row>
-                  {{ sortedSkills[i].name }}
+                  {{ skill.name }}
                 </v-row>
                 <v-row>
                   <v-icon
                     class="ml-4"
                     :color="
-                      sortedSkills[i].esteem === 1
+                      skill.esteem === 1
                         ? 'red'
-                        : sortedSkills[i].esteem === 2
+                        : skill.esteem === 2
                         ? 'orange'
                         : 'green'
                     "
@@ -65,7 +65,7 @@
       </v-col>
       <v-col cols="12" md="4" sm="12">
         <v-card :height="292">
-          <SkillList :skills="sortedSkills"></SkillList>
+          <SkillList :skills="topThreeSkills"></SkillList>
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
@@ -97,9 +97,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['sortedSkills']),
+    ...mapGetters(['topThreeSkills']),
     getChartSeries() {
-      return this.sortedSkills.map(e => {
+      return this.topThreeSkills.map(e => {
         return e.rating;
       });
     },
@@ -121,7 +121,7 @@ export default {
             }
           }
         },
-        labels: this.sortedSkills.map(e => {
+        labels: this.topThreeSkills.map(e => {
           return e.name;
         })
       };
