@@ -2,7 +2,7 @@
   <v-card max-width="344" class="mx-auto">
     <v-list-item>
       <v-list-item-avatar color="grey">
-        <img :src="randomUserImg" alt="" />
+        <img :src="randomUserImg" />
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="headline title" @click="openProfile">{{
@@ -15,13 +15,13 @@
     <v-list>
       <v-subheader>Top Skills</v-subheader>
       <v-list-item-group color="primary">
-        <v-list-item v-for="(item, i) in sortedSkills" :key="i">
+        <v-list-item v-for="(skill, i) in sortedSkills" :key="i">
           <v-list-item-icon>
             <v-icon
               :color="
-                item.esteem === 1
+                skill.esteem === 1
                   ? 'red'
-                  : item.esteem === 2
+                  : skill.esteem === 2
                   ? 'orange'
                   : 'green'
               "
@@ -29,7 +29,7 @@
             >
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title v-text="item.name"></v-list-item-title>
+            <v-list-item-title v-text="skill.name"></v-list-item-title>
           </v-list-item-content>
           <v-list-item-action>
             <v-btn icon>
@@ -51,25 +51,18 @@
 
 <script>
 export default {
-  components: {},
   props: {
     user: {
       type: Object,
       required: true
     }
   },
-  data() {
-    return {
-      chartLabels: null,
-      chartData: null
-    };
-  },
   computed: {
     sortedSkills() {
       return this.user.skills
         .concat()
-        .slice(0, 3)
-        .sort((a, b) => b.rating - a.rating);
+        .sort((a, b) => b.rating - a.rating)
+        .slice(0, 3);
     },
     randomUserImg() {
       return `https://randomuser.me/api/portraits/men/${Math.floor(
