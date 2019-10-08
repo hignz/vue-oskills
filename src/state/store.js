@@ -135,7 +135,7 @@ export default new Vuex.Store({
           });
       });
     },
-    fetchSkills() {
+    fetchAllSkills() {
       return new Promise((resolve, reject) => {
         axios
           .get('http://localhost:1111/get-all-skills')
@@ -146,6 +146,24 @@ export default new Vuex.Store({
             reject(error);
           });
       });
+    },
+    fetchSkills({ commit }) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
+      return new Promise((resolve, reject) =>
+        axios
+          .get('http://localhost:1111/get-all-user-skills')
+          .then(response => {
+            commit('updateSkills', response.data.skills);
+            resolve(response.data.skills);
+          })
+          .catch(err => {
+            console.log(err);
+            reject(err);
+          })
+      );
     },
     fetchSkillsById({ commit }, categoryId) {
       const config = {

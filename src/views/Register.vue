@@ -168,7 +168,7 @@ export default {
         this.verified = true;
 
         this.$store
-          .dispatch('fetchSkills')
+          .dispatch('fetchAllSkills')
           .then(response => {
             console.log(response);
             this.skills = response.data.skills.map(o => {
