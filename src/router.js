@@ -41,10 +41,10 @@ const routes = [
     meta: { requiresVisitor: true }
   },
   {
-    path: '/register',
+    path: '/register/:token',
     name: 'register',
     component: () => import('./views/Register'),
-    meta: { requiresAuth: true }
+    meta: { requiresVisitor: true }
   },
   {
     path: '/profile/:id',

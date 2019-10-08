@@ -1,57 +1,56 @@
 <template>
   <v-container>
-    <p class="subheading grey--text">Welcome to OSkills</p>
-    <v-container fill-height>
+    <v-col class="text-center">
+      <h1 class="subheading grey--text">
+        Welcome to
+        <span class="primary--text">O</span>
+        <span class="font-weight-light">Skills</span>
+      </h1>
+    </v-col>
+    <v-container v-if="verified" fill-height>
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md6>
-          <v-card class="elevation-12">
-            <v-toolbar color="primary" dark>
-              <v-toolbar-title>
-                Register
-              </v-toolbar-title>
-            </v-toolbar>
+          <v-card flat>
             <v-stepper v-model="n" vertical>
               <v-stepper-step :complete="n > 1" :step="1" :editable="true">
                 Personal Details
               </v-stepper-step>
               <v-stepper-content step="1">
-                <v-row>
-                  <v-col sm="6">
-                    <v-file-input chips label="Profile Picture"> </v-file-input>
-                    <v-text-field
-                      v-model="firstName"
-                      name="firstName"
-                      label="First name"
-                      :rules="nameRules"
-                    >
-                    </v-text-field>
-                    <v-text-field
-                      v-model="lastName"
-                      name="lastName"
-                      label="Last Name"
-                      :rules="nameRules"
-                    >
-                    </v-text-field>
-                    <v-autocomplete
-                      v-model="selectedSkills"
-                      :items="skills"
-                      item-text="text"
-                      item-value="value"
-                      attach
-                      chips
-                      label="Skills"
-                      multiple
-                    ></v-autocomplete>
-                  </v-col>
-                </v-row>
-
+                <v-col sm="8">
+                  <v-file-input chips label="Profile Picture"> </v-file-input>
+                  <v-text-field
+                    v-model="firstName"
+                    name="firstName"
+                    label="First Name"
+                    :rules="nameRules"
+                  >
+                  </v-text-field>
+                  <v-text-field
+                    v-model="lastName"
+                    name="lastName"
+                    label="Last Name"
+                    :rules="nameRules"
+                  >
+                  </v-text-field>
+                  <v-autocomplete
+                    v-model="selectedSkills"
+                    :items="skills"
+                    item-text="text"
+                    item-value="value"
+                    attach
+                    chips
+                    dense
+                    label="Skills"
+                    multiple
+                  ></v-autocomplete>
+                </v-col>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" @click="n = 2">Continue</v-btn>
                 <v-btn text>Cancel</v-btn>
               </v-stepper-content>
 
               <v-stepper-step :complete="n > 2" step="2" :editable="true">
-                Apparence
+                Appearance
               </v-stepper-step>
               <v-stepper-content step="2">
                 <v-row>
@@ -79,7 +78,7 @@
                       v-model="password"
                       :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                       :rules="passwordRules"
-                      :type="show ? 'text' : 'password'"
+                      :type="show1 ? 'text' : 'password'"
                       label="Password"
                       hint="At least 8 characters"
                       counter
@@ -89,7 +88,7 @@
                       v-model="confirmPassword"
                       :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
                       :rules="passwordRules"
-                      :type="show ? 'text' : 'password'"
+                      :type="show2 ? 'text' : 'password'"
                       label="Confirm password"
                       hint="At least 8 characters"
                       counter
@@ -98,7 +97,7 @@
                   </v-col>
                 </v-row>
 
-                <v-btn type="submit" color="primary" @click="n = 4"
+                <v-btn type="submit" color="primary" @click="complete()"
                   >Complete</v-btn
                 >
                 <v-btn text>Cancel</v-btn>
@@ -108,6 +107,7 @@
         </v-flex>
       </v-layout>
     </v-container>
+    <p v-else>Not Recognized</p>
   </v-container>
 </template>
 
@@ -131,8 +131,9 @@ export default {
         v => !!v || 'Required',
         v => v.length > 2 || 'Name must be at least 3 characters'
       ],
-      skills: {},
-      selectedSkills: []
+      skills: [],
+      selectedSkills: [],
+      verified: false
     };
   },
   computed: {
@@ -159,19 +160,43 @@ export default {
     }
   },
   created() {
+    const token = this.$route.params.token;
     this.$store
-      .dispatch('fetchSkills')
+      .dispatch('verifyUser', token)
       .then(response => {
-        this.skills = response.data.skills.map(o => {
-          return {
-            text: o.name,
-            value: o._id
-          };
-        });
+        console.log(response.data);
+        this.verified = true;
+
+        this.$store
+          .dispatch('fetchSkills')
+          .then(response => {
+            console.log(response);
+            this.skills = response.data.skills.map(o => {
+              return {
+                text: o.name,
+                value: o._id
+              };
+            });
+          })
+          .catch(err => {
+            console.log(err);
+          });
       })
       .catch(err => {
         console.log(err);
+        this.verified = false;
       });
+  },
+  methods: {
+    complete() {
+      const user = {
+        name: this.firstName + this.lastName,
+        skills: this.selectedSkills,
+        password: this.password
+      };
+
+      console.log(user);
+    }
   }
 };
 </script>
