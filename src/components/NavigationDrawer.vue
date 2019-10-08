@@ -23,9 +23,14 @@
           :to="item.route"
           links
         >
-          <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-icon>
+          <v-tooltip right>
+            <template v-slot:activator="{ on }">
+              <v-list-item-icon v-on="on">
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+            </template>
+            <span>{{ item.text }}</span>
+          </v-tooltip>
 
           <v-list-item-content>
             <v-list-item-title>{{ item.text }}</v-list-item-title>
