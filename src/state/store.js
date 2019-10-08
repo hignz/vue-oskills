@@ -103,7 +103,7 @@ export default new Vuex.Store({
           });
       });
     },
-    fetchUsersByName({ commit }, searchTerm) {
+    fetchByName({ commit }, searchTerm) {
       axios.defaults.headers.common = {
         Authorization: `Bearer ${this.getters.accessToken}`
       };
@@ -120,7 +120,7 @@ export default new Vuex.Store({
 
       return new Promise((resolve, reject) => {
         axios
-          .post('http://localhost:1111/findusersbyname', body, config)
+          .post('http://localhost:1111/find-by-name', body, config)
           .then(response => {
             resolve(response);
           })
