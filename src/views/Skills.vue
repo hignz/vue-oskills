@@ -118,7 +118,7 @@ export default {
     },
     deleteSkill() {
       this.$store
-        .dispatch('fetchDeleteSkill', this.selectedSkill.skillId)
+        .dispatch('fetchDeleteSkill', this.selectedSkill._id)
         .then(() => {
           this.deleteDialog = false;
           this.showSnackbar = true;
