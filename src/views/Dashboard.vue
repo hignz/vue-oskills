@@ -3,7 +3,7 @@
     <p class="subheading grey--text">Dashboard</p>
     <v-row>
       <v-col cols="12">
-        <v-card class="pa-2" outlined tile>
+        <v-card class="pa-2">
           <v-container>
             <v-row>
               <v-col cols="3">
@@ -156,7 +156,8 @@ export default {
     this.$store
       .dispatch('getAllUsers')
       .then(response => {
-        this.similarUsers = response.data;
+        console.log(response.data.data);
+        this.similarUsers = response.data.data.slice(0, 4);
       })
       .catch(err => {
         console.log(err);
