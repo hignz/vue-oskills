@@ -241,14 +241,14 @@ export default new Vuex.Store({
       );
     },
 
-    fetchDeleteSkill({ commit }, skillId) {
+    fetchDeleteSkill({ commit }, id) {
       axios.defaults.headers.common = {
         Authorization: `Bearer ${this.getters.accessToken}`
       };
 
       return new Promise((resolve, reject) =>
         axios
-          .post('http://localhost:1111/remove-user-skill', { skillId })
+          .post('http://localhost:1111/remove-user-skill', { id })
           .then(response => {
             commit('updateSkills', response.data.skills);
             resolve(response.data.skills);
