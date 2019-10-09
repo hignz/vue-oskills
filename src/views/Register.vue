@@ -1,28 +1,32 @@
 <template>
   <v-container>
-    <v-col class="text-center">
+    <v-row class="display-1">
+    <v-col class="text-center pt-12 pb-8">
       <h1 class="subheading grey--text">
-        Welcome to
+        <span class="font-weight-light">Welcome to </span>
         <span class="primary--text">O</span>
         <span class="font-weight-light">Skills</span>
       </h1>
     </v-col>
+    </v-row>
     <v-container v-if="verified" fill-height>
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md6>
           <v-card flat>
+            <v-form>
             <v-stepper v-model="n" vertical>
               <v-stepper-step :complete="n > 1" :step="1" :editable="true">
                 Personal Details
               </v-stepper-step>
               <v-stepper-content step="1">
-                <v-col sm="8">
-                  <v-file-input chips label="Profile Picture"> </v-file-input>
+                <v-col sm="8" class="mx-auto">
+                  <v-file-input chips label="Profile Picture" prepend-icon="mdi-camera"> </v-file-input>
                   <v-text-field
                     v-model="firstName"
                     name="firstName"
                     label="First Name"
                     :rules="nameRules"
+                    class="pb-3"
                   >
                   </v-text-field>
                   <v-text-field
@@ -30,6 +34,7 @@
                     name="lastName"
                     label="Last Name"
                     :rules="nameRules"
+                    class="pb-3"
                   >
                   </v-text-field>
                   <v-autocomplete
@@ -42,11 +47,13 @@
                     dense
                     label="Skills"
                     multiple
+                    class="pb-3"
                   ></v-autocomplete>
                 </v-col>
                 <v-spacer></v-spacer>
+                <v-col class="mx-auto pt-6" sm="4" >
                 <v-btn color="primary" @click="n = 2">Continue</v-btn>
-                <v-btn text>Cancel</v-btn>
+                </v-col>
               </v-stepper-content>
 
               <v-stepper-step :complete="n > 2" step="2" :editable="true">
@@ -54,7 +61,7 @@
               </v-stepper-step>
               <v-stepper-content step="2">
                 <v-row>
-                  <v-col>
+                  <v-col sm="8" class="mx-auto">
                     <v-switch
                       v-model="darkMode"
                       label="Dark Mode"
@@ -63,9 +70,10 @@
                     </v-switch>
                   </v-col>
                 </v-row>
-
+                <v-col class="mx-auto pt-6" sm="4">
                 <v-btn color="primary" @click="n = 3">Continue</v-btn>
-                <v-btn text>Cancel</v-btn>
+                <v-btn text @click="n=1">Back</v-btn>
+                </v-col>
               </v-stepper-content>
 
               <v-stepper-step :complete="n > 3" step="3" :editable="true">
@@ -73,7 +81,7 @@
               </v-stepper-step>
               <v-stepper-content step="3">
                 <v-row>
-                  <v-col cols="12" sm="6">
+                  <v-col sm="8" class="mx-auto">
                     <v-text-field
                       v-model="password"
                       :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -83,6 +91,7 @@
                       hint="At least 8 characters"
                       counter
                       @click:append="show1 = !show1"
+                      class="pb-3"
                     ></v-text-field>
                     <v-text-field
                       v-model="confirmPassword"
@@ -93,21 +102,27 @@
                       hint="At least 8 characters"
                       counter
                       @click:append="show2 = !show2"
+                      class="pb-3"
                     ></v-text-field>
                   </v-col>
                 </v-row>
-
-                <v-btn type="submit" color="primary" @click="complete()"
-                  >Complete</v-btn
-                >
-                <v-btn text>Cancel</v-btn>
+                <v-col class="mx-auto pt-6" sm="4">
+                <v-btn type="submit" color="primary" @click="complete()">Complete</v-btn>
+                <v-btn text @click="n=2">Back</v-btn>
+                </v-col>
               </v-stepper-content>
             </v-stepper>
+            </v-form>
           </v-card>
         </v-flex>
       </v-layout>
     </v-container>
-    <p v-else>Not Recognized</p>
+    <v-col v-else class="text-center">
+      <h1 class="subheading grey--text">
+        User not recognized
+      </h1>
+    </v-col>
+    
   </v-container>
 </template>
 
