@@ -220,7 +220,6 @@ export default new Vuex.Store({
       });
     },
     doRegister({ commit }, registerData) {
-      console.log(registerData);
       const config = {
         headers: {
           'Content-Type': 'application/json'
