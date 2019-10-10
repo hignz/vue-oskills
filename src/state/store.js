@@ -220,13 +220,14 @@ export default new Vuex.Store({
       });
     },
     doRegister({ commit }, registerData) {
+      console.log(registerData);
       const config = {
         headers: {
           'Content-Type': 'application/json'
         }
       };
       axios
-        .post('http://localhost:1111/register', registerData, config)
+        .post('http://localhost:1111/register-user', registerData, config)
         .then(response => {
           router.push('/login');
         })

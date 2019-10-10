@@ -120,7 +120,7 @@
                       type="submit"
                       class="ml-2"
                       color="primary"
-                      @click="complete()"
+                      @click="onComplete()"
                       >Complete</v-btn
                     >
                   </v-col>
@@ -220,15 +220,15 @@ export default {
       });
   },
   methods: {
-    complete() {
-      const user = {
+    onComplete() {
+      this.$store.dispatch('doRegister', {
         name: this.firstName + this.lastName,
         skills: this.selectedSkills,
-        password: this.password
-      };
+        password: this.password,
+        verificationToken: this.$route.params.token
+      });
 
       this.completed = true;
-      console.log(user);
     }
   }
 };
