@@ -258,6 +258,22 @@ export default new Vuex.Store({
           })
       );
     },
+    fetchActivites({ commit }) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
+      return new Promise((resolve, reject) =>
+        axios
+          .get('http://localhost:1111/recent-activity')
+          .then(response => {
+            resolve(response.data);
+          })
+          .catch(err => {
+            reject(err);
+          })
+      );
+    },
     updateUser({ commit }, user) {
       commit('setUser', user);
     },
