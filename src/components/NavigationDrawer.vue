@@ -3,7 +3,7 @@
     <v-navigation-drawer
       v-model="showDrawer"
       :mini-variant.sync="showNavigationDrawer"
-      :width="220"
+      :width="210"
       app
     >
       <v-list-item>
