@@ -2,11 +2,11 @@
   <v-container v-if="loaded">
     <p class="subheading grey--text">Dashboard</p>
     <v-row>
-      <v-col cols="12">
+      <v-col cols="12" sm="12">
         <v-card class="pa-2">
           <v-container>
             <v-row align="center">
-              <v-col cols="3">
+              <v-col xs="12" sm="12" md="3">
                 <v-row class="subtitle-2 ml-2"
                   >Hello, {{ user.name.split(' ')[0] }}</v-row
                 >
@@ -15,16 +15,24 @@
                   >Remaining Votes: {{ user.remainingVotes }}</v-row
                 >
               </v-col>
-              <v-col v-for="(skill, i) in topThreeSkills" :key="i" cols="3">
+              <v-col
+                v-for="(skill, i) in topThreeSkills"
+                :key="i"
+                xs="12"
+                sm="12"
+                md="3"
+              >
                 <v-row align="center">
-                  <v-col>
-                    <v-row class="caption grey--text">
+                  <v-col sm="3">
+                    <v-row class="caption grey--text" justify="center">
                       {{ skill.name }}
                     </v-row>
-                    <v-row class="headline">{{ skill.rating }}</v-row>
+                    <v-row class="headline" justify="center">{{
+                      skill.rating
+                    }}</v-row>
                   </v-col>
                   <v-col>
-                    <v-row>
+                    <v-row justify="start">
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                           <v-icon
