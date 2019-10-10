@@ -16,7 +16,7 @@
 
       <v-divider></v-divider>
 
-      <v-list dense>
+      <v-list dense nav>
         <v-list-item
           v-for="item in links"
           :key="item.title"
