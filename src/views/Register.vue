@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-col class="text-center">
       <h1 class="subheading grey--text pt-5">
         <span class="font-weight-light">Welcome to </span>
@@ -7,7 +7,7 @@
         <span class="font-weight-light">Skills</span>
       </h1>
     </v-col>
-    <v-container v-if="verified + !completed" fill-height>
+    <v-container v-if="verified && !completed" fill-height>
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md6>
           <v-card flat>
@@ -51,11 +51,13 @@
                       chips
                       label="Profile Picture"
                       prepend-icon="mdi-camera"
+                      show-size
+                      accept="image/png, image/jpeg, image/bmp"
                     ></v-file-input>
                   </v-col>
 
-                  <v-col class="mx-auto pt-6" sm="4">
-                    <v-btn color="primary" @click="n = 2">Continue</v-btn>
+                  <v-col class="mx-auto pt-6" sm="12">
+                    <v-btn color="primary" @click="n = 2">Next</v-btn>
                   </v-col>
                 </v-stepper-content>
 
@@ -64,18 +66,21 @@
                 </v-stepper-step>
                 <v-stepper-content step="2">
                   <v-row>
-                    <v-col class="mx-auto" sm="6">
+                    <v-col sm="12">
                       <v-switch
                         v-model="darkMode"
                         label="Dark Mode"
+                        class="ml-4"
                         color="primary"
                       >
                       </v-switch>
                     </v-col>
                   </v-row>
-                  <v-col class="mx-auto pt-6" cols="12" sm="6">
-                    <v-btn color="primary" @click="n = 3">Continue</v-btn>
-                    <v-btn text col="6" @click="n = 1">Back</v-btn>
+                  <v-col class="mx-auto pt-6" cols="12" sm="12">
+                    <v-btn text @click="n = 1">Back</v-btn>
+                    <v-btn color="primary" class="ml-2" @click="n = 3"
+                      >Next</v-btn
+                    >
                   </v-col>
                 </v-stepper-content>
 
@@ -109,11 +114,15 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
-                  <v-col class="mx-auto pt-6" sm="6">
-                    <v-btn type="submit" color="primary" @click="complete()"
+                  <v-col class="mx-auto pt-6" sm="12">
+                    <v-btn text @click="n = 2">Back</v-btn>
+                    <v-btn
+                      type="submit"
+                      class="ml-2"
+                      color="primary"
+                      @click="complete()"
                       >Complete</v-btn
                     >
-                    <v-btn text @click="n = 2">Back</v-btn>
                   </v-col>
                 </v-stepper-content>
               </v-stepper>
@@ -122,9 +131,14 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <v-col v-else class="text-center">
+    <v-col v-if="verified === false" class="text-center">
       <h1 class="subheading grey--text">
         User not recognized
+      </h1>
+    </v-col>
+    <v-col v-if="completed" class="text-center">
+      <h1 class="subheading grey--text">
+        Registration complete
       </h1>
     </v-col>
   </v-container>
@@ -152,8 +166,8 @@ export default {
       ],
       skills: [],
       selectedSkills: [],
-      verified: false,
-      completed: false
+      verified: null,
+      completed: null
     };
   },
   computed: {
@@ -184,13 +198,11 @@ export default {
     this.$store
       .dispatch('verifyUser', token)
       .then(response => {
-        console.log(response.data);
         this.verified = true;
 
         this.$store
           .dispatch('fetchAllSkills')
           .then(response => {
-            console.log(response);
             this.skills = response.data.skills.map(o => {
               return {
                 text: o.name,
@@ -215,6 +227,7 @@ export default {
         password: this.password
       };
 
+      this.completed = true;
       console.log(user);
     }
   }
