@@ -1,22 +1,21 @@
 <template>
   <v-container fluid>
     <p class="subheading grey--text">Results</p>
-    <div v-if="results.data">
-      <div v-if="results.data.length > 0">
-        <v-card-title class="subtitle-1">Users</v-card-title>
-        <v-row v-for="i in rowCount" :key="i" justify="end">
-          <v-col
-            v-for="(result, j) in results.data.slice(calcIndex(i))"
-            :key="j"
-          >
-            <MiniProfile :user="results.data[j]"></MiniProfile>
-          </v-col>
-        </v-row>
-      </div>
+    <div v-if="results.length">
+      <v-row v-for="i in rowCount" :key="i" justify="start">
+        <v-col
+          v-for="(result, j) in results.slice(calcIndex(i), j)"
+          :key="j"
+          sm="12"
+          md="3"
+        >
+          <MiniProfile :user="results[j]"></MiniProfile>
+        </v-col>
+      </v-row>
     </div>
-    <v-row v-else>
-      <v-col cols="12">
-        <v-card class="align-center">No results found</v-card>
+    <v-row v-else-if="!results.length" align="center" justify="center">
+      <v-col cols="6">
+        <v-card class="text-center">No results found</v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -30,12 +29,12 @@ export default {
   },
   data() {
     return {
-      results: {}
+      results: []
     };
   },
   computed: {
     rowCount() {
-      return Math.ceil(this.results.data.length / 5);
+      return Math.ceil(this.results.length / 5);
     }
   },
   created() {
@@ -44,7 +43,8 @@ export default {
     this.$store
       .dispatch('fetchByName', searchTerm)
       .then(response => {
-        this.results = response.data;
+        console.log(response);
+        this.results = response.data.data;
       })
       .catch(error => {
         console.error(error);
@@ -53,7 +53,7 @@ export default {
   methods: {
     calcIndex(i) {
       if (i - 1 === 0) return 0;
-      return (i - 1) * 5;
+      return (i - 1) * 6;
     }
   }
 };
