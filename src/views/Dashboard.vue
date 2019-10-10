@@ -64,23 +64,25 @@
 
     <v-row>
       <v-col cols="12" md="8" sm="12">
-        <v-card class="pa-2" outlined tile>
-          <apexcharts
-            type="bar"
-            height="300"
-            :options="getChartOptions"
-            :series="getChartSeries"
-          />
+        <v-card class="pa-2">
+          <div id="chart">
+            <apexcharts
+              type="bar"
+              height="300"
+              :options="barChartOptions"
+              :series="barChartSeries"
+            />
+          </div>
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <v-card class="pa-2" outlined tile>
+        <v-card class="pa-2">
           <div id="chart">
             <apexcharts
               type="radialBar"
               height="350"
-              :options="getChartOptions"
-              :series="getChartSeries"
+              :options="radialChartOptions"
+              :series="radialChartSeries"
             />
           </div>
         </v-card>
@@ -130,13 +132,13 @@ export default {
   },
   computed: {
     ...mapGetters(['topThreeSkills']),
-    getChartSeries() {
+    radialChartSeries() {
       return this.topThreeSkills.map(e => {
         return e.rating;
       });
     },
     // TODO: make chart reactive
-    getChartOptions() {
+    radialChartOptions() {
       return {
         plotOptions: {
           radialBar: {
@@ -156,6 +158,66 @@ export default {
         labels: this.topThreeSkills.map(e => {
           return e.name;
         })
+      };
+    },
+    barChartSeries() {
+      return [
+        {
+          name: 'Rating',
+          data: this.user.skills.map(e => {
+            return e.rating;
+          })
+        }
+      ];
+    },
+    // TODO: make chart reactive
+    barChartOptions() {
+      return {
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: '55%',
+            background: '#fff'
+          }
+        },
+        dataLabels: {
+          enabled: true
+        },
+        theme: {
+          mode: 'light',
+          palette: 'palette1',
+          monochrome: {
+            enabled: false,
+            color: '#255aee',
+            shadeTo: 'light',
+            shadeIntensity: 0.65
+          }
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ['transparent']
+        },
+        xaxis: {
+          categories: this.user.skills.map(el => {
+            return el.name;
+          })
+        },
+        yaxis: {
+          title: {
+            text: 'Rating'
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        tooltip: {
+          y: {
+            formatter: function(val) {
+              return val;
+            }
+          }
+        }
       };
     },
     randomUserImg() {
