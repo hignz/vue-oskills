@@ -19,12 +19,14 @@ export default {
   },
   methods: {
     search() {
-      this.$router.push({
-        name: 'results',
-        query: {
-          search: this.searchTerm.trim()
-        }
-      });
+      this.$router
+        .push({
+          name: 'results',
+          query: {
+            search: this.searchTerm
+          }
+        })
+        .catch(err => console.log(err));
     }
   }
 };

@@ -1,5 +1,5 @@
 <template>
-  <v-list rounded dense two-line>
+  <v-list rounded dense two-line flat>
     <v-subheader
       >ACTIVITY FEED
       <v-spacer></v-spacer>

@@ -14,7 +14,6 @@
           v-model="color"
           mode="hexa"
           :hide-mode-switch="true"
-          :show-swatches="true"
         ></v-color-picker>
       </v-container>
     </v-card>

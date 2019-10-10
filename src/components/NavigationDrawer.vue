@@ -3,7 +3,7 @@
     <v-navigation-drawer
       v-model="showDrawer"
       :mini-variant.sync="showNavigationDrawer"
-      :width="220"
+      :width="210"
       app
     >
       <v-list-item>
@@ -16,7 +16,7 @@
 
       <v-divider></v-divider>
 
-      <v-list dense>
+      <v-list dense nav>
         <v-list-item
           v-for="item in links"
           :key="item.title"
