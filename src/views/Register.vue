@@ -222,7 +222,7 @@ export default {
   methods: {
     onComplete() {
       this.$store.dispatch('doRegister', {
-        name: this.firstName + this.lastName,
+        name: this.firstName + ' ' + this.lastName,
         skills: this.selectedSkills,
         password: this.password,
         verificationToken: this.$route.params.token
