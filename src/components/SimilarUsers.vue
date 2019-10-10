@@ -1,5 +1,5 @@
 <template>
-  <v-list rounded dense flat>
+  <v-list rounded dense>
     <v-subheader
       >SIMILAR USERS
       <v-spacer></v-spacer>
