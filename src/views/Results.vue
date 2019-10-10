@@ -2,6 +2,9 @@
   <v-container fluid>
     <p class="subheading grey--text">Results</p>
     <div v-if="results.length">
+      <p class="subtitle-2">
+        Search results: {{ results.length }} results for {{ searchTerm }}
+      </p>
       <v-row v-for="i in rowCount" :key="i" justify="start">
         <v-col
           v-for="(result, j) in results.slice(calcIndex(i), j)"
@@ -15,7 +18,9 @@
     </div>
     <v-row v-else-if="!results.length" align="center" justify="center">
       <v-col cols="6">
-        <v-card class="text-center">No results found</v-card>
+        <v-card class="text-center"
+          >Search results: 0 results for {{ searchTerm }}</v-card
+        >
       </v-col>
     </v-row>
   </v-container>
@@ -29,7 +34,8 @@ export default {
   },
   data() {
     return {
-      results: []
+      results: [],
+      searchTerm: ''
     };
   },
   computed: {
@@ -38,10 +44,10 @@ export default {
     }
   },
   created() {
-    const searchTerm = this.$route.query.search;
+    this.searchTerm = this.$route.query.search;
 
     this.$store
-      .dispatch('fetchByName', searchTerm)
+      .dispatch('fetchByName', this.searchTerm)
       .then(response => {
         console.log(response);
         this.results = response.data.data;
