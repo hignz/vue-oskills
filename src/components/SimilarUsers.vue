@@ -1,22 +1,26 @@
 <template>
-  <v-list rounded dense flat>
+  <v-list rounded dense>
     <v-subheader
       >SIMILAR USERS
       <v-spacer></v-spacer>
-      <v-tooltip top>
+      <v-menu offset-y>
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on">
             <v-icon>mdi-chevron-down</v-icon>
           </v-btn>
         </template>
-        <span>Change view</span>
-      </v-tooltip>
+        <v-list>
+          <v-list-item v-for="(item, i) in menuItems" :key="i" @click="">
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-subheader>
     <v-list-item-group color="primary">
       <v-list-item
-        v-for="(item, i) in users.data"
+        v-for="(user, i) in users"
         :key="i"
-        :to="{ name: 'profile', params: { id: item._id, user: item } }"
+        :to="{ name: 'profile', params: { id: user._id, user } }"
         link
       >
         <v-list-item-avatar>
@@ -25,7 +29,7 @@
           ></v-img>
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title v-text="item.name"></v-list-item-title>
+          <v-list-item-title v-text="user.name"></v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list-item-group>
@@ -39,6 +43,9 @@ export default {
       require: true
     }
   },
+  data: () => ({
+    menuItems: [{ title: 'Similar Users' }, { title: 'New Users' }]
+  }),
   methods: {
     openProfile(user) {
       this.$router.push({

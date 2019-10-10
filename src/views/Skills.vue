@@ -4,6 +4,7 @@
       :headers="headers"
       :items="skills"
       sort-by="rating"
+      :sort-desc="true"
       class="elevation-1"
     >
       <template v-slot:top>
@@ -17,12 +18,15 @@
         <v-icon small @click="showDeleteDialog(item)">
           mdi-delete
         </v-icon>
+        <v-icon small @click="openSkillProfile(item)">
+          mdi-post-outline
+        </v-icon>
       </template>
     </v-data-table>
     <v-dialog v-model="deleteDialog" width="500">
       <v-card>
         <v-card-title class="headline" primary-title>
-          Confirm deletion
+          Are you sure?
         </v-card-title>
 
         <v-card-text>
@@ -117,13 +121,19 @@ export default {
     },
     deleteSkill() {
       this.$store
-        .dispatch('fetchDeleteSkill', this.selectedSkill.skillId)
+        .dispatch('fetchDeleteSkill', this.selectedSkill._id)
         .then(() => {
           this.deleteDialog = false;
           this.showSnackbar = true;
           this.snackbarText = 'Skill deleted!';
         })
         .catch(err => console.log(err));
+    },
+    openSkillProfile(item) {
+      this.$router.push({
+        name: 'skillprofile',
+        params: { id: item.skillId }
+      });
     }
   }
 };

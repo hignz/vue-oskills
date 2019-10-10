@@ -3,32 +3,49 @@
     <p class="subheading grey--text">Dashboard</p>
     <v-row>
       <v-col cols="12">
-        <v-card class="pa-2" outlined tile>
+        <v-card class="pa-2">
           <v-container>
-            <v-row>
+            <v-row align="center">
               <v-col cols="3">
                 <v-row class="subtitle-2 ml-2"
                   >Hello, {{ user.name.split(' ')[0] }}</v-row
                 >
                 <v-row class="caption grey--text ml-2">{{ user.role }}</v-row>
+                <v-row class="overline grey--text ml-2"
+                  >Remaining Votes: {{ user.remainingVotes }}</v-row
+                >
               </v-col>
-              <v-col v-for="i in 3" :key="i" cols="3">
-                <v-row>
-                  {{ sortedSkills[i].name }}
-                </v-row>
-                <v-row>
-                  <v-icon
-                    class="ml-4"
-                    :color="
-                      sortedSkills[i].esteem === 1
-                        ? 'red'
-                        : sortedSkills[i].esteem === 2
-                        ? 'orange'
-                        : 'green'
-                    "
-                  >
-                    mdi-circle
-                  </v-icon>
+              <v-col v-for="(skill, i) in topThreeSkills" :key="i" cols="3">
+                <v-row align="center">
+                  <v-col>
+                    <v-row class="caption grey--text">
+                      {{ skill.name }}
+                    </v-row>
+                    <v-row class="headline">{{ skill.rating }}</v-row>
+                  </v-col>
+                  <v-col>
+                    <v-row>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                          <v-icon
+                            x-large
+                            class="mt-2"
+                            :color="
+                              skill.esteem === 1
+                                ? 'red'
+                                : skill.esteem === 2
+                                ? 'orange'
+                                : 'green'
+                            "
+                            v-on="on"
+                          >
+                            mdi-hexagon
+                          </v-icon>
+                        </template>
+                        <span>{{ skill.esteem }}</span>
+                      </v-tooltip>
+                    </v-row>
+                  </v-col>
                 </v-row>
               </v-col>
             </v-row>
@@ -40,7 +57,12 @@
     <v-row>
       <v-col cols="12" md="8" sm="12">
         <v-card class="pa-2" outlined tile>
-          .col-12 .col-md-8
+          <apexcharts
+            type="bar"
+            height="300"
+            :options="getChartOptions"
+            :series="getChartSeries"
+          />
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
@@ -65,11 +87,11 @@
       </v-col>
       <v-col cols="12" md="4" sm="12">
         <v-card :height="292">
-          <SkillList :skills="sortedSkills"></SkillList>
+          <SkillList :skills="topThreeSkills"></SkillList>
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <v-card :height="292"> .col-6 .col-md-4 </v-card>
+        <v-card :height="292"><ActivityFeed></ActivityFeed></v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -80,11 +102,13 @@ import SimilarUsers from '../components/SimilarUsers';
 import SkillList from '../components/SkillList';
 import VueApexCharts from 'vue-apexcharts';
 import { mapGetters } from 'vuex';
+import ActivityFeed from '../components/ActivityFeed';
 
 export default {
   components: {
     SimilarUsers,
     SkillList,
+    ActivityFeed,
     apexcharts: VueApexCharts
   },
   data() {
@@ -97,9 +121,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['sortedSkills']),
+    ...mapGetters(['topThreeSkills']),
     getChartSeries() {
-      return this.sortedSkills.map(e => {
+      return this.topThreeSkills.map(e => {
         return e.rating;
       });
     },
@@ -121,7 +145,7 @@ export default {
             }
           }
         },
-        labels: this.sortedSkills.map(e => {
+        labels: this.topThreeSkills.map(e => {
           return e.name;
         })
       };
@@ -156,7 +180,8 @@ export default {
     this.$store
       .dispatch('getAllUsers')
       .then(response => {
-        this.similarUsers = response.data;
+        console.log(response.data.data);
+        this.similarUsers = response.data.data.slice(0, 4);
       })
       .catch(err => {
         console.log(err);

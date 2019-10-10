@@ -41,8 +41,11 @@ export default new Vuex.Store({
       state.accessToken && state.showNavigationDrawer,
     getUser: state => state.user,
     skills: state => state.skills,
-    sortedSkills: state =>
-      state.user.skills.concat().sort((a, b) => b.rating - a.rating)
+    topThreeSkills: state =>
+      state.user.skills
+        .concat()
+        .sort((a, b) => b.rating - a.rating)
+        .slice(0, 3)
   },
   actions: {
     fetchUser({ commit }, id) {
@@ -103,7 +106,7 @@ export default new Vuex.Store({
           });
       });
     },
-    fetchUsersByName({ commit }, searchTerm) {
+    fetchByName({ commit }, searchTerm) {
       axios.defaults.headers.common = {
         Authorization: `Bearer ${this.getters.accessToken}`
       };
@@ -120,7 +123,7 @@ export default new Vuex.Store({
 
       return new Promise((resolve, reject) => {
         axios
-          .post('http://localhost:1111/findusersbyname', body, config)
+          .post('http://localhost:1111/find-by-name', body, config)
           .then(response => {
             resolve(response);
           })
@@ -140,6 +143,36 @@ export default new Vuex.Store({
             reject(error);
           });
       });
+    },
+    fetchAllSkills() {
+      return new Promise((resolve, reject) => {
+        axios
+          .get('http://localhost:1111/get-all-skills')
+          .then(response => {
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    fetchSkills({ commit }) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
+      return new Promise((resolve, reject) =>
+        axios
+          .get('http://localhost:1111/get-all-user-skills')
+          .then(response => {
+            commit('updateSkills', response.data.skills);
+            resolve(response.data.skills);
+          })
+          .catch(err => {
+            console.log(err);
+            reject(err);
+          })
+      );
     },
     fetchSkillsById({ commit }, categoryId) {
       const config = {
@@ -207,35 +240,34 @@ export default new Vuex.Store({
         JSON.parse(localStorage.getItem('accessToken'))
       );
     },
-    fetchSkills({ commit }) {
+
+    fetchDeleteSkill({ commit }, id) {
       axios.defaults.headers.common = {
         Authorization: `Bearer ${this.getters.accessToken}`
       };
 
       return new Promise((resolve, reject) =>
         axios
-          .get('http://localhost:1111/get-all-user-skills')
+          .post('http://localhost:1111/remove-user-skill', { id })
           .then(response => {
             commit('updateSkills', response.data.skills);
             resolve(response.data.skills);
           })
           .catch(err => {
-            console.log(err);
             reject(err);
           })
       );
     },
-    fetchDeleteSkill({ commit }, skillId) {
+    fetchActivites({ commit }) {
       axios.defaults.headers.common = {
         Authorization: `Bearer ${this.getters.accessToken}`
       };
 
       return new Promise((resolve, reject) =>
         axios
-          .post('http://localhost:1111/remove-user-skill', { skillId })
+          .get('http://localhost:1111/recent-activity')
           .then(response => {
-            commit('updateSkills', response.data.skills);
-            resolve(response.data.skills);
+            resolve(response.data);
           })
           .catch(err => {
             reject(err);
@@ -256,6 +288,28 @@ export default new Vuex.Store({
     toggleDarkMode({ commit }, value) {
       commit('toogleIsDark', value);
       localStorage.setItem('darkMode', value);
+    },
+    verifyUser({ commit }, verificationToken) {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+
+      return new Promise((resolve, reject) => {
+        axios
+          .post(
+            'http://localhost:1111/verify-user',
+            { verificationToken },
+            config
+          )
+          .then(response => {
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
     }
   }
 });

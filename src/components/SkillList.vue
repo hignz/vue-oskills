@@ -11,18 +11,18 @@
 
     <v-list-item-group color="primary">
       <v-list-item
-        v-for="i in 3"
+        v-for="(skill, i) in skills"
         :key="i"
         :to="{
           name: 'skillprofile',
-          params: { id: skills[i].skillId }
+          params: { id: skill.skillId }
         }"
       >
         <v-list-item-content>
-          <v-list-item-title v-text="skills[i].name"></v-list-item-title>
+          <v-list-item-title v-text="skill.name"></v-list-item-title>
         </v-list-item-content>
         <v-list-item-avatar>
-          {{ skills[i].rating }}
+          {{ skill.rating }}
         </v-list-item-avatar>
       </v-list-item>
     </v-list-item-group>
