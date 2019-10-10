@@ -1,7 +1,7 @@
 <template>
   <v-card max-width="344" class="mx-auto">
-    <v-list-item>
-      <v-list-item-avatar color="grey">
+    <v-list-item dense>
+      <v-list-item-avatar color="grey" @click="openProfile">
         <img :src="randomUserImg" />
       </v-list-item-avatar>
       <v-list-item-content>
