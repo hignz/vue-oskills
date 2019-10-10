@@ -1,25 +1,23 @@
 <template>
   <v-container>
-    <v-row class="headline" align="center" justify="center">
-      <v-col class="text-center pt-12 pb-8">
-        <h1 class="subheading grey--text pt-5">
-          <span class="font-weight-light">Welcome to </span>
-          <span class="primary--text">O</span>
-          <span class="font-weight-light">Skills</span>
-        </h1>
-      </v-col>
-    </v-row>
+    <v-col class="text-center">
+      <h1 class="subheading grey--text pt-5">
+        <span class="font-weight-light">Welcome to </span>
+        <span class="primary--text">O</span>
+        <span class="font-weight-light">Skills</span>
+      </h1>
+    </v-col>
     <v-container v-if="verified + !completed" fill-height>
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md6>
           <v-card flat>
             <v-form>
-              <v-stepper v-model="n" vertical>
+              <v-stepper v-model="n" vertical class="elevation-0">
                 <v-stepper-step :complete="n > 1" :step="1" :editable="true">
                   Personal Details
                 </v-stepper-step>
                 <v-stepper-content step="1">
-                  <v-col sm="8" class="mx-auto">
+                  <v-col sm="12">
                     <v-text-field
                       v-model="firstName"
                       name="firstName"
@@ -47,7 +45,6 @@
                       label="Skills"
                       multiple
                       class="pb-3"
-                      menu-props="auto"
                     >
                     </v-autocomplete>
                     <v-file-input
@@ -67,7 +64,7 @@
                 </v-stepper-step>
                 <v-stepper-content step="2">
                   <v-row>
-                    <v-col class="mx-auto" sm="3">
+                    <v-col class="mx-auto" sm="6">
                       <v-switch
                         v-model="darkMode"
                         label="Dark Mode"
@@ -76,10 +73,8 @@
                       </v-switch>
                     </v-col>
                   </v-row>
-                  <v-col class="mx-auto pt-6" cols="12" sm="4">
-                    <v-btn color="primary" col="6" @click="n = 3"
-                      >Continue</v-btn
-                    >
+                  <v-col class="mx-auto pt-6" cols="12" sm="6">
+                    <v-btn color="primary" @click="n = 3">Continue</v-btn>
                     <v-btn text col="6" @click="n = 1">Back</v-btn>
                   </v-col>
                 </v-stepper-content>
@@ -89,7 +84,7 @@
                 </v-stepper-step>
                 <v-stepper-content step="3">
                   <v-row>
-                    <v-col sm="8" class="mx-auto">
+                    <v-col sm="12" class="mx-auto">
                       <v-text-field
                         v-model="password"
                         :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -114,7 +109,7 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
-                  <v-col class="mx-auto pt-6" sm="4">
+                  <v-col class="mx-auto pt-6" sm="6">
                     <v-btn type="submit" color="primary" @click="complete()"
                       >Complete</v-btn
                     >
