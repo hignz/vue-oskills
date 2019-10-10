@@ -23,7 +23,7 @@ export default {
         .push({
           name: 'results',
           query: {
-            search: this.searchTerm.trim()
+            search: this.searchTerm
           }
         })
         .catch(err => console.log(err));
