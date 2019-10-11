@@ -7,11 +7,12 @@
       app
     >
       <v-list-item>
-        <v-list-item-avatar>
+        <!-- <v-list-item-avatar>
           <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-title>Welcome</v-list-item-title>
+        <v-list-item-title>Welcome</v-list-item-title> -->
+        <ProfileMenu></ProfileMenu>
       </v-list-item>
 
       <v-divider></v-divider>
@@ -67,8 +68,12 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import ProfileMenu from '../components/ProfileMenu';
 
 export default {
+  components: {
+    ProfileMenu
+  },
   data() {
     return {
       showDrawer: true,
