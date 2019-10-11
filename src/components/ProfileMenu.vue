@@ -7,7 +7,7 @@
     offset-x
   >
     <template v-slot:activator="{ on }">
-      <v-btn fab small color="primary" v-on="on">
+      <v-btn fab x-small="" color="primary" v-on="on">
         <v-icon>mdi-account-circle</v-icon>
       </v-btn>
     </template>

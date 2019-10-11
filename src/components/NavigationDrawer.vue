@@ -7,11 +7,12 @@
       app
     >
       <v-list-item>
-        <v-list-item-avatar>
+        <!-- <v-list-item-avatar>
           <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-title>Welcome</v-list-item-title>
+        <v-list-item-title>Welcome</v-list-item-title> -->
+        <ProfileMenu></ProfileMenu>
       </v-list-item>
 
       <v-divider></v-divider>
@@ -36,7 +37,7 @@
             <v-list-item-title>{{ item.text }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-group no-action>
+        <!-- <v-list-group no-action>
           <template v-slot:activator>
             <v-list-item-icon>
               <v-icon>mdi-settings</v-icon>
@@ -59,7 +60,7 @@
               <v-icon>mdi-brush</v-icon>
             </v-list-item-icon>
           </v-list-item>
-        </v-list-group>
+        </v-list-group> -->
       </v-list>
     </v-navigation-drawer>
   </v-card>
@@ -67,8 +68,12 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import ProfileMenu from '../components/ProfileMenu';
 
 export default {
+  components: {
+    ProfileMenu
+  },
   data() {
     return {
       showDrawer: true,
@@ -76,7 +81,8 @@ export default {
       links: [
         { icon: 'mdi-bulletin-board', text: 'Dashboard', route: '/dashboard' },
         { icon: 'mdi-star-circle', text: 'Skills', route: '/skills' },
-        { icon: 'mdi-magnify', text: 'Explore', route: '/explore' }
+        { icon: 'mdi-magnify', text: 'Explore', route: '/explore' },
+        { icon: 'mdi-settings', text: 'Settings', route: '/settings' }
       ]
     };
   },

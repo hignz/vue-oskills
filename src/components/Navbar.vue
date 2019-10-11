@@ -10,8 +10,7 @@
       </router-link>
       <v-spacer></v-spacer>
       <SearchBar class="mt-4"></SearchBar>
-      <v-spacer></v-spacer>
-      <ProfileMenu />
+      <!-- <ProfileMenu /> -->
     </v-app-bar>
   </nav>
 </template>
