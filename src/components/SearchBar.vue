@@ -1,32 +1,69 @@
 <template>
   <v-form @submit.prevent>
-    <v-text-field
-      v-model="searchTerm"
-      prepend-inner-icon="mdi-magnify"
-      placeholder="Search"
-      :clearable="true"
-      @keyup.enter="search()"
-    ></v-text-field>
+    <v-autocomplete
+      v-model="model"
+      browser-autocomplete="off"
+      class="mt-4"
+      :items="items"
+      :loading="isLoading"
+      :search-input.sync="search"
+      color="white"
+      hide-no-data
+      hide-selected
+      item-text="name"
+      item-value="_id"
+      label="Search"
+      placeholder="Start typing to Search"
+      prepend-icon="mdi-magnify"
+      return-object
+      @change="goToResults"
+    ></v-autocomplete>
   </v-form>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      searchTerm: ''
-    };
+  data: () => ({
+    descriptionLimit: 60,
+    entries: [],
+    isLoading: false,
+    model: null,
+    search: null
+  }),
+
+  computed: {
+    items() {
+      return this.entries.map(entry => {
+        return Object.assign({}, entry);
+      });
+    }
+  },
+
+  watch: {
+    search(val) {
+      if (val.length === 0) {
+        this.entries = [];
+      }
+
+      if (this.items.length > 0) return;
+
+      if (this.isLoading) return;
+
+      this.isLoading = true;
+
+      this.$store
+        .dispatch('fetchByName', val)
+        .then(res => (this.entries = res.data.data))
+        .catch(error => console.log(error))
+        .finally(() => (this.isLoading = false));
+    }
   },
   methods: {
-    search() {
-      this.$router
-        .push({
-          name: 'results',
-          query: {
-            search: this.searchTerm
-          }
-        })
-        .catch(err => console.log(err));
+    goToResults() {
+      this.$router.push({
+        name: 'profile',
+        params: { id: this.model._id, user: this.model }
+      });
     }
   }
 };
