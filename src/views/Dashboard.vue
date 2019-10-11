@@ -3,7 +3,7 @@
     <p class="subheading grey--text">Dashboard</p>
     <v-row>
       <v-col cols="12" sm="12">
-        <v-card class="pa-2">
+        <v-card>
           <v-container>
             <v-row align="center">
               <v-col xs="12" sm="12" md="3">
@@ -64,7 +64,7 @@
 
     <v-row>
       <v-col cols="12" md="8" sm="12">
-        <v-card class="pa-2">
+        <v-card>
           <div id="chart">
             <apexcharts
               type="bar"
@@ -76,11 +76,11 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <v-card class="pa-2">
+        <v-card>
           <div id="chart">
             <apexcharts
-              type="radialBar"
-              height="350"
+              type="radar"
+              height="300"
               :options="radialChartOptions"
               :series="radialChartSeries"
             />
@@ -133,29 +133,65 @@ export default {
   computed: {
     ...mapGetters(['topThreeSkills']),
     radialChartSeries() {
-      return this.topThreeSkills.map(e => {
-        return e.rating;
-      });
+      return [
+        {
+          name: 'Rating',
+          data: this.user.skills.map(e => {
+            return e.rating;
+          })
+        }
+      ];
     },
     // TODO: make chart reactive
     radialChartOptions() {
       return {
+        chart: {
+          type: 'radar',
+          background: '#424242'
+        },
+        title: {
+          text: 'Categories'
+        },
+        stroke: {
+          width: 0
+        },
+        theme: {
+          mode: 'dark',
+          palette: 'palette1'
+        },
+        fill: {
+          opacity: 0.6
+        },
         plotOptions: {
-          radialBar: {
-            dataLabels: {
-              name: {
-                fontSize: '22px'
-              },
-              value: {
-                fontSize: '16px',
-                formatter: val => {
-                  return val;
-                }
+          radar: {
+            size: 120,
+            polygons: {
+              strokeColor: '#e9e9e9',
+              fill: {
+                colors: ['#424242', '#424242']
               }
             }
           }
         },
-        labels: this.topThreeSkills.map(e => {
+
+        yaxis: {
+          tickAmount: 5,
+          labels: {
+            formatter: function(val, i) {
+              if (i % 2 === 0) {
+                return val;
+              } else {
+                return '';
+              }
+            }
+          }
+        },
+        markers: {
+          size: 2,
+          colors: ['#fff'],
+          strokeWidth: 2
+        },
+        labels: this.user.skills.map(e => {
           return e.name;
         })
       };
@@ -176,7 +212,7 @@ export default {
         plotOptions: {
           bar: {
             horizontal: false,
-            columnWidth: '55%',
+            columnWidth: '40%',
             background: '#fff'
           }
         },
@@ -184,14 +220,11 @@ export default {
           enabled: true
         },
         theme: {
-          mode: 'light',
-          palette: 'palette1',
-          monochrome: {
-            enabled: false,
-            color: '#255aee',
-            shadeTo: 'light',
-            shadeIntensity: 0.65
-          }
+          mode: 'dark',
+          palette: 'palette1'
+        },
+        chart: {
+          background: '#424242'
         },
         stroke: {
           show: true,
