@@ -226,7 +226,7 @@ export default new Vuex.Store({
         }
       };
       axios
-        .post('http://localhost:1111/register', registerData, config)
+        .post('http://localhost:1111/register-user', registerData, config)
         .then(response => {
           router.push('/login');
         })

@@ -7,17 +7,17 @@
           searchTerm
         }}"
       </p>
-      <v-row justify="start">
-        <v-col v-for="(result, i) in results" :key="i" sm="12" md="3">
+      <v-row justify="center" dense>
+        <v-col v-for="(result, i) in results" :key="i" sm="12" md="3" lg="2">
           <MiniProfile :user="result"></MiniProfile>
         </v-col>
       </v-row>
     </div>
-    <v-row v-else-if="!results.length" align="center" justify="center">
+    <v-row v-else-if="!results.length">
       <v-col cols="6">
-        <v-card class="text-center"
-          >Search results: 0 {{ getPlural }} for "{{ searchTerm }}"</v-card
-        >
+        <p class="subtitle-2">
+          Search results: 0 {{ getPlural }} for "{{ searchTerm }}"
+        </p>
       </v-col>
     </v-row>
   </v-container>

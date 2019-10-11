@@ -20,10 +20,12 @@
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title v-if="getUser.name">{{
+            <v-list-item-title v-if="getUser.name" class="subtitle-1">{{
               getUser.name
             }}</v-list-item-title>
-            <v-list-item-subtitle>{{ getUser.role }}</v-list-item-subtitle>
+            <v-list-item-subtitle class="caption">{{
+              getUser.role
+            }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-list>
