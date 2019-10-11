@@ -36,7 +36,7 @@
             <v-list-item-title>{{ item.text }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-group no-action>
+        <!-- <v-list-group no-action>
           <template v-slot:activator>
             <v-list-item-icon>
               <v-icon>mdi-settings</v-icon>
@@ -59,7 +59,7 @@
               <v-icon>mdi-brush</v-icon>
             </v-list-item-icon>
           </v-list-item>
-        </v-list-group>
+        </v-list-group> -->
       </v-list>
     </v-navigation-drawer>
   </v-card>
@@ -76,7 +76,8 @@ export default {
       links: [
         { icon: 'mdi-bulletin-board', text: 'Dashboard', route: '/dashboard' },
         { icon: 'mdi-star-circle', text: 'Skills', route: '/skills' },
-        { icon: 'mdi-magnify', text: 'Explore', route: '/explore' }
+        { icon: 'mdi-magnify', text: 'Explore', route: '/explore' },
+        { icon: 'mdi-settings', text: 'Settings', route: '/settings' }
       ]
     };
   },
