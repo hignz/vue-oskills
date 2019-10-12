@@ -2,7 +2,7 @@
   <v-form @submit.prevent>
     <v-autocomplete
       v-model="model"
-      browser-autocomplete="off"
+      autocomplete="off"
       class="mt-4"
       :items="items"
       :loading="isLoading"
