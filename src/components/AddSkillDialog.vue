@@ -8,7 +8,7 @@
       </template>
       <v-card>
         <v-card-title>
-          <span class="headline">Add a skill</span>
+          Add a skill
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -28,6 +28,7 @@
                   <v-autocomplete
                     v-model="selectedSkill"
                     label="Skill"
+                    no-data-text="No skills available"
                     :items="skills"
                     required
                   ></v-autocomplete>

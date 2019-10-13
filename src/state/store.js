@@ -196,6 +196,32 @@ export default new Vuex.Store({
           });
       });
     },
+    voteSkill({ commit }, skillId) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+
+      return new Promise((resolve, reject) => {
+        axios
+          .post(
+            'http://localhost:1111/vote-skill',
+            { userSkillId: skillId },
+            config
+          )
+          .then(response => {
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
     addSkillToUser({ commit }, { skillId }) {
       axios.defaults.headers.common = {
         Authorization: `Bearer ${this.getters.accessToken}`

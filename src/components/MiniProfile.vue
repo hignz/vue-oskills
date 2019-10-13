@@ -1,23 +1,22 @@
 <template>
   <v-card max-width="344" class="mx-auto">
-    <v-list-item dense>
-      <v-list-item-avatar color="grey" @click="openProfile">
+    <v-list-item dense @click="openProfile">
+      <v-list-item-avatar color="grey">
         <img :src="randomUserImg" />
       </v-list-item-avatar>
       <v-list-item-content>
-        <v-list-item-title class="headline title" @click="openProfile">{{
-          user.name
-        }}</v-list-item-title>
+        <v-list-item-title class="headline">{{ user.name }}</v-list-item-title>
         <v-list-item-subtitle>{{ user.role }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
-    <v-list>
-      <v-subheader>Top Skills</v-subheader>
+    <v-list dense>
+      <v-subheader class="ml-2">Top Skills</v-subheader>
       <v-list-item-group color="primary">
         <v-list-item v-for="(skill, i) in sortedSkills" :key="i">
           <v-list-item-icon>
             <v-icon
+              class="mt-2"
               :color="
                 skill.esteem === 1
                   ? 'red'
@@ -25,15 +24,23 @@
                   ? 'orange'
                   : 'green'
               "
-              >mdi-circle</v-icon
             >
+              mdi-hexagon
+            </v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title v-text="skill.name"></v-list-item-title>
           </v-list-item-content>
           <v-list-item-action>
-            <v-btn icon>
-              <v-icon color="grey lighten-1">mdi-thumb-up</v-icon>
+            <v-btn icon @click="vote(skill)">
+              <v-icon
+                :color="
+                  skill.votedBy.includes(user._id)
+                    ? 'red lighten-1'
+                    : 'grey lighten-1'
+                "
+                >mdi-vote</v-icon
+              >
             </v-btn>
           </v-list-item-action>
         </v-list-item>
@@ -50,6 +57,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   props: {
     user: {
@@ -57,7 +66,13 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      selectedSkill: {}
+    };
+  },
   computed: {
+    ...mapGetters['getUser'],
     sortedSkills() {
       return this.user.skills
         .concat()
@@ -76,6 +91,14 @@ export default {
         name: 'profile',
         params: { id: this.user._id, user: this.user }
       });
+    },
+    vote(s) {
+      this.$store
+        .dispatch('voteSkill', s._id)
+        .then(() => {
+          // TODO highlight voted skill
+        })
+        .catch(err => console.log(err));
     }
   }
 };

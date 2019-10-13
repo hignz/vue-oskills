@@ -17,21 +17,15 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/Account',
-    name: 'account',
-    component: () => import('./views/AccountSettings'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/appearance',
-    name: 'AppearanceSettings',
-    component: () => import('./views/AppearanceSettings'),
-    meta: { requiresAuth: true }
-  },
-  {
     path: '/explore',
     name: 'explore',
     component: () => import('./views/Explore'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: () => import('./views/Settings'),
     meta: { requiresAuth: true }
   },
   {
