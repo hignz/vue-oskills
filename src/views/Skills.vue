@@ -1,5 +1,6 @@
 <template>
   <v-container v-if="loaded">
+    <p class="subheading grey--text">Skills</p>
     <v-data-table
       :headers="headers"
       :items="skills"
@@ -40,7 +41,8 @@
                 value: 'name'
               },
               { text: 'Rating', value: 'rating', align: 'center' },
-              { text: 'Esteem', value: 'esteem', align: 'center' }
+              { text: 'Esteem', value: 'esteem', align: 'center' },
+              { text: 'Category', value: 'categoryName', align: 'left' }
             ]"
             :items="[selectedSkill]"
             hide-default-footer
@@ -94,6 +96,7 @@ export default {
         },
         { text: 'Rating', value: 'rating', align: 'center' },
         { text: 'Esteem', value: 'esteem', align: 'center' },
+        { text: 'Category', value: 'categoryName', align: 'center' },
         { text: 'Actions', value: 'action', sortable: false, align: 'center' }
       ],
       showSnackbar: false,
