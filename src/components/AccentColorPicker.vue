@@ -32,6 +32,11 @@ export default {
       vuetify.framework.theme.themes.light.primary = val;
       localStorage.setItem('accentColor', val);
     }
+  },
+  created() {
+    this.hex = vuetify.framework.theme.isDark
+      ? vuetify.framework.theme.themes.dark.primary
+      : vuetify.framework.theme.themes.light.primary;
   }
 };
 </script>
