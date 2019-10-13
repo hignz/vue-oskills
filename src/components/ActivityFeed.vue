@@ -1,6 +1,6 @@
 <template>
-  <v-list rounded dense two-line flat>
-    <v-subheader
+  <v-list dense two-line flat>
+    <v-subheader class="ml-2"
       >ACTIVITY FEED
       <v-spacer></v-spacer>
       <v-btn icon>
@@ -9,7 +9,13 @@
     </v-subheader>
 
     <v-list-item-group color="primary">
-      <v-list-item v-for="(activity, i) in activities" :key="i">
+      <v-list-item v-for="(activity, i) in activities.slice(0, 3)" :key="i">
+        <v-list-item-avatar>
+          <v-icon>
+            mdi-circle-medium
+          </v-icon>
+        </v-list-item-avatar>
+
         <v-list-item-content>
           <v-list-item-title v-text="activity.message"></v-list-item-title>
           <v-list-item-subtitle>{{
