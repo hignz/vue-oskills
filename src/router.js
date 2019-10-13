@@ -35,6 +35,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/settings',
+    name: 'settings',
+    component: () => import('./views/Settings'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('./views/Login'),
