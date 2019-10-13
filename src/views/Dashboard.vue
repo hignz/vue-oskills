@@ -91,17 +91,17 @@
 
     <v-row>
       <v-col cols="12" md="4" sm="12">
-        <v-card :height="292">
+        <v-card>
           <SimilarUsers :users="similarUsers" />
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <v-card :height="292">
+        <v-card>
           <SkillList :skills="topThreeSkills"></SkillList>
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <v-card :height="292"><ActivityFeed></ActivityFeed></v-card>
+        <v-card><ActivityFeed></ActivityFeed></v-card>
       </v-col>
     </v-row>
   </v-container>
