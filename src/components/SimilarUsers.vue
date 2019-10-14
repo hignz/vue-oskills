@@ -1,6 +1,6 @@
 <template>
-  <v-list rounded dense>
-    <v-subheader
+  <v-list dense two-line>
+    <v-subheader class="ml-2"
       >SIMILAR USERS
       <v-spacer></v-spacer>
       <v-menu offset-y>
@@ -18,7 +18,7 @@
     </v-subheader>
     <v-list-item-group color="primary">
       <v-list-item
-        v-for="(user, i) in users"
+        v-for="(user, i) in users.slice(0, 3)"
         :key="i"
         :to="{ name: 'profile', params: { id: user._id, user } }"
         link
@@ -30,6 +30,7 @@
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title v-text="user.name"></v-list-item-title>
+          <v-list-item-subtitle v-text="user.role"></v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
     </v-list-item-group>

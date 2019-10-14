@@ -1,9 +1,13 @@
 <template>
-  <v-list rounded dense>
-    <v-subheader
+  <v-list dense two-line>
+    <v-subheader class="ml-2"
       >SKILLS
       <v-spacer></v-spacer>
       <AddSkillDialog></AddSkillDialog>
+      <v-btn icon @click="openAllSkills">
+        <v-icon>mdi-arrow-expand</v-icon>
+      </v-btn>
+
       <v-tooltip top>
         <span>Add a new skill</span>
       </v-tooltip>
@@ -18,15 +22,33 @@
           params: { id: skill.skillId }
         }"
       >
+        <v-list-item-avatar>
+          <v-icon
+            x-large
+            class="mt-2"
+            :color="
+              skill.esteem === 1
+                ? 'red'
+                : skill.esteem === 2
+                ? 'orange'
+                : 'green'
+            "
+          >
+            mdi-hexagon
+          </v-icon>
+        </v-list-item-avatar>
+
         <v-list-item-content>
           <v-list-item-title v-text="skill.name"></v-list-item-title>
+          <v-list-item-subtitle
+            v-text="skill.categoryName"
+          ></v-list-item-subtitle>
         </v-list-item-content>
-        <v-list-item-avatar>
+        <v-list-item-action-text>
           {{ skill.rating }}
-        </v-list-item-avatar>
+        </v-list-item-action-text>
       </v-list-item>
     </v-list-item-group>
-    <v-btn block text rounded @click="openAllSkills">All</v-btn>
   </v-list>
 </template>
 

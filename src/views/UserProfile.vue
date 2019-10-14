@@ -1,46 +1,94 @@
 <template>
-  <v-container v-if="user" fluid>
+  <v-container v-if="loaded" fluid>
     <p class="subheading grey--text">Profile</p>
 
-    <v-row style="height: 200px" class="primary darken-5">
-      <v-col cols="12" sm="12" md="6">
-        <v-row>
-          <v-col cols="12" sm="12" md="6">
-            <v-card>1</v-card>
-          </v-col>
-          <v-col cols="12" sm="12" md="6">
-            <v-card>2</v-card>
-          </v-col>
-        </v-row>
-      </v-col>
-      <v-col cols="12" sm="12" md="6">
-        <v-row>
-          <v-col cols="12" sm="12" md="6">
-            <v-card>1</v-card>
-          </v-col>
-          <v-col cols="12" sm="12" md="6">
-            <v-card>2</v-card>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
+    <v-card>
+      <v-row justify="center" align="center">
+        <v-col cols="12" sm="12" md="6">
+          <v-row justify="center" align="center">
+            <v-col cols="12" sm="12" md="6">
+              <v-row justify="center" align="center">
+                <v-col cols="12" sm="12" md="6">
+                  <v-avatar size="72">
+                    <v-img :src="randomUserImg"></v-img>
+                  </v-avatar>
+                </v-col>
+                <v-col cols="12" sm="12" md="6">
+                  <v-row class="subheading-1" justify="start" align="end">
+                    {{ user.name }}
+                  </v-row>
+                  <v-row
+                    class="subtitle-2 grey--text"
+                    justify="start"
+                    align="end"
+                  >
+                    {{ user.role }}
+                  </v-row>
+                  <v-row
+                    class="subtitle-2 grey--text"
+                    justify="start"
+                    align="end"
+                  >
+                    Joined: {{ moment(user.dateJoined).format('DD-MM-YYYY') }}
+                  </v-row>
+                </v-col>
+              </v-row>
+            </v-col>
+            <!-- <v-col cols="12" sm="12" md="6">
+              <v-col>
+                <v-row justify="start" align="center">
+                  {{ user.name }}
+                </v-row>
+                <v-row justify="start" align="center">
+                  {{ user.name }}
+                </v-row>
+              </v-col> -->
+            <!-- </v-col> -->
+          </v-row>
+        </v-col>
+        <v-col cols="12" sm="12" md="6">
+          <v-row>
+            <v-col cols="12" sm="12" md="6">
+              <v-card>1</v-card>
+            </v-col>
+            <v-col cols="12" sm="12" md="6">
+              <v-card>2</v-card>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-card>
 
-    <v-row align="stretch" style="height: 600px;" class="success darken-5">
-      <v-col cols="12" sm="12" md="6">
-        <v-card>
-          1
-        </v-card>
-      </v-col>
-      <v-col cols="12" sm="12" md="6">
-        <v-row>
-          <v-col cols="12" sm="12" md="6"><v-card>1</v-card></v-col>
-          <v-col cols="12" sm="12" md="6"><v-card>2</v-card></v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" sm="12"><v-card>3</v-card></v-col>
-        </v-row>
-      </v-col>
-    </v-row>
+    <v-card class="mt-1">
+      <v-row justify="center" align="center">
+        <v-col cols="12" sm="12" md="6">
+          <v-expansion-panels multiple>
+            <v-expansion-panel v-for="(skill, i) in user.skills" :key="i">
+              <v-expansion-panel-header>
+                {{ skill.name }}
+              </v-expansion-panel-header>
+
+              <v-expansion-panel-content>
+                <v-list>
+                  <v-list-item v-for="(s, j) in user.skills" :key="j">
+                    <v-list-item-title>{{ s.name }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </v-col>
+        <v-col cols="12" sm="12" md="6">
+          <v-row>
+            <v-col cols="12" sm="12" md="6"><v-card>1</v-card></v-col>
+            <v-col cols="12" sm="12" md="6"><v-card>2</v-card></v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" sm="12"><v-card>3</v-card></v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-card>
   </v-container>
 </template>
 
@@ -82,6 +130,17 @@ export default {
       .then(response => {
         this.user = response;
         this.loaded = true;
+
+        const categories = ['Data', 'Languages'];
+
+        const x = categories.map(e => {
+          return {
+            name: e,
+            skills: []
+          };
+        });
+
+        console.log(x);
       })
       .catch(err => {
         console.log(err);

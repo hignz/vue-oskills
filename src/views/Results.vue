@@ -1,22 +1,23 @@
 <template>
   <v-container fluid>
     <p class="subheading grey--text">Results</p>
-    <div v-if="results.data">
-      <div v-if="results.data.length > 0">
-        <v-card-title class="subtitle-1">Users</v-card-title>
-        <v-row v-for="i in rowCount" :key="i" justify="end">
-          <v-col
-            v-for="(result, j) in results.data.slice(calcIndex(i))"
-            :key="j"
-          >
-            <MiniProfile :user="results.data[j]"></MiniProfile>
-          </v-col>
-        </v-row>
-      </div>
+    <div v-if="results.length">
+      <p class="subtitle-2">
+        Search results: {{ results.length }} {{ getPlural }} for "{{
+          searchTerm
+        }}"
+      </p>
+      <v-row justify="center" dense>
+        <v-col v-for="(result, i) in results" :key="i" sm="12" md="3" lg="2">
+          <MiniProfile :user="result"></MiniProfile>
+        </v-col>
+      </v-row>
     </div>
-    <v-row v-else>
-      <v-col cols="12">
-        <v-card class="align-center">No results found</v-card>
+    <v-row v-else-if="!results.length">
+      <v-col cols="6">
+        <p class="subtitle-2">
+          Search results: 0 {{ getPlural }} for "{{ searchTerm }}"
+        </p>
       </v-col>
     </v-row>
   </v-container>
@@ -30,31 +31,26 @@ export default {
   },
   data() {
     return {
-      results: {}
+      results: [],
+      searchTerm: ''
     };
   },
   computed: {
-    rowCount() {
-      return Math.ceil(this.results.data.length / 5);
+    getPlural() {
+      return this.results.length === 1 ? 'result' : 'results';
     }
   },
   created() {
-    const searchTerm = this.$route.query.search;
+    this.searchTerm = this.$route.query.search;
 
     this.$store
-      .dispatch('fetchByName', searchTerm)
+      .dispatch('fetchByName', this.searchTerm)
       .then(response => {
-        this.results = response.data;
+        this.results = response.data.data;
       })
       .catch(error => {
         console.error(error);
       });
-  },
-  methods: {
-    calcIndex(i) {
-      if (i - 1 === 0) return 0;
-      return (i - 1) * 5;
-    }
   }
 };
 </script>

@@ -10,7 +10,7 @@
     <v-container v-if="verified && !completed" fill-height>
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md6>
-          <v-card flat>
+          <v-card>
             <v-form>
               <v-stepper v-model="n" vertical class="elevation-0">
                 <v-stepper-step :complete="n > 1" :step="1" :editable="true">
@@ -39,9 +39,10 @@
                       :items="skills"
                       item-text="text"
                       item-value="value"
-                      attach
                       dense
+                      no-data-text="No skill available"
                       chips
+                      autocomplete="off"
                       label="Skills"
                       multiple
                       class="pb-3"
@@ -66,14 +67,9 @@
                 </v-stepper-step>
                 <v-stepper-content step="2">
                   <v-row>
-                    <v-col sm="12">
-                      <v-switch
-                        v-model="darkMode"
-                        label="Dark Mode"
-                        class="ml-4"
-                        color="primary"
-                      >
-                      </v-switch>
+                    <v-col sm="6" class="text-center">
+                      <DarkThemeSwitch></DarkThemeSwitch>
+                      <AccentColorPicker></AccentColorPicker>
                     </v-col>
                   </v-row>
                   <v-col class="mx-auto pt-6" cols="12" sm="12">
@@ -120,7 +116,7 @@
                       type="submit"
                       class="ml-2"
                       color="primary"
-                      @click="complete()"
+                      @click="onComplete()"
                       >Complete</v-btn
                     >
                   </v-col>
@@ -145,7 +141,14 @@
 </template>
 
 <script>
+import AccentColorPicker from '../components/AccentColorPicker';
+import DarkThemeSwitch from '../components/DarkThemeSwitch';
+
 export default {
+  components: {
+    AccentColorPicker,
+    DarkThemeSwitch
+  },
   data() {
     return {
       n: 1,
@@ -170,34 +173,11 @@ export default {
       completed: null
     };
   },
-  computed: {
-    color: {
-      get() {
-        return this[this.type];
-      },
-      set(v) {
-        this[this.type] = v;
-      },
-      comparePasswords() {
-        return this.password !== this.confirmPassword
-          ? 'Passwords do not match'
-          : '';
-      }
-    },
-    darkMode: {
-      get() {
-        return this.$store.state.isDark;
-      },
-      set(value) {
-        this.$store.dispatch('toggleDarkMode', value);
-      }
-    }
-  },
   created() {
     const token = this.$route.params.token;
     this.$store
       .dispatch('verifyUser', token)
-      .then(response => {
+      .then(() => {
         this.verified = true;
 
         this.$store
@@ -214,21 +194,20 @@ export default {
             console.log(err);
           });
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
         this.verified = false;
       });
   },
   methods: {
-    complete() {
-      const user = {
-        name: this.firstName + this.lastName,
+    onComplete() {
+      this.$store.dispatch('doRegister', {
+        name: `${this.firstName} ${this.lastName}`,
         skills: this.selectedSkills,
-        password: this.password
-      };
+        password: this.password,
+        verificationToken: this.$route.params.token
+      });
 
       this.completed = true;
-      console.log(user);
     }
   }
 };

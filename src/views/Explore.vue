@@ -1,10 +1,17 @@
 <template>
-  <v-container grid-list-lg fluid class="page">
+  <v-container>
     <p class="subheading grey--text">Explore</p>
-    <v-layout align-content-start justify-space-between row wrap>
-      <v-flex v-for="user in users.data" :key="user._id" xs12 md6 mb-3>
-        <MiniProfile v-if="loaded" :user="user" />
-      </v-flex>
+    <v-layout v-if="users.data">
+      <v-row>
+        <v-col
+          v-for="(user, i) in users.data.slice(0, 4)"
+          :key="i"
+          sm="12"
+          md="3"
+        >
+          <MiniProfile :user="user" />
+        </v-col>
+      </v-row>
     </v-layout>
   </v-container>
 </template>
