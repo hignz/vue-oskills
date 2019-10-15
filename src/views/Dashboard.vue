@@ -6,7 +6,7 @@
         <v-card>
           <v-container>
             <v-row align="center">
-              <v-col xs="12" sm="12" md="3">
+              <v-col sm="12" md="3">
                 <v-row class="subtitle-2 ml-2"
                   >Hello, {{ user.name.split(' ')[0] }}</v-row
                 >
@@ -18,7 +18,6 @@
               <v-col
                 v-for="(skill, i) in topThreeSkills"
                 :key="i"
-                xs="12"
                 sm="12"
                 md="3"
               >
@@ -125,18 +124,17 @@ export default {
     return {
       user: {},
       similarUsers: [],
-      skills: [],
       loaded: false,
       now: new Date().toLocaleDateString()
     };
   },
   computed: {
-    ...mapGetters(['topThreeSkills']),
+    ...mapGetters(['topThreeSkills', 'skills']),
     radialChartSeries() {
       return [
         {
           name: 'Rating',
-          data: this.user.skills.map(e => {
+          data: this.skills.map(e => {
             return e.rating;
           })
         }
@@ -173,9 +171,9 @@ export default {
             }
           }
         },
-
         yaxis: {
           tickAmount: 5,
+          max: 10,
           labels: {
             formatter: function(val, i) {
               if (i % 2 === 0) {
@@ -186,12 +184,15 @@ export default {
             }
           }
         },
-        markers: {
-          size: 2,
-          colors: ['#fff'],
-          strokeWidth: 2
+        tooltip: {
+          y: {
+            formatter: function(val) {
+              return val;
+            }
+          }
         },
-        labels: this.user.skills.map(e => {
+
+        labels: this.skills.map(e => {
           return e.name;
         })
       };
@@ -200,7 +201,7 @@ export default {
       return [
         {
           name: 'Rating',
-          data: this.user.skills.map(e => {
+          data: this.skills.map(e => {
             return e.rating;
           })
         }
@@ -211,9 +212,8 @@ export default {
       return {
         plotOptions: {
           bar: {
-            horizontal: false,
-            columnWidth: '40%',
-            background: '#fff'
+            horizontal: true,
+            columnWidth: '10%'
           }
         },
         dataLabels: {
@@ -221,7 +221,7 @@ export default {
         },
         theme: {
           mode: 'dark',
-          palette: 'palette1'
+          palette: 'palette3'
         },
         chart: {
           background: '#424242'
@@ -232,14 +232,15 @@ export default {
           colors: ['transparent']
         },
         xaxis: {
-          categories: this.user.skills.map(el => {
+          title: {
+            text: 'Rating'
+          },
+          categories: this.skills.map(el => {
             return el.name;
           })
         },
         yaxis: {
-          title: {
-            text: 'Rating'
-          }
+          max: this.getBestSkill.rating + 10
         },
         fill: {
           opacity: 1
@@ -259,7 +260,7 @@ export default {
       ) + 1}.jpg`;
     },
     getBestSkill() {
-      return this.user.skills.reduce((prev, current) =>
+      return this.skills.reduce((prev, current) =>
         prev.rating > current.rating ? prev : current
       );
     },
@@ -283,8 +284,7 @@ export default {
     this.$store
       .dispatch('getAllUsers')
       .then(response => {
-        console.log(response.data.data);
-        this.similarUsers = response.data.data.slice(0, 4);
+        this.similarUsers = response.data.data;
       })
       .catch(err => {
         console.log(err);
