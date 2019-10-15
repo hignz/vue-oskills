@@ -61,12 +61,14 @@ export default {
       'accentColor'
     );
 
-    this.$store
-      .dispatch('fetchUser')
-      .then(() => {})
-      .catch(err => {
-        console.log(err);
-      });
+    if (!this.getUser._id) {
+      this.$store
+        .dispatch('fetchUser')
+        .then(() => {})
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
 };
 </script>
