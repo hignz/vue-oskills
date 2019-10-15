@@ -1,9 +1,8 @@
 <template>
-  <v-form @submit.prevent>
+  <v-form class="mr-12 mt-8" @submit.prevent>
     <v-autocomplete
       v-model="model"
       autocomplete="off"
-      class="mt-4"
       :items="items"
       :loading="isLoading"
       :search-input.sync="search"
