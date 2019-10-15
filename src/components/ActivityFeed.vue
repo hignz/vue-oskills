@@ -1,5 +1,5 @@
 <template>
-  <v-list dense two-line flat>
+  <v-list v-if="activities" dense two-line flat>
     <v-subheader class="ml-2"
       >ACTIVITY FEED
       <v-spacer></v-spacer>
@@ -37,7 +37,6 @@ export default {
     this.$store
       .dispatch('fetchActivites')
       .then(res => {
-        console.log(res);
         this.activities = res;
       })
       .catch(err => {
