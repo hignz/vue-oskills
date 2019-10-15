@@ -61,7 +61,7 @@ export default {
       'accentColor'
     );
 
-    if (!this.getUser._id) {
+    if (this.accessToken) {
       this.$store
         .dispatch('fetchUser')
         .then(() => {})
