@@ -42,7 +42,7 @@ export default new Vuex.Store({
     getUser: state => state.user,
     skills: state => state.skills,
     topThreeSkills: state =>
-      state.user.skills
+      state.skills
         .concat()
         .sort((a, b) => b.rating - a.rating)
         .slice(0, 3)
@@ -62,6 +62,23 @@ export default new Vuex.Store({
           )
           .then(response => {
             commit('setUser', response.data.data);
+            commit('updateSkills', response.data.data.skills);
+            resolve(response.data.data);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    fetchUserById({ commit }, id) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
+      return new Promise((resolve, reject) => {
+        axios
+          .get('http://localhost:1111/user/' + id)
+          .then(response => {
             resolve(response.data.data);
           })
           .catch(error => {
