@@ -32,25 +32,7 @@
                   </v-col>
                   <v-col>
                     <v-row justify="start">
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on }">
-                          <v-icon
-                            x-large
-                            class="mt-2"
-                            :color="
-                              skill.esteem === 1
-                                ? 'red'
-                                : skill.esteem === 2
-                                ? 'orange'
-                                : 'green'
-                            "
-                            v-on="on"
-                          >
-                            mdi-hexagon
-                          </v-icon>
-                        </template>
-                        <span>{{ skill.esteem }}</span>
-                      </v-tooltip>
+                      <EsteemBadge :skill="skill"></EsteemBadge>
                     </v-row>
                   </v-col>
                 </v-row>
@@ -107,18 +89,21 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import VueApexCharts from 'vue-apexcharts';
+
 import SimilarUsers from '../components/SimilarUsers';
 import SkillList from '../components/SkillList';
-import VueApexCharts from 'vue-apexcharts';
-import { mapGetters } from 'vuex';
 import ActivityFeed from '../components/ActivityFeed';
+import EsteemBadge from '../components/EsteemBadge';
 
 export default {
   components: {
-    SimilarUsers,
-    SkillList,
+    apexcharts: VueApexCharts,
     ActivityFeed,
-    apexcharts: VueApexCharts
+    EsteemBadge,
+    SimilarUsers,
+    SkillList
   },
   data() {
     return {

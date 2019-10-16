@@ -23,19 +23,7 @@
         }"
       >
         <v-list-item-avatar>
-          <v-icon
-            x-large
-            class="mt-2"
-            :color="
-              skill.esteem === 1
-                ? 'red'
-                : skill.esteem === 2
-                ? 'orange'
-                : 'green'
-            "
-          >
-            mdi-hexagon
-          </v-icon>
+          <EsteemBadge :skill="skill"></EsteemBadge>
         </v-list-item-avatar>
 
         <v-list-item-content>
@@ -70,10 +58,12 @@
 
 <script>
 const AddSkillDialog = () => import('./AddSkillDialog');
+const EsteemBadge = () => import('./EsteemBadge');
 
 export default {
   components: {
-    AddSkillDialog
+    AddSkillDialog,
+    EsteemBadge
   },
   props: {
     skills: {
