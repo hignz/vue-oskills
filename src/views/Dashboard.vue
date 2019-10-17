@@ -46,26 +46,12 @@
     <v-row>
       <v-col cols="12" md="8" sm="12">
         <v-card>
-          <div id="chart">
-            <apexcharts
-              type="bar"
-              height="300"
-              :options="barChartOptions"
-              :series="barChartSeries"
-            />
-          </div>
+          <BarChart :skills="skills"></BarChart>
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
         <v-card>
-          <div id="chart">
-            <apexcharts
-              type="radar"
-              height="300"
-              :options="radialChartOptions"
-              :series="radialChartSeries"
-            />
-          </div>
+          <RadarChart></RadarChart>
         </v-card>
       </v-col>
     </v-row>
@@ -90,20 +76,22 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import VueApexCharts from 'vue-apexcharts';
 
 import SimilarUsers from '../components/SimilarUsers';
 import SkillList from '../components/SkillList';
 import ActivityFeed from '../components/ActivityFeed';
 import EsteemBadge from '../components/EsteemBadge';
+import BarChart from '../components/BarChart';
+import RadarChart from '../components/RadarChart';
 
 export default {
   components: {
-    apexcharts: VueApexCharts,
     ActivityFeed,
     EsteemBadge,
     SimilarUsers,
-    SkillList
+    SkillList,
+    BarChart,
+    RadarChart
   },
   data() {
     return {
@@ -115,130 +103,6 @@ export default {
   },
   computed: {
     ...mapGetters(['topThreeSkills', 'skills']),
-    radialChartSeries() {
-      return [
-        {
-          name: 'Rating',
-          data: this.skills.map(e => {
-            return e.rating;
-          })
-        }
-      ];
-    },
-    // TODO: make chart reactive
-    radialChartOptions() {
-      return {
-        chart: {
-          type: 'radar',
-          background: '#424242'
-        },
-        title: {
-          text: 'Categories'
-        },
-        stroke: {
-          width: 0
-        },
-        theme: {
-          mode: 'dark',
-          palette: 'palette1'
-        },
-        fill: {
-          opacity: 0.6
-        },
-        plotOptions: {
-          radar: {
-            size: 120,
-            polygons: {
-              strokeColor: '#e9e9e9',
-              fill: {
-                colors: ['#424242', '#424242']
-              }
-            }
-          }
-        },
-        yaxis: {
-          tickAmount: 5,
-          max: 10,
-          labels: {
-            formatter: function(val, i) {
-              if (i % 2 === 0) {
-                return val;
-              } else {
-                return '';
-              }
-            }
-          }
-        },
-        tooltip: {
-          y: {
-            formatter: function(val) {
-              return val;
-            }
-          }
-        },
-
-        labels: this.skills.map(e => {
-          return e.name;
-        })
-      };
-    },
-    barChartSeries() {
-      return [
-        {
-          name: 'Rating',
-          data: this.skills.map(e => {
-            return e.rating;
-          })
-        }
-      ];
-    },
-    // TODO: make chart reactive
-    barChartOptions() {
-      return {
-        plotOptions: {
-          bar: {
-            horizontal: true,
-            columnWidth: '10%'
-          }
-        },
-        dataLabels: {
-          enabled: true
-        },
-        theme: {
-          mode: 'dark',
-          palette: 'palette3'
-        },
-        chart: {
-          background: '#424242'
-        },
-        stroke: {
-          show: true,
-          width: 2,
-          colors: ['transparent']
-        },
-        xaxis: {
-          title: {
-            text: 'Rating'
-          },
-          categories: this.skills.map(el => {
-            return el.name;
-          })
-        },
-        yaxis: {
-          max: this.getBestSkill.rating + 10
-        },
-        fill: {
-          opacity: 1
-        },
-        tooltip: {
-          y: {
-            formatter: function(val) {
-              return val;
-            }
-          }
-        }
-      };
-    },
     randomUserImg() {
       return `https://randomuser.me/api/portraits/men/${Math.floor(
         Math.random() * (Math.floor(65) - Math.ceil(1) + 1)
@@ -260,11 +124,11 @@ export default {
       .dispatch('fetchUser')
       .then(response => {
         this.user = response;
-        this.loaded = true;
       })
       .catch(err => {
         console.log(err);
-      });
+      })
+      .finally(() => (this.loaded = true));
 
     this.$store
       .dispatch('getAllUsers')
