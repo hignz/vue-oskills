@@ -2,6 +2,7 @@
   <v-form class="mr-12 mt-5" @submit.prevent>
     <v-autocomplete
       v-model="model"
+      clearable
       autocomplete="off"
       :items="items"
       :loading="isLoading"
@@ -11,7 +12,7 @@
       item-text="name"
       item-value="_id"
       placeholder="Search..."
-      prepend-icon="mdi-magnify"
+      prepend-inner-icon="mdi-magnify"
       return-object
       @change="goToResults"
     ></v-autocomplete>
@@ -21,7 +22,6 @@
 <script>
 export default {
   data: () => ({
-    descriptionLimit: 60,
     entries: [],
     isLoading: false,
     model: null,
@@ -38,8 +38,9 @@ export default {
 
   watch: {
     search(val) {
-      if (val && val.length === 0) {
+      if (!val) {
         this.entries = [];
+        return;
       }
 
       if (this.items.length > 0) return;
@@ -57,10 +58,12 @@ export default {
   },
   methods: {
     goToResults() {
-      this.$router.push({
-        name: 'profile',
-        params: { id: this.model._id, user: this.model }
-      });
+      if (this.model) {
+        this.$router.push({
+          name: 'profile',
+          params: { id: this.model._id, user: this.model }
+        });
+      }
     }
   }
 };
