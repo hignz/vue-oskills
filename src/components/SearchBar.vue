@@ -1,5 +1,5 @@
 <template>
-  <v-form class="mr-12 mt-8" @submit.prevent>
+  <v-form class="mr-12 mt-5" @submit.prevent>
     <v-autocomplete
       v-model="model"
       autocomplete="off"
@@ -11,8 +11,7 @@
       hide-selected
       item-text="name"
       item-value="_id"
-      label="Search"
-      placeholder="Start typing to Search"
+      placeholder="Search..."
       prepend-icon="mdi-magnify"
       return-object
       @change="goToResults"
