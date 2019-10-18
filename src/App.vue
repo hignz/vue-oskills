@@ -3,8 +3,15 @@
     <NavigationDrawer v-if="accessToken" />
     <Navbar v-if="accessToken" />
     <v-content>
+      <v-progress-linear
+        indeterminate
+        :active="isLoading"
+        :height="2"
+        :query="true"
+        color="primary"
+      ></v-progress-linear>
       <transition name="fade">
-        <router-view :key="$route.fullPath"></router-view>
+        <router-view :key="$route.fullPath"> </router-view>
       </transition>
     </v-content>
   </v-app>
@@ -33,7 +40,7 @@ export default {
     showNavDrawer() {
       return this.$store.getters.showNavigationDrawer;
     },
-    ...mapGetters(['getUser', 'accessToken'])
+    ...mapGetters(['getUser', 'accessToken', 'isLoading'])
   },
   created() {
     axios.interceptors.response.use(
