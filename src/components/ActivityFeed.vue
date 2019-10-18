@@ -1,30 +1,40 @@
 <template>
-  <v-list dense two-line flat class="overflow-y-auto" style="max-height: 272px">
-    <v-subheader class="ml-2"
-      >ACTIVITY FEED
+  <v-card>
+    <v-toolbar dense flat>
+      <v-toolbar-title class="subtitle-2 grey--text"
+        >ACTIVITY FEED</v-toolbar-title
+      >
       <v-spacer></v-spacer>
       <v-btn icon>
         <v-icon>mdi-refresh</v-icon>
       </v-btn>
-    </v-subheader>
+    </v-toolbar>
 
-    <v-list-item-group color="primary">
-      <v-list-item v-for="(activity, i) in activities" :key="i">
-        <v-list-item-avatar>
-          <v-icon>
-            mdi-circle-medium
-          </v-icon>
-        </v-list-item-avatar>
+    <v-list
+      dense
+      two-line
+      flat
+      class="overflow-y-auto"
+      style="max-height: 232px"
+    >
+      <v-list-item-group color="primary">
+        <v-list-item v-for="(activity, i) in activities" :key="i">
+          <v-list-item-avatar>
+            <v-icon>
+              mdi-circle-medium
+            </v-icon>
+          </v-list-item-avatar>
 
-        <v-list-item-content>
-          <v-list-item-title v-text="activity.message"></v-list-item-title>
-          <v-list-item-subtitle>{{
-            moment(activity.logDate).fromNow()
-          }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-    </v-list-item-group>
-  </v-list>
+          <v-list-item-content>
+            <v-list-item-title v-text="activity.message"></v-list-item-title>
+            <v-list-item-subtitle>{{
+              moment(activity.logDate).fromNow()
+            }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-item-group>
+    </v-list>
+  </v-card>
 </template>
 
 <script>
