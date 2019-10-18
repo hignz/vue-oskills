@@ -43,12 +43,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ProfileMenu from '../components/ProfileMenu';
 
 export default {
-  components: {
-    ProfileMenu
-  },
   data() {
     return {
       showDrawer: true,
