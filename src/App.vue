@@ -7,7 +7,6 @@
         indeterminate
         :active="isLoading"
         :height="2"
-        :query="true"
         color="primary"
       ></v-progress-linear>
       <transition name="fade">
