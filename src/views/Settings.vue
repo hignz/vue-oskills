@@ -16,14 +16,15 @@
         </v-card>
       </v-tab-item>
       <v-tab-item :transition="false" :reverse-transition="false">
-        <v-card flat>
-          <v-card-text>
-            <p>Dark Theme</p>
-            <DarkThemeSwitch></DarkThemeSwitch>
-            <p>Accent Color</p>
-            <AccentColorPicker></AccentColorPicker>
-          </v-card-text>
-        </v-card>
+        <v-container>
+          <v-card flat>
+            <v-card-content>
+              <DarkThemeSwitch></DarkThemeSwitch>
+              <p><v-icon>mdi-palette-outline</v-icon> Accent Color</p>
+              <AccentColorPicker></AccentColorPicker>
+            </v-card-content>
+          </v-card>
+        </v-container>
       </v-tab-item>
     </v-tabs-items>
   </v-card>
