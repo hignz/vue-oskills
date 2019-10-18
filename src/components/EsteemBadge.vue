@@ -1,13 +1,7 @@
 <template>
   <v-tooltip bottom>
     <template v-slot:activator="{ on }">
-      <v-icon
-        large
-        :color="
-          skill.esteem === 1 ? 'red' : skill.esteem === 2 ? 'orange' : 'green'
-        "
-        v-on="on"
-      >
+      <v-icon large :color="color" v-on="on">
         mdi-hexagon
       </v-icon>
     </template>
@@ -21,6 +15,23 @@ export default {
     skill: {
       type: Object,
       required: true
+    }
+  },
+  computed: {
+    color() {
+      const esteem = this.skill.esteem;
+      let color = '';
+      if (esteem >= 1 && esteem <= 5) {
+        color = 'orange';
+      } else if (esteem > 5 && esteem <= 10) {
+        color = 'yellow';
+      } else if (esteem >= 11 && esteem <= 16) {
+        color = 'green';
+      } else {
+        color = 'blue';
+      }
+
+      return color;
     }
   }
 };
