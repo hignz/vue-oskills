@@ -47,7 +47,7 @@ export default {
         },
         fill: {
           opacity: 0.6,
-          colors: [this.accentColor]
+          colors: [localStorage.getItem('accentColor')]
         },
         plotOptions: {
           radar: {
