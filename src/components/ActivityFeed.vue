@@ -1,5 +1,5 @@
 <template>
-  <v-list v-if="activities" dense two-line flat>
+  <v-list dense two-line flat class="overflow-y-auto" style="max-height: 272px">
     <v-subheader class="ml-2"
       >ACTIVITY FEED
       <v-spacer></v-spacer>
@@ -9,7 +9,7 @@
     </v-subheader>
 
     <v-list-item-group color="primary">
-      <v-list-item v-for="(activity, i) in activities.slice(0, 3)" :key="i">
+      <v-list-item v-for="(activity, i) in activities" :key="i">
         <v-list-item-avatar>
           <v-icon>
             mdi-circle-medium
@@ -47,4 +47,26 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+</style>
