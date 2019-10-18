@@ -20,7 +20,7 @@
           mdi-delete
         </v-icon>
         <v-icon small @click="openSkillProfile(item)">
-          mdi-post-outline
+          mdi-file-star-outline
         </v-icon>
       </template>
     </v-data-table>
