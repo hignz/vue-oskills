@@ -1,12 +1,16 @@
 <template>
-  <div id="chart">
-    <apexcharts
-      type="bar"
-      height="300"
-      :options="barChartOptions"
-      :series="barChartSeries"
-    />
-  </div>
+  <v-card>
+    <v-toolbar dense flat class="subtitle-2 grey--text">SKILLS</v-toolbar>
+
+    <div id="chart">
+      <apexcharts
+        type="bar"
+        height="300"
+        :options="barChartOptions"
+        :series="barChartSeries"
+      />
+    </div>
+  </v-card>
 </template>
 
 <script>
@@ -17,14 +21,14 @@ export default {
   components: {
     apexcharts: VueApexCharts
   },
-  // props: {
-  //   userSkills: {
-  //     type: Object,
-  //     required: true
-  //   }
-  // },
   computed: {
     ...mapGetters(['skills', 'isDark', 'accentColor']),
+    bestSkill() {
+      return this.skills.reduce((prev, current) =>
+        prev.rating > current.rating ? prev : current
+      );
+    },
+
     barChartSeries() {
       return [
         {
@@ -39,7 +43,7 @@ export default {
       return {
         plotOptions: {
           bar: {
-            horizontal: false,
+            horizontal: true,
             columnWidth: '10%'
           }
         },
@@ -66,9 +70,10 @@ export default {
             return el.name;
           })
         },
-        // yaxis: {
-        //   max: this.getBestSkill.rating + 10
-        // },
+        yaxis: {
+          min: 0,
+          max: this.bestSkill.rating + this.bestSkill.rating / 2
+        },
         fill: {
           opacity: 0.6,
           colors: [localStorage.getItem('accentColor')]
