@@ -35,7 +35,7 @@
       <v-list nav>
         <v-list-item @click="">
           <v-list-item-icon>
-            <v-icon>mdi-weather-night</v-icon>
+            <v-icon>mdi-theme-light-dark</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Dark Theme</v-list-item-title>

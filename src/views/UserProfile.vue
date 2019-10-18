@@ -34,25 +34,25 @@
                 </v-col>
               </v-row>
             </v-col>
-            <!-- <v-col cols="12" sm="12" md="6">
-              <v-col>
-                <v-row justify="start" align="center">
-                  {{ user.name }}
-                </v-row>
-                <v-row justify="start" align="center">
-                  {{ user.name }}
-                </v-row>
-              </v-col> -->
-            <!-- </v-col> -->
           </v-row>
         </v-col>
         <v-col cols="12" sm="12" md="6">
           <v-row>
+            <v-col cols="12" sm="12" md="6"> </v-col>
             <v-col cols="12" sm="12" md="6">
-              <v-card>1</v-card>
-            </v-col>
-            <v-col cols="12" sm="12" md="6">
-              <v-card>2</v-card>
+              <v-row align="center" justify="center">
+                <v-col>
+                  <v-row align="center" justify="center">TOP SKILL</v-row>
+                  <v-row align="center" justify="center">
+                    <v-col class="subtitle grey--text text-end">
+                      {{ getBestSkill.name }}
+                    </v-col>
+                    <v-col>
+                      <EsteemBadge :skill="getBestSkill"></EsteemBadge>
+                    </v-col>
+                  </v-row>
+                </v-col>
+              </v-row>
             </v-col>
           </v-row>
         </v-col>
@@ -75,6 +75,9 @@
                 <template v-for="(skill, j) in cat.skills">
                   <v-list-item :key="skill._id">
                     <template v-slot:default="{ active, toggle }">
+                      <v-list-item-icon>
+                        <EsteemBadge :skill="skill"></EsteemBadge>
+                      </v-list-item-icon>
                       <v-list-item-content>
                         <v-list-item-title>{{ skill.name }}</v-list-item-title>
                       </v-list-item-content>
@@ -126,8 +129,12 @@
 <script>
 import { mapGetters } from 'vuex';
 
+const EsteemBadge = () => import('../components/EsteemBadge');
+
 export default {
-  components: {},
+  components: {
+    EsteemBadge
+  },
   data() {
     return {
       selected: [0],
@@ -199,17 +206,18 @@ export default {
       this.$store
         .dispatch('voteSkill', skill._id)
         .then(response => {
-          this.snackbarText = `Voted! Remaining votes: ${this.getUser.remainingVotes}`;
+          this.snackbarText = `Voted! Remaining votes: ${response.data.remainingVotes}`;
           this.snackbarColor = 'accent';
           this.showSnackbar = true;
 
-          const s = response.data.skill;
+          const skill = response.data.skill;
           this.user.skills = this.user.skills.map(x =>
-            x._id == s._id ? s : x
+            x._id == skill._id ? skill : x
           );
         })
         .catch(err => {
-          this.snackbarText = 'You have no remaining votes!';
+          this.showSnackbar = false;
+          this.snackbarText = 'You have no votes left for this week.';
           this.snackbarColor = 'error';
           this.showSnackbar = true;
 

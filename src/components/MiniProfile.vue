@@ -10,29 +10,18 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-list dense>
+    <v-list dense two-line>
       <v-subheader class="ml-2">Top Skills</v-subheader>
       <v-list-item-group color="primary">
         <v-list-item v-for="(skill, i) in sortedSkills" :key="i">
-          <v-list-item-icon>
-            <v-icon
-              class="mt-2"
-              :color="
-                skill.esteem === 1
-                  ? 'red'
-                  : skill.esteem === 2
-                  ? 'orange'
-                  : 'green'
-              "
-            >
-              mdi-hexagon
-            </v-icon>
-          </v-list-item-icon>
+          <v-list-item-avatar>
+            <EsteemBadge :skill="skill"></EsteemBadge>
+          </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title v-text="skill.name"></v-list-item-title>
           </v-list-item-content>
           <v-list-item-action>
-            <v-btn icon @click="vote(skill)">
+            <v-btn icon @click="vote(skill._id)">
               <v-icon
                 :color="
                   skill.votedBy.includes(user._id)
@@ -58,8 +47,10 @@
 
 <script>
 import { mapGetters } from 'vuex';
+const EsteemBadge = () => import('./EsteemBadge');
 
 export default {
+  components: { EsteemBadge },
   props: {
     user: {
       type: Object,
@@ -92,9 +83,9 @@ export default {
         params: { id: this.user._id, user: this.user }
       });
     },
-    vote(s) {
+    vote(skillId) {
       this.$store
-        .dispatch('voteSkill', s._id)
+        .dispatch('voteSkill', skillId)
         .then(() => {
           // TODO highlight voted skill
         })

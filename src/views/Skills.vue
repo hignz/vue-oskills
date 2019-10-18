@@ -16,12 +16,26 @@
         </v-toolbar>
       </template>
       <template v-slot:item.action="{ item }">
-        <v-icon small @click="showDeleteDialog(item)">
-          mdi-delete
-        </v-icon>
-        <v-icon small @click="openSkillProfile(item)">
-          mdi-post-outline
-        </v-icon>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn icon v-on="on">
+              <v-icon small @click="showDeleteDialog(item)">
+                mdi-delete
+              </v-icon>
+            </v-btn>
+          </template>
+          <span>Delete</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn icon v-on="on">
+              <v-icon small @click="openSkillProfile(item)">
+                mdi-file-star-outline
+              </v-icon>
+            </v-btn>
+          </template>
+          <span>Skill profile</span>
+        </v-tooltip>
       </template>
     </v-data-table>
     <v-dialog v-model="deleteDialog" width="500">
