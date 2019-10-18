@@ -1,12 +1,20 @@
 <template>
-  <div id="chart">
-    <apexcharts
-      type="radar"
-      height="300"
-      :options="chartOptions"
-      :series="chartSeries"
-    />
-  </div>
+  <v-card>
+    <v-toolbar dense flat>
+      <v-toolbar-title class="subtitle-2 grey--text"
+        >CATEGORIES</v-toolbar-title
+      >
+    </v-toolbar>
+
+    <div v-if="categories" id="chart">
+      <apexcharts
+        type="radar"
+        height="300"
+        :options="chartOptions"
+        :series="chartSeries"
+      />
+    </div>
+  </v-card>
 </template>
 
 <script>
@@ -17,15 +25,18 @@ export default {
   components: {
     apexcharts: VueApexCharts
   },
+  data() {
+    return {
+      skillCategories: []
+    };
+  },
   computed: {
     ...mapGetters(['skills', 'isDark', 'accentColor']),
     chartSeries() {
       return [
         {
-          name: 'Esteem Points',
-          data: this.skills.map(e => {
-            return e.rating;
-          })
+          name: 'Esteem Total',
+          data: this.categoryTotals
         }
       ];
     },
@@ -35,15 +46,12 @@ export default {
           type: 'radar',
           background: this.isDark ? '#424242' : '#ffffff'
         },
-        title: {
-          text: 'Categories'
-        },
         stroke: {
-          width: 0
+          width: 0,
+          curve: 'smooth'
         },
         theme: {
-          mode: this.isDark ? 'dark' : 'light',
-          palette: 'palette1'
+          mode: this.isDark ? 'dark' : 'light'
         },
         fill: {
           opacity: 0.6,
@@ -61,30 +69,58 @@ export default {
         },
         yaxis: {
           tickAmount: 5,
-          max: 10,
-          labels: {
-            formatter: function(val, i) {
-              if (i % 2 === 0) {
-                return val;
-              } else {
-                return '';
-              }
-            }
-          }
+          max: this.bestSkill[0],
+          min: 1
+        },
+        markers: {
+          colors: [localStorage.getItem('accentColor')],
+          size: 2.5
         },
         tooltip: {
           y: {
-            formatter: function(val) {
-              return val;
-            }
+            formatter: val => val
           }
         },
 
-        labels: this.skills.map(e => {
-          return e.name;
-        })
+        labels: this.categoryLabels
       };
+    },
+    categories() {
+      let categories = this.skillCategories.map(e => {
+        return { name: e, skills: [] };
+      });
+
+      categories.forEach(category => {
+        this.skills.forEach(skill => {
+          if (skill.categoryName === category.name) {
+            category.skills.push(skill);
+          }
+        });
+      });
+
+      return categories.sort((a, b) => b.name - a.name);
+    },
+    categoryLabels() {
+      return this.categories.map(el => el.name);
+    },
+    categoryTotals() {
+      let l = this.categories.map(el =>
+        el.skills.reduce((acc, curr) => acc + curr.esteem, 0)
+      );
+
+      return l;
+    },
+    bestSkill() {
+      return [...this.categoryTotals].sort((a, b) => b - a).slice(0, 1);
     }
+  },
+  created() {
+    this.$store
+      .dispatch('fetchCategories')
+      .then(res => {
+        this.skillCategories = res.data.categories.map(el => el.name);
+      })
+      .catch(err => console.log(err));
   }
 };
 </script>
