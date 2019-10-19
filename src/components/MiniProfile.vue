@@ -21,15 +21,17 @@
             <v-list-item-title v-text="skill.name"></v-list-item-title>
           </v-list-item-content>
           <v-list-item-action>
-            <v-btn icon @click="vote(skill._id)">
+            <v-btn icon @click="vote(skill)">
               <v-icon
-                :color="
-                  skill.votedBy.includes(user._id)
-                    ? 'red lighten-1'
-                    : 'grey lighten-1'
-                "
-                >mdi-vote</v-icon
+                v-if="!skill.votedBy.includes(getUser._id)"
+                color="grey lighten-1"
               >
+                mdi-vote-outline
+              </v-icon>
+
+              <v-icon v-else color="yellow">
+                mdi-vote
+              </v-icon>
             </v-btn>
           </v-list-item-action>
         </v-list-item>
@@ -42,6 +44,13 @@
         View Profile
       </v-btn>
     </v-card-actions>
+
+    <v-snackbar v-model="showSnackbar" :color="snackbarColor">
+      {{ snackbarText }}
+      <v-btn color="white" text @click="showSnackbar = false">
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-card>
 </template>
 
@@ -59,11 +68,14 @@ export default {
   },
   data() {
     return {
-      selectedSkill: {}
+      selectedSkill: {},
+      showSnackbar: false,
+      snackbarText: '',
+      snackbarColor: ''
     };
   },
   computed: {
-    ...mapGetters['getUser'],
+    ...mapGetters(['getUser']),
     sortedSkills() {
       return this.user.skills
         .concat()
@@ -83,13 +95,27 @@ export default {
         params: { id: this.user._id, user: this.user }
       });
     },
-    vote(skillId) {
+    vote(skill) {
       this.$store
-        .dispatch('voteSkill', skillId)
-        .then(() => {
-          // TODO highlight voted skill
+        .dispatch('voteSkill', skill._id)
+        .then(response => {
+          this.snackbarText = `Voted! Remaining votes: ${response.data.remainingVotes}`;
+          this.snackbarColor = 'accent';
+          this.showSnackbar = true;
+
+          const skill = response.data.skill;
+          this.user.skills = this.user.skills.map(x =>
+            x._id == skill._id ? skill : x
+          );
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          this.showSnackbar = false;
+          this.snackbarText = 'You have no votes left for this week.';
+          this.snackbarColor = 'error';
+          this.showSnackbar = true;
+
+          console.log(err);
+        });
     }
   }
 };
