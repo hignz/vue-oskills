@@ -68,9 +68,12 @@ export default {
           }
         },
         yaxis: {
-          tickAmount: 5,
+          tickAmount: 1,
           max: this.bestSkill[0],
-          min: 1
+          min: 1,
+          labels: {
+            formatter: val => val.toFixed(0)
+          }
         },
         markers: {
           colors: [localStorage.getItem('accentColor')],
