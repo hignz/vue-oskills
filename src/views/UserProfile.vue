@@ -1,7 +1,5 @@
 <template>
   <v-container v-if="loaded" fluid>
-    <p class="subheading grey--text">Profile</p>
-
     <v-card>
       <v-row justify="center" align="center">
         <v-col cols="12" sm="12" md="6">
@@ -59,58 +57,73 @@
       </v-row>
     </v-card>
 
-    <v-row justify="center" align="center">
+    <v-row>
       <v-col cols="12" sm="12" md="6">
-        <v-expansion-panels multiple>
-          <v-expansion-panel
-            v-for="(cat, i) in getSkillsByCategories"
-            :key="cat.name"
-          >
-            <v-expansion-panel-header>
-              {{ cat.name }}
-            </v-expansion-panel-header>
+        <v-card tile>
+          <v-toolbar>SKILLS</v-toolbar>
+          <v-expansion-panels v-if="user.skills" multiple>
+            <v-expansion-panel
+              v-for="(cat, i) in getSkillsByCategories"
+              :key="cat.name"
+              class="elevation-0"
+            >
+              <v-expansion-panel-header>
+                {{ cat.name }}
+              </v-expansion-panel-header>
 
-            <v-expansion-panel-content>
-              <v-list>
-                <template v-for="(skill, j) in cat.skills">
-                  <v-list-item :key="skill._id">
-                    <template v-slot:default="{ active, toggle }">
-                      <v-list-item-icon>
-                        <EsteemBadge :skill="skill"></EsteemBadge>
-                      </v-list-item-icon>
-                      <v-list-item-content>
-                        <v-list-item-title>{{ skill.name }}</v-list-item-title>
-                      </v-list-item-content>
-                      <v-list-item-action>
-                        <v-btn icon @click="vote(skill)">
-                          <v-icon
-                            v-if="!skill.votedBy.includes(getUser._id)"
-                            color="grey lighten-1"
-                          >
-                            mdi-vote-outline
-                          </v-icon>
+              <v-expansion-panel-content>
+                <v-list>
+                  <template v-for="(skill, j) in cat.skills">
+                    <v-list-item :key="skill._id">
+                      <template v-slot:default="{ active, toggle }">
+                        <v-list-item-icon>
+                          <EsteemBadge :skill="skill"></EsteemBadge>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          <v-list-item-title>{{
+                            skill.name
+                          }}</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-btn icon @click="vote(skill)">
+                            <v-icon
+                              v-if="!skill.votedBy.includes(getUser._id)"
+                              color="grey lighten-1"
+                            >
+                              mdi-vote-outline
+                            </v-icon>
 
-                          <v-icon v-else color="yellow">
-                            mdi-vote
-                          </v-icon>
-                        </v-btn>
-                      </v-list-item-action>
-                    </template>
-                  </v-list-item>
-                  <v-divider
-                    v-if="j + 1 < cat.skills.length"
-                    :key="j"
-                  ></v-divider>
-                </template>
-              </v-list>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
+                            <v-icon v-else color="yellow">
+                              mdi-vote
+                            </v-icon>
+                          </v-btn>
+                        </v-list-item-action>
+                      </template>
+                    </v-list-item>
+                    <v-divider
+                      v-if="j + 1 < cat.skills.length"
+                      :key="j"
+                    ></v-divider>
+                  </template>
+                </v-list>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="6">
         <v-row>
-          <v-col cols="12" sm="12" md="6"><v-card>1</v-card></v-col>
-          <v-col cols="12" sm="12" md="6"><v-card>2</v-card></v-col>
+          <v-col cols="12" sm="12" md="8">
+            <v-card>
+              <v-toolbar>CATEGORIES</v-toolbar>
+              <RadarChart
+                :user-skills="user.skills"
+                :size="90"
+                :height="250"
+              ></RadarChart>
+            </v-card>
+          </v-col>
+          <v-col cols="12" sm="12" md="4"><v-card>2</v-card></v-col>
         </v-row>
         <v-row>
           <v-col cols="12" sm="12"><v-card>3</v-card></v-col>
@@ -130,16 +143,18 @@
 import { mapGetters } from 'vuex';
 
 const EsteemBadge = () => import('../components/EsteemBadge');
+const RadarChart = () => import('../components/RadarChart');
 
 export default {
   components: {
-    EsteemBadge
+    EsteemBadge,
+    RadarChart
   },
   data() {
     return {
       selected: [0],
       loaded: false,
-      user: null,
+      user: {},
       similarUsers: [],
       categories: [],
       showSnackbar: false,
@@ -158,13 +173,15 @@ export default {
       ) + 1}.jpg`;
     },
     getBestSkill() {
-      return this.user.skills.reduce((prev, current) =>
-        prev.rating > current.rating ? prev : current
+      return this.user.skills.reduce(
+        (prev, current) => (prev.rating > current.rating ? prev : current),
+        0
       );
     },
     getLowestSkill() {
-      return this.user.skills.reduce((prev, current) =>
-        prev.rating > current.rating ? current : prev
+      return this.user.skills.reduce(
+        (prev, current) => (prev.rating > current.rating ? current : prev),
+        0
       );
     },
     getSkillsByCategories() {

@@ -47,7 +47,14 @@
         <BarChart :skills="skills"></BarChart>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <RadarChart></RadarChart>
+        <v-card>
+          <v-toolbar dense flat>
+            <v-toolbar-title class="subtitle-2 grey--text"
+              >CATEGORIES</v-toolbar-title
+            >
+          </v-toolbar>
+          <RadarChart></RadarChart>
+        </v-card>
       </v-col>
     </v-row>
 

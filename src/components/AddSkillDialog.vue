@@ -32,6 +32,7 @@
                     label="Skill"
                     no-data-text="No skills available"
                     :items="skills"
+                    autocomplete="off"
                     auto-select-first
                     :loading="loadingSkills"
                     clearable
