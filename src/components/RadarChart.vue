@@ -1,20 +1,13 @@
 <template>
-  <v-card>
-    <v-toolbar dense flat>
-      <v-toolbar-title class="subtitle-2 grey--text"
-        >CATEGORIES</v-toolbar-title
-      >
-    </v-toolbar>
-
-    <div v-if="categories" id="chart">
-      <apexcharts
-        type="radar"
-        height="300"
-        :options="chartOptions"
-        :series="chartSeries"
-      />
-    </div>
-  </v-card>
+  <div v-if="categories" id="chart">
+    <apexcharts
+      type="radar"
+      :height="height"
+      :width="width"
+      :options="chartOptions"
+      :series="chartSeries"
+    />
+  </div>
 </template>
 
 <script>
@@ -24,6 +17,24 @@ import VueApexCharts from 'vue-apexcharts';
 export default {
   components: {
     apexcharts: VueApexCharts
+  },
+  props: {
+    userSkills: {
+      type: Array,
+      default: () => []
+    },
+    size: {
+      type: Number,
+      default: () => 120
+    },
+    height: {
+      type: Number,
+      default: () => 300
+    },
+    width: {
+      type: Number,
+      default: () => 500
+    }
   },
   data() {
     return {
@@ -59,7 +70,7 @@ export default {
         },
         plotOptions: {
           radar: {
-            size: 120,
+            size: this.size,
             polygons: {
               fill: {
                 colors: this.isDark ? ['#424242'] : ['#ffffff']
@@ -93,8 +104,9 @@ export default {
         return { name: e, skills: [] };
       });
 
+      const s = this.userSkills.length ? this.userSkills : this.skills;
       categories.forEach(category => {
-        this.skills.forEach(skill => {
+        s.forEach(skill => {
           if (skill.categoryName === category.name) {
             category.skills.push(skill);
           }
