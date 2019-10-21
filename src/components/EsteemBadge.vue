@@ -1,11 +1,9 @@
 <template>
   <v-tooltip bottom>
     <template v-slot:activator="{ on }">
-      <v-icon large :color="color" v-on="on">
-        mdi-hexagon
-      </v-icon>
+      <v-icon large :color="color" v-on="on">mdi-hexagon</v-icon>
     </template>
-    <span>{{ skill.esteem }}</span>
+    <span>Esteem: {{ skill.esteem }}</span>
   </v-tooltip>
 </template>
 
