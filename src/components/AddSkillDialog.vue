@@ -20,6 +20,8 @@
                     :items="categories"
                     item-text="text"
                     item-value="value"
+                    :loading="loadingCategories"
+                    prepend-inner-icon="mdi-playlist-star"
                     required
                     @change="populateSkills"
                   ></v-select>
@@ -30,6 +32,11 @@
                     label="Skill"
                     no-data-text="No skills available"
                     :items="skills"
+                    autocomplete="off"
+                    auto-select-first
+                    :loading="loadingSkills"
+                    clearable
+                    prepend-inner-icon="mdi-star"
                     required
                   ></v-autocomplete>
                 </v-col>
@@ -44,6 +51,7 @@
             color="primary"
             text
             :disabled="selectedSkill ? false : true"
+            :loading="addSkillLoading"
             @click="addSkill"
           >
             Add</v-btn
@@ -71,13 +79,17 @@ export default {
       selectedSkill: null,
       dialog: false,
       showSnackbar: false,
-      snackbarText: ''
+      snackbarText: '',
+      loadingCategories: false,
+      loadingSkills: false,
+      addSkillLoading: false
     };
   },
   computed: {
     ...mapState(['user'])
   },
   created() {
+    this.loadingCategories = true;
     this.$store
       .dispatch('fetchCategories')
       .then(response => {
@@ -90,10 +102,13 @@ export default {
       })
       .catch(err => {
         console.log(err);
-      });
+      })
+      .finally(() => (this.loadingCategories = false));
   },
   methods: {
     populateSkills(categoryId) {
+      this.loadingSkills = true;
+      this.skills = [];
       this.$store
         .dispatch('fetchSkillsById', categoryId)
         .then(response => {
@@ -106,15 +121,16 @@ export default {
         })
         .catch(err => {
           console.log(err);
-        });
+        })
+        .finally(() => (this.loadingSkills = false));
     },
     addSkill() {
+      this.addSkillLoading = true;
       this.$store
         .dispatch('addSkillToUser', {
           skillId: this.selectedSkill
         })
-        .then(response => {
-          // TODO: commit response to store.user
+        .then(() => {
           this.$refs.form.reset();
           this.snackbarText = 'Skill added!';
           this.showSnackbar = true;
@@ -123,7 +139,8 @@ export default {
           console.log(err);
           this.snackbarText = 'Something went wrong';
           this.showSnackbar = true;
-        });
+        })
+        .finally(() => (this.addSkillLoading = false));
     }
   }
 };

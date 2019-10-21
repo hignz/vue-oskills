@@ -1,86 +1,111 @@
 <template>
   <v-container v-if="loaded">
-    <p class="subheading grey--text">Skills</p>
-    <v-data-table
-      :headers="headers"
-      :items="skills"
-      sort-by="rating"
-      :sort-desc="true"
-      class="elevation-1"
-    >
-      <template v-slot:top>
-        <v-toolbar flat>
-          <v-toolbar-title>Skill List</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <AddSkillDialog />
-        </v-toolbar>
-      </template>
-      <template v-slot:item.action="{ item }">
-        <v-icon small @click="showDeleteDialog(item)">
-          mdi-delete
-        </v-icon>
-        <v-icon small @click="openSkillProfile(item)">
-          mdi-post-outline
-        </v-icon>
-      </template>
-    </v-data-table>
-    <v-dialog v-model="deleteDialog" width="500">
-      <v-card>
-        <v-card-title class="headline" primary-title>
-          Are you sure?
-        </v-card-title>
+    <v-card>
+      <v-card-title>
+        Skill List
+        <v-spacer></v-spacer>
+        <AddSkillDialog />
+        <v-text-field
+          v-model="searchTerm"
+          class="mx-4 mb-5"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          hide-details
+        ></v-text-field>
+      </v-card-title>
 
-        <v-card-text>
-          <v-data-table
-            v-if="loaded"
-            class="mb-4"
-            :headers="[
-              {
-                text: 'Skill',
-                align: 'center',
-                value: 'name'
-              },
-              { text: 'Rating', value: 'rating', align: 'center' },
-              { text: 'Esteem', value: 'esteem', align: 'center' },
-              { text: 'Category', value: 'categoryName', align: 'left' }
-            ]"
-            :items="[selectedSkill]"
-            hide-default-footer
-          >
-          </v-data-table>
-          Are you sure you want to delete {{ selectedSkill.name }}? This action
-          is irreversible, all esteem gained will be lost.
-        </v-card-text>
+      <v-data-table
+        :headers="headers"
+        :items="skills"
+        sort-by="rating"
+        :search="searchTerm"
+        :sort-desc="true"
+      >
+        <template v-slot:item.action="{ item }">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn icon v-on="on">
+                <v-icon small @click="showDeleteDialog(item)">
+                  mdi-delete
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Delete</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn icon v-on="on">
+                <v-icon small @click="openSkillProfile(item)">
+                  mdi-file-star-outline
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Skill profile</span>
+          </v-tooltip>
+        </template>
+      </v-data-table>
+      <v-dialog v-model="deleteDialog" width="500">
+        <v-card>
+          <v-card-title class="headline" primary-title>
+            Are you sure?
+          </v-card-title>
 
-        <v-divider></v-divider>
+          <v-card-text>
+            <v-data-table
+              v-if="loaded"
+              class="mb-4"
+              :headers="[
+                {
+                  text: 'Skill',
+                  align: 'center',
+                  value: 'name'
+                },
+                { text: 'Rating', value: 'rating', align: 'center' },
+                { text: 'Esteem', value: 'esteem', align: 'center' },
+                { text: 'Category', value: 'categoryName', align: 'left' }
+              ]"
+              :items="[selectedSkill]"
+              hide-default-footer
+            >
+            </v-data-table>
+            Are you sure you want to delete {{ selectedSkill.name }}? This
+            action is irreversible, all esteem gained will be lost.
+          </v-card-text>
 
-        <v-card-actions>
-          <v-btn color="primary" text @click="deleteDialog = false">
-            Close
-          </v-btn>
-          <div class="flex-grow-1"></div>
-          <v-btn color="primary" text @click="deleteSkill()">
-            Delete
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <v-snackbar v-model="showSnackbar" color="success">
-      {{ snackbarText }}
-      <v-btn color="white" text @click="showSnackbar = false">
-        Close
-      </v-btn>
-    </v-snackbar>
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-btn color="primary" text @click="deleteDialog = false">
+              Close
+            </v-btn>
+            <div class="flex-grow-1"></div>
+            <v-btn color="primary" text @click="deleteSkill()">
+              Delete
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-snackbar v-model="showSnackbar" color="success">
+        {{ snackbarText }}
+        <v-btn color="white" text @click="showSnackbar = false">
+          Close
+        </v-btn>
+      </v-snackbar>
+    </v-card>
   </v-container>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+
 import AddSkillDialog from '../components/AddSkillDialog';
+import EsteemBadge from '../components/EsteemBadge';
 
 export default {
   components: {
-    AddSkillDialog
+    AddSkillDialog,
+    EsteemBadge
   },
   data() {
     return {
@@ -94,13 +119,14 @@ export default {
           sortable: true,
           value: 'name'
         },
-        { text: 'Rating', value: 'rating', align: 'center' },
         { text: 'Esteem', value: 'esteem', align: 'center' },
+        { text: 'Esteem Points', value: 'rating', align: 'center' },
         { text: 'Category', value: 'categoryName', align: 'center' },
         { text: 'Actions', value: 'action', sortable: false, align: 'center' }
       ],
       showSnackbar: false,
-      snackbarText: ''
+      snackbarText: '',
+      searchTerm: ''
     };
   },
   computed: {

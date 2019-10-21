@@ -14,7 +14,8 @@ export default new Vuex.Store({
     loginError: null,
     showNavigationDrawer: true,
     isDark: JSON.parse(localStorage.getItem('darkMode')) || false,
-    skills: []
+    skills: [],
+    loading: true
   },
   mutations: {
     updateAccessToken: (state, accessToken) => {
@@ -33,7 +34,8 @@ export default new Vuex.Store({
       vuetify.framework.theme.dark = value;
     },
     setUser: (state, user) => (state.user = user),
-    updateSkills: (state, skills) => (state.skills = skills)
+    updateSkills: (state, skills) => (state.skills = skills),
+    setLoading: (state, isLoading) => (state.loading = isLoading)
   },
   getters: {
     accessToken: state => state.accessToken,
@@ -42,16 +44,21 @@ export default new Vuex.Store({
     getUser: state => state.user,
     skills: state => state.skills,
     topThreeSkills: state =>
-      state.user.skills
+      state.skills
         .concat()
         .sort((a, b) => b.rating - a.rating)
-        .slice(0, 3)
+        .slice(0, 3),
+    isLoading: state => state.loading,
+    isDark: state => state.isDark,
+    accentColor: () => localStorage.getItem('accentColor')
   },
   actions: {
     fetchUser({ commit }, id) {
       axios.defaults.headers.common = {
         Authorization: `Bearer ${this.getters.accessToken}`
       };
+
+      commit('setLoading', true);
 
       return new Promise((resolve, reject) => {
         axios
@@ -62,6 +69,24 @@ export default new Vuex.Store({
           )
           .then(response => {
             commit('setUser', response.data.data);
+            commit('updateSkills', response.data.data.skills);
+            commit('setLoading', false);
+            resolve(response.data.data);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    fetchUserById({ commit }, id) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
+      return new Promise((resolve, reject) => {
+        axios
+          .get('http://localhost:1111/user/' + id)
+          .then(response => {
             resolve(response.data.data);
           })
           .catch(error => {
@@ -161,6 +186,8 @@ export default new Vuex.Store({
         Authorization: `Bearer ${this.getters.accessToken}`
       };
 
+      commit('setLoading', true);
+
       return new Promise((resolve, reject) =>
         axios
           .get('http://localhost:1111/get-all-user-skills')
@@ -172,6 +199,7 @@ export default new Vuex.Store({
             console.log(err);
             reject(err);
           })
+          .finally(() => commit('setLoading', false))
       );
     },
     fetchSkillsById({ commit }, categoryId) {
@@ -266,7 +294,6 @@ export default new Vuex.Store({
         JSON.parse(localStorage.getItem('accessToken'))
       );
     },
-
     fetchDeleteSkill({ commit }, id) {
       axios.defaults.headers.common = {
         Authorization: `Bearer ${this.getters.accessToken}`
