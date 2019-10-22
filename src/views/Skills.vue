@@ -5,21 +5,27 @@
         Skill List
         <v-spacer></v-spacer>
         <AddSkillDialog />
-        <v-text-field
-          v-model="searchTerm"
-          class="mx-4 mb-5"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-        ></v-text-field>
       </v-card-title>
+      <v-col sm="2">
+        <v-form>
+          <v-text-field
+            v-model="searchTerm"
+            class="mb-1"
+            append-icon="mdi-magnify"
+            label="Search skills..."
+            single-line
+            clearable
+            hide-details
+          ></v-text-field>
+        </v-form>
+      </v-col>
 
       <v-data-table
         :headers="headers"
         :items="skills"
         sort-by="rating"
         :search="searchTerm"
+        no-results-text="No matching skills found"
         :sort-desc="true"
       >
         <template v-slot:item.action="{ item }">
