@@ -70,12 +70,12 @@ export default new Vuex.Store({
           .then(response => {
             commit('setUser', response.data.data);
             commit('updateSkills', response.data.data.skills);
-            commit('setLoading', false);
             resolve(response.data.data);
           })
           .catch(error => {
             reject(error);
-          });
+          })
+          .finally(() => commit('setLoading', false));
       });
     },
     fetchUserById({ commit }, id) {
@@ -349,6 +349,8 @@ export default new Vuex.Store({
         }
       };
 
+      commit('setLoading', true);
+
       return new Promise((resolve, reject) => {
         axios
           .post(
@@ -361,7 +363,8 @@ export default new Vuex.Store({
           })
           .catch(error => {
             reject(error);
-          });
+          })
+          .finally(() => commit('setLoading', false));
       });
     },
     fetchRecentUsers({ commit }) {
