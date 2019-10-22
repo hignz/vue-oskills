@@ -363,6 +363,22 @@ export default new Vuex.Store({
             reject(error);
           });
       });
+    },
+    fetchRecentUsers({ commit }) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
+      return new Promise((resolve, reject) => {
+        axios
+          .get('http://localhost:1111/recent-users')
+          .then(response => {
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
     }
   }
 });

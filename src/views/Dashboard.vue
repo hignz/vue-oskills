@@ -60,7 +60,31 @@
 
     <v-row>
       <v-col cols="12" md="4" sm="12">
-        <SimilarUsers :users="similarUsers" />
+        <v-card>
+          <v-toolbar dense flat>
+            <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
+              >{{ usersCardTitle }}
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-menu offset-y>
+              <template v-slot:activator="{ on }">
+                <v-btn icon v-on="on">
+                  <v-icon>mdi-chevron-down</v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="(item, i) in usersMenuItems"
+                  :key="i"
+                  @click="switchUsersList(item, i)"
+                >
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-toolbar>
+          <RecentUsers v-if="usersMenuIndex === 0" />
+        </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
         <SkillList :skills="topThreeSkills"></SkillList>
@@ -75,7 +99,7 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import SimilarUsers from '../components/SimilarUsers';
+import RecentUsers from '../components/RecentUsers';
 import SkillList from '../components/SkillList';
 import ActivityFeed from '../components/ActivityFeed';
 import EsteemBadge from '../components/EsteemBadge';
@@ -86,7 +110,7 @@ export default {
   components: {
     ActivityFeed,
     EsteemBadge,
-    SimilarUsers,
+    RecentUsers,
     SkillList,
     BarChart,
     RadarChart
@@ -94,9 +118,14 @@ export default {
   data() {
     return {
       user: {},
-      similarUsers: [],
       loaded: false,
-      now: new Date().toLocaleDateString()
+      now: new Date().toLocaleDateString(),
+      usersMenuItems: [
+        { title: 'Recently Joined' },
+        { title: 'Similar Users' }
+      ],
+      usersMenuIndex: 0,
+      usersCardTitle: 'Recently Joined'
     };
   },
   computed: {
@@ -117,15 +146,12 @@ export default {
         console.log(err);
       })
       .finally(() => (this.loaded = true));
-
-    this.$store
-      .dispatch('getAllUsers')
-      .then(response => {
-        this.similarUsers = response.data.data;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+  },
+  methods: {
+    switchUsersList(menuItem, i) {
+      this.usersCardTitle = menuItem.title;
+      this.usersMenuIndex = i;
+    }
   }
 };
 </script>
