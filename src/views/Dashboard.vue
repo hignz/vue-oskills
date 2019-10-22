@@ -60,7 +60,7 @@
 
     <v-row>
       <v-col cols="12" md="4" sm="12">
-        <SimilarUsers :users="similarUsers" />
+        <RecentUsers />
       </v-col>
       <v-col cols="12" md="4" sm="12">
         <SkillList :skills="topThreeSkills"></SkillList>
@@ -75,7 +75,7 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import SimilarUsers from '../components/SimilarUsers';
+import RecentUsers from '../components/RecentUsers';
 import SkillList from '../components/SkillList';
 import ActivityFeed from '../components/ActivityFeed';
 import EsteemBadge from '../components/EsteemBadge';
@@ -86,7 +86,7 @@ export default {
   components: {
     ActivityFeed,
     EsteemBadge,
-    SimilarUsers,
+    RecentUsers,
     SkillList,
     BarChart,
     RadarChart
@@ -94,7 +94,6 @@ export default {
   data() {
     return {
       user: {},
-      similarUsers: [],
       loaded: false,
       now: new Date().toLocaleDateString()
     };
@@ -117,15 +116,6 @@ export default {
         console.log(err);
       })
       .finally(() => (this.loaded = true));
-
-    this.$store
-      .dispatch('getAllUsers')
-      .then(response => {
-        this.similarUsers = response.data.data;
-      })
-      .catch(err => {
-        console.log(err);
-      });
   }
 };
 </script>
