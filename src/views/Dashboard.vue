@@ -63,7 +63,7 @@
         <v-card>
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
-              >{{ otherUsersCardTitle }}
+              >{{ usersCardTitle }}
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-menu offset-y>
@@ -74,7 +74,7 @@
               </template>
               <v-list>
                 <v-list-item
-                  v-for="(item, i) in otherUsersMenuItems"
+                  v-for="(item, i) in usersMenuItems"
                   :key="i"
                   @click="switchUsersList(item, i)"
                 >
@@ -83,7 +83,7 @@
               </v-list>
             </v-menu>
           </v-toolbar>
-          <RecentUsers v-if="x === 0" />
+          <RecentUsers v-if="usersMenuIndex === 0" />
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
@@ -120,12 +120,12 @@ export default {
       user: {},
       loaded: false,
       now: new Date().toLocaleDateString(),
-      otherUsersMenuItems: [
+      usersMenuItems: [
         { title: 'Recently Joined' },
         { title: 'Similar Users' }
       ],
-      x: 0,
-      otherUsersCardTitle: 'Recently Joined'
+      usersMenuIndex: 0,
+      usersCardTitle: 'Recently Joined'
     };
   },
   computed: {
@@ -149,8 +149,8 @@ export default {
   },
   methods: {
     switchUsersList(menuItem, i) {
-      this.otherUsersCardTitle = menuItem.title;
-      this.x = i;
+      this.usersCardTitle = menuItem.title;
+      this.usersMenuIndex = i;
     }
   }
 };
