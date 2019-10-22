@@ -280,11 +280,10 @@ export default new Vuex.Store({
           'Content-Type': 'application/json'
         }
       };
+
       axios
         .post('http://localhost:1111/register-user', registerData, config)
-        .then(response => {
-          router.push('/login');
-        })
+        .then(response => {})
         .catch(error => {
           console.log(error);
         });
