@@ -1,5 +1,5 @@
 <template>
-  <v-list dense two-line>
+  <v-list v-if="users.length" dense two-line>
     <v-list-item-group color="primary">
       <v-list-item
         v-for="(user, i) in users.slice(0, 3)"

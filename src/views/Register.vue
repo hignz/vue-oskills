@@ -11,7 +11,7 @@
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md6>
           <v-card>
-            <v-form>
+            <v-form ref="form" v-model="valid" :lazy-validation="lazy">
               <v-stepper v-model="n" vertical class="elevation-0">
                 <v-stepper-step :complete="n > 1" :step="1" :editable="true">
                   Personal Details
@@ -24,6 +24,7 @@
                       label="First Name"
                       :rules="nameRules"
                       class="pb-3"
+                      required
                     >
                     </v-text-field>
                     <v-text-field
@@ -32,6 +33,7 @@
                       label="Last Name"
                       :rules="nameRules"
                       class="pb-3"
+                      required
                     >
                     </v-text-field>
                     <v-autocomplete
@@ -46,6 +48,7 @@
                       label="Skills"
                       multiple
                       class="pb-3"
+                      required
                     >
                     </v-autocomplete>
                     <v-file-input
@@ -54,6 +57,7 @@
                       prepend-icon="mdi-camera"
                       show-size
                       accept="image/png, image/jpeg, image/bmp"
+                      required
                     ></v-file-input>
                   </v-col>
 
@@ -95,6 +99,7 @@
                         hint="At least 8 characters"
                         counter
                         class="pb-3"
+                        required
                         @click:append="show1 = !show1"
                       ></v-text-field>
                       <v-text-field
@@ -105,6 +110,7 @@
                         label="Confirm password"
                         hint="At least 8 characters"
                         counter
+                        required
                         class="pb-3"
                         @click:append="show2 = !show2"
                       ></v-text-field>
@@ -113,6 +119,7 @@
                   <v-col class="mx-auto pt-6" sm="12">
                     <v-btn text @click="n = 2">Back</v-btn>
                     <v-btn
+                      :disabled="!valid"
                       type="submit"
                       class="ml-2"
                       color="primary"
@@ -151,6 +158,7 @@ export default {
   },
   data() {
     return {
+      valid: true,
       n: 1,
       show1: false,
       show2: false,
@@ -200,14 +208,17 @@ export default {
   },
   methods: {
     onComplete() {
-      this.$store.dispatch('doRegister', {
-        name: `${this.firstName} ${this.lastName}`,
-        skills: this.selectedSkills,
-        password: this.password,
-        verificationToken: this.$route.params.token
-      });
+      if (this.$refs.form.validate()) {
+        this.snackbar = true;
+        this.$store.dispatch('doRegister', {
+          name: `${this.firstName} ${this.lastName}`,
+          skills: this.selectedSkills,
+          password: this.password,
+          verificationToken: this.$route.params.token
+        });
 
-      this.completed = true;
+        this.completed = true;
+      }
     }
   }
 };
