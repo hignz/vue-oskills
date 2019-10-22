@@ -36,7 +36,7 @@
     </v-card>
     <v-snackbar
       v-model="showSnackbar"
-      color="primary"
+      color="error"
       :timeout="4000"
       :bottom="true"
     >
@@ -72,8 +72,7 @@ export default {
             this.$router.push('/dashboard');
           })
           .catch(err => {
-            console.log(err);
-            this.snackbarText = err.message;
+            this.snackbarText = 'Email or password is incorrect.';
             this.showSnackbar = true;
           });
       }
