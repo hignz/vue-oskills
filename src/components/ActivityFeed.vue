@@ -5,7 +5,7 @@
         >ACTIVITY FEED</v-toolbar-title
       >
       <v-spacer></v-spacer>
-      <v-btn icon>
+      <v-btn icon @click="getRecentActivity()">
         <v-icon>mdi-refresh</v-icon>
       </v-btn>
     </v-toolbar>
@@ -44,15 +44,20 @@ export default {
     loaded: false
   }),
   created() {
-    this.$store
-      .dispatch('fetchActivites')
-      .then(res => {
-        this.activities = res;
-      })
-      .catch(err => {
-        console.log(err);
-        this.loaded = false;
-      });
+    this.getRecentActivity();
+  },
+  methods: {
+    getRecentActivity() {
+      this.$store
+        .dispatch('fetchActivites')
+        .then(res => {
+          this.activities = res;
+        })
+        .catch(err => {
+          console.log(err);
+          this.loaded = false;
+        });
+    }
   }
 };
 </script>
