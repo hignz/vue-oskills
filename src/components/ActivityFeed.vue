@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card v-if="loaded">
     <v-toolbar dense flat>
       <v-toolbar-title class="subtitle-2 grey--text"
         >ACTIVITY FEED</v-toolbar-title
@@ -51,6 +51,7 @@ export default {
       this.$store
         .dispatch('fetchActivites')
         .then(res => {
+          this.loaded = true;
           this.activities = res;
         })
         .catch(err => {
