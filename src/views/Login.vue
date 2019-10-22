@@ -12,6 +12,9 @@ import Login from '../components/Login';
 export default {
   components: {
     Login
+  },
+  created() {
+    this.$store.dispatch('updateLoading', false);
   }
 };
 </script>
