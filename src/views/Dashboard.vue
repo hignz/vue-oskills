@@ -9,10 +9,15 @@
                 <v-row class="subtitle-2 ml-12"
                   >Hello, {{ user.name.split(' ')[0] }}</v-row
                 >
-                <v-row class="caption grey--text ml-12">{{ user.role }}</v-row>
-                <v-row class="caption grey--text ml-12"
-                  >Remaining Votes: {{ user.remainingVotes }}</v-row
-                >
+                <v-row class="caption grey--text ml-12 font-weight-bold">{{
+                  user.role
+                }}</v-row>
+                <v-row class="caption grey--text ml-12 font-weight-bold"
+                  >Remaining Votes:
+                  <span class="font-weight-bold">
+                    {{ user.remainingVotes }}</span
+                  >
+                </v-row>
               </v-col>
               <v-col
                 v-for="(skill, i) in topThreeSkills"
