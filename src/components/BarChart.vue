@@ -63,6 +63,8 @@ export default {
           colors: ['transparent']
         },
         xaxis: {
+          ticks: 10,
+
           title: {
             text: 'Esteem Points'
           },
@@ -71,8 +73,9 @@ export default {
           })
         },
         yaxis: {
+          ticks: 10,
           min: 0,
-          max: this.bestSkill.rating + this.bestSkill.rating / 2
+          max: this.bestSkill.rating + 10
         },
         fill: {
           opacity: 0.6,

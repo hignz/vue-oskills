@@ -18,11 +18,11 @@
       <v-tab-item :transition="false" :reverse-transition="false">
         <v-container>
           <v-card flat>
-            <v-card-content>
+            <v-card-text>
               <DarkThemeSwitch></DarkThemeSwitch>
               <p><v-icon>mdi-palette-outline</v-icon> Accent Color</p>
               <AccentColorPicker></AccentColorPicker>
-            </v-card-content>
+            </v-card-text>
           </v-card>
         </v-container>
       </v-tab-item>
