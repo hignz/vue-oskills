@@ -58,7 +58,12 @@
           >
         </v-card-actions>
       </v-card>
-      <v-snackbar v-model="showSnackbar" color="success">
+      <v-snackbar
+        v-model="showSnackbar"
+        color="success"
+        :bottom="true"
+        :timeout="3000"
+      >
         {{ snackbarText }}
         <v-btn color="white" text @click="showSnackbar = false">
           Close
