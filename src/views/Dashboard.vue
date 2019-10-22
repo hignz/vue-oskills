@@ -60,7 +60,31 @@
 
     <v-row>
       <v-col cols="12" md="4" sm="12">
-        <RecentUsers />
+        <v-card>
+          <v-toolbar dense flat>
+            <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
+              >{{ otherUsersCardTitle }}
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-menu offset-y>
+              <template v-slot:activator="{ on }">
+                <v-btn icon v-on="on">
+                  <v-icon>mdi-chevron-down</v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="(item, i) in otherUsersMenuItems"
+                  :key="i"
+                  @click="switchUsersList(item, i)"
+                >
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-toolbar>
+          <RecentUsers v-if="x === 0" />
+        </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
         <SkillList :skills="topThreeSkills"></SkillList>
@@ -95,7 +119,13 @@ export default {
     return {
       user: {},
       loaded: false,
-      now: new Date().toLocaleDateString()
+      now: new Date().toLocaleDateString(),
+      otherUsersMenuItems: [
+        { title: 'Recently Joined' },
+        { title: 'Similar Users' }
+      ],
+      x: 0,
+      otherUsersCardTitle: 'Recently Joined'
     };
   },
   computed: {
@@ -116,6 +146,12 @@ export default {
         console.log(err);
       })
       .finally(() => (this.loaded = true));
+  },
+  methods: {
+    switchUsersList(menuItem, i) {
+      this.otherUsersCardTitle = menuItem.title;
+      this.x = i;
+    }
   }
 };
 </script>
