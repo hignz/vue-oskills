@@ -117,6 +117,7 @@ export default new Vuex.Store({
           'Content-Type': 'application/json'
         }
       };
+
       return new Promise((resolve, reject) => {
         axios
           .post('http://localhost:1111/login', loginData, config)
@@ -382,6 +383,9 @@ export default new Vuex.Store({
             reject(error);
           });
       });
+    },
+    updateLoading({ commit }, isLoading) {
+      commit('setLoading', isLoading);
     }
   }
 });
