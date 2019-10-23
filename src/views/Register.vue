@@ -143,6 +143,7 @@
       <h1 class="subheading grey--text">
         Registration complete
       </h1>
+      <v-btn class="primary" to="/login">Login</v-btn>
     </v-col>
   </v-container>
 </template>
