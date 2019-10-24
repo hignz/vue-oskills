@@ -69,6 +69,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/admin',
+    name: 'admin',
+    component: () => import('./views/Admin'),
+    meta: { requiresAdmin: true }
+  },
+  {
     path: '*',
     redirect: '/'
   }
@@ -81,17 +87,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    // this route requires auth, check if authenticated in
-    // if not, redirect to login page.
-    if (!store.getters.accessToken) {
-      next({
-        path: '/login'
-      });
-    } else {
-      next();
-    }
-  } else if (to.matched.some(record => record.meta.requiresVisitor)) {
+  if (to.matched.some(record => record.meta.requiresVisitor)) {
     // this route requires visitor, check if NOT authenticated
     // if not, redirect to dashboard.
     if (store.getters.accessToken) {
@@ -101,6 +97,29 @@ router.beforeEach((to, from, next) => {
     } else {
       next();
     }
+  } else if (to.matched.some(record => record.meta.requiresAuth)) {
+    // this route requires auth, check if authenticated in
+    // if not, redirect to login page.
+    if (!store.getters.accessToken) {
+      next({
+        path: '/login'
+      });
+    } else {
+      next();
+    }
+  } else if (to.matched.some(record => record.meta.requiresAdmin)) {
+    store
+      .dispatch('fetchUser')
+      .then(() => {
+        if (!store.getters.getUser.isAdmin) {
+          next({
+            path: '/dashboard'
+          });
+        } else {
+          next();
+        }
+      })
+      .catch(err => console.log(err));
   } else {
     next();
   }
