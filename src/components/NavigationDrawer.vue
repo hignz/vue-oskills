@@ -19,6 +19,7 @@
       <v-list dense nav>
         <v-list-item
           v-for="item in links"
+          v-if="!item.requiresAdmin || (getUser.isAdmin && item.requiresAdmin)"
           :key="item.title"
           :to="item.route"
           links
@@ -50,7 +51,13 @@ export default {
       showDrawer: true,
       mini: true,
       links: [
-        { icon: 'mdi-bulletin-board', text: 'Dashboard', route: '/dashboard' },
+        {
+          icon: 'mdi-account-key',
+          text: 'Admin',
+          route: '/admin',
+          requiresAdmin: true
+        },
+        { icon: 'mdi-view-dashboard', text: 'Dashboard', route: '/dashboard' },
         { icon: 'mdi-star-circle', text: 'Skills', route: '/skills' },
         { icon: 'mdi-magnify', text: 'Explore', route: '/explore' },
         { icon: 'mdi-settings', text: 'Settings', route: '/settings' }
@@ -58,7 +65,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['showNavigationDrawer'])
+    ...mapGetters(['showNavigationDrawer', 'getUser'])
   }
 };
 </script>
