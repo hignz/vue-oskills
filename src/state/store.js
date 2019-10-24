@@ -311,7 +311,7 @@ export default new Vuex.Store({
           })
       );
     },
-    fetchActivites({ commit }) {
+    fetchRecentActivity({ commit }) {
       axios.defaults.headers.common = {
         Authorization: `Bearer ${this.getters.accessToken}`
       };
@@ -385,6 +385,22 @@ export default new Vuex.Store({
     },
     updateLoading({ commit }, isLoading) {
       commit('setLoading', isLoading);
+    },
+    fetchUserActivity({ commit }, userId) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
+      return new Promise((resolve, reject) =>
+        axios
+          .post('http://localhost:1111/participant-activity', { userId })
+          .then(response => {
+            resolve(response.data);
+          })
+          .catch(err => {
+            reject(err);
+          })
+      );
     }
   }
 });
