@@ -69,7 +69,13 @@ export default {
             password: this.password
           })
           .then(response => {
-            this.$router.push('/dashboard');
+            const { isAdmin } = response.data;
+
+            if (isAdmin) {
+              this.$router.push('/admin');
+            } else {
+              this.$router.push('/dashboard');
+            }
           })
           .catch(err => {
             this.snackbarText = 'Email or password is incorrect.';
