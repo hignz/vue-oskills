@@ -58,7 +58,7 @@
     </v-card>
 
     <v-row>
-      <v-col cols="12" sm="12" md="6">
+      <v-col cols="12" sm="12" md="4">
         <v-card tile>
           <v-toolbar>SKILLS</v-toolbar>
           <v-expansion-panels v-if="user.skills" multiple>
@@ -111,9 +111,9 @@
           </v-expansion-panels>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="12" md="6">
+      <v-col cols="12" sm="12" md="8">
         <v-row>
-          <v-col cols="12" sm="12" md="8">
+          <v-col cols="12" sm="12" md="6">
             <v-card>
               <v-toolbar>CATEGORIES</v-toolbar>
               <RadarChart
@@ -123,7 +123,10 @@
               ></RadarChart>
             </v-card>
           </v-col>
-          <v-col cols="12" sm="12" md="4"><v-card>2</v-card></v-col>
+          <v-col cols="12" sm="12" md="6"
+            ><v-card>
+              <ActivityFeed :participant-id="user._id"></ActivityFeed></v-card
+          ></v-col>
         </v-row>
         <v-row>
           <v-col cols="12" sm="12"><v-card>3</v-card></v-col>
@@ -144,11 +147,13 @@ import { mapGetters } from 'vuex';
 
 const EsteemBadge = () => import('../components/EsteemBadge');
 const RadarChart = () => import('../components/RadarChart');
+const ActivityFeed = () => import('../components/ActivityFeed');
 
 export default {
   components: {
     EsteemBadge,
-    RadarChart
+    RadarChart,
+    ActivityFeed
   },
   data() {
     return {
