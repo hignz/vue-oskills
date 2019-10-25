@@ -11,7 +11,7 @@
           <v-text-field
             v-model="searchTerm"
             class="mb-1"
-            append-icon="mdi-magnify"
+            prepend-inner-icon="mdi-magnify"
             label="Search skills..."
             single-line
             clearable
@@ -86,7 +86,7 @@
               Close
             </v-btn>
             <div class="flex-grow-1"></div>
-            <v-btn color="primary" text @click="deleteSkill()">
+            <v-btn color="error" text @click="deleteSkill()">
               Delete
             </v-btn>
           </v-card-actions>
