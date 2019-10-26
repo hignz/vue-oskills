@@ -3,7 +3,7 @@
     <apexcharts
       type="radar"
       :height="height"
-      :width="width"
+      width="100%"
       :options="chartOptions"
       :series="chartSeries"
     />
