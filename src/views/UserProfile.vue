@@ -2,72 +2,56 @@
   <v-container v-if="loaded" fluid>
     <v-card>
       <v-row justify="center" align="center">
-        <v-col cols="12" sm="12" md="12">
-          <v-row justify="center" align="center">
-            <v-col cols="12" sm="12" md="4">
-              <v-row justify="center" align="center" class="mb-6">
-                <v-avatar size="128">
-                  <v-img :src="randomUserImg"></v-img>
-                </v-avatar>
-              </v-row>
-              <v-row class="subheading-1" justify="center" align="center">
-                {{ user.name }}
-              </v-row>
-              <v-row
-                class="subtitle-2 grey--text"
-                justify="center"
-                align="center"
-              >
-                {{ user.role }}
-              </v-row>
-              <v-row
-                class="subtitle-2 grey--text"
-                justify="center"
-                align="center"
-              >
-                <v-col sm="4" class="text-right">
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on }">
-                      <v-chip class="ma-2" color="primary" v-on="on">
-                        <v-icon class="pa-1" left>mdi-flag</v-icon>
-                        {{ getLowestSkill.name }}
-                      </v-chip>
-                    </template>
-                    <span>{{ user.name }} wants to improve this skill.</span>
-                  </v-tooltip>
-                </v-col>
-                <v-col sm="4" class="text-center">
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on }">
-                      <v-chip class="ma-2" color="primary" v-on="on">
-                        <v-icon class="pa-1" left>mdi-calendar-range</v-icon>
-                        {{ moment(user.dateJoined).format('DD-MM-YYYY') }}
-                      </v-chip>
-                    </template>
-                    <span>When {{ user.name }} joined OSkills.</span>
-                  </v-tooltip>
-                </v-col>
-                <v-col sm="4" class="text-left">
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on }">
-                      <v-chip class="ma-2" color="primary" v-on="on">
-                        <v-icon class="pa-1" left>mdi-star</v-icon>
-                        {{ getBestSkill.name }}
-                      </v-chip>
-                    </template>
-                    <span>{{ user.name }}'s' best skill.</span>
-                  </v-tooltip>
-                </v-col>
-                <v-row justify="center" align="center">
-                  <v-btn v-if="getUser.isAdmin" small color="primary" outlined>
-                    <v-icon small>
-                      mdi-plus
-                    </v-icon>
-                    {{ promoteBtnText }}
-                  </v-btn>
-                </v-row>
-              </v-row>
+        <v-col cols="12" sm="12">
+          <v-row justify="center" align="center" class="mb-6">
+            <v-avatar size="128">
+              <v-img :src="randomUserImg"></v-img>
+            </v-avatar>
+          </v-row>
+          <v-row class="subheading-1" justify="center" align="center">
+            {{ user.name }}
+          </v-row>
+          <v-row class="subtitle-2 grey--text" justify="center" align="center">
+            {{ user.role }}
+          </v-row>
+          <v-row class="subtitle-2 grey--text" justify="center" align="center">
+            <v-col cols="12" sm="12" class="text-center">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-chip class="ma-2" color="primary" v-on="on">
+                    <v-icon class="pa-1" left>mdi-flag</v-icon>
+                    {{ getLowestSkill.name }}
+                  </v-chip>
+                </template>
+                <span>{{ user.name }} wants to improve this skill.</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-chip class="ma-2" color="primary" v-on="on">
+                    <v-icon class="pa-1" left>mdi-calendar-range</v-icon>
+                    {{ moment(user.dateJoined).format('DD-MM-YYYY') }}
+                  </v-chip>
+                </template>
+                <span>When {{ user.name }} joined OSkills.</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-chip class="ma-2" color="primary" v-on="on">
+                    <v-icon class="pa-1" left>mdi-star</v-icon>
+                    {{ getBestSkill.name }}
+                  </v-chip>
+                </template>
+                <span>{{ user.name }}'s' best skill.</span>
+              </v-tooltip>
             </v-col>
+          </v-row>
+          <v-row justify="center" align="center">
+            <v-btn v-if="getUser.isAdmin" small color="primary" outlined>
+              <v-icon small>
+                mdi-plus
+              </v-icon>
+              {{ promoteBtnText }}
+            </v-btn>
           </v-row>
         </v-col>
       </v-row>
