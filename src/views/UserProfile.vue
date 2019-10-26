@@ -25,26 +25,41 @@
                 justify="center"
                 align="center"
               >
-                <v-col sm="4">
-                  <v-chip class="ma-2" color="primary" outlined pill>
-                    Wants to improve: {{ getLowestSkill }}
-                    <v-icon small right>mdi-flag</v-icon>
-                  </v-chip>
+                <v-col sm="4" class="text-right">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-chip class="ma-2" color="primary" v-on="on">
+                        <v-icon class="pa-1" left>mdi-flag</v-icon>
+                        {{ getLowestSkill.name }}
+                      </v-chip>
+                    </template>
+                    <span>{{ user.name }} wants to improve this skill.</span>
+                  </v-tooltip>
                 </v-col>
-                <v-col sm="4">
-                  <v-chip class="ma-2" color="primary" outlined pill>
-                    Joined: {{ moment(user.dateJoined).format('DD-MM-YYYY') }}
-                    <v-icon small right>mdi-calendar-range</v-icon>
-                  </v-chip>
+                <v-col sm="4" class="text-center">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-chip class="ma-2" color="primary" v-on="on">
+                        <v-icon class="pa-1" left>mdi-calendar-range</v-icon>
+                        {{ moment(user.dateJoined).format('DD-MM-YYYY') }}
+                      </v-chip>
+                    </template>
+                    <span>When {{ user.name }} joined OSkills.</span>
+                  </v-tooltip>
                 </v-col>
-                <v-col sm="4">
-                  <v-chip class="ma-2" color="primary" outlined pill>
-                    Top skill: {{ getBestSkill.name }}
-                    <v-icon small right>mdi-star</v-icon>
-                  </v-chip>
+                <v-col sm="4" class="text-left">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-chip class="ma-2" color="primary" v-on="on">
+                        <v-icon class="pa-1" left>mdi-star</v-icon>
+                        {{ getBestSkill.name }}
+                      </v-chip>
+                    </template>
+                    <span>{{ user.name }}'s' best skill.</span>
+                  </v-tooltip>
                 </v-col>
                 <v-row justify="center" align="center">
-                  <v-btn v-if="getUser.isAdmin" small color="primary" rounded>
+                  <v-btn v-if="getUser.isAdmin" small color="primary" outlined>
                     <v-icon small>
                       mdi-plus
                     </v-icon>
@@ -82,7 +97,7 @@
             >
           </v-toolbar>
 
-          <v-list subheader>
+          <v-list subheader class="overflow-y-auto" style="max-height: 345px">
             <div
               v-for="(category, i) in getSkillsByCategories"
               :key="category.name"
@@ -92,7 +107,10 @@
               <v-list-item
                 v-for="skill in category.skills"
                 :key="skill.name"
-                @click="vote(skill)"
+                :to="{
+                  name: 'skillprofile',
+                  params: { id: skill.skillId }
+                }"
               >
                 <v-list-item-avatar>
                   <EsteemBadge :skill="skill"></EsteemBadge>
@@ -188,7 +206,7 @@ export default {
     getLowestSkill() {
       return this.user.skills.reduce(
         (prev, current) => (prev.rating > current.rating ? current : prev),
-        0
+        this.user.skills[0]
       );
     },
     getSkillsByCategories() {
@@ -220,6 +238,7 @@ export default {
       .then(response => {
         this.user = response;
         this.loaded = true;
+        console.log(this.getLowestSkill);
       })
       .catch(err => {
         console.log(err);
