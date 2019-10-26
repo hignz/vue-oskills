@@ -20,29 +20,27 @@
               >
                 {{ skill.categoryName }}
               </v-row>
-              <v-row
-                class="subtitle-2 grey--text"
-                justify="center"
-                align="center"
-              >
-                <!--  <v-col sm="4">
-                  <v-chip class="ma-2" color="primary" outlined pill>
-                    Joined: {{ moment(user.dateJoined).fromNow() }}
-                    <v-icon right>mdi-calendar-range</v-icon>
-                  </v-chip>
-                </v-col>
-                <v-col sm="4">
-                  <v-chip class="ma-2" color="primary" outlined pill>
-                    Joined: {{ moment(user.dateJoined).format('DD-MM-YYYY') }}
-                    <v-icon right>mdi-calendar-range</v-icon>
-                  </v-chip>
-                </v-col>
-                <v-col sm="4">
-                  <v-chip class="ma-2" color="primary" outlined pill>
-                    Top skill: {{ getBestSkill.name }}
-                    <v-icon right>mdi-star</v-icon>
-                  </v-chip>
-                </v-col> -->
+
+              <v-row class="mt-5" justify="center" align="center">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-chip class="ma-2" color="primary" v-on="on">
+                      <v-icon class="pa-1 mb-1" left>mdi-account-group</v-icon>
+                      {{ skill.usersWith }}
+                    </v-chip>
+                  </template>
+                  <span>Users with this skill</span>
+                </v-tooltip>
+
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-chip class="ma-2" color="primary" v-on="on">
+                      <v-icon class="pa-1" left>mdi-division</v-icon>
+                      {{ skill.averageEsteem }}
+                    </v-chip>
+                  </template>
+                  <span>Average Esteem level</span>
+                </v-tooltip>
               </v-row>
             </v-col>
           </v-row>
