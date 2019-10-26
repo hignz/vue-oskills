@@ -116,7 +116,7 @@ export default {
       this.loadingSkills = true;
       this.skills = [];
       this.$store
-        .dispatch('fetchSkillsById', categoryId)
+        .dispatch('fetchSkillsByCategory', categoryId)
         .then(response => {
           this.skills = response.data.skills.map(o => {
             return {

@@ -203,7 +203,7 @@ export default new Vuex.Store({
           .finally(() => commit('setLoading', false))
       );
     },
-    fetchSkillsById({ commit }, categoryId) {
+    fetchSkillsByCategory({ commit }, categoryId) {
       const config = {
         headers: {
           'Content-Type': 'application/json'
@@ -213,7 +213,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         axios
           .post(
-            'http://localhost:1111/get-skills-by-id',
+            'http://localhost:1111/get-skills-by-category',
             { categoryId },
             config
           )
