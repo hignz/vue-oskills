@@ -1,51 +1,55 @@
 <template>
   <v-container v-if="loaded">
-    <v-row>
-      <v-col cols="12" sm="12">
-        <v-card>
-          <v-container>
-            <v-row align="center">
-              <v-col sm="12" md="3">
-                <v-row class="subtitle-2 ml-12"
-                  >Hello, {{ user.name.split(' ')[0] }}</v-row
-                >
-                <v-row class="caption grey--text ml-12 font-weight-bold">{{
-                  user.role
-                }}</v-row>
-                <v-row class="caption grey--text ml-12 font-weight-bold"
-                  >Remaining Votes:
-                  <span class="font-weight-bold">
-                    {{ user.remainingVotes }}</span
-                  >
-                </v-row>
-              </v-col>
-              <v-col
-                v-for="(skill, i) in topThreeSkills"
-                :key="i"
-                sm="12"
-                md="3"
-              >
-                <v-row align="center">
-                  <v-col sm="3">
-                    <v-row class="caption grey--text" justify="center">
-                      {{ skill.name }}
-                    </v-row>
-                    <v-row class="headline" justify="center">{{
-                      skill.rating
-                    }}</v-row>
-                  </v-col>
-                  <v-col>
-                    <v-row justify="start">
-                      <EsteemBadge :skill="skill"></EsteemBadge>
-                    </v-row>
-                  </v-col>
-                </v-row>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card>
-      </v-col>
-    </v-row>
+    <v-card>
+      <v-row align="center" justify="center">
+        <v-col cols="12" sm="12" md="3" class="text-center">
+          <v-row
+            class="subtitle-2 ml-12"
+            align="center"
+            justify="center"
+            justify-md="start"
+            >Hello, {{ user.name.split(' ')[0] }}</v-row
+          >
+          <v-row
+            class="caption grey--text ml-12 font-weight-bold"
+            justify="center"
+            justify-md="start"
+            >{{ user.role }}</v-row
+          >
+          <v-row
+            class="caption grey--text ml-12 font-weight-bold"
+            justify="center"
+            justify-md="start"
+            >Remaining Votes:
+            <span class="font-weight-bold"> {{ user.remainingVotes }}</span>
+          </v-row>
+        </v-col>
+        <v-col
+          v-for="(skill, i) in topThreeSkills"
+          :key="i"
+          sm="12"
+          md="3"
+          cols="12"
+          class="text-center"
+        >
+          <v-row align="center" justify="center">
+            <v-col sm="6" class="text-center">
+              <v-row class="caption grey--text" justify="center">
+                {{ skill.name }}
+              </v-row>
+              <v-row class="headline" justify="center">{{
+                skill.rating
+              }}</v-row>
+            </v-col>
+            <v-col class="text-center">
+              <v-row justify="start">
+                <EsteemBadge :skill="skill" />
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-card>
 
     <v-row>
       <v-col cols="12" md="8" sm="12">
@@ -58,7 +62,7 @@
               >CATEGORIES</v-toolbar-title
             >
           </v-toolbar>
-          <RadarChart></RadarChart>
+          <RadarChart />
         </v-card>
       </v-col>
     </v-row>
