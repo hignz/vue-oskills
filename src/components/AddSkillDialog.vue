@@ -60,7 +60,7 @@
       </v-card>
       <v-snackbar
         v-model="showSnackbar"
-        color="success"
+        :color="snackbarColor"
         :bottom="true"
         :timeout="3000"
       >
@@ -79,12 +79,13 @@ import { mapState } from 'vuex';
 export default {
   data: () => {
     return {
-      categories: {},
+      categories: [],
       skills: [],
       selectedSkill: null,
       dialog: false,
       showSnackbar: false,
       snackbarText: '',
+      snackbarColor: '',
       loadingCategories: false,
       loadingSkills: false,
       addSkillLoading: false
@@ -135,14 +136,15 @@ export default {
         .dispatch('addSkillToUser', {
           skillId: this.selectedSkill
         })
-        .then(() => {
+        .then(res => {
           this.$refs.form.reset();
           this.snackbarText = 'Skill added!';
+          this.snackbarColor = 'primary';
           this.showSnackbar = true;
         })
         .catch(err => {
-          console.log(err);
           this.snackbarText = 'Something went wrong';
+          this.snackbarColor = 'error';
           this.showSnackbar = true;
         })
         .finally(() => (this.addSkillLoading = false));
