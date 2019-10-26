@@ -9,9 +9,7 @@
         :height="2"
         color="primary"
       ></v-progress-linear>
-      <transition name="fade">
-        <router-view :key="$route.fullPath"> </router-view>
-      </transition>
+      <router-view :key="$route.fullPath"> </router-view>
     </v-content>
   </v-app>
 </template>
