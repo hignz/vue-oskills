@@ -27,17 +27,8 @@ export default {
     Navbar,
     NavigationDrawer
   },
-  data() {
-    return {};
-  },
   computed: {
-    isDark() {
-      return this.$store.state.isDark;
-    },
-    showNavDrawer() {
-      return this.$store.getters.showNavigationDrawer;
-    },
-    ...mapGetters(['getUser', 'accessToken', 'isLoading'])
+    ...mapGetters(['accessToken', 'isLoading'])
   },
   created() {
     axios.interceptors.response.use(
