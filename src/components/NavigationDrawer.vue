@@ -38,6 +38,20 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <template v-slot:append>
+        <div class="pa-2">
+          <v-tooltip right>
+            <template v-slot:activator="{ on }">
+              <v-btn text block @click="logout()" v-on="on">
+                <v-icon>
+                  mdi-logout
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Logout</span>
+          </v-tooltip>
+        </div>
+      </template>
     </v-navigation-drawer>
   </v-card>
 </template>
@@ -66,6 +80,11 @@ export default {
   },
   computed: {
     ...mapGetters(['showNavigationDrawer', 'getUser'])
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('doLogout');
+    }
   }
 };
 </script>
