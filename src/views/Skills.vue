@@ -5,20 +5,18 @@
         Skill List
         <v-spacer></v-spacer>
         <AddSkillDialog />
-      </v-card-title>
-      <v-col sm="2">
         <v-form>
           <v-text-field
             v-model="searchTerm"
-            class="mb-1"
-            append-icon="mdi-magnify"
+            class="mb-5 ml-5"
+            prepend-inner-icon="mdi-magnify"
             label="Search skills..."
             single-line
             clearable
             hide-details
           ></v-text-field>
         </v-form>
-      </v-col>
+      </v-card-title>
 
       <v-data-table
         :headers="headers"
@@ -86,7 +84,7 @@
               Close
             </v-btn>
             <div class="flex-grow-1"></div>
-            <v-btn color="primary" text @click="deleteSkill()">
+            <v-btn color="error" text @click="deleteSkill()">
               Delete
             </v-btn>
           </v-card-actions>
