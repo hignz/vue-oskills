@@ -6,9 +6,18 @@
           <v-row justify="center" align="center">
             <v-col cols="12" sm="12" md="4">
               <v-row justify="center" align="center" class="mb-6">
-                <v-avatar color="primary" size="62">
-                  <span class="white--text headline">{{ skill.name[0] }}</span>
-                </v-avatar>
+                <v-badge @click="">
+                  <template v-slot:badge>
+                    <v-icon small dark>
+                      mdi-plus
+                    </v-icon>
+                  </template>
+                  <v-avatar color="primary" size="62">
+                    <span class="white--text headline">{{
+                      skill.name[0]
+                    }}</span>
+                  </v-avatar>
+                </v-badge>
               </v-row>
               <v-row class="subheading-1" justify="center" align="center">
                 {{ skill.name }}
