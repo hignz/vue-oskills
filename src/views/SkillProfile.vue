@@ -6,8 +6,8 @@
           <v-row justify="center" align="center">
             <v-col cols="12" sm="12" md="4">
               <v-row justify="center" align="center" class="mb-6">
-                <v-avatar size="128">
-                  <!-- <v-img :src="randomUserImg"></v-img> -->
+                <v-avatar color="primary" size="62">
+                  <span class="white--text headline">{{ skill.name[0] }}</span>
                 </v-avatar>
               </v-row>
               <v-row class="subheading-1" justify="center" align="center">
@@ -36,7 +36,7 @@
                   <template v-slot:activator="{ on }">
                     <v-chip class="ma-2" color="primary" v-on="on">
                       <v-icon class="pa-1" left>mdi-division</v-icon>
-                      {{ skill.averageEsteem }}
+                      {{ skill.averageEsteem.toFixed(1) }}
                     </v-chip>
                   </template>
                   <span>Average Esteem level</span>
