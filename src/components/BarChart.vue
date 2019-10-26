@@ -1,6 +1,8 @@
 <template>
   <v-card>
-    <v-toolbar dense flat class="subtitle-2 grey--text">SKILLS</v-toolbar>
+    <v-toolbar dense flat>
+      <v-toolbar-title class="subtitle-2 grey--text">SKILLS</v-toolbar-title>
+    </v-toolbar>
 
     <div id="chart">
       <apexcharts
