@@ -401,6 +401,22 @@ export default new Vuex.Store({
             reject(err);
           })
       );
+    },
+    fetchSkillInfo({ commit }, skillId) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
+      return new Promise((resolve, reject) =>
+        axios
+          .post('http://localhost:1111/get-skill', { skillId })
+          .then(response => {
+            resolve(response.data);
+          })
+          .catch(err => {
+            reject(err);
+          })
+      );
     }
   }
 });
