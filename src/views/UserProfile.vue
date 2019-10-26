@@ -72,7 +72,6 @@
           ></RadarChart>
         </v-card>
       </v-col>
-
       <v-col cols="12" sm="12" md="4">
         <v-card>
           <v-toolbar dense flat>
@@ -222,11 +221,11 @@ export default {
       .then(response => {
         this.user = response;
         this.loaded = true;
-        console.log(this.getLowestSkill);
       })
       .catch(err => {
         console.log(err);
-      });
+      })
+      .finally(() => this.$store.dispatch('updateLoading', false));
   },
   methods: {
     vote(skill) {
