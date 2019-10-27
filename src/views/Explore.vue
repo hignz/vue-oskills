@@ -1,18 +1,17 @@
 <template>
   <v-container>
     <p class="subheading grey--text">Explore</p>
-    <v-layout v-if="users.data">
-      <v-row>
-        <v-col
-          v-for="(user, i) in users.data.slice(0, 4)"
-          :key="i"
-          sm="12"
-          md="3"
-        >
-          <MiniProfile :user="user" />
-        </v-col>
-      </v-row>
-    </v-layout>
+    <v-row v-if="users" justify="center" align="center">
+      <v-col
+        v-for="(user, i) in users.slice(0, 4)"
+        :key="i"
+        cols="12"
+        sm="12"
+        md="3"
+      >
+        <MiniProfile :user="user" />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -31,9 +30,10 @@ export default {
   },
   created() {
     this.$store
-      .dispatch('getAllUsers')
+      .dispatch('fetchRecentUsers')
       .then(response => {
-        this.users = response.data;
+        this.users = response.data.users;
+        console.log(this.users);
         this.loaded = true;
       })
       .catch(err => {
