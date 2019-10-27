@@ -406,6 +406,8 @@ export default new Vuex.Store({
       );
     },
     fetchSkillInfo({ commit }, skillId) {
+      commit('setLoading', true);
+
       axios.defaults.headers.common = {
         Authorization: `Bearer ${this.getters.accessToken}`
       };
@@ -419,6 +421,7 @@ export default new Vuex.Store({
           .catch(err => {
             reject(err);
           })
+          .finally(() => commit('setLoading', false))
       );
     }
   }
