@@ -9,7 +9,7 @@
         :height="2"
         color="primary"
       ></v-progress-linear>
-      <router-view :key="$route.fullPath"> </router-view>
+      <router-view :key="$route.fullPath"></router-view>
     </v-content>
   </v-app>
 </template>

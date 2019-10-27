@@ -50,7 +50,7 @@ export default {
 
       this.$router.push({
         name: 'profile',
-        params: { id: user._id, user: user }
+        params: { id: user._id }
       });
     }
   }
