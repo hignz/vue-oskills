@@ -1,9 +1,9 @@
 <template>
-  <v-container v-if="loaded" fluid>
+  <v-container v-if="loaded">
     <v-card>
       <v-row justify="center" align="center">
         <v-col cols="12" sm="12">
-          <v-row justify="center" align="center" class="mb-6">
+          <v-row justify="center" align="center" class="ma-4">
             <v-avatar size="128">
               <v-img :src="randomUserImg"></v-img>
             </v-avatar>
@@ -232,6 +232,7 @@ export default {
       this.$store
         .dispatch('voteSkill', skill._id)
         .then(response => {
+          this.showSnackbar = false;
           this.snackbarText = `Voted! Remaining votes: ${response.data.remainingVotes}`;
           this.snackbarColor = 'primary';
           this.showSnackbar = true;
@@ -246,8 +247,6 @@ export default {
           this.snackbarText = 'You have no votes left for this week.';
           this.snackbarColor = 'error';
           this.showSnackbar = true;
-
-          console.log(err);
         });
     }
   }
