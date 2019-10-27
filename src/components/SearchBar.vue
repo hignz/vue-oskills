@@ -60,10 +60,13 @@ export default {
   methods: {
     goToResults() {
       if (this.model) {
-        this.$router.push({
-          name: 'profile',
-          params: { id: this.model._id, user: this.model }
-        });
+        const route = this.model.categoryName
+          ? { name: 'skillprofile', params: { id: this.model._id } }
+          : {
+              name: 'profile',
+              params: { id: this.model._id, user: this.model }
+            };
+        this.$router.push(route);
       }
     }
   }
