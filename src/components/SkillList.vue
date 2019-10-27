@@ -16,7 +16,7 @@
           v-for="(skill, i) in skills"
           :key="i"
           :to="{
-            name: 'skillprofile',
+            name: 'skillProfile',
             params: { id: skill.skillId }
           }"
         >

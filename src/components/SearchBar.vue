@@ -78,7 +78,7 @@ export default {
     navigateTo() {
       if (this.model) {
         const route = this.model.categoryName
-          ? { name: 'skillprofile', params: { id: this.model._id } }
+          ? { name: 'skillProfile', params: { id: this.model._id } }
           : {
               name: 'profile',
               params: { id: this.model._id, user: this.model }
