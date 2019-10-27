@@ -16,7 +16,7 @@
           v-for="(skill, i) in skills"
           :key="i"
           :to="{
-            name: 'skillprofile',
+            name: 'skillProfile',
             params: { id: skill.skillId }
           }"
         >
@@ -27,6 +27,7 @@
           <v-list-item-content>
             <v-list-item-title v-text="skill.name"></v-list-item-title>
             <v-list-item-subtitle
+              class="grey--text"
               v-text="skill.categoryName"
             ></v-list-item-subtitle>
           </v-list-item-content>

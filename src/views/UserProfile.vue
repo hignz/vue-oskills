@@ -1,58 +1,57 @@
 <template>
-  <v-container v-if="loaded" fluid>
+  <v-container v-if="loaded">
     <v-card>
       <v-row justify="center" align="center">
-        <v-col cols="12" sm="12" md="12">
-          <v-row justify="center" align="center">
-            <v-col cols="12" sm="12" md="4">
-              <v-row justify="center" align="center" class="mb-6">
-                <v-avatar size="128">
-                  <v-img :src="randomUserImg"></v-img>
-                </v-avatar>
-              </v-row>
-              <v-row class="subheading-1" justify="center" align="center">
-                {{ user.name }}
-              </v-row>
-              <v-row
-                class="subtitle-2 grey--text"
-                justify="center"
-                align="center"
-              >
-                {{ user.role }}
-              </v-row>
-              <v-row
-                class="subtitle-2 grey--text"
-                justify="center"
-                align="center"
-              >
-                <v-col sm="4">
-                  <v-chip class="ma-2" color="primary" outlined pill>
-                    Wants to improve: {{ getLowestSkill }}
-                    <v-icon small right>mdi-flag</v-icon>
+        <v-col cols="12" sm="12">
+          <v-row justify="center" align="center" class="ma-4">
+            <v-avatar size="128">
+              <v-img :src="randomUserImg"></v-img>
+            </v-avatar>
+          </v-row>
+          <v-row class="subheading-1" justify="center" align="center">
+            {{ user.name }}
+          </v-row>
+          <v-row class="subtitle-2 grey--text" justify="center" align="center">
+            {{ user.role }}
+          </v-row>
+          <v-row class="subtitle-2 grey--text" justify="center" align="center">
+            <v-col cols="12" sm="12" class="text-center">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-chip class="ma-2" color="primary" v-on="on">
+                    <v-icon class="pa-1" left>mdi-flag</v-icon>
+                    {{ getLowestSkill.name }}
                   </v-chip>
-                </v-col>
-                <v-col sm="4">
-                  <v-chip class="ma-2" color="primary" outlined pill>
-                    Joined: {{ moment(user.dateJoined).format('DD-MM-YYYY') }}
-                    <v-icon small right>mdi-calendar-range</v-icon>
+                </template>
+                <span>{{ user.name }} wants to improve this skill.</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-chip class="ma-2" color="primary" v-on="on">
+                    <v-icon class="pa-1" left>mdi-calendar-range</v-icon>
+                    {{ moment(user.dateJoined).format('DD-MM-YYYY') }}
                   </v-chip>
-                </v-col>
-                <v-col sm="4">
-                  <v-chip class="ma-2" color="primary" outlined pill>
-                    Top skill: {{ getBestSkill.name }}
-                    <v-icon small right>mdi-star</v-icon>
+                </template>
+                <span>When {{ user.name }} joined OSkills.</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-chip class="ma-2" color="primary" v-on="on">
+                    <v-icon class="pa-1" left>mdi-star</v-icon>
+                    {{ getBestSkill.name }}
                   </v-chip>
-                </v-col>
-                <v-row justify="center" align="center">
-                  <v-btn v-if="getUser.isAdmin" small color="primary" rounded>
-                    <v-icon small>
-                      mdi-plus
-                    </v-icon>
-                    {{ promoteBtnText }}
-                  </v-btn>
-                </v-row>
-              </v-row>
+                </template>
+                <span>{{ user.name }}'s' best skill.</span>
+              </v-tooltip>
             </v-col>
+          </v-row>
+          <v-row justify="center" align="center">
+            <v-btn v-if="getUser.isAdmin" small color="primary" outlined>
+              <v-icon small>
+                mdi-plus
+              </v-icon>
+              {{ promoteBtnText }}
+            </v-btn>
           </v-row>
         </v-col>
       </v-row>
@@ -73,7 +72,6 @@
           ></RadarChart>
         </v-card>
       </v-col>
-
       <v-col cols="12" sm="12" md="4">
         <v-card>
           <v-toolbar dense flat>
@@ -82,7 +80,7 @@
             >
           </v-toolbar>
 
-          <v-list subheader>
+          <v-list subheader class="overflow-y-auto" style="max-height: 345px">
             <div
               v-for="(category, i) in getSkillsByCategories"
               :key="category.name"
@@ -92,7 +90,7 @@
               <v-list-item
                 v-for="skill in category.skills"
                 :key="skill.name"
-                @click="vote(skill)"
+                link
               >
                 <v-list-item-avatar>
                   <EsteemBadge :skill="skill"></EsteemBadge>
@@ -188,7 +186,7 @@ export default {
     getLowestSkill() {
       return this.user.skills.reduce(
         (prev, current) => (prev.rating > current.rating ? current : prev),
-        0
+        this.user.skills[0]
       );
     },
     getSkillsByCategories() {
@@ -223,13 +221,15 @@ export default {
       })
       .catch(err => {
         console.log(err);
-      });
+      })
+      .finally(() => this.$store.dispatch('updateLoading', false));
   },
   methods: {
     vote(skill) {
       this.$store
         .dispatch('voteSkill', skill._id)
         .then(response => {
+          this.showSnackbar = false;
           this.snackbarText = `Voted! Remaining votes: ${response.data.remainingVotes}`;
           this.snackbarColor = 'primary';
           this.showSnackbar = true;
@@ -244,8 +244,6 @@ export default {
           this.snackbarText = 'You have no votes left for this week.';
           this.snackbarColor = 'error';
           this.showSnackbar = true;
-
-          console.log(err);
         });
     }
   }

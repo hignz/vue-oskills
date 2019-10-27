@@ -56,7 +56,7 @@ const routes = [
   },
   {
     path: '/skill/:id',
-    name: 'skillprofile',
+    name: 'skillProfile',
     component: () => import('./views/SkillProfile'),
     props: true,
     meta: { requiresAuth: true }

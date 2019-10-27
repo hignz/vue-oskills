@@ -9,9 +9,7 @@
         :height="2"
         color="primary"
       ></v-progress-linear>
-      <transition name="fade">
-        <router-view :key="$route.fullPath"> </router-view>
-      </transition>
+      <router-view :key="$route.fullPath"></router-view>
     </v-content>
   </v-app>
 </template>
@@ -29,17 +27,8 @@ export default {
     Navbar,
     NavigationDrawer
   },
-  data() {
-    return {};
-  },
   computed: {
-    isDark() {
-      return this.$store.state.isDark;
-    },
-    showNavDrawer() {
-      return this.$store.getters.showNavigationDrawer;
-    },
-    ...mapGetters(['getUser', 'accessToken', 'isLoading'])
+    ...mapGetters(['accessToken', 'isLoading'])
   },
   created() {
     axios.interceptors.response.use(
@@ -83,5 +72,27 @@ export default {
 a {
   text-decoration: none;
   color: white;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 </style>

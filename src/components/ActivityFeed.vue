@@ -1,14 +1,21 @@
 <template>
-  <v-card v-if="loaded">
+  <v-card>
     <v-toolbar dense flat>
       <v-toolbar-title class="subtitle-2 grey--text">ACTIVITY</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon @click="getActivity()">
+      <v-btn icon :loading="loading" @click="getActivity()">
         <v-icon>mdi-refresh</v-icon>
       </v-btn>
     </v-toolbar>
 
-    <v-list dense two-line flat class="overflow-y-auto" :style="maxHeight">
+    <v-list
+      v-if="loaded"
+      dense
+      two-line
+      flat
+      class="overflow-y-auto"
+      :style="maxHeight"
+    >
       <v-list-item-group color="primary">
         <v-list-item v-for="(activity, i) in activities" :key="i">
           <v-list-item-avatar>
@@ -40,7 +47,8 @@ export default {
   },
   data: () => ({
     activities: null,
-    loaded: false
+    loaded: false,
+    loading: false
   }),
   computed: {
     maxHeight() {
@@ -52,6 +60,8 @@ export default {
   },
   methods: {
     getActivity() {
+      this.loading = true;
+
       if (this.participantId) {
         this.getUserActivity();
       } else {
@@ -68,7 +78,8 @@ export default {
         .catch(err => {
           console.log(err);
           this.loaded = false;
-        });
+        })
+        .finally(() => (this.loading = false));
     },
     getUserActivity() {
       this.$store
@@ -80,32 +91,11 @@ export default {
         .catch(err => {
           console.log(err);
           this.loaded = false;
-        });
+        })
+        .finally(() => (this.loading = false));
     }
   }
 };
 </script>
 
-<style scoped>
-/* width */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  border-radius: 10px;
-  background: #f1f1f1;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background: #888;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-</style>
+<style></style>

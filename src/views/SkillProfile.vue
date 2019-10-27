@@ -1,23 +1,14 @@
 <template>
-  <v-container v-if="loaded" fluid>
+  <v-container v-if="loaded">
     <v-card>
       <v-row justify="center" align="center">
         <v-col cols="12" sm="12" md="12">
           <v-row justify="center" align="center">
             <v-col cols="12" sm="12" md="4">
               <v-row justify="center" align="center" class="mb-6">
-                <v-badge @click="">
-                  <template v-slot:badge>
-                    <v-icon small dark>
-                      mdi-plus
-                    </v-icon>
-                  </template>
-                  <v-avatar color="primary" size="62">
-                    <span class="white--text headline">{{
-                      skill.name[0]
-                    }}</span>
-                  </v-avatar>
-                </v-badge>
+                <v-avatar color="primary" size="62">
+                  <span class="white--text headline">{{ skill.name[0] }}</span>
+                </v-avatar>
               </v-row>
               <v-row class="subheading-1" justify="center" align="center">
                 {{ skill.name }}
@@ -49,6 +40,23 @@
                     </v-chip>
                   </template>
                   <span>Average Esteem level</span>
+                </v-tooltip>
+              </v-row>
+
+              <v-row align="center" justify="center" class="mt-2">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      icon
+                      small
+                      color="primary"
+                      v-on="on"
+                      @click="addSkill()"
+                    >
+                      <v-icon>mdi-plus</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Add this skill to your profile</span>
                 </v-tooltip>
               </v-row>
             </v-col>
@@ -89,6 +97,11 @@ export default {
       .catch(err => {
         console.log(err);
       });
+  },
+  methods: {
+    addSkill() {
+      console.log('PILLOWS');
+    }
   }
 };
 </script>

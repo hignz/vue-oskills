@@ -4,8 +4,8 @@
       <v-list-item
         v-for="(user, i) in users.slice(0, 3)"
         :key="i"
-        :to="{ name: 'profile', params: { id: user._id, user } }"
         link
+        @click="openProfile(user)"
       >
         <v-list-item-avatar>
           <v-img
@@ -14,7 +14,10 @@
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title v-text="user.name"></v-list-item-title>
-          <v-list-item-subtitle v-text="user.role"></v-list-item-subtitle>
+          <v-list-item-subtitle
+            class="grey--text"
+            v-text="user.role"
+          ></v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action-text>
           {{ moment(user.dateJoined).fromNow() }}
@@ -43,9 +46,11 @@ export default {
   },
   methods: {
     openProfile(user) {
+      this.$store.dispatch('updateLoading', true);
+
       this.$router.push({
         name: 'profile',
-        params: { id: user._id, user: user }
+        params: { id: user._id }
       });
     }
   }
