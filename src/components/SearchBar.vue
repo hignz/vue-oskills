@@ -15,8 +15,25 @@
       placeholder="Search..."
       prepend-inner-icon="mdi-magnify"
       return-object
-      @change="goToResults"
-    ></v-autocomplete>
+      @change="navigateTo"
+    >
+      <template v-slot:item="data">
+        <template>
+          <v-list-item-avatar>
+            <v-icon v-if="data.item.categoryName">mdi-star</v-icon>
+            <v-icon v-else>mdi-account</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>{{ data.item.name }}</v-list-item-title>
+            <v-list-item-subtitle class="grey--text">
+              {{
+                data.item.categoryName || data.item.role
+              }}</v-list-item-subtitle
+            >
+          </v-list-item-content>
+        </template>
+      </template>
+    </v-autocomplete>
   </v-form>
 </template>
 
@@ -58,7 +75,7 @@ export default {
     }
   },
   methods: {
-    goToResults() {
+    navigateTo() {
       if (this.model) {
         const route = this.model.categoryName
           ? { name: 'skillprofile', params: { id: this.model._id } }
