@@ -96,4 +96,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.apexcharts-toolbar {
+  z-index: 0;
+}
+</style>
