@@ -90,10 +90,7 @@
               <v-list-item
                 v-for="skill in category.skills"
                 :key="skill.name"
-                :to="{
-                  name: 'skillprofile',
-                  params: { id: skill.skillId }
-                }"
+                link
               >
                 <v-list-item-avatar>
                   <EsteemBadge :skill="skill"></EsteemBadge>
