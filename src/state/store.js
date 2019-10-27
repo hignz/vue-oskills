@@ -15,7 +15,8 @@ export default new Vuex.Store({
     showNavigationDrawer: true,
     isDark: JSON.parse(localStorage.getItem('darkMode')) || false,
     skills: [],
-    loading: true
+    loading: true,
+    expandedNavDrawer: true
   },
   mutations: {
     updateAccessToken: (state, accessToken) => {
@@ -35,12 +36,13 @@ export default new Vuex.Store({
     },
     setUser: (state, user) => (state.user = user),
     updateSkills: (state, skills) => (state.skills = skills),
-    setLoading: (state, isLoading) => (state.loading = isLoading)
+    setLoading: (state, isLoading) => (state.loading = isLoading),
+    setExpandedNavDrawer: (state, isExpanded) =>
+      (state.expandedNavDrawer = isExpanded)
   },
   getters: {
     accessToken: state => state.accessToken,
-    showNavigationDrawer: state =>
-      state.accessToken && state.showNavigationDrawer,
+    showNavigationDrawer: state => state.showNavigationDrawer,
     getUser: state => state.user,
     skills: state => state.skills,
     topThreeSkills: state =>
@@ -50,7 +52,8 @@ export default new Vuex.Store({
         .slice(0, 3),
     isLoading: state => state.loading,
     isDark: state => state.isDark,
-    accentColor: () => localStorage.getItem('accentColor')
+    accentColor: () => localStorage.getItem('accentColor'),
+    expandedNavDrawer: state => state.expandedNavDrawer
   },
   actions: {
     fetchUser({ commit }, id) {
@@ -336,7 +339,7 @@ export default new Vuex.Store({
       router.push('/');
     },
     toggleDrawer({ commit }, showDrawer) {
-      commit('toggleDrawer', showDrawer);
+      commit('setExpandedNavDrawer', showDrawer);
     },
     toggleDarkMode({ commit }, value) {
       commit('toogleIsDark', value);
