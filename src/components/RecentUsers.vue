@@ -5,7 +5,7 @@
         v-for="(user, i) in users.slice(0, 3)"
         :key="i"
         link
-        @click="openProfile(user)"
+        @click="openProfile(user._id)"
       >
         <v-list-item-avatar>
           <v-img
@@ -45,12 +45,12 @@ export default {
       });
   },
   methods: {
-    openProfile(user) {
+    openProfile(userId) {
       this.$store.dispatch('updateLoading', true);
 
       this.$router.push({
         name: 'profile',
-        params: { id: user._id }
+        params: { id: userId }
       });
     }
   }
