@@ -38,19 +38,6 @@
       </v-list-item-group>
     </v-list>
     <v-list v-else dense two-line>
-      <v-subheader class="ml-2"
-        >SKILLS
-        <v-spacer></v-spacer>
-        <AddSkillDialog></AddSkillDialog>
-        <v-btn icon @click="openAllSkills">
-          <v-icon>mdi-arrow-expand</v-icon>
-        </v-btn>
-
-        <v-tooltip top>
-          <span>Add a new skill</span>
-        </v-tooltip>
-      </v-subheader>
-
       <v-list-item>You have no skills, please add some.</v-list-item>
     </v-list>
   </v-card>
