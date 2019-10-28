@@ -40,7 +40,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <v-btn icon v-on="on">
-                <v-icon small @click="openSkillProfile(item)">
+                <v-icon small @click="openSkillProfile(item.skillId)">
                   mdi-file-star-outline
                 </v-icon>
               </v-btn>
@@ -162,10 +162,10 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    openSkillProfile(item) {
+    openSkillProfile(skillId) {
       this.$router.push({
-        name: 'skillprofile',
-        params: { id: item.skillId }
+        name: 'skillProfile',
+        params: { id: skillId }
       });
     }
   }
