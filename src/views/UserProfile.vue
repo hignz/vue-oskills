@@ -91,17 +91,18 @@
                 v-for="skill in category.skills"
                 :key="skill.name"
                 link
+                @click="openSkillProfile(skill.skillId)"
               >
                 <v-list-item-avatar>
                   <EsteemBadge :esteem="skill.esteem"></EsteemBadge>
                 </v-list-item-avatar>
 
-                <v-list-item-content @click="openSkillProfile(skill.skillId)">
+                <v-list-item-content>
                   <v-list-item-title v-text="skill.name"></v-list-item-title>
                 </v-list-item-content>
 
                 <v-list-item-action>
-                  <v-btn icon @click="vote(skill)">
+                  <v-btn icon @click="vote(skill)" @click.stop>
                     <v-icon
                       v-if="!skill.votedBy.includes(getUser._id)"
                       color="grey lighten-1"
