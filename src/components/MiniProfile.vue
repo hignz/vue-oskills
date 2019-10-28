@@ -29,7 +29,7 @@
                 mdi-vote-outline
               </v-icon>
 
-              <v-icon v-else color="yellow">
+              <v-icon v-else color="primary">
                 mdi-vote
               </v-icon>
             </v-btn>
