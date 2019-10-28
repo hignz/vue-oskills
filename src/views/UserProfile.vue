@@ -16,7 +16,7 @@
           </v-row>
           <v-row class="subtitle-2 grey--text" justify="center" align="center">
             <v-col cols="12" sm="12" class="text-center">
-              <v-tooltip bottom>
+              <v-tooltip v-if="getLowestSkill" bottom>
                 <template v-slot:activator="{ on }">
                   <v-chip class="ma-2" color="primary" v-on="on">
                     <v-icon class="pa-1" left>mdi-flag</v-icon>
@@ -34,7 +34,7 @@
                 </template>
                 <span>When {{ user.name }} joined OSkills.</span>
               </v-tooltip>
-              <v-tooltip bottom>
+              <v-tooltip v-if="getBestSkill" bottom>
                 <template v-slot:activator="{ on }">
                   <v-chip class="ma-2" color="primary" v-on="on">
                     <v-icon class="pa-1" left>mdi-star</v-icon>
@@ -96,7 +96,7 @@
                   <EsteemBadge :esteem="skill.esteem"></EsteemBadge>
                 </v-list-item-avatar>
 
-                <v-list-item-content>
+                <v-list-item-content @click="openSkillProfile(skill.skillId)">
                   <v-list-item-title v-text="skill.name"></v-list-item-title>
                 </v-list-item-content>
 
@@ -125,9 +125,7 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <v-card :height="392">
-          <ActivityFeed :participant-id="user._id"></ActivityFeed
-        ></v-card>
+        <ActivityFeed :participant-id="user._id"></ActivityFeed>
       </v-col>
     </v-row>
     <v-snackbar v-model="showSnackbar" :color="snackbarColor">
@@ -245,6 +243,12 @@ export default {
           this.snackbarColor = 'error';
           this.showSnackbar = true;
         });
+    },
+    openSkillProfile(skillId) {
+      this.$router.push({
+        name: 'skillProfile',
+        params: { id: skillId }
+      });
     }
   }
 };
