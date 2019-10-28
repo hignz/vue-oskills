@@ -93,7 +93,7 @@
                 link
               >
                 <v-list-item-avatar>
-                  <EsteemBadge :skill="skill"></EsteemBadge>
+                  <EsteemBadge :esteem="skill.esteem"></EsteemBadge>
                 </v-list-item-avatar>
 
                 <v-list-item-content>

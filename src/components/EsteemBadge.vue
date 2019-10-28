@@ -5,21 +5,21 @@
         mdi-hexagon
       </v-icon>
     </template>
-    <span>{{ skill.esteem }}</span>
+    <span>{{ esteem }}</span>
   </v-tooltip>
 </template>
 
 <script>
 export default {
   props: {
-    skill: {
-      type: Object,
+    esteem: {
+      type: Number,
       required: true
     }
   },
   computed: {
     color() {
-      const esteem = this.skill.esteem;
+      const esteem = this.esteem;
       let color = '';
       if (esteem >= 1 && esteem <= 5) {
         color = 'orange';
