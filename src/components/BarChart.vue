@@ -26,8 +26,9 @@ export default {
   computed: {
     ...mapGetters(['skills', 'isDark', 'accentColor']),
     bestSkill() {
-      return this.skills.reduce((prev, current) =>
-        prev.rating > current.rating ? prev : current
+      return this.skills.reduce(
+        (prev, current) => (prev.rating > current.rating ? prev : current),
+        0
       );
     },
 
