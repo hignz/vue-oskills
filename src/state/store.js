@@ -423,6 +423,22 @@ export default new Vuex.Store({
           })
           .finally(() => commit('setLoading', false))
       );
+    },
+    fetchSkillActivity({ commit }, skillId) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
+      return new Promise((resolve, reject) =>
+        axios
+          .post('http://localhost:1111/skill-activity', { skillId })
+          .then(response => {
+            resolve(response.data);
+          })
+          .catch(err => {
+            reject(err);
+          })
+      );
     }
   }
 });
