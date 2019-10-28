@@ -103,7 +103,9 @@
       </v-col>
       <v-col cols="12" sm="12" md="4"> <v-card :height="392"></v-card> </v-col>
       <v-col cols="12" sm="12" md="4">
-        <v-card :height="392"> </v-card>
+        <v-card :height="392">
+          <ActivityFeed :skill-id="skill._id"></ActivityFeed
+        ></v-card>
       </v-col>
     </v-row>
     <v-snackbar v-model="showSnackbar" color="primary">
@@ -117,10 +119,12 @@
 
 <script>
 import EsteemBadge from '../components/EsteemBadge';
+import ActivityFeed from '../components/ActivityFeed';
 
 export default {
   components: {
-    EsteemBadge
+    EsteemBadge,
+    ActivityFeed
   },
   data() {
     return {
