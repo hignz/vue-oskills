@@ -43,7 +43,7 @@
             </v-col>
             <v-col class="text-center">
               <v-row justify="start">
-                <EsteemBadge :skill="skill" />
+                <EsteemBadge :esteem="skill.esteem" />
               </v-row>
             </v-col>
           </v-row>
