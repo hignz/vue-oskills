@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <p class="subheading grey--text">Explore</p>
-    <v-row v-if="users" justify="center" align="center">
+    <v-row v-if="users.length" justify="center" align="center">
       <v-col
         v-for="(user, i) in users.slice(0, 4)"
         :key="i"
@@ -33,7 +33,6 @@ export default {
       .dispatch('fetchRecentUsers')
       .then(response => {
         this.users = response.data.users;
-        console.log(this.users);
         this.loaded = true;
       })
       .catch(err => {

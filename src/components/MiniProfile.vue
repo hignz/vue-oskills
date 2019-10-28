@@ -1,19 +1,27 @@
 <template>
   <v-card max-width="344" class="mx-auto">
     <v-list-item dense @click="openProfile">
-      <v-list-item-avatar color="grey">
-        <img :src="randomUserImg" />
+      <v-list-item-avatar>
+        <v-avatar size="50">
+          <v-img :src="randomUserImg"></v-img>
+        </v-avatar>
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="headline">{{ user.name }}</v-list-item-title>
-        <v-list-item-subtitle>{{ user.role }}</v-list-item-subtitle>
+        <v-list-item-subtitle class="grey--text">{{
+          user.role
+        }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
-    <v-list dense two-line>
-      <v-subheader class="ml-2">Top Skills</v-subheader>
+    <v-list v-if="sortedSkills.length" dense nav>
+      <v-subheader class="caption">Top Skills</v-subheader>
       <v-list-item-group color="primary">
-        <v-list-item v-for="(skill, i) in sortedSkills" :key="i">
+        <v-list-item
+          v-for="(skill, i) in sortedSkills"
+          :key="i"
+          @click="openSkillProfile(skill.skillId)"
+        >
           <v-list-item-avatar>
             <EsteemBadge :esteem="skill.esteem"></EsteemBadge>
           </v-list-item-avatar>
@@ -21,7 +29,7 @@
             <v-list-item-title v-text="skill.name"></v-list-item-title>
           </v-list-item-content>
           <v-list-item-action>
-            <v-btn icon @click="vote(skill)">
+            <v-btn icon @click="vote(skill)" @click.stop>
               <v-icon
                 v-if="!skill.votedBy.includes(getUser._id)"
                 color="grey lighten-1"
@@ -37,13 +45,6 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
-
-    <v-card-actions>
-      <v-spacer></v-spacer>
-      <v-btn text @click="openProfile">
-        View Profile
-      </v-btn>
-    </v-card-actions>
 
     <v-snackbar v-model="showSnackbar" :color="snackbarColor">
       {{ snackbarText }}
@@ -79,7 +80,7 @@ export default {
     sortedSkills() {
       return this.user.skills
         .concat()
-        .sort((a, b) => b.rating - a.rating)
+        .sort((a, b) => b.esteem - a.esteem)
         .slice(0, 3);
     },
     randomUserImg() {
@@ -92,9 +93,16 @@ export default {
     openProfile() {
       this.$router.push({
         name: 'profile',
-        params: { id: this.user._id, user: this.user }
+        params: { id: this.user._id }
       });
     },
+    openSkillProfile(skillId) {
+      this.$router.push({
+        name: 'skillProfile',
+        params: { id: skillId }
+      });
+    },
+
     vote(skill) {
       this.$store
         .dispatch('voteSkill', skill._id)

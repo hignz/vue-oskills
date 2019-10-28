@@ -26,13 +26,14 @@
         </v-col>
         <v-col
           v-for="(skill, i) in topThreeSkills"
+          v-if="skill"
           :key="i"
           sm="12"
           md="3"
           cols="12"
           class="text-center"
         >
-          <v-row align="center" justify="center">
+          <v-row v-if="skill" align="center" justify="center">
             <v-col sm="6" class="text-center">
               <v-row class="caption grey--text" justify="center">
                 {{ skill.name }}
@@ -48,14 +49,15 @@
             </v-col>
           </v-row>
         </v-col>
+        <v-row else></v-row>
       </v-row>
     </v-card>
 
     <v-row>
-      <v-col cols="12" md="8" sm="12">
+      <v-col v-if="skills.length" cols="12" md="8" sm="12">
         <BarChart :skills="skills"></BarChart>
       </v-col>
-      <v-col cols="12" md="4" sm="12">
+      <v-col v-if="skills.length" cols="12" md="4" sm="12">
         <v-card>
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text"
