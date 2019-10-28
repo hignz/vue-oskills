@@ -14,18 +14,22 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-list v-if="sortedSkills.length" dense>
-      <v-subheader class="ml-2">Top Skills</v-subheader>
+    <v-list v-if="sortedSkills.length" dense nav>
+      <v-subheader class="caption">Top Skills</v-subheader>
       <v-list-item-group color="primary">
-        <v-list-item v-for="(skill, i) in sortedSkills" :key="i">
+        <v-list-item
+          v-for="(skill, i) in sortedSkills"
+          :key="i"
+          @click="openSkillProfile(skill.skillId)"
+        >
           <v-list-item-avatar>
             <EsteemBadge :esteem="skill.esteem"></EsteemBadge>
           </v-list-item-avatar>
-          <v-list-item-content @click="openSkillProfile(skill.skillId)">
+          <v-list-item-content>
             <v-list-item-title v-text="skill.name"></v-list-item-title>
           </v-list-item-content>
           <v-list-item-action>
-            <v-btn icon @click="vote(skill)">
+            <v-btn icon @click="vote(skill)" @click.stop>
               <v-icon
                 v-if="!skill.votedBy.includes(getUser._id)"
                 color="grey lighten-1"
@@ -76,7 +80,7 @@ export default {
     sortedSkills() {
       return this.user.skills
         .concat()
-        .sort((a, b) => b.rating - a.rating)
+        .sort((a, b) => b.esteem - a.esteem)
         .slice(0, 3);
     },
     randomUserImg() {
