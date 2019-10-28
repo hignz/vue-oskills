@@ -43,6 +43,11 @@ export default {
       type: String,
       required: false,
       default: null
+    },
+    skillId: {
+      type: String,
+      required: false,
+      default: null
     }
   },
   data: () => ({
@@ -52,7 +57,9 @@ export default {
   }),
   computed: {
     maxHeight() {
-      return this.participantId ? 'max-height: 350px' : 'max-height: 232px';
+      return this.participantId || this.skillId
+        ? 'max-height: 350px'
+        : 'max-height: 232px';
     }
   },
   created() {
@@ -64,6 +71,8 @@ export default {
 
       if (this.participantId) {
         this.getUserActivity();
+      } else if (this.skillId) {
+        this.getSkillActivity();
       } else {
         this.getRecentActivity();
       }
@@ -84,6 +93,19 @@ export default {
     getUserActivity() {
       this.$store
         .dispatch('fetchUserActivity', this.participantId)
+        .then(res => {
+          this.loaded = true;
+          this.activities = res;
+        })
+        .catch(err => {
+          console.log(err);
+          this.loaded = false;
+        })
+        .finally(() => (this.loading = false));
+    },
+    getSkillActivity() {
+      this.$store
+        .dispatch('fetchSkillActivity', this.skillId)
         .then(res => {
           this.loaded = true;
           this.activities = res;
