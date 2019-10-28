@@ -144,9 +144,7 @@ export default {
       });
   },
   methods: {
-    addSkill() {
-      console.log('PILLOWS');
-    },
+    addSkill() {},
     openProfile(ownerId) {
       this.$store.dispatch('updateLoading', true);
 
