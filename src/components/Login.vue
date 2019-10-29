@@ -1,5 +1,5 @@
 <template>
-  <v-flex xs12 sm8 md4>
+  <v-col sm="8" md="4">
     <v-card class="elevation-12">
       <v-toolbar color="primary" dark>
         <v-toolbar-title>
@@ -10,7 +10,7 @@
         <v-form id="loginForm" ref="loginForm" @submit.prevent="login">
           <v-text-field
             v-model="email"
-            label="E-mail"
+            label="Email"
             prepend-inner-icon="mdi-account"
             required
           >
@@ -45,7 +45,7 @@
         Close
       </v-btn>
     </v-snackbar>
-  </v-flex>
+  </v-col>
 </template>
 
 <script>
