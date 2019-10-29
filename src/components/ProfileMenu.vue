@@ -23,7 +23,7 @@
             <v-list-item-title v-if="getUser.name" class="subtitle-1">{{
               getUser.name
             }}</v-list-item-title>
-            <v-list-item-subtitle class="caption">{{
+            <v-list-item-subtitle class="caption grey--text">{{
               getUser.role
             }}</v-list-item-subtitle>
           </v-list-item-content>
@@ -32,15 +32,15 @@
 
       <v-divider></v-divider>
 
-      <v-list nav>
-        <v-list-item @click="">
+      <v-list>
+        <v-list-item @click="toggleDarkMode()">
           <v-list-item-icon>
             <v-icon>mdi-theme-light-dark</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Dark Theme</v-list-item-title>
           </v-list-item-content>
-          <v-list-item-action>
+          <v-list-item-action @click.stop>
             <v-switch v-model="darkMode" color="primary"></v-switch>
           </v-list-item-action>
         </v-list-item>
@@ -77,6 +77,9 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch('doLogout');
+    },
+    toggleDarkMode() {
+      this.darkMode = !this.darkMode;
     }
   }
 };
