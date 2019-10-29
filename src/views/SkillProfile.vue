@@ -17,6 +17,7 @@
                 class="subtitle-2 grey--text"
                 justify="center"
                 align="center"
+                @click="openCategoryProfile(skill.categoryId)"
               >
                 {{ skill.categoryName }}
               </v-row>
@@ -179,6 +180,12 @@ export default {
       this.$router.push({
         name: 'profile',
         params: { id: ownerId }
+      });
+    },
+    openCategoryProfile(categoryId) {
+      this.$router.push({
+        name: 'category',
+        params: { id: categoryId }
       });
     }
   }
