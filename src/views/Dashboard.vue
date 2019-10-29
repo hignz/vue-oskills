@@ -55,7 +55,7 @@
 
     <v-row>
       <v-col v-if="skills.length" cols="12" md="8" sm="12">
-        <BarChart :skills="skills"></BarChart>
+        <BarChart :skills="skills" class="pr-2"></BarChart>
       </v-col>
       <v-col v-if="skills.length" cols="12" md="4" sm="12">
         <v-card>
