@@ -26,7 +26,7 @@
 
           <v-list-item-content>
             <v-list-item-title v-text="activity.message"></v-list-item-title>
-            <v-list-item-subtitle>{{
+            <v-list-item-subtitle class="grey--text">{{
               moment(activity.logDate).fromNow()
             }}</v-list-item-subtitle>
           </v-list-item-content>
