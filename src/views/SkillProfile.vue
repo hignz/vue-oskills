@@ -47,6 +47,7 @@
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <v-btn
+                      v-if="isAdded"
                       icon
                       small
                       color="primary"
@@ -108,7 +109,7 @@
         ></v-card>
       </v-col>
     </v-row>
-    <v-snackbar v-model="showSnackbar" color="primary">
+    <v-snackbar v-model="showSnackbar" :color="snackbarColor">
       {{ snackbarText }}
       <v-btn color="white" text @click="showSnackbar = false">
         Close
@@ -118,6 +119,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 import EsteemBadge from '../components/EsteemBadge';
 import ActivityFeed from '../components/ActivityFeed';
 
@@ -131,8 +134,15 @@ export default {
       skill: {},
       showSnackbar: false,
       loaded: false,
-      snackbarText: ''
+      snackbarText: '',
+      snackbarColor: ''
     };
+  },
+  computed: {
+    ...mapGetters(['skills']),
+    isAdded() {
+      return !this.skills.filter(e => e.skillId === this.skill._id).length > 0;
+    }
   },
   created() {
     const skillId = this.$route.params.id;
@@ -148,7 +158,21 @@ export default {
       });
   },
   methods: {
-    addSkill() {},
+    addSkill() {
+      this.$store
+        .dispatch('addSkillToUser', { skillId: this.skill._id })
+        .then(() => {
+          this.snackbarText = `${this.skill.name} added!`;
+          this.snackbarColor = 'primary';
+          this.showSnackbar = true;
+        })
+        .catch(err => {
+          console.log(err);
+          this.snackbarText = 'Something went wrong!';
+          this.snackbarColor = 'error';
+          this.showSnackbar = true;
+        });
+    },
     openProfile(ownerId) {
       this.$store.dispatch('updateLoading', true);
 
