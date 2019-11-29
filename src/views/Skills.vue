@@ -4,7 +4,7 @@
       <v-card-title>
         Skill List
         <v-spacer></v-spacer>
-        <AddSkillDialog />
+        <AddSkillDialog :skill-categories="skillCategories" />
         <v-form>
           <v-text-field
             v-model="searchTerm"
@@ -130,7 +130,8 @@ export default {
       ],
       showSnackbar: false,
       snackbarText: '',
-      searchTerm: ''
+      searchTerm: '',
+      skillCategories: []
     };
   },
   computed: {
@@ -142,6 +143,13 @@ export default {
       .then(() => {
         this.initialize();
         this.loaded = true;
+      })
+      .catch(err => console.log(err));
+
+    this.$store
+      .dispatch('fetchCategories')
+      .then(res => {
+        this.skillCategories = res.data.categories;
       })
       .catch(err => console.log(err));
   },

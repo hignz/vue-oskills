@@ -5,7 +5,7 @@
         >TOP SKILLS</v-toolbar-title
       >
       <v-spacer></v-spacer>
-      <AddSkillDialog></AddSkillDialog>
+      <AddSkillDialog :skill-categories="skillCategories"></AddSkillDialog>
       <v-btn icon @click="openAllSkills">
         <v-icon>mdi-arrow-expand</v-icon>
       </v-btn>
@@ -54,6 +54,10 @@ export default {
   },
   props: {
     skills: {
+      type: Array,
+      required: true
+    },
+    skillCategories: {
       type: Array,
       required: true
     }
