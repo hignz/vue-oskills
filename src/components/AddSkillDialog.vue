@@ -74,9 +74,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-
 export default {
+  props: {
+    skillCategories: {
+      type: Array,
+      default: () => []
+    }
+  },
   data: () => {
     return {
       categories: [],
@@ -91,25 +95,15 @@ export default {
       addSkillLoading: false
     };
   },
-  computed: {
-    ...mapState(['user'])
-  },
   created() {
     this.loadingCategories = true;
-    this.$store
-      .dispatch('fetchCategories')
-      .then(response => {
-        this.categories = response.data.categories.map(o => {
-          return {
-            text: o.name,
-            value: o._id
-          };
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      })
-      .finally(() => (this.loadingCategories = false));
+    this.categories = this.skillCategories.map(o => {
+      return {
+        text: o.name,
+        value: o._id
+      };
+    });
+    this.loadingCategories = false;
   },
   methods: {
     populateSkills(categoryId) {
@@ -138,8 +132,8 @@ export default {
         })
         .then(res => {
           this.$refs.form.reset();
-          this.snackbarText = 'Skill added!';
-          this.snackbarColor = 'primary';
+          this.snackbarText = 'Skill added successfully!';
+          this.snackbarColor = 'success';
           this.showSnackbar = true;
         })
         .catch(err => {

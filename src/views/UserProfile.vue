@@ -66,9 +66,11 @@
             >
           </v-toolbar>
           <RadarChart
-            :user-skills="user.skills"
+            :user-skills="skills"
             :size="120"
             :height="330"
+            :skill-categories="skillCategories"
+            class="pr-2"
           ></RadarChart>
         </v-card>
       </v-col>
@@ -80,7 +82,12 @@
             >
           </v-toolbar>
 
-          <v-list subheader class="overflow-y-auto" style="max-height: 345px">
+          <v-list
+            subheader
+            class="overflow-y-auto"
+            dense
+            style="max-height: 345px"
+          >
             <div
               v-for="(category, i) in getSkillsByCategories"
               :key="category.name"
@@ -119,7 +126,6 @@
 
               <v-divider
                 v-if="i !== getSkillsByCategories.length - 1"
-                inset
               ></v-divider>
             </div>
           </v-list>
@@ -147,9 +153,9 @@ const ActivityFeed = () => import('../components/ActivityFeed');
 
 export default {
   components: {
+    ActivityFeed,
     EsteemBadge,
-    RadarChart,
-    ActivityFeed
+    RadarChart
   },
   data() {
     return {
@@ -160,7 +166,8 @@ export default {
       categories: [],
       showSnackbar: false,
       snackbarText: '',
-      snackbarColor: ''
+      snackbarColor: '',
+      skillCategories: []
     };
   },
   computed: {
@@ -168,13 +175,13 @@ export default {
     promoteBtnText() {
       return this.user.isAdmin ? 'Demote' : 'Promote';
     },
-    sortedSkills() {
-      return this.user.skills.concat().sort((a, b) => b.rating - a.rating);
-    },
     randomUserImg() {
       return `https://randomuser.me/api/portraits/men/${Math.floor(
         Math.random() * (Math.floor(65) - Math.ceil(1) + 1)
       ) + 1}.jpg`;
+    },
+    skills() {
+      return this.user.skills;
     },
     getBestSkill() {
       return this.user.skills.reduce(
@@ -222,15 +229,23 @@ export default {
         console.log(err);
       })
       .finally(() => this.$store.dispatch('updateLoading', false));
+
+    this.$store
+      .dispatch('fetchCategories')
+      .then(res => {
+        this.skillCategories = res.data.categories;
+      })
+      .catch(err => console.log(err));
   },
   methods: {
     vote(skill) {
       this.$store
         .dispatch('voteSkill', skill._id)
         .then(response => {
+          // show different snackbars for voted or removed vote
           this.showSnackbar = false;
           this.snackbarText = `Voted! Remaining votes: ${response.data.remainingVotes}`;
-          this.snackbarColor = 'primary';
+          this.snackbarColor = 'success';
           this.showSnackbar = true;
 
           const skill = response.data.skill;

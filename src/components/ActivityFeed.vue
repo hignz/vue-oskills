@@ -17,7 +17,11 @@
       :style="maxHeight"
     >
       <v-list-item-group color="primary">
-        <v-list-item v-for="(activity, i) in activities" :key="i">
+        <v-list-item
+          v-for="(activity, i) in activities"
+          :key="i"
+          @click="openSkillProfile(activity.skillId._id)"
+        >
           <v-list-item-avatar>
             <v-icon>
               mdi-circle-medium
@@ -25,7 +29,7 @@
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title v-text="activity.message"></v-list-item-title>
+            <v-list-item-title>{{ activity.message }}</v-list-item-title>
             <v-list-item-subtitle class="grey--text">{{
               moment(activity.logDate).fromNow()
             }}</v-list-item-subtitle>
@@ -115,6 +119,12 @@ export default {
           this.loaded = false;
         })
         .finally(() => (this.loading = false));
+    },
+    openSkillProfile(skillId) {
+      this.$router.push({
+        name: 'skillProfile',
+        params: { id: skillId }
+      });
     }
   }
 };

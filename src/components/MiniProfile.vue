@@ -1,5 +1,5 @@
 <template>
-  <v-card max-width="344" class="mx-auto">
+  <v-card max-width="344" height="310" class="mx-auto">
     <v-list-item dense @click="openProfile">
       <v-list-item-avatar>
         <v-avatar size="50">
@@ -14,9 +14,9 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-list v-if="sortedSkills.length" dense nav>
+    <v-list dense nav>
       <v-subheader class="caption">Top Skills</v-subheader>
-      <v-list-item-group color="primary">
+      <v-list-item-group v-if="sortedSkills.length" color="primary">
         <v-list-item
           v-for="(skill, i) in sortedSkills"
           :key="i"

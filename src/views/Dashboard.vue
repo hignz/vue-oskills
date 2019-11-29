@@ -4,29 +4,30 @@
       <v-row align="center" justify="center">
         <v-col cols="12" sm="12" md="3" class="text-center">
           <v-row
-            class="subtitle-2 ml-12"
+            class="subtitle-2 ml-md-12"
             align="center"
             justify="center"
             justify-md="start"
             >Hello, {{ user.name.split(' ')[0] }}</v-row
           >
           <v-row
-            class="caption grey--text ml-12 font-weight-bold"
+            class="caption grey--text ml-md-12 font-weight-bold"
             justify="center"
             justify-md="start"
             >{{ user.role }}</v-row
           >
           <v-row
-            class="caption grey--text ml-12 font-weight-bold"
+            class="caption grey--text ml-md-12 font-weight-bold"
             justify="center"
             justify-md="start"
-            >Remaining Votes:
-            <span class="font-weight-bold"> {{ user.remainingVotes }}</span>
+            >Remaining votes:
+            <span class="font-weight-bold ml-1">
+              {{ user.remainingVotes }}</span
+            >
           </v-row>
         </v-col>
         <v-col
           v-for="(skill, i) in topThreeSkills"
-          v-if="skill"
           :key="i"
           sm="12"
           md="3"
@@ -64,7 +65,10 @@
               >CATEGORIES</v-toolbar-title
             >
           </v-toolbar>
-          <RadarChart />
+          <RadarChart
+            :skill-categories="skillCategories"
+            :user-skills="skills"
+          />
         </v-card>
       </v-col>
     </v-row>
@@ -89,7 +93,9 @@
                   :key="i"
                   @click="switchUsersList(item, i)"
                 >
-                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                  <v-list-item-title class="subtitle-2">{{
+                    item.title
+                  }}</v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -98,7 +104,10 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <SkillList :skills="topThreeSkills"></SkillList>
+        <SkillList
+          :skills="topThreeSkills"
+          :skill-categories="skillCategories"
+        ></SkillList>
       </v-col>
       <v-col cols="12" md="4" sm="12">
         <ActivityFeed></ActivityFeed>
@@ -136,7 +145,8 @@ export default {
         { title: 'Similar Users' }
       ],
       usersMenuIndex: 0,
-      usersCardTitle: 'Recently Joined'
+      usersCardTitle: 'Recently Joined',
+      skillCategories: []
     };
   },
   computed: {
@@ -157,6 +167,13 @@ export default {
         console.log(err);
       })
       .finally(() => (this.loaded = true));
+
+    this.$store
+      .dispatch('fetchCategories')
+      .then(res => {
+        this.skillCategories = res.data.categories;
+      })
+      .catch(err => console.log(err));
   },
   methods: {
     switchUsersList(menuItem, i) {

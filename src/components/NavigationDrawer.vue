@@ -7,7 +7,7 @@
   >
     <v-list-item>
       <v-list-item-avatar size="47">
-        <v-icon>mdi-star</v-icon>
+        <v-icon color="primary" class="animated rollIn">mdi-star</v-icon>
       </v-list-item-avatar>
 
       <v-list-item-title>Welcome</v-list-item-title>
@@ -37,20 +37,6 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
-    <template v-slot:append>
-      <div class="pa-2">
-        <v-tooltip right>
-          <template v-slot:activator="{ on }">
-            <v-btn text block @click="logout()" v-on="on">
-              <v-icon>
-                mdi-logout
-              </v-icon>
-            </v-btn>
-          </template>
-          <span>Logout</span>
-        </v-tooltip>
-      </div>
-    </template>
   </v-navigation-drawer>
 </template>
 
