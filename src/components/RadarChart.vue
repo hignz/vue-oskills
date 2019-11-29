@@ -1,6 +1,7 @@
 <template>
   <div v-if="categories" id="chart">
     <apexcharts
+      v-if="userSkills.length"
       type="radar"
       :height="height"
       width="100%"
@@ -19,6 +20,10 @@ export default {
     apexcharts: VueApexCharts
   },
   props: {
+    skillCategories: {
+      type: Array,
+      default: () => []
+    },
     userSkills: {
       type: Array,
       default: () => []
@@ -36,17 +41,12 @@ export default {
       default: () => 500
     }
   },
-  data() {
-    return {
-      skillCategories: []
-    };
-  },
   computed: {
     ...mapGetters(['skills', 'isDark', 'accentColor']),
     chartSeries() {
       return [
         {
-          name: 'Esteem Total',
+          name: 'Total Category Esteem',
           data: this.categoryTotals
         }
       ];
@@ -79,9 +79,6 @@ export default {
           }
         },
         yaxis: {
-          tickAmount: 1,
-          max: this.bestSkill[0],
-          min: 1,
           labels: {
             formatter: val => val.toFixed(0)
           }
@@ -101,7 +98,7 @@ export default {
     },
     categories() {
       let categories = this.skillCategories.map(e => {
-        return { name: e, skills: [] };
+        return { name: e.name, skills: [] };
       });
 
       const s = this.userSkills.length ? this.userSkills : this.skills;
@@ -128,14 +125,6 @@ export default {
     bestSkill() {
       return [...this.categoryTotals].sort((a, b) => b - a).slice(0, 1);
     }
-  },
-  created() {
-    this.$store
-      .dispatch('fetchCategories')
-      .then(res => {
-        this.skillCategories = res.data.categories.map(el => el.name);
-      })
-      .catch(err => console.log(err));
   }
 };
 </script>
