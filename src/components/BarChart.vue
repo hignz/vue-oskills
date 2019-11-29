@@ -35,7 +35,7 @@ export default {
     barChartSeries() {
       return [
         {
-          name: 'Esteem Points',
+          name: 'Esteem level',
           data: this.skills.map(e => {
             return e.rating;
           })
@@ -67,7 +67,6 @@ export default {
         },
         xaxis: {
           ticks: 10,
-
           title: {
             text: 'Esteem Points'
           },
@@ -75,11 +74,7 @@ export default {
             return el.name;
           })
         },
-        yaxis: {
-          ticks: 10,
-          min: 0,
-          max: this.bestSkill.rating + 10
-        },
+        yaxis: {},
         fill: {
           opacity: 0.6,
           colors: [localStorage.getItem('accentColor')]
@@ -87,7 +82,7 @@ export default {
         tooltip: {
           y: {
             formatter: function(val) {
-              return val;
+              return Math.ceil(val / 5);
             }
           }
         }
