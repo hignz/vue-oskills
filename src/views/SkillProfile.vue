@@ -14,7 +14,7 @@
                 {{ skill.name }}
               </v-row>
               <v-row
-                class="subtitle-2 grey--text"
+                class="subtitle-2 grey--text link"
                 justify="center"
                 align="center"
                 @click="openCategoryProfile(skill.categoryId)"
@@ -30,7 +30,7 @@
                       {{ skill.usersWith }}
                     </v-chip>
                   </template>
-                  <span>Users with this skill</span>
+                  <span>Amount of users with this skill</span>
                 </v-tooltip>
 
                 <v-tooltip bottom>
@@ -103,11 +103,28 @@
           </v-list>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="12" md="4"> <v-card :height="392"></v-card> </v-col>
       <v-col cols="12" sm="12" md="4">
         <v-card :height="392">
-          <ActivityFeed :skill-id="skill._id"></ActivityFeed
-        ></v-card>
+          <v-row no-gutters="">
+            <v-col cols="12" sm="12" md="6">
+              <RadialChart
+                :series-data="[skill.averageEsteem]"
+                series-name="Average Esteem"
+                :size="100"
+              ></RadialChart>
+            </v-col>
+            <v-col cols="12" sm="12" md="6">
+              <RadialChart
+                :series-data="[skill.usersWith]"
+                series-name="Average Esteem"
+                :size="100"
+              ></RadialChart>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col>
+      <v-col cols="12" sm="12" md="4">
+        <ActivityFeed :skill-id="skill._id"></ActivityFeed>
       </v-col>
     </v-row>
     <v-snackbar v-model="showSnackbar" :color="snackbarColor">
@@ -122,13 +139,15 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import EsteemBadge from '../components/EsteemBadge';
 import ActivityFeed from '../components/ActivityFeed';
+import EsteemBadge from '../components/EsteemBadge';
+const RadialChart = () => import('../components/RadialChart');
 
 export default {
   components: {
+    ActivityFeed,
     EsteemBadge,
-    ActivityFeed
+    RadialChart
   },
   data() {
     return {
@@ -192,4 +211,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.link {
+  cursor: pointer;
+}
+</style>
