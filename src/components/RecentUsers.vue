@@ -36,7 +36,7 @@ export default {
   }),
   created() {
     this.$store
-      .dispatch('fetchRecentUsers')
+      .dispatch('fetchRecentUsersSlim')
       .then(response => {
         this.users = response.data.users;
       })

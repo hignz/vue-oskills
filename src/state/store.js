@@ -386,6 +386,22 @@ export default new Vuex.Store({
           });
       });
     },
+    fetchRecentUsersSlim({ commit }) {
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${this.getters.accessToken}`
+      };
+
+      return new Promise((resolve, reject) => {
+        axios
+          .get('http://localhost:1111/recent-users-slim/3')
+          .then(response => {
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
     updateLoading({ commit }, isLoading) {
       commit('setLoading', isLoading);
     },
