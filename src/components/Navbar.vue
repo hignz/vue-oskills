@@ -12,7 +12,7 @@
         </v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
-      <SearchBar />
+      <SearchBar class="mx-6" />
       <ProfileMenu />
     </v-app-bar>
   </nav>
