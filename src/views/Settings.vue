@@ -54,29 +54,26 @@
                 </v-col>
               </v-row>
 
-              <v-row>
-                <v-col cols="12" sm="12" md="6">
-                  <p class="subtitle-2">
-                    Accent Colour
-                  </p>
-
-                  <v-chip-group v-model="colorSelection" class="mb-2" mandatory>
-                    <v-chip
-                      v-for="color in colors"
-                      :key="color.value"
-                      pill
-                      @click="changeAccentColor(color)"
-                    >
-                      <v-avatar left :color="color.value"></v-avatar>
-                      {{ color.name }}
-                    </v-chip>
-                    <v-chip pill @click="showColorPicker = !showColorPicker">
-                      Custom
-                    </v-chip>
-                  </v-chip-group>
-                  <AccentColorPicker v-if="showColorPicker"></AccentColorPicker>
-                </v-col>
-              </v-row>
+              <v-col cols="12" sm="12" md="6">
+                <p class="subtitle-2">
+                  Accent Colour
+                </p>
+                <v-chip-group v-model="colorSelection" class="mb-2" mandatory>
+                  <v-chip
+                    v-for="color in colors"
+                    :key="color.value"
+                    pill
+                    @click="changeAccentColor(color)"
+                  >
+                    <v-avatar left :color="color.value"></v-avatar>
+                    {{ color.name }}
+                  </v-chip>
+                  <v-chip pill @click="showColorPicker = !showColorPicker">
+                    Custom
+                  </v-chip>
+                </v-chip-group>
+                <AccentColorPicker v-if="showColorPicker"></AccentColorPicker>
+              </v-col>
             </fieldset>
           </v-col>
         </v-row>
@@ -130,5 +127,11 @@ fieldset {
 legend {
   font-weight: 700;
   margin: 0px 6px;
+}
+
+.v-slide-group__content {
+  white-space: unset !important;
+  display: inline-block !important;
+  flex: auto;
 }
 </style>
