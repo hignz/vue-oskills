@@ -1,5 +1,6 @@
 <template>
   <v-container v-if="loaded">
+    <p class="mb-4 mt-3 pl-1 grey--text">Dashboard</p>
     <v-card>
       <v-row align="center" justify="center">
         <v-col cols="12" sm="12" md="3" class="text-center">
