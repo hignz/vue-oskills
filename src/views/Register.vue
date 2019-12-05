@@ -14,7 +14,7 @@
             <v-form ref="form" v-model="valid" :lazy-validation="lazy">
               <v-stepper v-model="n" vertical class="elevation-0">
                 <v-stepper-step :complete="n > 1" :step="1" :editable="true">
-                  Personal Details
+                  Personal details
                 </v-stepper-step>
                 <v-stepper-content step="1">
                   <v-col sm="12">
@@ -72,7 +72,7 @@
                 <v-stepper-content step="2">
                   <v-row>
                     <v-col sm="6" class="text-center">
-                      <DarkThemeSwitch></DarkThemeSwitch>
+                      <DarkThemeSwitch class="pl-3"></DarkThemeSwitch>
                       <AccentColorPicker></AccentColorPicker>
                     </v-col>
                   </v-row>
@@ -134,16 +134,24 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <v-col v-if="verified === false" class="text-center">
-      <h1 class="subheading grey--text">
-        User not recognized
-      </h1>
+    <v-col
+      v-if="verified === false"
+      sm="12"
+      md="6"
+      offset-md="3"
+      class="text-center"
+    >
+      <v-alert text color="error" icon="mdi-exclamation" border="left">
+        User not found.
+        <p class="my-0 py-0"></p>
+      </v-alert>
     </v-col>
     <v-col v-if="completed" class="text-center">
-      <h1 class="subheading grey--text">
-        Registration complete
-      </h1>
-      <v-btn class="primary" to="/login">Login</v-btn>
+      <v-alert text color="accent" icon="mdi-login" border="left">
+        Registration complete! Please login.
+        <p class="my-0 py-0"></p>
+        <v-btn class="accent mt-4" to="/login">Login</v-btn>
+      </v-alert>
     </v-col>
   </v-container>
 </template>
