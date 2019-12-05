@@ -105,7 +105,8 @@
       </v-col>
       <v-col cols="12" sm="12" md="4">
         <v-card :height="392">
-          <v-row no-gutters="">
+          <v-card-title>Under construction</v-card-title>
+          <!-- <v-row no-gutters="">
             <v-col cols="12" sm="12" md="6">
               <RadialChart
                 :series-data="[skill.averageEsteem]"
@@ -120,7 +121,7 @@
                 :size="100"
               ></RadialChart>
             </v-col>
-          </v-row>
+          </v-row> -->
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
