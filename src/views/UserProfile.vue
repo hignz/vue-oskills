@@ -114,11 +114,11 @@
                       v-if="!skill.votedBy.includes(getUser._id)"
                       color="grey lighten-1"
                     >
-                      mdi-vote-outline
+                      mdi-arrow-up-bold-outline
                     </v-icon>
 
-                    <v-icon v-else color="orange">
-                      mdi-vote
+                    <v-icon v-else color="primary">
+                      mdi-arrow-up-bold
                     </v-icon>
                   </v-btn>
                 </v-list-item-action>

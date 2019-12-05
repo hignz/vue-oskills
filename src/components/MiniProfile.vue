@@ -34,11 +34,11 @@
                 v-if="!skill.votedBy.includes(getUser._id)"
                 color="grey lighten-1"
               >
-                mdi-vote-outline
+                mdi-arrow-up-bold-outline
               </v-icon>
 
               <v-icon v-else color="primary">
-                mdi-vote
+                mdi-arrow-up-bold
               </v-icon>
             </v-btn>
           </v-list-item-action>
@@ -107,8 +107,11 @@ export default {
       this.$store
         .dispatch('voteSkill', skill._id)
         .then(response => {
-          this.snackbarText = `Voted! Remaining votes: ${response.data.remainingVotes}`;
-          this.snackbarColor = 'accent';
+          const remainingVotes = response.data.remainingVotes;
+          this.snackbarText = response.data.upvoted
+            ? `Voted! Remaining votes: ${remainingVotes}`
+            : `Vote removed! Remaining votes ${remainingVotes}`;
+          this.snackbarColor = response.data.upvoted ? 'success' : 'orange';
           this.showSnackbar = true;
 
           const skill = response.data.skill;
