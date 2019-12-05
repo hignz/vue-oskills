@@ -23,9 +23,9 @@ export default {
       let color = '';
 
       if (esteem >= 0 && esteem <= 5) {
-        color = '#FFC914';
-      } else if (esteem > 5 && esteem <= 10) {
         color = '#FF7733';
+      } else if (esteem > 5 && esteem <= 10) {
+        color = '#FFC914';
       } else if (esteem >= 11 && esteem <= 16) {
         color = '#5EEB5B';
       } else {
