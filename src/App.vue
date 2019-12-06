@@ -18,7 +18,6 @@
 import Navbar from './components/Navbar';
 import NavigationDrawer from './components/NavigationDrawer';
 import vuetify from './plugins/vuetify';
-import axios from 'axios';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -31,30 +30,7 @@ export default {
     ...mapGetters(['accessToken', 'isLoading'])
   },
   created() {
-    axios.interceptors.response.use(
-      response => {
-        return response;
-      },
-      error => {
-        if (401 === error.response.status) {
-          localStorage.removeItem('accessToken');
-          this.$store.state.accessToken = null;
-          this.$router.push({ path: '/login' });
-        }
-        return Promise.reject(error);
-      }
-    );
-
     vuetify.framework.theme.dark = this.$store.state.isDark;
-    if (!localStorage.getItem('accentColor')) {
-      localStorage.setItem('accentColor', '#ff1f2c');
-    }
-    vuetify.framework.theme.themes.dark.primary = localStorage.getItem(
-      'accentColor'
-    );
-    vuetify.framework.theme.themes.light.primary = localStorage.getItem(
-      'accentColor'
-    );
 
     if (this.accessToken) {
       this.$store
