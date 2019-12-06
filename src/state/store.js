@@ -10,8 +10,6 @@ export default new Vuex.Store({
   state: {
     user: {},
     accessToken: localStorage.getItem('accessToken') || null,
-    loggingIn: false,
-    loginError: null,
     showNavigationDrawer: true,
     isDark: JSON.parse(localStorage.getItem('darkMode')) || false,
     skills: [],
@@ -22,10 +20,6 @@ export default new Vuex.Store({
     updateAccessToken: (state, accessToken) => {
       state.accessToken = accessToken;
       localStorage.setItem('accessToken', accessToken);
-    },
-    loginStop: (state, errorMessage) => {
-      state.loggingIn = false;
-      state.loginError = errorMessage;
     },
     toggleDrawer: (state, showDrawer) => {
       state.showNavigationDrawer = showDrawer;
