@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import VueApexCharts from 'vue-apexcharts';
 
 export default {
@@ -24,9 +24,10 @@ export default {
     apexcharts: VueApexCharts
   },
   computed: {
-    ...mapGetters(['skills', 'isDark', 'accentColor']),
+    ...mapGetters(['isDark', 'accentColor']),
+    ...mapState(['user']),
     bestSkill() {
-      return this.skills.reduce(
+      return this.user.skills.reduce(
         (prev, current) => (prev.rating > current.rating ? prev : current),
         0
       );
@@ -36,7 +37,7 @@ export default {
       return [
         {
           name: 'Esteem level',
-          data: this.skills.map(e => {
+          data: this.user.skills.map(e => {
             return e.rating;
           })
         }
@@ -70,7 +71,7 @@ export default {
           title: {
             text: 'Esteem Points'
           },
-          categories: this.skills.map(el => {
+          categories: this.user.skills.map(el => {
             return el.name;
           })
         },

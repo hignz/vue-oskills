@@ -74,6 +74,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   props: {
     skillCategories: {
@@ -81,7 +83,7 @@ export default {
       default: () => []
     }
   },
-  data: () => {
+  data() {
     return {
       categories: [],
       skills: [],
@@ -106,13 +108,13 @@ export default {
     this.loadingCategories = false;
   },
   methods: {
+    ...mapActions(['fetchSkillsByCategory', 'addSkillToUser']),
     populateSkills(categoryId) {
       this.loadingSkills = true;
       this.skills = [];
-      this.$store
-        .dispatch('fetchSkillsByCategory', categoryId)
+      this.fetchSkillsByCategory(categoryId)
         .then(response => {
-          this.skills = response.data.skills.map(o => {
+          this.skills = response.skills.map(o => {
             return {
               text: o.name,
               value: o._id
@@ -126,17 +128,17 @@ export default {
     },
     addSkill() {
       this.addSkillLoading = true;
-      this.$store
-        .dispatch('addSkillToUser', {
-          skillId: this.selectedSkill
-        })
-        .then(res => {
+      this.addSkillToUser({
+        skillId: this.selectedSkill
+      })
+        .then(() => {
           this.$refs.form.reset();
+          this.skills = [];
           this.snackbarText = 'Skill added successfully!';
           this.snackbarColor = 'success';
           this.showSnackbar = true;
         })
-        .catch(err => {
+        .catch(() => {
           this.snackbarText = 'Something went wrong';
           this.snackbarColor = 'error';
           this.showSnackbar = true;

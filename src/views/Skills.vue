@@ -2,7 +2,7 @@
   <v-container v-if="loaded">
     <v-card>
       <v-card-title>
-        Skill List
+        Skill list
         <v-spacer></v-spacer>
         <AddSkillDialog :skill-categories="skillCategories" />
         <v-form>
@@ -20,7 +20,7 @@
 
       <v-data-table
         :headers="headers"
-        :items="skills"
+        :items="user.skills"
         sort-by="rating"
         :search="searchTerm"
         no-results-text="No matching skills found"
@@ -101,15 +101,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-
+import { mapState, mapActions } from 'vuex';
 import AddSkillDialog from '../components/AddSkillDialog';
-import EsteemBadge from '../components/EsteemBadge';
 
 export default {
   components: {
-    AddSkillDialog,
-    EsteemBadge
+    AddSkillDialog
   },
   data() {
     return {
@@ -135,34 +132,31 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['skills'])
+    ...mapState(['user'])
   },
   created() {
-    this.$store
-      .dispatch('fetchSkills')
+    this.fetchUserSkills()
       .then(() => {
         this.initialize();
         this.loaded = true;
       })
       .catch(err => console.log(err));
 
-    this.$store
-      .dispatch('fetchCategories')
+    this.fetchCategories()
       .then(res => {
-        this.skillCategories = res.data.categories;
+        this.skillCategories = res.categories;
       })
       .catch(err => console.log(err));
   },
   methods: {
+    ...mapActions(['fetchUserSkills', 'fetchCategories', 'fetchDeleteSkill']),
     initialize() {},
-
     showDeleteDialog(item) {
       this.selectedSkill = item;
       this.deleteDialog = true;
     },
     deleteSkill() {
-      this.$store
-        .dispatch('fetchDeleteSkill', this.selectedSkill._id)
+      this.fetchDeleteSkill(this.selectedSkill._id)
         .then(() => {
           this.deleteDialog = false;
           this.showSnackbar = true;

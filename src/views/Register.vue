@@ -159,6 +159,7 @@
 <script>
 import AccentColorPicker from '../components/AccentColorPicker';
 import DarkThemeSwitch from '../components/DarkThemeSwitch';
+import { mapActions } from 'vuex';
 
 export default {
   components: {
@@ -192,15 +193,13 @@ export default {
   },
   created() {
     const token = this.$route.params.token;
-    this.$store
-      .dispatch('verifyUser', token)
+    this.verifyUser(token)
       .then(() => {
         this.verified = true;
 
-        this.$store
-          .dispatch('fetchAllSkills')
+        this.fetchAllSkills()
           .then(response => {
-            this.skills = response.data.skills.map(o => {
+            this.skills = response.skills.map(o => {
               return {
                 text: o.name,
                 value: o._id
@@ -216,10 +215,11 @@ export default {
       });
   },
   methods: {
+    ...mapActions(['fetchAllSkills', 'doRegister', 'verifyUser']),
     onComplete() {
       if (this.$refs.form.validate()) {
         this.snackbar = true;
-        this.$store.dispatch('doRegister', {
+        this.doRegister('doRegister', {
           name: `${this.firstName} ${this.lastName}`,
           skills: this.selectedSkills,
           password: this.password,

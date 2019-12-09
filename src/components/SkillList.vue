@@ -62,7 +62,7 @@ export default {
       required: true
     }
   },
-  data: () => {
+  data() {
     return {
       dialog: false,
       selectedSkill: {}

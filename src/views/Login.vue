@@ -14,7 +14,7 @@ export default {
     Login
   },
   created() {
-    this.$store.dispatch('updateLoading', false);
+    this.$store.dispatch('setLoading', false);
   }
 };
 </script>

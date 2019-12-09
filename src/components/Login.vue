@@ -19,10 +19,10 @@
             v-model="password"
             label="Password"
             prepend-inner-icon="mdi-lock"
-            :append-icon="value ? 'mdi-eye-off' : 'mdi-eye'"
-            :type="value ? 'password' : 'text'"
+            :append-icon="hidePassword ? 'mdi-eye-off' : 'mdi-eye'"
+            :type="hidePassword ? 'password' : 'text'"
             required
-            @click:append="() => (value = !value)"
+            @click:append="() => (hidePassword = !hidePassword)"
           >
           </v-text-field>
         </v-form>
@@ -49,35 +49,34 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
-  name: 'Login',
   data() {
     return {
       email: '',
       password: '',
+      hidePassword: true,
       showSnackbar: false,
-      snackbarText: '',
-      value: String
+      snackbarText: ''
     };
   },
   methods: {
+    ...mapActions(['doLogin']),
     login() {
       if (this.$refs.loginForm.validate()) {
-        this.$store
-          .dispatch('doLogin', {
-            email: this.email,
-            password: this.password
-          })
+        this.doLogin({
+          email: this.email,
+          password: this.password
+        })
           .then(response => {
-            const { isAdmin } = response.data;
+            const { isAdmin } = response;
 
-            if (isAdmin) {
-              this.$router.push('/admin');
-            } else {
-              this.$router.push('/dashboard');
-            }
+            this.$router.push(
+              isAdmin ? { name: 'admin' } : { name: 'dashboard' }
+            );
           })
-          .catch(err => {
+          .catch(() => {
             this.snackbarText = 'Email or password is incorrect.';
             this.showSnackbar = true;
           });

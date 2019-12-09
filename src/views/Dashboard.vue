@@ -56,20 +56,17 @@
     </v-card>
 
     <v-row>
-      <v-col v-if="skills.length" cols="12" md="8" sm="12">
-        <BarChart :skills="skills" class="pr-2"></BarChart>
+      <v-col v-if="user.skills.length" cols="12" md="8" sm="12">
+        <BarChart :skills="user.skills" class="pr-2"></BarChart>
       </v-col>
-      <v-col v-if="skills.length" cols="12" md="4" sm="12">
+      <v-col v-if="user.skills.length" cols="12" md="4" sm="12">
         <v-card>
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text"
               >CATEGORIES</v-toolbar-title
             >
           </v-toolbar>
-          <RadarChart
-            :skill-categories="skillCategories"
-            :user-skills="skills"
-          />
+          <RadarChart :skill-categories="skillCategories" />
         </v-card>
       </v-col>
     </v-row>
@@ -118,7 +115,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions, mapState } from 'vuex';
 
 import RecentUsers from '../components/RecentUsers';
 import SkillList from '../components/SkillList';
@@ -138,9 +135,7 @@ export default {
   },
   data() {
     return {
-      user: {},
       loaded: false,
-      now: new Date().toLocaleDateString(),
       usersMenuItems: [
         { title: 'Recently Joined' },
         { title: 'Similar Users' }
@@ -151,32 +146,20 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['topThreeSkills', 'skills']),
-    randomUserImg() {
-      return `https://randomuser.me/api/portraits/men/${Math.floor(
-        Math.random() * (Math.floor(65) - Math.ceil(1) + 1)
-      ) + 1}.jpg`;
-    }
+    ...mapState(['user']),
+    ...mapGetters(['topThreeSkills', 'skills'])
   },
   created() {
-    this.$store
-      .dispatch('fetchUser')
-      .then(response => {
-        this.user = response;
-      })
-      .catch(err => {
-        console.log(err);
-      })
-      .finally(() => (this.loaded = true));
+    this.fetchUser().then(() => {
+      this.loaded = true;
+    });
 
-    this.$store
-      .dispatch('fetchCategories')
-      .then(res => {
-        this.skillCategories = res.data.categories;
-      })
-      .catch(err => console.log(err));
+    this.fetchCategories().then(res => {
+      this.skillCategories = res.categories;
+    });
   },
   methods: {
+    ...mapActions(['fetchCategories', 'fetchUser']),
     switchUsersList(menuItem, i) {
       this.usersCardTitle = menuItem.title;
       this.usersMenuIndex = i;

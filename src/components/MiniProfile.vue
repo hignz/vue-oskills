@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 const EsteemBadge = () => import('./EsteemBadge');
 
 export default {
@@ -90,6 +90,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['voteSkill']),
     openProfile() {
       this.$router.push({
         name: 'profile',
@@ -102,19 +103,17 @@ export default {
         params: { id: skillId }
       });
     },
-
     vote(skill) {
-      this.$store
-        .dispatch('voteSkill', skill._id)
+      this.voteSkill(skill._id)
         .then(response => {
-          const remainingVotes = response.data.remainingVotes;
-          this.snackbarText = response.data.upvoted
+          const remainingVotes = response.remainingVotes;
+          this.snackbarText = response.upvoted
             ? `Voted! Remaining votes: ${remainingVotes}`
             : `Vote removed! Remaining votes ${remainingVotes}`;
-          this.snackbarColor = response.data.upvoted ? 'success' : 'orange';
+          this.snackbarColor = response.upvoted ? 'success' : 'orange';
           this.showSnackbar = true;
 
-          const skill = response.data.skill;
+          const skill = response.skill;
           this.user.skills = this.user.skills.map(x =>
             x._id == skill._id ? skill : x
           );

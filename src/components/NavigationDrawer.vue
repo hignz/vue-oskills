@@ -17,8 +17,7 @@
 
     <v-list dense nav>
       <v-list-item
-        v-for="item in links"
-        v-if="!item.requiresAdmin || (getUser.isAdmin && item.requiresAdmin)"
+        v-for="item in filteredLinks"
         :key="item.title"
         :to="item.route"
         links
@@ -41,7 +40,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   data() {
@@ -55,15 +54,37 @@ export default {
           route: '/admin',
           requiresAdmin: true
         },
-        { icon: 'mdi-view-dashboard', text: 'Dashboard', route: '/dashboard' },
-        { icon: 'mdi-star-circle', text: 'Skills', route: '/skills' },
-        { icon: 'mdi-magnify', text: 'Explore', route: '/explore' },
-        { icon: 'mdi-settings', text: 'Settings', route: '/settings' }
+        {
+          icon: 'mdi-view-dashboard',
+          text: 'Dashboard',
+          route: '/dashboard'
+        },
+        {
+          icon: 'mdi-star-circle',
+          text: 'Skills',
+          route: '/skills'
+        },
+        {
+          icon: 'mdi-magnify',
+          text: 'Explore',
+          route: '/explore'
+        },
+        {
+          icon: 'mdi-settings',
+          text: 'Settings',
+          route: '/settings'
+        }
       ]
     };
   },
   computed: {
-    ...mapGetters(['getUser', 'expandedNavDrawer']),
+    ...mapState(['user']),
+    ...mapGetters(['expandedNavDrawer']),
+    filteredLinks() {
+      return this.links.filter(
+        e => !e.requiresAdmin || (this.user.isAdmin && e.requiresAdmin)
+      );
+    },
     expandedNavDrawer: {
       get: function() {
         return this.$store.getters.expandedNavDrawer;

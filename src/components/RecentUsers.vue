@@ -20,7 +20,9 @@
           ></v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action-text>
-          {{ moment(user.dateJoined).fromNow() }}
+          {{
+            formatDistanceToNow(parseISO(user.dateJoined), { addSuffix: true })
+          }}
         </v-list-item-action-text>
       </v-list-item>
     </v-list-item-group>
@@ -28,25 +30,32 @@
 </template>
 
 <script>
+import { formatDistanceToNow, parseISO } from 'date-fns';
+import { mapActions } from 'vuex';
+
 export default {
-  data: () => ({
-    menuItems: [{ title: 'Similar Users' }, { title: 'New Users' }],
-    sortName: 'NEW USERS',
-    users: []
-  }),
+  data() {
+    return {
+      menuItems: [{ title: 'Similar Users' }, { title: 'New Users' }],
+      sortName: 'NEW USERS',
+      users: [],
+      formatDistanceToNow,
+      parseISO
+    };
+  },
   created() {
-    this.$store
-      .dispatch('fetchRecentUsersSlim')
+    this.fetchRecentUsersSlim(3)
       .then(response => {
-        this.users = response.data.users;
+        this.users = response.users;
       })
       .catch(err => {
         console.log(err);
       });
   },
   methods: {
+    ...mapActions(['fetchRecentUsersSlim', 'setLoading']),
     openProfile(userId) {
-      this.$store.dispatch('updateLoading', true);
+      this.setLoading(true);
 
       this.$router.push({
         name: 'profile',

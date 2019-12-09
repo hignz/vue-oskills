@@ -31,7 +31,9 @@
           <v-list-item-content>
             <v-list-item-title>{{ activity.message }}</v-list-item-title>
             <v-list-item-subtitle class="grey--text">{{
-              moment(activity.logDate).fromNow()
+              formatDistanceToNow(new Date(activity.logDate), {
+                addSuffix: true
+              })
             }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -41,6 +43,9 @@
 </template>
 
 <script>
+import { formatDistanceToNow } from 'date-fns';
+import { mapActions } from 'vuex';
+
 export default {
   props: {
     participantId: {
@@ -54,11 +59,14 @@ export default {
       default: null
     }
   },
-  data: () => ({
-    activities: null,
-    loaded: false,
-    loading: false
-  }),
+  data() {
+    return {
+      activities: null,
+      loaded: false,
+      loading: false,
+      formatDistanceToNow
+    };
+  },
   computed: {
     maxHeight() {
       return this.participantId || this.skillId
@@ -70,6 +78,11 @@ export default {
     this.getActivity();
   },
   methods: {
+    ...mapActions([
+      'fetchRecentActivity',
+      'fetchUserActivity',
+      'fetchSkillActivity'
+    ]),
     getActivity() {
       this.loading = true;
 
@@ -82,40 +95,34 @@ export default {
       }
     },
     getRecentActivity() {
-      this.$store
-        .dispatch('fetchRecentActivity')
+      this.fetchRecentActivity()
         .then(res => {
-          this.loaded = true;
           this.activities = res;
+          this.loaded = true;
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
           this.loaded = false;
         })
         .finally(() => (this.loading = false));
     },
     getUserActivity() {
-      this.$store
-        .dispatch('fetchUserActivity', this.participantId)
+      this.fetchUserActivity(this.participantId)
         .then(res => {
-          this.loaded = true;
           this.activities = res;
+          this.loaded = true;
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
           this.loaded = false;
         })
         .finally(() => (this.loading = false));
     },
     getSkillActivity() {
-      this.$store
-        .dispatch('fetchSkillActivity', this.skillId)
+      this.fetchSkillActivity(this.skillId)
         .then(res => {
-          this.loaded = true;
           this.activities = res;
+          this.loaded = true;
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
           this.loaded = false;
         })
         .finally(() => (this.loading = false));
