@@ -38,13 +38,17 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
-  data: () => ({
-    entries: [],
-    isLoading: false,
-    model: null,
-    search: null
-  }),
+  data() {
+    return {
+      entries: [],
+      isLoading: false,
+      model: null,
+      search: null
+    };
+  },
 
   computed: {
     items() {
@@ -67,14 +71,14 @@ export default {
 
       this.isLoading = true;
 
-      this.$store
-        .dispatch('fetchByName', val)
-        .then(res => (this.entries = res.data.data))
+      this.fetchByName(val)
+        .then(res => (this.entries = res.data))
         .catch(error => console.log(error))
         .finally(() => (this.isLoading = false));
     }
   },
   methods: {
+    ...mapActions(['fetchByName']),
     navigateTo() {
       if (this.model) {
         const route = this.model.categoryName

@@ -1,7 +1,7 @@
 <template>
   <div v-if="categories" id="chart">
     <apexcharts
-      v-if="userSkills.length"
+      v-if="userSkills.length || user.skills.length"
       type="radar"
       :height="height"
       width="100%"
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import VueApexCharts from 'vue-apexcharts';
 
 export default {
@@ -43,6 +43,7 @@ export default {
   },
   computed: {
     ...mapGetters(['skills', 'isDark', 'accentColor']),
+    ...mapState(['user']),
     chartSeries() {
       return [
         {
@@ -101,7 +102,8 @@ export default {
         return { name: e.name, skills: [] };
       });
 
-      const s = this.userSkills.length ? this.userSkills : this.skills;
+      const s = this.userSkills.length ? this.userSkills : this.user.skills;
+      console.log(s);
       categories.forEach(category => {
         s.forEach(skill => {
           if (skill.categoryName === category.name) {
@@ -122,6 +124,7 @@ export default {
 
       return l;
     },
+
     bestSkill() {
       return [...this.categoryTotals].sort((a, b) => b - a).slice(0, 1);
     }

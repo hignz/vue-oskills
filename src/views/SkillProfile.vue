@@ -138,17 +138,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 import ActivityFeed from '../components/ActivityFeed';
 import EsteemBadge from '../components/EsteemBadge';
-const RadialChart = () => import('../components/RadialChart');
 
 export default {
   components: {
     ActivityFeed,
-    EsteemBadge,
-    RadialChart
+    EsteemBadge
   },
   data() {
     return {
@@ -168,8 +166,7 @@ export default {
   created() {
     const skillId = this.$route.params.id;
 
-    this.$store
-      .dispatch('fetchSkillInfo', skillId)
+    this.fetchSkillInfo(skillId)
       .then(res => {
         this.skill = res;
         this.loaded = true;
@@ -179,9 +176,9 @@ export default {
       });
   },
   methods: {
+    ...mapActions(['addSkillToUser', 'setLoading', 'fetchSkillInfo']),
     addSkill() {
-      this.$store
-        .dispatch('addSkillToUser', { skillId: this.skill._id })
+      this.addSkillToUser({ skillId: this.skill._id })
         .then(() => {
           this.snackbarText = `${this.skill.name} added!`;
           this.snackbarColor = 'primary';
@@ -195,7 +192,7 @@ export default {
         });
     },
     openProfile(ownerId) {
-      this.$store.dispatch('updateLoading', true);
+      this.setLoading(true);
 
       this.$router.push({
         name: 'profile',

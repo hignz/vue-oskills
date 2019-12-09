@@ -1,6 +1,6 @@
 <template>
   <v-menu
-    v-if="getUser"
+    v-if="user"
     v-model="menu"
     :close-on-content-click="false"
     :nudge-width="200"
@@ -16,15 +16,15 @@
       <v-list dense>
         <v-list-item>
           <v-list-item-avatar>
-            <img src="https://randomuser.me/api/portraits/men/54.jpg" />
+            <img src="https://randomuser.me/api/portraits/men/52.jpg" />
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title v-if="getUser.name" class="subtitle-1">{{
-              getUser.name
+            <v-list-item-title class="subtitle-1">{{
+              user.name
             }}</v-list-item-title>
             <v-list-item-subtitle class="caption grey--text">{{
-              getUser.role
+              user.role
             }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -56,15 +56,17 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
-  data: () => ({
-    available: true,
-    menu: false
-  }),
+  data() {
+    return {
+      available: true,
+      menu: false
+    };
+  },
   computed: {
-    ...mapGetters(['getUser']),
+    ...mapState(['user']),
     darkMode: {
       get() {
         return this.$store.state.isDark;

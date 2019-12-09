@@ -29,7 +29,7 @@
                 <template v-slot:activator="{ on }">
                   <v-chip class="ma-2" color="primary" v-on="on">
                     <v-icon class="pa-1" left>mdi-calendar-range</v-icon>
-                    {{ moment(user.dateJoined).format('DD-MM-YYYY') }}
+                    {{ lightFormat(parseISO(user.dateJoined), 'dd-mm-yyyy') }}
                   </v-chip>
                 </template>
                 <span>When {{ user.name }} joined OSkills.</span>
@@ -145,11 +145,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-
 const EsteemBadge = () => import('../components/EsteemBadge');
 const RadarChart = () => import('../components/RadarChart');
 const ActivityFeed = () => import('../components/ActivityFeed');
+import { lightFormat, parseISO } from 'date-fns';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
@@ -167,7 +167,9 @@ export default {
       showSnackbar: false,
       snackbarText: '',
       snackbarColor: '',
-      skillCategories: []
+      skillCategories: [],
+      lightFormat,
+      parseISO
     };
   },
   computed: {
@@ -219,41 +221,40 @@ export default {
     }
   },
   created() {
-    this.$store
-      .dispatch('fetchUserById', this.$route.params.id)
+    this.fetchUserById(this.$route.params.id)
       .then(response => {
-        this.user = response;
+        this.user = response.data;
         this.loaded = true;
       })
       .catch(err => {
         console.log(err);
       })
-      .finally(() => this.$store.dispatch('updateLoading', false));
+      .finally(() => this.$store.dispatch('setLoading', false));
 
-    this.$store
-      .dispatch('fetchCategories')
+    this.fetchCategories()
       .then(res => {
-        this.skillCategories = res.data.categories;
+        this.skillCategories = res.categories;
       })
       .catch(err => console.log(err));
   },
   methods: {
+    ...mapActions(['fetchUserById', 'fetchCategories', 'voteSkill']),
     vote(skill) {
-      this.$store
-        .dispatch('voteSkill', skill._id)
+      this.voteSkill(skill._id)
         .then(response => {
-          // show different snackbars for voted or removed vote
-          this.showSnackbar = false;
-          this.snackbarText = `Voted! Remaining votes: ${response.data.remainingVotes}`;
-          this.snackbarColor = 'success';
+          const remainingVotes = response.remainingVotes;
+          this.snackbarText = response.upvoted
+            ? `Voted! Remaining votes: ${remainingVotes}`
+            : `Vote removed! Remaining votes ${remainingVotes}`;
+          this.snackbarColor = response.upvoted ? 'success' : 'orange';
           this.showSnackbar = true;
 
-          const skill = response.data.skill;
+          const skill = response.skill;
           this.user.skills = this.user.skills.map(x =>
             x._id == skill._id ? skill : x
           );
         })
-        .catch(err => {
+        .catch(() => {
           this.showSnackbar = false;
           this.snackbarText = 'You have no votes left for this week.';
           this.snackbarColor = 'error';

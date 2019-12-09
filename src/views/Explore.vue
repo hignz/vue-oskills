@@ -17,6 +17,7 @@
 
 <script>
 import MiniProfile from '../components/MiniProfile';
+import { mapActions } from 'vuex';
 
 export default {
   components: {
@@ -29,15 +30,17 @@ export default {
     };
   },
   created() {
-    this.$store
-      .dispatch('fetchRecentUsers')
+    this.fetchRecentUsers()
       .then(response => {
-        this.users = response.data.users;
+        this.users = response.users;
         this.loaded = true;
       })
       .catch(err => {
         console.log(err);
       });
+  },
+  methods: {
+    ...mapActions(['fetchRecentUsers'])
   }
 };
 </script>
