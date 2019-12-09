@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-
-import store from './state/store';
+import store from '../store';
 
 Vue.use(Router);
 
@@ -13,71 +12,71 @@ const routes = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: () => import('./views/Dashboard'),
+    component: () => import('@/views/Dashboard'),
     meta: { requiresAuth: true }
   },
   {
     path: '/explore',
     name: 'explore',
-    component: () => import('./views/Explore'),
+    component: () => import('@/views/Explore'),
     meta: { requiresAuth: true }
   },
   {
     path: '/category/:id',
     name: 'category',
-    component: () => import('./views/Category'),
+    component: () => import('@/views/Category'),
     meta: { requiresAuth: true }
   },
   {
     path: '/settings',
     name: 'settings',
-    component: () => import('./views/Settings'),
+    component: () => import('@/views/Settings'),
     meta: { requiresAuth: true }
   },
   {
     path: '/login',
     name: 'login',
-    component: () => import('./views/Login'),
+    component: () => import('@/views/Login'),
     meta: { requiresVisitor: true }
   },
   {
     path: '/register/:token',
     name: 'register',
-    component: () => import('./views/Register'),
+    component: () => import('@/views/Register'),
     meta: { requiresVisitor: true }
   },
   {
     path: '/profile/:id',
     name: 'profile',
-    component: () => import('./views/UserProfile'),
+    component: () => import('@/views/UserProfile'),
     props: true,
     meta: { requiresAuth: true }
   },
   {
     path: '/results',
     name: 'results',
-    component: () => import('./views/Results'),
+    component: () => import('@/views/Results'),
     props: true,
     meta: { requiresAuth: true }
   },
   {
     path: '/skill/:id',
     name: 'skillProfile',
-    component: () => import('./views/SkillProfile'),
+    component: () => import('@/views/SkillProfile'),
     props: true,
     meta: { requiresAuth: true }
   },
   {
     path: '/skills',
     name: 'skills',
-    component: () => import('./views/Skills'),
+    component: () => import('@/views/Skills'),
     props: true,
     meta: { requiresAuth: true }
   },
   {
     path: '/admin',
     name: 'admin',
-    component: () => import('./views/Admin'),
+    component: () => import('@/views/Admin'),
     meta: { requiresAdmin: true }
   },
   {
