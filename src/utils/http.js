@@ -1,11 +1,10 @@
 import axios from 'axios';
+import router from '../router/index.js';
+import store from '../store';
 
 const http = axios.create({
   baseURL: 'http://localhost:1111'
 });
-
-http.CancelToken = axios.CancelToken;
-http.isCancel = axios.isCancel;
 
 http.interceptors.request.use(
   config => {
@@ -30,8 +29,8 @@ http.interceptors.response.use(
   error => {
     if (401 === error.response.status) {
       localStorage.removeItem('accessToken');
-      this.$store.state.accessToken = null;
-      this.$router.push({ path: '/login' });
+      store.state.accessToken = null;
+      router.push({ path: '/login' });
     }
     return Promise.reject(error);
   }
