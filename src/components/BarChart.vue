@@ -1,6 +1,8 @@
 <template>
   <v-card>
-    <v-toolbar dense flat class="subtitle-2 grey--text">SKILLS</v-toolbar>
+    <v-toolbar dense flat>
+      <v-toolbar-title class="subtitle-2 grey--text">SKILLS</v-toolbar-title>
+    </v-toolbar>
 
     <div id="chart">
       <apexcharts
@@ -14,7 +16,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import VueApexCharts from 'vue-apexcharts';
 
 export default {
@@ -22,18 +24,20 @@ export default {
     apexcharts: VueApexCharts
   },
   computed: {
-    ...mapGetters(['skills', 'isDark', 'accentColor']),
+    ...mapGetters(['isDark', 'accentColor']),
+    ...mapState(['user']),
     bestSkill() {
-      return this.skills.reduce((prev, current) =>
-        prev.rating > current.rating ? prev : current
+      return this.user.skills.reduce(
+        (prev, current) => (prev.rating > current.rating ? prev : current),
+        0
       );
     },
 
     barChartSeries() {
       return [
         {
-          name: 'Esteem Points',
-          data: this.skills.map(e => {
+          name: 'Esteem level',
+          data: this.user.skills.map(e => {
             return e.rating;
           })
         }
@@ -54,7 +58,7 @@ export default {
           mode: this.isDark ? 'dark' : 'light'
         },
         chart: {
-          background: this.isDark ? '#424242' : '#ffffff',
+          background: this.isDark ? '#343a40' : '#ffffff',
           foreColor: this.isDark ? '#ffffff' : '#424242'
         },
         stroke: {
@@ -63,17 +67,15 @@ export default {
           colors: ['transparent']
         },
         xaxis: {
+          ticks: 10,
           title: {
             text: 'Esteem Points'
           },
-          categories: this.skills.map(el => {
+          categories: this.user.skills.map(el => {
             return el.name;
           })
         },
-        yaxis: {
-          min: 0,
-          max: this.bestSkill.rating + this.bestSkill.rating / 2
-        },
+        yaxis: {},
         fill: {
           opacity: 0.6,
           colors: [localStorage.getItem('accentColor')]
@@ -81,7 +83,7 @@ export default {
         tooltip: {
           y: {
             formatter: function(val) {
-              return val;
+              return Math.ceil(val / 5);
             }
           }
         }
@@ -91,4 +93,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.apexcharts-toolbar {
+  z-index: 0;
+}
+</style>

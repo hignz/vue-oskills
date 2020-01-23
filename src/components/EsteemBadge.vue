@@ -5,33 +5,50 @@
         mdi-hexagon
       </v-icon>
     </template>
-    <span>{{ skill.esteem }}</span>
+    <span>{{ esteem }}</span>
   </v-tooltip>
 </template>
 
 <script>
 export default {
   props: {
-    skill: {
-      type: Object,
+    esteem: {
+      type: Number,
       required: true
     }
   },
   computed: {
     color() {
-      const esteem = this.skill.esteem;
+      let esteem = this.esteem;
       let color = '';
-      if (esteem >= 1 && esteem <= 5) {
-        color = 'orange';
+
+      if (esteem >= 0 && esteem <= 5) {
+        color = '#FF7733';
       } else if (esteem > 5 && esteem <= 10) {
-        color = 'yellow';
+        color = '#FFC914';
       } else if (esteem >= 11 && esteem <= 16) {
-        color = 'green';
+        color = '#5EEB5B';
       } else {
-        color = 'blue';
+        color = '#3DD6D0';
       }
 
       return color;
+    },
+    icon() {
+      let esteem = this.esteem;
+      let icon = '';
+
+      if (esteem >= 0 && esteem <= 5) {
+        icon = 'mdi-star-three-points';
+      } else if (esteem > 5 && esteem <= 10) {
+        icon = 'mdi-star-four-points';
+      } else if (esteem >= 11 && esteem <= 16) {
+        icon = 'mdi-star';
+      } else {
+        icon = 'mdi-hexagram';
+      }
+
+      return icon;
     }
   }
 };

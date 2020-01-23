@@ -1,5 +1,5 @@
 <template>
-  <v-flex xs12 sm8 md4>
+  <v-col sm="8" md="4">
     <v-card class="elevation-12">
       <v-toolbar color="primary" dark>
         <v-toolbar-title>
@@ -10,7 +10,7 @@
         <v-form id="loginForm" ref="loginForm" @submit.prevent="login">
           <v-text-field
             v-model="email"
-            label="E-mail"
+            label="Email"
             prepend-inner-icon="mdi-account"
             required
           >
@@ -19,10 +19,10 @@
             v-model="password"
             label="Password"
             prepend-inner-icon="mdi-lock"
-            :append-icon="value ? 'mdi-eye-off' : 'mdi-eye'"
-            :type="value ? 'password' : 'text'"
+            :append-icon="hidePassword ? 'mdi-eye-off' : 'mdi-eye'"
+            :type="hidePassword ? 'password' : 'text'"
             required
-            @click:append="() => (value = !value)"
+            @click:append="() => (hidePassword = !hidePassword)"
           >
           </v-text-field>
         </v-form>
@@ -36,7 +36,7 @@
     </v-card>
     <v-snackbar
       v-model="showSnackbar"
-      color="primary"
+      color="error"
       :timeout="4000"
       :bottom="true"
     >
@@ -45,35 +45,39 @@
         Close
       </v-btn>
     </v-snackbar>
-  </v-flex>
+  </v-col>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
-  name: 'Login',
   data() {
     return {
       email: '',
       password: '',
+      hidePassword: true,
       showSnackbar: false,
-      snackbarText: '',
-      value: String
+      snackbarText: ''
     };
   },
   methods: {
+    ...mapActions(['doLogin']),
     login() {
       if (this.$refs.loginForm.validate()) {
-        this.$store
-          .dispatch('doLogin', {
-            email: this.email,
-            password: this.password
-          })
+        this.doLogin({
+          email: this.email,
+          password: this.password
+        })
           .then(response => {
-            this.$router.push('/dashboard');
+            const { isAdmin } = response;
+
+            this.$router.push(
+              isAdmin ? { name: 'admin' } : { name: 'dashboard' }
+            );
           })
-          .catch(err => {
-            console.log(err);
-            this.snackbarText = err.message;
+          .catch(() => {
+            this.snackbarText = 'Email or password is incorrect.';
             this.showSnackbar = true;
           });
       }

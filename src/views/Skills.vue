@@ -2,24 +2,28 @@
   <v-container v-if="loaded">
     <v-card>
       <v-card-title>
-        Skill List
+        Skill list
         <v-spacer></v-spacer>
-        <AddSkillDialog />
-        <v-text-field
-          v-model="searchTerm"
-          class="mx-4 mb-5"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-        ></v-text-field>
+        <AddSkillDialog :skill-categories="skillCategories" />
+        <v-form>
+          <v-text-field
+            v-model="searchTerm"
+            class="mb-5 ml-5"
+            prepend-inner-icon="mdi-magnify"
+            label="Search skills..."
+            single-line
+            clearable
+            hide-details
+          ></v-text-field>
+        </v-form>
       </v-card-title>
 
       <v-data-table
         :headers="headers"
-        :items="skills"
+        :items="user.skills"
         sort-by="rating"
         :search="searchTerm"
+        no-results-text="No matching skills found"
         :sort-desc="true"
       >
         <template v-slot:item.action="{ item }">
@@ -36,7 +40,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <v-btn icon v-on="on">
-                <v-icon small @click="openSkillProfile(item)">
+                <v-icon small @click="openSkillProfile(item.skillId)">
                   mdi-file-star-outline
                 </v-icon>
               </v-btn>
@@ -80,7 +84,7 @@
               Close
             </v-btn>
             <div class="flex-grow-1"></div>
-            <v-btn color="primary" text @click="deleteSkill()">
+            <v-btn color="error" text @click="deleteSkill()">
               Delete
             </v-btn>
           </v-card-actions>
@@ -97,15 +101,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-
+import { mapState, mapActions } from 'vuex';
 import AddSkillDialog from '../components/AddSkillDialog';
-import EsteemBadge from '../components/EsteemBadge';
 
 export default {
   components: {
-    AddSkillDialog,
-    EsteemBadge
+    AddSkillDialog
   },
   data() {
     return {
@@ -126,31 +127,36 @@ export default {
       ],
       showSnackbar: false,
       snackbarText: '',
-      searchTerm: ''
+      searchTerm: '',
+      skillCategories: []
     };
   },
   computed: {
-    ...mapGetters(['skills'])
+    ...mapState(['user'])
   },
   created() {
-    this.$store
-      .dispatch('fetchSkills')
+    this.fetchUserSkills()
       .then(() => {
         this.initialize();
         this.loaded = true;
       })
       .catch(err => console.log(err));
+
+    this.fetchCategories()
+      .then(res => {
+        this.skillCategories = res.categories;
+      })
+      .catch(err => console.log(err));
   },
   methods: {
+    ...mapActions(['fetchUserSkills', 'fetchCategories', 'fetchDeleteSkill']),
     initialize() {},
-
     showDeleteDialog(item) {
       this.selectedSkill = item;
       this.deleteDialog = true;
     },
     deleteSkill() {
-      this.$store
-        .dispatch('fetchDeleteSkill', this.selectedSkill._id)
+      this.fetchDeleteSkill(this.selectedSkill._id)
         .then(() => {
           this.deleteDialog = false;
           this.showSnackbar = true;
@@ -158,10 +164,10 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    openSkillProfile(item) {
+    openSkillProfile(skillId) {
       this.$router.push({
-        name: 'skillprofile',
-        params: { id: item.skillId }
+        name: 'skillProfile',
+        params: { id: skillId }
       });
     }
   }

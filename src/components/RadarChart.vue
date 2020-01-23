@@ -1,9 +1,10 @@
 <template>
   <div v-if="categories" id="chart">
     <apexcharts
+      v-if="userSkills.length || user.skills.length"
       type="radar"
       :height="height"
-      :width="width"
+      width="100%"
       :options="chartOptions"
       :series="chartSeries"
     />
@@ -11,7 +12,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import VueApexCharts from 'vue-apexcharts';
 
 export default {
@@ -19,6 +20,10 @@ export default {
     apexcharts: VueApexCharts
   },
   props: {
+    skillCategories: {
+      type: Array,
+      default: () => []
+    },
     userSkills: {
       type: Array,
       default: () => []
@@ -36,17 +41,13 @@ export default {
       default: () => 500
     }
   },
-  data() {
-    return {
-      skillCategories: []
-    };
-  },
   computed: {
     ...mapGetters(['skills', 'isDark', 'accentColor']),
+    ...mapState(['user']),
     chartSeries() {
       return [
         {
-          name: 'Esteem Total',
+          name: 'Total Category Esteem',
           data: this.categoryTotals
         }
       ];
@@ -55,7 +56,7 @@ export default {
       return {
         chart: {
           type: 'radar',
-          background: this.isDark ? '#424242' : '#ffffff'
+          background: this.isDark ? '#343a40' : '#ffffff'
         },
         stroke: {
           width: 0,
@@ -73,15 +74,12 @@ export default {
             size: this.size,
             polygons: {
               fill: {
-                colors: this.isDark ? ['#424242'] : ['#ffffff']
+                colors: this.isDark ? ['#343a40'] : ['#ffffff']
               }
             }
           }
         },
         yaxis: {
-          tickAmount: 1,
-          max: this.bestSkill[0],
-          min: 1,
           labels: {
             formatter: val => val.toFixed(0)
           }
@@ -101,10 +99,11 @@ export default {
     },
     categories() {
       let categories = this.skillCategories.map(e => {
-        return { name: e, skills: [] };
+        return { name: e.name, skills: [] };
       });
 
-      const s = this.userSkills.length ? this.userSkills : this.skills;
+      const s = this.userSkills.length ? this.userSkills : this.user.skills;
+      console.log(s);
       categories.forEach(category => {
         s.forEach(skill => {
           if (skill.categoryName === category.name) {
@@ -125,17 +124,10 @@ export default {
 
       return l;
     },
+
     bestSkill() {
       return [...this.categoryTotals].sort((a, b) => b - a).slice(0, 1);
     }
-  },
-  created() {
-    this.$store
-      .dispatch('fetchCategories')
-      .then(res => {
-        this.skillCategories = res.data.categories.map(el => el.name);
-      })
-      .catch(err => console.log(err));
   }
 };
 </script>

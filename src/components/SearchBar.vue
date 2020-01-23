@@ -1,5 +1,5 @@
 <template>
-  <v-form class="mr-12 mt-5" @submit.prevent>
+  <v-form class="mt-4" @submit.prevent>
     <v-autocomplete
       v-model="model"
       clearable
@@ -15,19 +15,40 @@
       placeholder="Search..."
       prepend-inner-icon="mdi-magnify"
       return-object
-      @change="goToResults"
-    ></v-autocomplete>
+      @change="navigateTo"
+    >
+      <template v-slot:item="data">
+        <template>
+          <v-list-item-avatar>
+            <v-icon v-if="data.item.categoryName">mdi-star</v-icon>
+            <v-icon v-else>mdi-account</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>{{ data.item.name }}</v-list-item-title>
+            <v-list-item-subtitle class="grey--text">
+              {{
+                data.item.categoryName || data.item.role
+              }}</v-list-item-subtitle
+            >
+          </v-list-item-content>
+        </template>
+      </template>
+    </v-autocomplete>
   </v-form>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
-  data: () => ({
-    entries: [],
-    isLoading: false,
-    model: null,
-    search: null
-  }),
+  data() {
+    return {
+      entries: [],
+      isLoading: false,
+      model: null,
+      search: null
+    };
+  },
 
   computed: {
     items() {
@@ -50,20 +71,23 @@ export default {
 
       this.isLoading = true;
 
-      this.$store
-        .dispatch('fetchByName', val)
-        .then(res => (this.entries = res.data.data))
+      this.fetchByName(val)
+        .then(res => (this.entries = res.data))
         .catch(error => console.log(error))
         .finally(() => (this.isLoading = false));
     }
   },
   methods: {
-    goToResults() {
+    ...mapActions(['fetchByName']),
+    navigateTo() {
       if (this.model) {
-        this.$router.push({
-          name: 'profile',
-          params: { id: this.model._id, user: this.model }
-        });
+        const route = this.model.categoryName
+          ? { name: 'skillProfile', params: { id: this.model._id } }
+          : {
+              name: 'profile',
+              params: { id: this.model._id, user: this.model }
+            };
+        this.$router.push(route);
       }
     }
   }

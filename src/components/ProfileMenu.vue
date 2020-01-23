@@ -1,14 +1,16 @@
 <template>
   <v-menu
-    v-if="getUser"
+    v-if="user"
     v-model="menu"
     :close-on-content-click="false"
     :nudge-width="200"
     offset-x
   >
-    <template v-slot:activator="{ on }">
-      <v-btn fab small color="primary" v-on="on">
-        <v-icon>mdi-account-circle</v-icon>
+    <template v-slot:activator="{ on }" class="d-none d-md-flex">
+      <v-btn class="mr-sm-5 d-none d-md-flex mb-2" small fab v-on="on">
+        <v-avatar>
+          <v-img src="https://randomuser.me/api/portraits/men/52.jpg"></v-img>
+        </v-avatar>
       </v-btn>
     </template>
 
@@ -16,15 +18,15 @@
       <v-list dense>
         <v-list-item>
           <v-list-item-avatar>
-            <img src="https://randomuser.me/api/portraits/men/54.jpg" />
+            <img src="https://randomuser.me/api/portraits/men/52.jpg" />
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title v-if="getUser.name" class="subtitle-1">{{
-              getUser.name
+            <v-list-item-title class="subtitle-1">{{
+              user.name
             }}</v-list-item-title>
-            <v-list-item-subtitle class="caption">{{
-              getUser.role
+            <v-list-item-subtitle class="caption grey--text">{{
+              user.role
             }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -32,15 +34,15 @@
 
       <v-divider></v-divider>
 
-      <v-list nav>
-        <v-list-item @click="">
+      <v-list>
+        <v-list-item @click="toggleDarkMode()">
           <v-list-item-icon>
             <v-icon>mdi-theme-light-dark</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Dark Theme</v-list-item-title>
           </v-list-item-content>
-          <v-list-item-action>
+          <v-list-item-action @click.stop>
             <v-switch v-model="darkMode" color="primary"></v-switch>
           </v-list-item-action>
         </v-list-item>
@@ -56,15 +58,17 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
-  data: () => ({
-    available: true,
-    menu: false
-  }),
+  data() {
+    return {
+      available: true,
+      menu: false
+    };
+  },
   computed: {
-    ...mapGetters(['getUser']),
+    ...mapState(['user']),
     darkMode: {
       get() {
         return this.$store.state.isDark;
@@ -77,6 +81,9 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch('doLogout');
+    },
+    toggleDarkMode() {
+      this.darkMode = !this.darkMode;
     }
   }
 };

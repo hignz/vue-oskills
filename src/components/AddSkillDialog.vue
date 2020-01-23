@@ -45,7 +45,7 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" text @click="dialog = false">Close</v-btn>
+          <v-btn text @click="dialog = false">Close</v-btn>
           <v-spacer></v-spacer>
           <v-btn
             color="primary"
@@ -58,9 +58,14 @@
           >
         </v-card-actions>
       </v-card>
-      <v-snackbar v-model="showSnackbar" color="success">
+      <v-snackbar
+        v-model="showSnackbar"
+        :color="snackbarColor"
+        :bottom="true"
+        :timeout="3000"
+      >
         {{ snackbarText }}
-        <v-btn color="white" text @click="showSnackbar = false">
+        <v-btn color="red" text @click="showSnackbar = false">
           Close
         </v-btn>
       </v-snackbar>
@@ -69,50 +74,47 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
-  data: () => {
+  props: {
+    skillCategories: {
+      type: Array,
+      default: () => []
+    }
+  },
+  data() {
     return {
-      categories: {},
+      categories: [],
       skills: [],
       selectedSkill: null,
       dialog: false,
       showSnackbar: false,
       snackbarText: '',
+      snackbarColor: '',
       loadingCategories: false,
       loadingSkills: false,
       addSkillLoading: false
     };
   },
-  computed: {
-    ...mapState(['user'])
-  },
   created() {
     this.loadingCategories = true;
-    this.$store
-      .dispatch('fetchCategories')
-      .then(response => {
-        this.categories = response.data.categories.map(o => {
-          return {
-            text: o.name,
-            value: o._id
-          };
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      })
-      .finally(() => (this.loadingCategories = false));
+    this.categories = this.skillCategories.map(o => {
+      return {
+        text: o.name,
+        value: o._id
+      };
+    });
+    this.loadingCategories = false;
   },
   methods: {
+    ...mapActions(['fetchSkillsByCategory', 'addSkillToUser']),
     populateSkills(categoryId) {
       this.loadingSkills = true;
       this.skills = [];
-      this.$store
-        .dispatch('fetchSkillsById', categoryId)
+      this.fetchSkillsByCategory(categoryId)
         .then(response => {
-          this.skills = response.data.skills.map(o => {
+          this.skills = response.skills.map(o => {
             return {
               text: o.name,
               value: o._id
@@ -126,18 +128,19 @@ export default {
     },
     addSkill() {
       this.addSkillLoading = true;
-      this.$store
-        .dispatch('addSkillToUser', {
-          skillId: this.selectedSkill
-        })
+      this.addSkillToUser({
+        skillId: this.selectedSkill
+      })
         .then(() => {
           this.$refs.form.reset();
-          this.snackbarText = 'Skill added!';
+          this.skills = [];
+          this.snackbarText = 'Skill added successfully!';
+          this.snackbarColor = 'success';
           this.showSnackbar = true;
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
           this.snackbarText = 'Something went wrong';
+          this.snackbarColor = 'error';
           this.showSnackbar = true;
         })
         .finally(() => (this.addSkillLoading = false));

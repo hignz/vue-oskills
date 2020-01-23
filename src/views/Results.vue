@@ -24,7 +24,9 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import MiniProfile from '../components/MiniProfile';
+
 export default {
   components: {
     MiniProfile
@@ -43,14 +45,16 @@ export default {
   created() {
     this.searchTerm = this.$route.query.search;
 
-    this.$store
-      .dispatch('fetchByName', this.searchTerm)
+    this.fetchByName(this.searchTerm)
       .then(response => {
-        this.results = response.data.data;
+        this.results = response.data;
       })
       .catch(error => {
         console.error(error);
       });
+  },
+  methods: {
+    ...mapActions(['fetchByName'])
   }
 };
 </script>

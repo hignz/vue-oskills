@@ -1,15 +1,18 @@
 <template>
   <nav>
-    <v-app-bar flat app>
-      <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
+    <v-app-bar flat app :color="backgroundColor">
+      <v-app-bar-nav-icon
+        class="d-md-none"
+        @click="toggleDrawer"
+      ></v-app-bar-nav-icon>
       <router-link to="/dashboard">
-        <v-toolbar-title class="text-uppercase grey--text">
-          <span class="primary--text">O</span>
-          <span class="font-weight-light">Skills</span>
+        <v-toolbar-title class="text-uppercase ml-sm-5">
+          <span class="font-weight-bold primary--text">O</span>
+          <span class="font-weight-light grey--text">Skills</span>
         </v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
-      <SearchBar></SearchBar>
+      <SearchBar class="mx-sm-6 ml-4" />
       <ProfileMenu />
     </v-app-bar>
   </nav>
@@ -19,6 +22,7 @@
 import { mapGetters } from 'vuex';
 import ProfileMenu from './ProfileMenu';
 import SearchBar from './SearchBar';
+import vuetify from '../plugins/vuetify';
 
 export default {
   components: {
@@ -30,10 +34,14 @@ export default {
       showDrawer: true
     };
   },
-  computed: mapGetters(['showNavigationDrawer', 'accessToken', 'getUser']),
+  computed: {
+    ...mapGetters(['accessToken']),
+    backgroundColor() {
+      return vuetify.framework.theme.isDark ? '#21252b' : '#f9f9f9';
+    }
+  },
   methods: {
     toggleDrawer() {
-      this.showDrawer = !this.showDrawer;
       this.$store.dispatch('toggleDrawer', this.showDrawer);
     }
   }

@@ -1,49 +1,50 @@
 <template>
-  <v-card max-width="344" class="mx-auto">
+  <v-card max-width="344" height="310" class="mx-auto">
     <v-list-item dense @click="openProfile">
-      <v-list-item-avatar color="grey">
-        <img :src="randomUserImg" />
+      <v-list-item-avatar>
+        <v-avatar size="50">
+          <v-img :src="randomUserImg"></v-img>
+        </v-avatar>
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="headline">{{ user.name }}</v-list-item-title>
-        <v-list-item-subtitle>{{ user.role }}</v-list-item-subtitle>
+        <v-list-item-subtitle class="grey--text">{{
+          user.role
+        }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
-    <v-list dense two-line>
-      <v-subheader class="ml-2">Top Skills</v-subheader>
-      <v-list-item-group color="primary">
-        <v-list-item v-for="(skill, i) in sortedSkills" :key="i">
+    <v-list dense nav>
+      <v-subheader class="caption">Top Skills</v-subheader>
+      <v-list-item-group v-if="sortedSkills.length" color="primary">
+        <v-list-item
+          v-for="(skill, i) in sortedSkills"
+          :key="i"
+          @click="openSkillProfile(skill.skillId)"
+        >
           <v-list-item-avatar>
-            <EsteemBadge :skill="skill"></EsteemBadge>
+            <EsteemBadge :esteem="skill.esteem"></EsteemBadge>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title v-text="skill.name"></v-list-item-title>
           </v-list-item-content>
           <v-list-item-action>
-            <v-btn icon @click="vote(skill)">
+            <v-btn icon @click="vote(skill)" @click.stop>
               <v-icon
                 v-if="!skill.votedBy.includes(getUser._id)"
                 color="grey lighten-1"
               >
-                mdi-vote-outline
+                mdi-arrow-up-bold-outline
               </v-icon>
 
-              <v-icon v-else color="yellow">
-                mdi-vote
+              <v-icon v-else color="primary">
+                mdi-arrow-up-bold
               </v-icon>
             </v-btn>
           </v-list-item-action>
         </v-list-item>
       </v-list-item-group>
     </v-list>
-
-    <v-card-actions>
-      <v-spacer></v-spacer>
-      <v-btn text @click="openProfile">
-        View Profile
-      </v-btn>
-    </v-card-actions>
 
     <v-snackbar v-model="showSnackbar" :color="snackbarColor">
       {{ snackbarText }}
@@ -55,7 +56,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 const EsteemBadge = () => import('./EsteemBadge');
 
 export default {
@@ -79,7 +80,7 @@ export default {
     sortedSkills() {
       return this.user.skills
         .concat()
-        .sort((a, b) => b.rating - a.rating)
+        .sort((a, b) => b.esteem - a.esteem)
         .slice(0, 3);
     },
     randomUserImg() {
@@ -89,21 +90,30 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['voteSkill']),
     openProfile() {
       this.$router.push({
         name: 'profile',
-        params: { id: this.user._id, user: this.user }
+        params: { id: this.user._id }
+      });
+    },
+    openSkillProfile(skillId) {
+      this.$router.push({
+        name: 'skillProfile',
+        params: { id: skillId }
       });
     },
     vote(skill) {
-      this.$store
-        .dispatch('voteSkill', skill._id)
+      this.voteSkill(skill._id)
         .then(response => {
-          this.snackbarText = `Voted! Remaining votes: ${response.data.remainingVotes}`;
-          this.snackbarColor = 'accent';
+          const remainingVotes = response.remainingVotes;
+          this.snackbarText = response.upvoted
+            ? `Voted! Remaining votes: ${remainingVotes}`
+            : `Vote removed! Remaining votes ${remainingVotes}`;
+          this.snackbarColor = response.upvoted ? 'success' : 'orange';
           this.showSnackbar = true;
 
-          const skill = response.data.skill;
+          const skill = response.skill;
           this.user.skills = this.user.skills.map(x =>
             x._id == skill._id ? skill : x
           );

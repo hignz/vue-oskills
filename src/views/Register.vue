@@ -11,10 +11,10 @@
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md6>
           <v-card>
-            <v-form>
+            <v-form ref="form" v-model="valid" :lazy-validation="lazy">
               <v-stepper v-model="n" vertical class="elevation-0">
                 <v-stepper-step :complete="n > 1" :step="1" :editable="true">
-                  Personal Details
+                  Personal details
                 </v-stepper-step>
                 <v-stepper-content step="1">
                   <v-col sm="12">
@@ -24,6 +24,7 @@
                       label="First Name"
                       :rules="nameRules"
                       class="pb-3"
+                      required
                     >
                     </v-text-field>
                     <v-text-field
@@ -32,6 +33,7 @@
                       label="Last Name"
                       :rules="nameRules"
                       class="pb-3"
+                      required
                     >
                     </v-text-field>
                     <v-autocomplete
@@ -46,6 +48,7 @@
                       label="Skills"
                       multiple
                       class="pb-3"
+                      required
                     >
                     </v-autocomplete>
                     <v-file-input
@@ -54,6 +57,7 @@
                       prepend-icon="mdi-camera"
                       show-size
                       accept="image/png, image/jpeg, image/bmp"
+                      required
                     ></v-file-input>
                   </v-col>
 
@@ -68,7 +72,7 @@
                 <v-stepper-content step="2">
                   <v-row>
                     <v-col sm="6" class="text-center">
-                      <DarkThemeSwitch></DarkThemeSwitch>
+                      <DarkThemeSwitch class="pl-3"></DarkThemeSwitch>
                       <AccentColorPicker></AccentColorPicker>
                     </v-col>
                   </v-row>
@@ -95,6 +99,7 @@
                         hint="At least 8 characters"
                         counter
                         class="pb-3"
+                        required
                         @click:append="show1 = !show1"
                       ></v-text-field>
                       <v-text-field
@@ -105,6 +110,7 @@
                         label="Confirm password"
                         hint="At least 8 characters"
                         counter
+                        required
                         class="pb-3"
                         @click:append="show2 = !show2"
                       ></v-text-field>
@@ -113,6 +119,7 @@
                   <v-col class="mx-auto pt-6" sm="12">
                     <v-btn text @click="n = 2">Back</v-btn>
                     <v-btn
+                      :disabled="!valid"
                       type="submit"
                       class="ml-2"
                       color="primary"
@@ -127,15 +134,24 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <v-col v-if="verified === false" class="text-center">
-      <h1 class="subheading grey--text">
-        User not recognized
-      </h1>
+    <v-col
+      v-if="verified === false"
+      sm="12"
+      md="6"
+      offset-md="3"
+      class="text-center"
+    >
+      <v-alert text color="error" icon="mdi-exclamation" border="left">
+        User not found.
+        <p class="my-0 py-0"></p>
+      </v-alert>
     </v-col>
     <v-col v-if="completed" class="text-center">
-      <h1 class="subheading grey--text">
-        Registration complete
-      </h1>
+      <v-alert text color="accent" icon="mdi-login" border="left">
+        Registration complete! Please login.
+        <p class="my-0 py-0"></p>
+        <v-btn class="accent mt-4" to="/login">Login</v-btn>
+      </v-alert>
     </v-col>
   </v-container>
 </template>
@@ -143,6 +159,7 @@
 <script>
 import AccentColorPicker from '../components/AccentColorPicker';
 import DarkThemeSwitch from '../components/DarkThemeSwitch';
+import { mapActions } from 'vuex';
 
 export default {
   components: {
@@ -151,6 +168,7 @@ export default {
   },
   data() {
     return {
+      valid: true,
       n: 1,
       show1: false,
       show2: false,
@@ -175,15 +193,13 @@ export default {
   },
   created() {
     const token = this.$route.params.token;
-    this.$store
-      .dispatch('verifyUser', token)
+    this.verifyUser(token)
       .then(() => {
         this.verified = true;
 
-        this.$store
-          .dispatch('fetchAllSkills')
+        this.fetchAllSkills()
           .then(response => {
-            this.skills = response.data.skills.map(o => {
+            this.skills = response.skills.map(o => {
               return {
                 text: o.name,
                 value: o._id
@@ -199,15 +215,19 @@ export default {
       });
   },
   methods: {
+    ...mapActions(['fetchAllSkills', 'doRegister', 'verifyUser']),
     onComplete() {
-      this.$store.dispatch('doRegister', {
-        name: `${this.firstName} ${this.lastName}`,
-        skills: this.selectedSkills,
-        password: this.password,
-        verificationToken: this.$route.params.token
-      });
+      if (this.$refs.form.validate()) {
+        this.snackbar = true;
+        this.doRegister('doRegister', {
+          name: `${this.firstName} ${this.lastName}`,
+          skills: this.selectedSkills,
+          password: this.password,
+          verificationToken: this.$route.params.token
+        });
 
-      this.completed = true;
+        this.completed = true;
+      }
     }
   }
 };

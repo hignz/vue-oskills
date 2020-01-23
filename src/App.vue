@@ -5,13 +5,11 @@
     <v-content>
       <v-progress-linear
         indeterminate
-        :active="isLoading"
+        :active="loading"
         :height="2"
         color="primary"
       ></v-progress-linear>
-      <transition name="fade">
-        <router-view :key="$route.fullPath"> </router-view>
-      </transition>
+      <router-view :key="$route.fullPath"></router-view>
     </v-content>
   </v-app>
 </template>
@@ -20,8 +18,7 @@
 import Navbar from './components/Navbar';
 import NavigationDrawer from './components/NavigationDrawer';
 import vuetify from './plugins/vuetify';
-import axios from 'axios';
-import { mapGetters } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'App',
@@ -29,59 +26,49 @@ export default {
     Navbar,
     NavigationDrawer
   },
-  data() {
-    return {};
-  },
   computed: {
-    isDark() {
-      return this.$store.state.isDark;
-    },
-    showNavDrawer() {
-      return this.$store.getters.showNavigationDrawer;
-    },
-    ...mapGetters(['getUser', 'accessToken', 'isLoading'])
+    ...mapState(['accessToken', 'loading', 'isDark'])
   },
   created() {
-    axios.interceptors.response.use(
-      response => {
-        return response;
-      },
-      error => {
-        if (401 === error.response.status) {
-          localStorage.removeItem('accessToken');
-          this.$store.state.accessToken = null;
-          this.$router.push({ path: '/login' });
-        }
-        return Promise.reject(error);
-      }
-    );
-
-    vuetify.framework.theme.dark = this.$store.state.isDark;
-    if (!localStorage.getItem('accentColor')) {
-      localStorage.setItem('accentColor', '#ff1f2c');
-    }
-    vuetify.framework.theme.themes.dark.primary = localStorage.getItem(
-      'accentColor'
-    );
-    vuetify.framework.theme.themes.light.primary = localStorage.getItem(
-      'accentColor'
-    );
+    vuetify.framework.theme.dark = this.isDark;
 
     if (this.accessToken) {
-      this.$store
-        .dispatch('fetchUser')
-        .then(() => {})
-        .catch(err => {
-          console.log(err);
-        });
+      this.fetchUser();
     }
+  },
+  methods: {
+    ...mapActions(['fetchUser'])
   }
 };
 </script>
 
 <style>
+@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css');
+
 a {
   text-decoration: none;
   color: white;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: #f1f1f1;
+}
+
+/* handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #888;
+}
+
+/* handle:hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 </style>

@@ -1,24 +1,27 @@
 <template>
   <v-card>
     <v-toolbar dense flat>
-      <v-toolbar-title class="subtitle-2 grey--text"
-        >ACTIVITY FEED</v-toolbar-title
-      >
+      <v-toolbar-title class="subtitle-2 grey--text">ACTIVITY</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon>
+      <v-btn icon :loading="loading" @click="getActivity()">
         <v-icon>mdi-refresh</v-icon>
       </v-btn>
     </v-toolbar>
 
     <v-list
+      v-if="loaded"
       dense
       two-line
       flat
       class="overflow-y-auto"
-      style="max-height: 232px"
+      :style="maxHeight"
     >
       <v-list-item-group color="primary">
-        <v-list-item v-for="(activity, i) in activities" :key="i">
+        <v-list-item
+          v-for="(activity, i) in activities"
+          :key="i"
+          @click="openSkillProfile(activity.skillId._id)"
+        >
           <v-list-item-avatar>
             <v-icon>
               mdi-circle-medium
@@ -26,9 +29,11 @@
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title v-text="activity.message"></v-list-item-title>
-            <v-list-item-subtitle>{{
-              moment(activity.logDate).fromNow()
+            <v-list-item-title>{{ activity.message }}</v-list-item-title>
+            <v-list-item-subtitle class="grey--text">{{
+              formatDistanceToNow(new Date(activity.logDate), {
+                addSuffix: true
+              })
             }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -38,45 +43,98 @@
 </template>
 
 <script>
+import { formatDistanceToNow } from 'date-fns';
+import { mapActions } from 'vuex';
+
 export default {
-  data: () => ({
-    activities: null,
-    loaded: false
-  }),
+  props: {
+    participantId: {
+      type: String,
+      required: false,
+      default: null
+    },
+    skillId: {
+      type: String,
+      required: false,
+      default: null
+    }
+  },
+  data() {
+    return {
+      activities: null,
+      loaded: false,
+      loading: false,
+      formatDistanceToNow
+    };
+  },
+  computed: {
+    maxHeight() {
+      return this.participantId || this.skillId
+        ? 'max-height: 350px'
+        : 'max-height: 232px';
+    }
+  },
   created() {
-    this.$store
-      .dispatch('fetchActivites')
-      .then(res => {
-        this.activities = res;
-      })
-      .catch(err => {
-        console.log(err);
-        this.loaded = false;
+    this.getActivity();
+  },
+  methods: {
+    ...mapActions([
+      'fetchRecentActivity',
+      'fetchUserActivity',
+      'fetchSkillActivity'
+    ]),
+    getActivity() {
+      this.loading = true;
+
+      if (this.participantId) {
+        this.getUserActivity();
+      } else if (this.skillId) {
+        this.getSkillActivity();
+      } else {
+        this.getRecentActivity();
+      }
+    },
+    getRecentActivity() {
+      this.fetchRecentActivity()
+        .then(res => {
+          this.activities = res;
+          this.loaded = true;
+        })
+        .catch(() => {
+          this.loaded = false;
+        })
+        .finally(() => (this.loading = false));
+    },
+    getUserActivity() {
+      this.fetchUserActivity(this.participantId)
+        .then(res => {
+          this.activities = res;
+          this.loaded = true;
+        })
+        .catch(() => {
+          this.loaded = false;
+        })
+        .finally(() => (this.loading = false));
+    },
+    getSkillActivity() {
+      this.fetchSkillActivity(this.skillId)
+        .then(res => {
+          this.activities = res;
+          this.loaded = true;
+        })
+        .catch(() => {
+          this.loaded = false;
+        })
+        .finally(() => (this.loading = false));
+    },
+    openSkillProfile(skillId) {
+      this.$router.push({
+        name: 'skillProfile',
+        params: { id: skillId }
       });
+    }
   }
 };
 </script>
 
-<style scoped>
-/* width */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  border-radius: 10px;
-  background: #f1f1f1;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background: #888;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-</style>
+<style></style>

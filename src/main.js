@@ -1,13 +1,12 @@
 import Vue from 'vue';
 import App from './App.vue';
-import router from './router';
-import store from './state/store';
+import router from './router/index.js';
+import store from './store';
 import './registerServiceWorker';
 import vuetify from './plugins/vuetify';
-import moment from 'moment';
+import '../src/scss/variables.scss';
 
 Vue.config.productionTip = false;
-Vue.prototype.moment = moment;
 
 new Vue({
   router,
