@@ -1,7 +1,20 @@
 {
   "name": "oskills",
   "version": "0.1.0",
+  "description": "",
   "private": true,
+  "author": "Aaron Higgins, Kalina Cmuchalska, Conor Fearon, Chris Kelly",
+  "homepage": "https://github.com/hignz/vue-oskills",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hignz/vue-oskills.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hignz/vue-oskills/issues"
+  },
+  "engines": {
+    "npm": ">=6.4.1"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
