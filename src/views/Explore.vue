@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <p class="subheading grey--text">Explore</p>
     <v-row v-if="users.length" justify="center" align="center">
       <v-col

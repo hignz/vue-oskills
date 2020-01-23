@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="loaded">
+  <v-container v-if="loaded" fluid>
     <v-card>
       <v-card-title>
         Skill list
