@@ -1,30 +1,45 @@
 <template>
   <v-container v-if="loaded">
-    <p class="mb-4 mt-3 pl-1 grey--text">Dashboard</p>
-    <v-card>
+    <v-card class="mb-3">
       <v-row align="center" justify="center">
         <v-col cols="12" sm="12" md="3" class="text-center">
-          <v-row
-            class="subtitle-2 ml-md-12"
-            align="center"
-            justify="center"
-            justify-md="start"
-            >Hello, {{ user.name.split(' ')[0] }}</v-row
-          >
-          <v-row
-            class="caption grey--text ml-md-12 font-weight-bold"
-            justify="center"
-            justify-md="start"
-            >{{ user.role }}</v-row
-          >
-          <v-row
-            class="caption grey--text ml-md-12 font-weight-bold"
-            justify="center"
-            justify-md="start"
-            >Remaining votes:
-            <span class="font-weight-bold ml-1">
-              {{ user.remainingVotes }}</span
-            >
+          <v-row>
+            <v-col sm="12" md="6">
+              <v-row
+                class="subtitle-2 ml-md-12"
+                align="center"
+                justify="center"
+                justify-md="start"
+                >Hello, {{ user.name.split(' ')[0] }}</v-row
+              >
+              <v-row
+                class="caption grey--text ml-md-12 font-weight-bold"
+                justify="center"
+                justify-md="start"
+                >{{ user.role }}</v-row
+              >
+              <v-row
+                class="caption grey--text ml-md-12 font-weight-bold"
+                justify="center"
+                justify-md="start"
+                >Remaining votes:
+                <span class="font-weight-bold ml-1">
+                  {{ user.remainingVotes }}</span
+                >
+              </v-row>
+            </v-col>
+            <v-col sm="12" md="6">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn icon :to="{ path: 'admin' }" v-on="on">
+                    <v-icon large>
+                      mdi-swap-horizontal
+                    </v-icon>
+                  </v-btn>
+                </template>
+                <span>Admin</span>
+              </v-tooltip>
+            </v-col>
           </v-row>
         </v-col>
         <v-col
@@ -37,21 +52,23 @@
         >
           <v-row v-if="skill" align="center" justify="center">
             <v-col sm="6" class="text-center">
-              <v-row class="caption grey--text" justify="center">
+              <v-row class="caption grey--text" justify="end" justify-md="end">
                 {{ skill.name }}
               </v-row>
-              <v-row class="headline" justify="center">{{
-                skill.rating
-              }}</v-row>
+              <v-row
+                class="headline mr-2 mr-md-2"
+                justify="end"
+                justify-md="end"
+                >{{ skill.rating }}</v-row
+              >
             </v-col>
-            <v-col class="text-center">
-              <v-row justify="start">
+            <v-col sm="6" class="text-center">
+              <v-row justify="start" class="mt-3">
                 <EsteemBadge :esteem="skill.esteem" />
               </v-row>
             </v-col>
           </v-row>
         </v-col>
-        <v-row else></v-row>
       </v-row>
     </v-card>
 

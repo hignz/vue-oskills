@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap');
+$body-font-family: 'Poppins', sans-serif !important;
+
+$overstockBlue: (
+  'base': #21252b,
+  'lighten-1': #343a40,
+  'darken-1': #343a40,
+);
+@import "~vuetify/src/styles/styles";
+
+$colors: (
+  'overstockBlue': $overstockBlue,
+) !default;
+
+$material-dark: map-merge(
+  $material-dark,
+  (
+    "background": map-get($overstockBlue, "base"),
+    'cards': map-get($overstockBlue, 'lighten-1'),
+    'toolbar': map-get($overstockBlue, 'lighten-1'),
+  )
+);
+
+@import '~vuetify/src/styles/styles.sass';

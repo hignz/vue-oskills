@@ -19,7 +19,7 @@ export default {
       return res.data;
     });
   },
-  getAllUsers() {
+  fetchAllUsers() {
     return http.get('/users').then(res => {
       return res.data;
     });
@@ -100,8 +100,11 @@ export default {
       return res.data;
     });
   },
-  fetchRecentUsers() {
+  fetchRecentUsers({ commit }) {
+    commit(constants.SET_LOADING, true);
+
     return http.get('/recent-users').then(res => {
+      commit(constants.SET_LOADING, false);
       return res.data;
     });
   },
