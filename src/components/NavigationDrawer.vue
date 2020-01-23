@@ -2,7 +2,8 @@
   <v-navigation-drawer
     v-model="expandedNavDrawer"
     :mini-variant="mini"
-    :width="200"
+    mini-variant-width="80"
+    :color="backgroundColor"
     app
   >
     <v-list-item>
@@ -12,8 +13,6 @@
 
       <v-list-item-title>Welcome</v-list-item-title>
     </v-list-item>
-
-    <v-divider></v-divider>
 
     <v-list dense nav>
       <v-list-item
@@ -41,6 +40,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
+import vuetify from '../plugins/vuetify';
 
 export default {
   data() {
@@ -77,6 +77,9 @@ export default {
       ]
     };
   },
+  created() {
+    console.log(vuetify);
+  },
   computed: {
     ...mapState(['user']),
     ...mapGetters(['expandedNavDrawer']),
@@ -92,6 +95,9 @@ export default {
       set: function(value) {
         return this.$store.dispatch('toggleDrawer', value);
       }
+    },
+    backgroundColor() {
+      return vuetify.framework.theme.isDark ? '#21252b' : '#f9f9f9';
     }
   },
   methods: {

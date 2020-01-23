@@ -37,7 +37,7 @@ export default {
     chartOptions() {
       return {
         chart: {
-          background: this.isDark ? '#424242' : '#ffffff'
+          background: this.isDark ? '#343a40' : '#ffffff'
         },
         theme: {
           mode: this.isDark ? 'dark' : 'light'

@@ -45,7 +45,7 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" text @click="dialog = false">Close</v-btn>
+          <v-btn text @click="dialog = false">Close</v-btn>
           <v-spacer></v-spacer>
           <v-btn
             color="primary"
@@ -65,7 +65,7 @@
         :timeout="3000"
       >
         {{ snackbarText }}
-        <v-btn color="white" text @click="showSnackbar = false">
+        <v-btn color="red" text @click="showSnackbar = false">
           Close
         </v-btn>
       </v-snackbar>

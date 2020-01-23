@@ -58,7 +58,7 @@ export default {
           mode: this.isDark ? 'dark' : 'light'
         },
         chart: {
-          background: this.isDark ? '#424242' : '#ffffff',
+          background: this.isDark ? '#343a40' : '#ffffff',
           foreColor: this.isDark ? '#ffffff' : '#424242'
         },
         stroke: {

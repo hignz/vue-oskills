@@ -1,5 +1,5 @@
 <template>
-  <v-form class="mt-5" @submit.prevent>
+  <v-form class="mt-4" @submit.prevent>
     <v-autocomplete
       v-model="model"
       clearable

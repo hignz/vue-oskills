@@ -43,12 +43,7 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css');
-
-.v-application {
-  font-family: 'Poppins', sans-serif;
-}
 
 a {
   text-decoration: none;

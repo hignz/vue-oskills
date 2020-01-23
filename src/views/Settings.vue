@@ -54,7 +54,7 @@
                 </v-col>
               </v-row>
 
-              <v-col cols="12" sm="12" md="6">
+              <v-col cols="12" sm="12" md="12">
                 <p class="subtitle-2">
                   Accent Colour
                 </p>
@@ -112,7 +112,7 @@ export default {
       vuetify.framework.theme.themes.light.primary = value;
       localStorage.setItem('accentColor', value);
 
-      this.showCustom = false;
+      this.showColorPicker = false;
     }
   }
 };

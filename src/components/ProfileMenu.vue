@@ -6,9 +6,11 @@
     :nudge-width="200"
     offset-x
   >
-    <template v-slot:activator="{ on }">
-      <v-btn fab small color="primary" v-on="on">
-        <v-icon>mdi-account-circle</v-icon>
+    <template v-slot:activator="{ on }" class="d-none d-md-flex">
+      <v-btn class="mr-sm-5 d-none d-md-flex mb-2" small fab v-on="on">
+        <v-avatar>
+          <v-img src="https://randomuser.me/api/portraits/men/52.jpg"></v-img>
+        </v-avatar>
       </v-btn>
     </template>
 

@@ -9,6 +9,9 @@ if (!localStorage.getItem('accentColor')) {
 
 export default new Vuetify({
   theme: {
+    options: {
+      customProperties: true
+    },
     themes: {
       light: {
         primary: localStorage.getItem('accentColor'),
@@ -20,6 +23,7 @@ export default new Vuetify({
         warning: '#FFC107'
       },
       dark: {
+        background: '#21252b',
         primary: localStorage.getItem('accentColor'),
         secondary: '#424242',
         accent: '#82B1FF',
