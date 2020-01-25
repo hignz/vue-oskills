@@ -219,7 +219,7 @@ export default {
     onComplete() {
       if (this.$refs.form.validate()) {
         this.snackbar = true;
-        this.doRegister('doRegister', {
+        this.doRegister({
           name: `${this.firstName} ${this.lastName}`,
           skills: this.selectedSkills,
           password: this.password,
