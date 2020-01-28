@@ -233,4 +233,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.theme--dark.v-stepper {
+  background: #343a40;
+}
+</style>
