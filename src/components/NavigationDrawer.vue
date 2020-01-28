@@ -77,9 +77,6 @@ export default {
       ]
     };
   },
-  created() {
-    console.log(vuetify);
-  },
   computed: {
     ...mapState(['user']),
     ...mapGetters(['expandedNavDrawer']),

@@ -66,7 +66,7 @@ export default {
           mode: this.isDark ? 'dark' : 'light'
         },
         fill: {
-          opacity: 0.6,
+          opacity: 0.7,
           colors: [localStorage.getItem('accentColor')]
         },
         plotOptions: {
@@ -103,7 +103,6 @@ export default {
       });
 
       const s = this.userSkills.length ? this.userSkills : this.user.skills;
-      console.log(s);
       categories.forEach(category => {
         s.forEach(skill => {
           if (skill.categoryName === category.name) {

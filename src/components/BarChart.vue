@@ -47,8 +47,7 @@ export default {
       return {
         plotOptions: {
           bar: {
-            horizontal: true,
-            columnWidth: '10%'
+            horizontal: true
           }
         },
         dataLabels: {
@@ -63,11 +62,10 @@ export default {
         },
         stroke: {
           show: true,
-          width: 2,
+          width: 1,
           colors: ['transparent']
         },
         xaxis: {
-          ticks: 10,
           title: {
             text: 'Esteem Points'
           },
@@ -77,7 +75,7 @@ export default {
         },
         yaxis: {},
         fill: {
-          opacity: 0.6,
+          opacity: 0.7,
           colors: [localStorage.getItem('accentColor')]
         },
         tooltip: {

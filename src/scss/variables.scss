@@ -18,6 +18,7 @@ $material-dark: map-merge(
     "background": map-get($overstockBlue, "base"),
     'cards': map-get($overstockBlue, 'lighten-1'),
     'toolbar': map-get($overstockBlue, 'lighten-1'),
+    'app-bar': map-get($overstockBlue, 'base'),
   )
 );
 
