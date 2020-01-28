@@ -148,5 +148,10 @@ export default {
       constants.SET_ACCESS_TOKEN,
       JSON.parse(localStorage.getItem('accessToken'))
     );
+  },
+  inviteUser(_, inviteData) {
+    return http.post('/invite', inviteData).then(res => {
+      return res.data;
+    });
   }
 };
