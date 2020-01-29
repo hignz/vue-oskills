@@ -45,9 +45,13 @@ export default {
 <style>
 @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css');
 
+html,
+body {
+  overflow: auto;
+}
+
 a {
   text-decoration: none;
-  color: white;
 }
 
 /* width */
