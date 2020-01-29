@@ -34,17 +34,6 @@
         >
       </v-card-actions>
     </v-card>
-    <v-snackbar
-      v-model="showSnackbar"
-      color="error"
-      :timeout="4000"
-      :bottom="true"
-    >
-      {{ snackbarText }}
-      <v-btn dark text @click="showSnackbar = false">
-        Close
-      </v-btn>
-    </v-snackbar>
   </v-col>
 </template>
 
@@ -56,13 +45,11 @@ export default {
     return {
       email: '',
       password: '',
-      hidePassword: true,
-      showSnackbar: false,
-      snackbarText: ''
+      hidePassword: true
     };
   },
   methods: {
-    ...mapActions(['doLogin']),
+    ...mapActions(['doLogin', 'toggleSnackbar']),
     login() {
       if (this.$refs.loginForm.validate()) {
         this.doLogin({
@@ -77,8 +64,11 @@ export default {
             );
           })
           .catch(() => {
-            this.snackbarText = 'Email or password is incorrect.';
-            this.showSnackbar = true;
+            this.toggleSnackbar({
+              show: true,
+              text: 'Email or password is incorrect',
+              color: 'error'
+            });
           });
       }
     }

@@ -218,7 +218,6 @@ export default {
     ...mapActions(['fetchAllSkills', 'doRegister', 'verifyUser']),
     onComplete() {
       if (this.$refs.form.validate()) {
-        this.snackbar = true;
         this.doRegister({
           name: `${this.firstName} ${this.lastName}`,
           skills: this.selectedSkills,

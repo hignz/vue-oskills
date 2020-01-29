@@ -45,13 +45,6 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
-
-    <v-snackbar v-model="showSnackbar" :color="snackbarColor">
-      {{ snackbarText }}
-      <v-btn color="white" text @click="showSnackbar = false">
-        Close
-      </v-btn>
-    </v-snackbar>
   </v-card>
 </template>
 
@@ -69,10 +62,7 @@ export default {
   },
   data() {
     return {
-      selectedSkill: {},
-      showSnackbar: false,
-      snackbarText: '',
-      snackbarColor: ''
+      selectedSkill: {}
     };
   },
   computed: {
@@ -90,7 +80,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['voteSkill']),
+    ...mapActions(['voteSkill', 'toggleSnackbar']),
     openProfile() {
       this.$router.push({
         name: 'profile',
@@ -107,24 +97,28 @@ export default {
       this.voteSkill(skill._id)
         .then(response => {
           const remainingVotes = response.remainingVotes;
-          this.snackbarText = response.upvoted
+          // TODO - have server create this message
+          const snackbarText = response.upvoted
             ? `Voted! Remaining votes: ${remainingVotes}`
             : `Vote removed! Remaining votes ${remainingVotes}`;
-          this.snackbarColor = response.upvoted ? 'success' : 'orange';
-          this.showSnackbar = true;
+
+          this.toggleSnackbar({
+            show: true,
+            text: snackbarText,
+            color: response.upvoted ? 'success' : 'orange'
+          });
 
           const skill = response.skill;
           this.user.skills = this.user.skills.map(x =>
             x._id == skill._id ? skill : x
           );
         })
-        .catch(err => {
-          this.showSnackbar = false;
-          this.snackbarText = 'You have no votes left for this week.';
-          this.snackbarColor = 'error';
-          this.showSnackbar = true;
-
-          console.log(err);
+        .catch(() => {
+          this.toggleSnackbar({
+            show: true,
+            text: 'You have no votes left for this week',
+            color: 'error'
+          });
         });
     }
   }

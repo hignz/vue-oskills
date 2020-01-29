@@ -38,18 +38,11 @@
         >
       </v-card-actions>
     </v-card>
-    <v-snackbar v-model="showSnackbar" :color="snackbarColor">
-      {{ snackbarText }}
-      <v-btn text @click="showSnackbar = false">
-        Close
-      </v-btn>
-    </v-snackbar>
   </v-dialog>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
-import Snackbar from 'vuex';
 
 export default {
   data() {
@@ -63,18 +56,13 @@ export default {
         v => !!v || 'Email is required',
         v => /.+@.+/.test(v) || 'Email must be valid'
       ],
-      requiredRule: [v => !!v || 'Field is required'],
-      showSnackbar: false,
-      snackbarText: '',
-      snackbarColor: 'primary'
+      requiredRule: [v => !!v || 'Field is required']
     };
   },
   methods: {
-    ...mapActions(['inviteUser']),
+    ...mapActions(['inviteUser', 'toggleSnackbar']),
     onSubmit() {
       if (this.$refs.form.validate()) {
-        console.log('VALID');
-
         this.inviteUser({
           email: this.email,
           role: this.role,
@@ -82,15 +70,18 @@ export default {
         })
           .then(() => {
             this.$refs.form.reset();
-            this.snackbarText = 'Invite has been sent!';
-            this.snackbarColor = 'primary';
-
-            this.showSnackbar = true;
+            this.toggleSnackbar({
+              show: true,
+              text: 'Invite has been sent',
+              color: 'success'
+            });
           })
           .catch(err => {
-            this.snackbarText = err.response.data;
-            this.snackbarColor = 'error';
-            this.showSnackbar = true;
+            this.toggleSnackbar({
+              show: true,
+              text: err.response.data,
+              color: 'error'
+            });
           });
       }
     }

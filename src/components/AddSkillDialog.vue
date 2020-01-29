@@ -54,17 +54,6 @@
         >
       </v-card-actions>
     </v-card>
-    <v-snackbar
-      v-model="showSnackbar"
-      :color="snackbarColor"
-      :bottom="true"
-      :timeout="3000"
-    >
-      {{ snackbarText }}
-      <v-btn color="red" text @click="showSnackbar = false">
-        Close
-      </v-btn>
-    </v-snackbar>
   </v-dialog>
 </template>
 
@@ -84,9 +73,6 @@ export default {
       skills: [],
       selectedSkill: null,
       dialog: false,
-      showSnackbar: false,
-      snackbarText: '',
-      snackbarColor: '',
       loadingCategories: false,
       loadingSkills: false,
       addSkillLoading: false
@@ -103,7 +89,11 @@ export default {
     this.loadingCategories = false;
   },
   methods: {
-    ...mapActions(['fetchSkillsByCategory', 'addSkillToUser']),
+    ...mapActions([
+      'fetchSkillsByCategory',
+      'addSkillToUser',
+      'toggleSnackbar'
+    ]),
     populateSkills(categoryId) {
       this.loadingSkills = true;
       this.skills = [];
@@ -129,14 +119,18 @@ export default {
         .then(() => {
           this.$refs.form.reset();
           this.skills = [];
-          this.snackbarText = 'Skill added successfully!';
-          this.snackbarColor = 'success';
-          this.showSnackbar = true;
+          this.toggleSnackbar({
+            show: true,
+            text: 'Skill added successfully',
+            color: 'success'
+          });
         })
         .catch(() => {
-          this.snackbarText = 'Something went wrong';
-          this.snackbarColor = 'error';
-          this.showSnackbar = true;
+          this.toggleSnackbar({
+            show: true,
+            text: 'Something went wrong',
+            color: 'error'
+          });
         })
         .finally(() => (this.addSkillLoading = false));
     }

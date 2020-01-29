@@ -1,23 +1,28 @@
 <template>
-  <v-snackbar v-model="showSnack">
-    <v-btn color="primary" text @click="show = false">
+  <v-snackbar
+    v-model="snackbar.show"
+    :color="snackbar.color"
+    :timeout="3000"
+    :bottom="true"
+  >
+    {{ snackbar.text }}
+    <v-btn text @click="closeSnackbar">
       Close
     </v-btn>
   </v-snackbar>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
-  props: {
-    show: {
-      type: Boolean,
-      default: false
-    }
+  computed: {
+    ...mapState(['snackbar'])
   },
-  data() {
-    return {
-      showSnack: this.show
-    };
+  methods: {
+    closeSnackbar() {
+      this.snackbar.show = false;
+    }
   }
 };
 </script>

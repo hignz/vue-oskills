@@ -176,7 +176,7 @@ export default {
     });
   },
   methods: {
-    ...mapActions(['fetchCategories', 'fetchUser']),
+    ...mapActions(['fetchCategories', 'fetchUser', 'toggleSnackbar']),
     switchUsersList(menuItem, i) {
       this.usersCardTitle = menuItem.title;
       this.usersMenuIndex = i;
