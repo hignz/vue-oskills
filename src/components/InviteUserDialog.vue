@@ -6,7 +6,9 @@
       </v-btn>
     </template>
     <v-card>
-      <v-card-title>Invite user</v-card-title>
+      <v-card-title>
+        Invite user
+      </v-card-title>
 
       <v-card-text>
         <v-form ref="form" v-model="valid">
@@ -29,9 +31,9 @@
       </v-card-text>
 
       <v-card-actions>
+        <v-spacer />
         <v-btn text @click="dialog = !dialog">Close</v-btn>
-        <v-spacer></v-spacer>
-        <v-btn text color="primary" :disabled="!valid" @click="onSubmit"
+        <v-btn color="primary" :disabled="!valid" @click="onSubmit"
           >Invite</v-btn
         >
       </v-card-actions>

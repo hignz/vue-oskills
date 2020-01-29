@@ -42,11 +42,10 @@
         </v-form>
       </v-card-text>
       <v-card-actions>
-        <v-btn text @click="dialog = false">Close</v-btn>
         <v-spacer></v-spacer>
+        <v-btn text @click="dialog = false">Close</v-btn>
         <v-btn
           color="primary"
-          text
           :disabled="selectedSkill ? false : true"
           :loading="addSkillLoading"
           @click="addSkill"
