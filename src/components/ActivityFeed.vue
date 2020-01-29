@@ -8,14 +8,7 @@
       </v-btn>
     </v-toolbar>
 
-    <v-list
-      v-if="loaded"
-      dense
-      two-line
-      flat
-      class="overflow-y-auto"
-      :style="maxHeight"
-    >
+    <v-list v-if="loaded" dense two-line flat class="overflow-y-auto" :style="maxHeight">
       <v-list-item-group color="primary">
         <v-list-item
           v-for="(activity, i) in activities"
@@ -23,18 +16,18 @@
           @click="openSkillProfile(activity.skillId._id)"
         >
           <v-list-item-avatar>
-            <v-icon>
-              mdi-circle-medium
-            </v-icon>
+            <v-icon>mdi-circle-medium</v-icon>
           </v-list-item-avatar>
 
           <v-list-item-content>
             <v-list-item-title>{{ activity.message }}</v-list-item-title>
-            <v-list-item-subtitle class="grey--text">{{
+            <v-list-item-subtitle class="grey--text">
+              {{
               formatDistanceToNow(new Date(activity.logDate), {
-                addSuffix: true
+              addSuffix: true
               })
-            }}</v-list-item-subtitle>
+              }}
+            </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
@@ -45,6 +38,7 @@
 <script>
 import { formatDistanceToNow } from 'date-fns';
 import { mapActions } from 'vuex';
+import Pusher from 'pusher-js';
 
 export default {
   props: {
@@ -61,7 +55,7 @@ export default {
   },
   data() {
     return {
-      activities: null,
+      activities: [],
       loaded: false,
       loading: false,
       formatDistanceToNow
@@ -75,7 +69,19 @@ export default {
     }
   },
   created() {
-    this.getActivity();
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('0dcf669b79776f397e0b', {
+      cluster: 'eu',
+      forceTLS: true
+    });
+
+    var channel = pusher.subscribe('activity');
+    channel.bind('activity-event', function(data) {
+      console.log(data.fullDocument);
+      this.activities.push(data.fullDocument);
+    });
   },
   methods: {
     ...mapActions([
