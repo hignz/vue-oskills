@@ -18,7 +18,10 @@
                   <span>Dashboard</span>
                 </v-tooltip>
               </v-col>
-              <v-col> Row 1 Col 2 </v-col>
+              <v-col> Add Skill <AddAdminSkill></AddAdminSkill> </v-col>
+              <v-col>
+                Add Category <AddAdminCategory></AddAdminCategory>
+              </v-col>
             </v-row>
           </v-card-text>
         </v-card>
@@ -67,7 +70,15 @@
 </template>
 
 <script>
-export default {};
+import AddAdminSkill from '../components/AddAdminSkill';
+import AddAdminCategory from '../components/AddAdminCategory';
+
+export default {
+  components: {
+    AddAdminSkill,
+    AddAdminCategory
+  }
+};
 </script>
 
 <style></style>
