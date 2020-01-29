@@ -1,7 +1,7 @@
 <template>
   <v-col sm="8" md="4">
     <v-card class="elevation-12">
-      <v-toolbar color="primary" dark>
+      <v-toolbar flat>
         <v-toolbar-title>
           Sign in to OSkills
         </v-toolbar-title>
