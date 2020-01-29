@@ -22,5 +22,10 @@ export default {
     state.isDark = value;
     vuetify.framework.theme.dark = value;
     localStorage.setItem('darkMode', value);
+  },
+  [constants.TOGGLE_SNACKBAR](state, value) {
+    state.snackbar.show = value.show;
+    state.snackbar.text = value.text;
+    state.snackbar.color = value.color;
   }
 };

@@ -11,12 +11,14 @@
       ></v-progress-linear>
       <router-view :key="$route.fullPath"></router-view>
     </v-content>
+    <Snackbar />
   </v-app>
 </template>
 
 <script>
 import Navbar from './components/Navbar';
 import NavigationDrawer from './components/NavigationDrawer';
+import Snackbar from './components/Snackbar';
 import vuetify from './plugins/vuetify';
 import { mapState, mapActions } from 'vuex';
 
@@ -24,7 +26,8 @@ export default {
   name: 'App',
   components: {
     Navbar,
-    NavigationDrawer
+    NavigationDrawer,
+    Snackbar
   },
   computed: {
     ...mapState(['accessToken', 'loading', 'isDark'])

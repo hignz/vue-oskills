@@ -153,5 +153,8 @@ export default {
     return http.post('/invite', inviteData).then(res => {
       return res.data;
     });
+  },
+  toggleSnackbar({ commit }, snackbarData) {
+    commit(constants.TOGGLE_SNACKBAR, snackbarData);
   }
 };
