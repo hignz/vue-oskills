@@ -3,7 +3,6 @@
     v-model="expandedNavDrawer"
     :mini-variant="mini"
     mini-variant-width="80"
-    :color="backgroundColor"
     app
   >
     <v-list-item>
@@ -40,7 +39,6 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import vuetify from '../plugins/vuetify';
 
 export default {
   data() {
@@ -92,9 +90,6 @@ export default {
       set: function(value) {
         return this.$store.dispatch('toggleDrawer', value);
       }
-    },
-    backgroundColor() {
-      return vuetify.framework.theme.isDark ? '#21252b' : '#f9f9f9';
     }
   },
   methods: {

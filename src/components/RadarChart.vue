@@ -56,7 +56,7 @@ export default {
       return {
         chart: {
           type: 'radar',
-          background: this.isDark ? '#343a40' : '#ffffff'
+          background: this.isDark ? '#282c34' : '#ffffff'
         },
         stroke: {
           width: 0,
@@ -74,7 +74,7 @@ export default {
             size: this.size,
             polygons: {
               fill: {
-                colors: this.isDark ? ['#343a40'] : ['#ffffff']
+                colors: this.isDark ? ['#282c34'] : ['#ffffff']
               }
             }
           }

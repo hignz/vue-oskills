@@ -1,25 +1,30 @@
+@import '~vuetify/src/styles/styles.sass';
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap');
 $body-font-family: 'Poppins', sans-serif !important;
 
-$overstockBlue: (
+$oskillsDark: (
   'base': #21252b,
-  'lighten-1': #343a40,
+  'lighten-1': #282c34,
   'darken-1': #343a40,
 );
-@import "~vuetify/src/styles/styles";
 
 $colors: (
-  'overstockBlue': $overstockBlue,
+  'oskillsDark': $oskillsDark,
 ) !default;
 
 $material-dark: map-merge(
   $material-dark,
   (
-    "background": map-get($overstockBlue, "base"),
-    'cards': map-get($overstockBlue, 'lighten-1'),
-    'toolbar': map-get($overstockBlue, 'lighten-1'),
-    'app-bar': map-get($overstockBlue, 'base'),
+    'app-bar': map-get($oskillsDark, 'base'),
+    "background": map-get($oskillsDark, "base"),
+    'cards': map-get($oskillsDark, 'lighten-1'),
+    'navigation-drawer': map-get($oskillsDark, 'base'),
+    'toolbar': map-get($oskillsDark, 'lighten-1'),
   )
 );
 
-@import '~vuetify/src/styles/styles.sass';
+$material-light: (
+  'app-bar': #FAFAFA, 
+  'background': #FAFAFA, 
+  'navigation-drawer': #FAFAFA
+);
