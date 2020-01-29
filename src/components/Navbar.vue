@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <v-app-bar flat app :color="backgroundColor">
+    <v-app-bar flat app>
       <v-app-bar-nav-icon
         class="d-md-none"
         @click="toggleDrawer"

@@ -128,12 +128,6 @@
         <ActivityFeed :skill-id="skill._id"></ActivityFeed>
       </v-col>
     </v-row>
-    <v-snackbar v-model="showSnackbar" :color="snackbarColor">
-      {{ snackbarText }}
-      <v-btn color="white" text @click="showSnackbar = false">
-        Close
-      </v-btn>
-    </v-snackbar>
   </v-container>
 </template>
 
@@ -151,10 +145,7 @@ export default {
   data() {
     return {
       skill: {},
-      showSnackbar: false,
-      loaded: false,
-      snackbarText: '',
-      snackbarColor: ''
+      loaded: false
     };
   },
   computed: {
@@ -176,19 +167,27 @@ export default {
       });
   },
   methods: {
-    ...mapActions(['addSkillToUser', 'setLoading', 'fetchSkillInfo']),
+    ...mapActions([
+      'addSkillToUser',
+      'setLoading',
+      'fetchSkillInfo',
+      'toggleSnackbar'
+    ]),
     addSkill() {
       this.addSkillToUser({ skillId: this.skill._id })
         .then(() => {
-          this.snackbarText = `${this.skill.name} added!`;
-          this.snackbarColor = 'primary';
-          this.showSnackbar = true;
+          this.toggleSnackbar({
+            show: true,
+            text: `${this.skill.name} added!`,
+            color: 'success'
+          });
         })
-        .catch(err => {
-          console.log(err);
-          this.snackbarText = 'Something went wrong!';
-          this.snackbarColor = 'error';
-          this.showSnackbar = true;
+        .catch(() => {
+          this.toggleSnackbar({
+            show: true,
+            text: 'Something went wrong!',
+            color: 'error'
+          });
         });
     },
     openProfile(ownerId) {

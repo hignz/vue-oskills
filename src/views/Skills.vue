@@ -80,22 +80,16 @@
           <v-divider></v-divider>
 
           <v-card-actions>
-            <v-btn color="primary" text @click="deleteDialog = false">
+            <v-spacer />
+            <v-btn text @click="deleteDialog = false">
               Close
             </v-btn>
-            <div class="flex-grow-1"></div>
-            <v-btn color="error" text @click="deleteSkill()">
+            <v-btn color="error" @click="deleteSkill()">
               Delete
             </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <v-snackbar v-model="showSnackbar" color="success">
-        {{ snackbarText }}
-        <v-btn color="white" text @click="showSnackbar = false">
-          Close
-        </v-btn>
-      </v-snackbar>
     </v-card>
   </v-container>
 </template>
@@ -125,8 +119,6 @@ export default {
         { text: 'Category', value: 'categoryName', align: 'center' },
         { text: 'Actions', value: 'action', sortable: false, align: 'center' }
       ],
-      showSnackbar: false,
-      snackbarText: '',
       searchTerm: '',
       skillCategories: []
     };
@@ -149,7 +141,12 @@ export default {
       .catch(err => console.log(err));
   },
   methods: {
-    ...mapActions(['fetchUserSkills', 'fetchCategories', 'fetchDeleteSkill']),
+    ...mapActions([
+      'fetchUserSkills',
+      'fetchCategories',
+      'fetchDeleteSkill',
+      'toggleSnackbar'
+    ]),
     initialize() {},
     showDeleteDialog(item) {
       this.selectedSkill = item;
@@ -159,8 +156,11 @@ export default {
       this.fetchDeleteSkill(this.selectedSkill._id)
         .then(() => {
           this.deleteDialog = false;
-          this.showSnackbar = true;
-          this.snackbarText = 'Skill deleted!';
+          this.toggleSnackbar({
+            show: true,
+            text: 'Skill deleted!',
+            color: 'success'
+          });
         })
         .catch(err => console.log(err));
     },
@@ -174,4 +174,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.theme--dark.v-data-table tbody tr:hover:not(.v-data-table__expanded__content) {
+  background: #363b46;
+}
+</style>
