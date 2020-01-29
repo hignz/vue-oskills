@@ -30,9 +30,7 @@
             124
           </v-card-text>
           <v-card-actions class="justify-center pt-0">
-            <v-btn icon>
-              <v-icon>mdi-flask-plus-outline</v-icon>
-            </v-btn>
+            <AdminAddSkillDialog></AdminAddSkillDialog>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -43,9 +41,7 @@
             5
           </v-card-text>
           <v-card-actions class="justify-center pt-0">
-            <v-btn icon>
-              <v-icon>mdi-view-grid-plus</v-icon>
-            </v-btn>
+            <AdminAddCategoryDialog></AdminAddCategoryDialog>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -104,10 +100,14 @@
 
 <script>
 import InviteUserDialog from '../components/InviteUserDialog';
+import AdminAddCategoryDialog from '../components/AdminAddCategoryDialog';
+import AdminAddSkillDialog from '../components/AdminAddSkillDialog';
 
 export default {
   components: {
-    InviteUserDialog
+    InviteUserDialog,
+    AdminAddCategoryDialog,
+    AdminAddSkillDialog
   }
 };
 </script>
