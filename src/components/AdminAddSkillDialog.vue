@@ -22,22 +22,11 @@
         </v-form>
       </v-card-text>
       <v-card-actions>
+        <v-spacer />
         <v-btn text @click="dialog = false">Close</v-btn>
-        <v-spacer></v-spacer>
         <v-btn color="primary" @click="addNewSkill"> Add</v-btn>
       </v-card-actions>
     </v-card>
-    <v-snackbar
-      v-model="showSnackbar"
-      :color="snackbarColor"
-      :bottom="true"
-      :timeout="3000"
-    >
-      {{ snackbarText }}
-      <v-btn color="red" text @click="showSnackbar = false">
-        Close
-      </v-btn>
-    </v-snackbar>
   </v-dialog>
 </template>
 
@@ -71,7 +60,12 @@ export default {
       });
   },
   methods: {
-    ...mapActions(['fetchCategories', 'fetchAllSkills', 'addSkill']),
+    ...mapActions([
+      'fetchCategories',
+      'fetchAllSkills',
+      'addSkill',
+      'toggleSnackbar'
+    ]),
     addNewSkill() {
       console.log(this.selectedCategory);
       this.addSkill({
@@ -81,14 +75,18 @@ export default {
       })
         .then(() => {
           this.$refs.form.reset();
-          this.snackbarText = 'Skill added successfully!';
-          this.snackbarColor = 'success';
-          this.showSnackbar = true;
+          this.toggleSnackbar({
+            show: true,
+            text: 'Skill added successfully',
+            color: 'success'
+          });
         })
         .catch(() => {
-          this.snackbarText = 'Something went wrong';
-          this.snackbarColor = 'error';
-          this.showSnackbar = true;
+          this.toggleSnackbar({
+            show: true,
+            text: 'Something went wrong',
+            color: 'error'
+          });
         });
     }
   }
