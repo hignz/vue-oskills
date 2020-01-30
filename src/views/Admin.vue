@@ -67,12 +67,7 @@
 </template>
 
 <script>
-import TopSkills from '../components/TopSkills';
-export default {
-  components: {
-    TopSkills
-  }
-};
+export default {};
 </script>
 
 <style></style>
