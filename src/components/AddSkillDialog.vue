@@ -46,7 +46,7 @@
         <v-btn text @click="dialog = false">Close</v-btn>
         <v-btn
           color="primary"
-          :disabled="selectedSkill ? false : true"
+          :disabled="!selectedSkill"
           :loading="addSkillLoading"
           @click="addSkill"
         >
@@ -97,6 +97,7 @@ export default {
     populateSkills(categoryId) {
       this.loadingSkills = true;
       this.skills = [];
+      this.selectedSkill = null;
       this.fetchSkillsByCategory(categoryId)
         .then(response => {
           this.skills = response.skills.map(o => {
