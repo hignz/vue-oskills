@@ -34,11 +34,18 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
+    <template v-slot:append>
+      <div class="pa-2 d-md-none">
+        <v-btn block text @click="logout">
+          <v-icon>mdi-logout</v-icon>
+        </v-btn>
+      </div>
+    </template>
   </v-navigation-drawer>
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters, mapState, mapActions } from 'vuex';
 
 export default {
   data() {
@@ -93,8 +100,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['doLogout']),
     logout() {
-      this.$store.dispatch('doLogout');
+      this.doLogout();
     }
   }
 };
