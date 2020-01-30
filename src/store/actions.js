@@ -60,7 +60,7 @@ export default {
       return res.data;
     });
   },
-  fetchTopSkills({ commit }) {
+  fetchTopSkills() {
     return http.get('/get-top-skills').then(res => {
       return res.data;
     });
