@@ -62,8 +62,6 @@ export default {
   },
   fetchTopSkills({ commit }) {
     return http.get('/get-top-skills').then(res => {
-      commit(constants.SET_SKILLS, res.data.skills);
-      commit(constants.SET_LOADING, false);
       return res.data;
     });
   },
