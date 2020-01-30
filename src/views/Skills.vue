@@ -59,6 +59,7 @@
             <v-data-table
               v-if="loaded"
               class="mb-4"
+              disable-sort
               :headers="[
                 {
                   text: 'Skill',
@@ -76,8 +77,6 @@
             Are you sure you want to delete {{ selectedSkill.name }}? This
             action is irreversible, all esteem gained will be lost.
           </v-card-text>
-
-          <v-divider></v-divider>
 
           <v-card-actions>
             <v-spacer />
