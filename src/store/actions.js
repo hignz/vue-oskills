@@ -60,6 +60,13 @@ export default {
       return res.data;
     });
   },
+  fetchTopSkills({ commit }) {
+    return http.get('/get-top-skills').then(res => {
+      commit(constants.SET_SKILLS, res.data.skills);
+      commit(constants.SET_LOADING, false);
+      return res.data;
+    });
+  },
   fetchSkillsByCategory(_, categoryId) {
     return http.post('/get-skills-by-category', { categoryId }).then(res => {
       return res.data;
