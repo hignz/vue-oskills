@@ -8,7 +8,14 @@
       </v-btn>
     </v-toolbar>
 
-    <v-list v-if="loaded" dense two-line flat class="overflow-y-auto" :style="maxHeight">
+    <v-list
+      v-if="loaded"
+      dense
+      two-line
+      flat
+      class="overflow-y-auto"
+      :style="maxHeight"
+    >
       <v-list-item-group color="primary">
         <v-list-item
           v-for="(activity, i) in activities"
@@ -23,9 +30,9 @@
             <v-list-item-title>{{ activity.message }}</v-list-item-title>
             <v-list-item-subtitle class="grey--text">
               {{
-              formatDistanceToNow(new Date(activity.logDate), {
-              addSuffix: true
-              })
+                formatDistanceToNow(new Date(activity.logDate), {
+                  addSuffix: true
+                })
               }}
             </v-list-item-subtitle>
           </v-list-item-content>
@@ -69,19 +76,7 @@ export default {
     }
   },
   created() {
-    // Enable pusher logging - don't include this in production
-    Pusher.logToConsole = true;
-
-    var pusher = new Pusher('0dcf669b79776f397e0b', {
-      cluster: 'eu',
-      forceTLS: true
-    });
-
-    var channel = pusher.subscribe('activity');
-    channel.bind('activity-event', function(data) {
-      console.log(data.fullDocument);
-      this.activities.push(data.fullDocument);
-    });
+    this.getRecentActivity();
   },
   methods: {
     ...mapActions([
@@ -105,6 +100,16 @@ export default {
         .then(res => {
           this.activities = res;
           this.loaded = true;
+
+          var pusher = new Pusher('0dcf669b79776f397e0b', {
+            cluster: 'eu',
+            forceTLS: true
+          });
+
+          var channel = pusher.subscribe('activity');
+          channel.bind('activity-event', data => {
+            this.activities.unshift(data.fullDocument);
+          });
         })
         .catch(() => {
           this.loaded = false;
