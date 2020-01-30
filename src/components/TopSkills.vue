@@ -6,8 +6,9 @@
     </v-card-title>
 
     <v-data-table
+     v-if="loaded"
       :headers="headers"
-      :items="user.skills"
+      :items="topSkills"
       :disable-filtering="true"
       :items-per-page="5"
     >
@@ -47,10 +48,7 @@ export default {
         { text: 'Category', value: 'categoryName', align: 'center' },
         { text: 'Actions', value: 'action', sortable: false, align: 'center' }
       ],
-      showSnackbar: false,
-      snackbarText: '',
-      searchTerm: '',
-      skillCategories: []
+      topSkills: null
     };
   },
   computed: {
@@ -58,20 +56,15 @@ export default {
   },
   created() {
     this.fetchTopSkills()
-      .then(() => {
-        this.initialize();
+      .then((res) => {
+        this.initialize();        
+        this.topSkills = res.skills;
         this.loaded = true;
-      })
-      .catch(err => console.log(err));
-
-    this.fetchCategories()
-      .then(res => {
-        this.skillCategories = res.categories;
       })
       .catch(err => console.log(err));
   },
   methods: {
-    ...mapActions(['fetchTopSkills', 'fetchCategories']),
+    ...mapActions(['fetchTopSkills']),
     initialize() {},
 
     openSkillProfile(skillId) {
