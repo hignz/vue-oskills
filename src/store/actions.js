@@ -60,6 +60,11 @@ export default {
       return res.data;
     });
   },
+  fetchTopSkills() {
+    return http.get('/get-top-skills').then(res => {
+      return res.data;
+    });
+  },
   fetchSkillsByCategory(_, categoryId) {
     return http.post('/get-skills-by-category', { categoryId }).then(res => {
       return res.data;
