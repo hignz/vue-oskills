@@ -173,7 +173,6 @@ export default {
 
     this.fetchSkillActivity(skillId)
       .then(res => {
-        console.log('test', res);
         this.skillActivityData = res;
       })
       .catch(err => {
