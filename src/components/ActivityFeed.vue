@@ -23,18 +23,18 @@
           @click="openSkillProfile(activity.skillId._id)"
         >
           <v-list-item-avatar>
-            <v-icon>
-              mdi-circle-medium
-            </v-icon>
+            <v-icon>mdi-circle-medium</v-icon>
           </v-list-item-avatar>
 
           <v-list-item-content>
             <v-list-item-title>{{ activity.message }}</v-list-item-title>
-            <v-list-item-subtitle class="grey--text">{{
-              formatDistanceToNow(new Date(activity.logDate), {
-                addSuffix: true
-              })
-            }}</v-list-item-subtitle>
+            <v-list-item-subtitle class="grey--text">
+              {{
+                formatDistanceToNow(new Date(activity.logDate), {
+                  addSuffix: true
+                })
+              }}
+            </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
@@ -45,6 +45,7 @@
 <script>
 import { formatDistanceToNow } from 'date-fns';
 import { mapActions } from 'vuex';
+import Pusher from 'pusher-js';
 
 export default {
   props: {
@@ -61,7 +62,7 @@ export default {
   },
   data() {
     return {
-      activities: null,
+      activities: [],
       loaded: false,
       loading: false,
       formatDistanceToNow
@@ -75,7 +76,7 @@ export default {
     }
   },
   created() {
-    this.getActivity();
+    this.getRecentActivity();
   },
   methods: {
     ...mapActions([
@@ -99,6 +100,16 @@ export default {
         .then(res => {
           this.activities = res;
           this.loaded = true;
+
+          var pusher = new Pusher('0dcf669b79776f397e0b', {
+            cluster: 'eu',
+            forceTLS: true
+          });
+
+          var channel = pusher.subscribe('activity');
+          channel.bind('activity-event', data => {
+            this.activities.unshift(data.fullDocument);
+          });
         })
         .catch(() => {
           this.loaded = false;

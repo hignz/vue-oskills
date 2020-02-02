@@ -113,7 +113,7 @@ export default {
       return res.data;
     });
   },
-  fetchUserActivity(_, userId) {
+  fetchParticipantActivity(_, userId) {
     return http.post('/participant-activity', { userId }).then(res => {
       return res.data;
     });
