@@ -80,6 +80,13 @@ const routes = [
     meta: { requiresAdmin: true }
   },
   {
+    path: '/manage',
+    name: 'manage',
+    component: () => import('@/views/Manage'),
+    meta: { requiresAdmin: true }
+  },
+
+  {
     path: '*',
     redirect: '/'
   }
