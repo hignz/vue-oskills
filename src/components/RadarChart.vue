@@ -56,7 +56,7 @@ export default {
       return {
         chart: {
           type: 'radar',
-          background: this.isDark ? '#343a40' : '#ffffff'
+          background: this.isDark ? '#282c34' : '#ffffff'
         },
         stroke: {
           width: 0,
@@ -66,7 +66,7 @@ export default {
           mode: this.isDark ? 'dark' : 'light'
         },
         fill: {
-          opacity: 0.6,
+          opacity: 0.7,
           colors: [localStorage.getItem('accentColor')]
         },
         plotOptions: {
@@ -74,7 +74,7 @@ export default {
             size: this.size,
             polygons: {
               fill: {
-                colors: this.isDark ? ['#343a40'] : ['#ffffff']
+                colors: this.isDark ? ['#282c34'] : ['#ffffff']
               }
             }
           }
@@ -103,7 +103,6 @@ export default {
       });
 
       const s = this.userSkills.length ? this.userSkills : this.user.skills;
-      console.log(s);
       categories.forEach(category => {
         s.forEach(skill => {
           if (skill.categoryName === category.name) {

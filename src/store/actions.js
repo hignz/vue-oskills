@@ -131,6 +131,16 @@ export default {
       return res.data;
     });
   },
+  addSkill(_, skillData) {
+    return http.post('/add-skill', skillData).then(res => {
+      return res.data;
+    });
+  },
+  addCategory(_, categoryData) {
+    return http.post('/add-category', { name: categoryData.name }).then(res => {
+      return res.data;
+    });
+  },
   setLoading({ commit }, isLoading) {
     commit(constants.SET_LOADING, isLoading);
   },
@@ -148,5 +158,13 @@ export default {
       constants.SET_ACCESS_TOKEN,
       JSON.parse(localStorage.getItem('accessToken'))
     );
+  },
+  inviteUser(_, inviteData) {
+    return http.post('/invite', inviteData).then(res => {
+      return res.data;
+    });
+  },
+  toggleSnackbar({ commit }, snackbarData) {
+    commit(constants.TOGGLE_SNACKBAR, snackbarData);
   }
 };

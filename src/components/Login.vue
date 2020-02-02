@@ -1,16 +1,17 @@
 <template>
   <v-col sm="8" md="4">
     <v-card class="elevation-12">
-      <v-toolbar color="primary" dark>
-        <v-toolbar-title>
-          Sign in to OSkills
-        </v-toolbar-title>
-      </v-toolbar>
-      <v-card-text>
-        <v-form id="loginForm" ref="loginForm" @submit.prevent="login">
+      <v-form ref="loginForm" v-model="valid" @submit.prevent="login">
+        <v-toolbar flat>
+          <v-toolbar-title>
+            Sign in to OSkills
+          </v-toolbar-title>
+        </v-toolbar>
+        <v-card-text>
           <v-text-field
             v-model="email"
             label="Email"
+            :rules="emailRules"
             prepend-inner-icon="mdi-account"
             required
           >
@@ -21,30 +22,20 @@
             prepend-inner-icon="mdi-lock"
             :append-icon="hidePassword ? 'mdi-eye-off' : 'mdi-eye'"
             :type="hidePassword ? 'password' : 'text'"
+            :rules="requiredRule"
             required
             @click:append="() => (hidePassword = !hidePassword)"
           >
           </v-text-field>
-        </v-form>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn type="submit" class="primary" form="loginForm" primary
-          >Sign In</v-btn
-        >
-      </v-card-actions>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn class="primary" primary :disabled="!valid" type="submit"
+            >Sign In</v-btn
+          >
+        </v-card-actions>
+      </v-form>
     </v-card>
-    <v-snackbar
-      v-model="showSnackbar"
-      color="error"
-      :timeout="4000"
-      :bottom="true"
-    >
-      {{ snackbarText }}
-      <v-btn dark text @click="showSnackbar = false">
-        Close
-      </v-btn>
-    </v-snackbar>
   </v-col>
 </template>
 
@@ -54,17 +45,23 @@ import { mapActions } from 'vuex';
 export default {
   data() {
     return {
+      valid: false,
       email: '',
       password: '',
       hidePassword: true,
-      showSnackbar: false,
-      snackbarText: ''
+      emailRules: [
+        v => !!v || 'Email is required',
+        v => /.+@.+/.test(v) || 'Email must be valid'
+      ],
+      requiredRule: [v => !!v || 'Field is required']
     };
   },
   methods: {
-    ...mapActions(['doLogin']),
+    ...mapActions(['doLogin', 'toggleSnackbar']),
     login() {
       if (this.$refs.loginForm.validate()) {
+        console.log('aushndahbd');
+
         this.doLogin({
           email: this.email,
           password: this.password
@@ -77,8 +74,11 @@ export default {
             );
           })
           .catch(() => {
-            this.snackbarText = 'Email or password is incorrect.';
-            this.showSnackbar = true;
+            this.toggleSnackbar({
+              show: true,
+              text: 'Email or password is incorrect',
+              color: 'error'
+            });
           });
       }
     }

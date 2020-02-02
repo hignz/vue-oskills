@@ -218,8 +218,7 @@ export default {
     ...mapActions(['fetchAllSkills', 'doRegister', 'verifyUser']),
     onComplete() {
       if (this.$refs.form.validate()) {
-        this.snackbar = true;
-        this.doRegister('doRegister', {
+        this.doRegister({
           name: `${this.firstName} ${this.lastName}`,
           skills: this.selectedSkills,
           password: this.password,
@@ -233,4 +232,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.theme--dark.v-stepper {
+  background: #343a40;
+}
+</style>

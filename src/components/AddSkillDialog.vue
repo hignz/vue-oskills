@@ -1,76 +1,60 @@
 <template>
-  <v-lazy>
-    <v-dialog v-model="dialog" max-width="600px">
-      <template v-slot:activator="{ on }">
-        <v-btn icon v-on="on">
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-      </template>
-      <v-card>
-        <v-card-title>
-          Add a skill
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-form ref="form">
-              <v-row>
-                <v-col cols="12">
-                  <v-select
-                    label="Category"
-                    :items="categories"
-                    item-text="text"
-                    item-value="value"
-                    :loading="loadingCategories"
-                    prepend-inner-icon="mdi-playlist-star"
-                    required
-                    @change="populateSkills"
-                  ></v-select>
-                </v-col>
-                <v-col cols="12">
-                  <v-autocomplete
-                    v-model="selectedSkill"
-                    label="Skill"
-                    no-data-text="No skills available"
-                    :items="skills"
-                    autocomplete="off"
-                    auto-select-first
-                    :loading="loadingSkills"
-                    clearable
-                    prepend-inner-icon="mdi-star"
-                    required
-                  ></v-autocomplete>
-                </v-col>
-              </v-row>
-            </v-form>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn text @click="dialog = false">Close</v-btn>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            text
-            :disabled="selectedSkill ? false : true"
-            :loading="addSkillLoading"
-            @click="addSkill"
-          >
-            Add</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-      <v-snackbar
-        v-model="showSnackbar"
-        :color="snackbarColor"
-        :bottom="true"
-        :timeout="3000"
-      >
-        {{ snackbarText }}
-        <v-btn color="red" text @click="showSnackbar = false">
-          Close
-        </v-btn>
-      </v-snackbar>
-    </v-dialog>
-  </v-lazy>
+  <v-dialog v-model="dialog" max-width="600px">
+    <template v-slot:activator="{ on }">
+      <v-btn icon v-on="on">
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+    </template>
+    <v-card>
+      <v-card-title>
+        Add a skill
+      </v-card-title>
+      <v-card-text>
+        <v-form ref="form">
+          <v-row>
+            <v-col cols="12">
+              <v-select
+                label="Category"
+                :items="categories"
+                item-text="text"
+                item-value="value"
+                :loading="loadingCategories"
+                prepend-inner-icon="mdi-playlist-star"
+                required
+                @change="populateSkills"
+              ></v-select>
+            </v-col>
+            <v-col cols="12">
+              <v-autocomplete
+                v-model="selectedSkill"
+                label="Skill"
+                no-data-text="No skills available"
+                :items="skills"
+                autocomplete="off"
+                auto-select-first
+                :loading="loadingSkills"
+                clearable
+                prepend-inner-icon="mdi-star"
+                required
+              ></v-autocomplete>
+            </v-col>
+          </v-row>
+        </v-form>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn text @click="dialog = false">Close</v-btn>
+        <v-btn
+          color="primary"
+          :disabled="selectedSkill ? false : true"
+          :loading="addSkillLoading"
+          @click="addSkill"
+        >
+          Add</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -89,9 +73,6 @@ export default {
       skills: [],
       selectedSkill: null,
       dialog: false,
-      showSnackbar: false,
-      snackbarText: '',
-      snackbarColor: '',
       loadingCategories: false,
       loadingSkills: false,
       addSkillLoading: false
@@ -108,7 +89,11 @@ export default {
     this.loadingCategories = false;
   },
   methods: {
-    ...mapActions(['fetchSkillsByCategory', 'addSkillToUser']),
+    ...mapActions([
+      'fetchSkillsByCategory',
+      'addSkillToUser',
+      'toggleSnackbar'
+    ]),
     populateSkills(categoryId) {
       this.loadingSkills = true;
       this.skills = [];
@@ -134,14 +119,18 @@ export default {
         .then(() => {
           this.$refs.form.reset();
           this.skills = [];
-          this.snackbarText = 'Skill added successfully!';
-          this.snackbarColor = 'success';
-          this.showSnackbar = true;
+          this.toggleSnackbar({
+            show: true,
+            text: 'Skill added successfully',
+            color: 'success'
+          });
         })
         .catch(() => {
-          this.snackbarText = 'Something went wrong';
-          this.snackbarColor = 'error';
-          this.showSnackbar = true;
+          this.toggleSnackbar({
+            show: true,
+            text: 'Something went wrong',
+            color: 'error'
+          });
         })
         .finally(() => (this.addSkillLoading = false));
     }

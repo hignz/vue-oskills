@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="loaded">
+  <v-container v-if="loaded" fluid>
     <v-card>
       <v-row justify="center" align="center">
         <v-col cols="12" sm="12">
@@ -111,10 +111,6 @@
         <ActivityFeed :participant-id="user._id"></ActivityFeed>
       </v-col>
     </v-row>
-    <v-snackbar v-model="showSnackbar" :color="snackbarColor">
-      {{ snackbarText }}
-      <v-btn color="white" text @click="showSnackbar = false">Close</v-btn>
-    </v-snackbar>
   </v-container>
 </template>
 
@@ -138,9 +134,6 @@ export default {
       user: {},
       similarUsers: [],
       categories: [],
-      showSnackbar: false,
-      snackbarText: '',
-      snackbarColor: '',
       skillCategories: [],
       userActivities: [],
       lightFormat,
@@ -227,16 +220,21 @@ export default {
       'fetchCategories',
       'voteSkill',
       'fetchParticipantActivity'
+      'toggleSnackbar'
     ]),
     vote(skill) {
       this.voteSkill(skill._id)
         .then(response => {
           const remainingVotes = response.remainingVotes;
-          this.snackbarText = response.upvoted
+          const snackbarText = response.upvoted
             ? `Voted! Remaining votes: ${remainingVotes}`
             : `Vote removed! Remaining votes ${remainingVotes}`;
-          this.snackbarColor = response.upvoted ? 'success' : 'orange';
-          this.showSnackbar = true;
+
+          this.toggleSnackbar({
+            show: true,
+            text: snackbarText,
+            color: response.upvoted ? 'success' : 'orange'
+          });
 
           const skill = response.skill;
           this.user.skills = this.user.skills.map(x =>
@@ -244,10 +242,11 @@ export default {
           );
         })
         .catch(() => {
-          this.showSnackbar = false;
-          this.snackbarText = 'You have no votes left for this week.';
-          this.snackbarColor = 'error';
-          this.showSnackbar = true;
+          this.toggleSnackbar({
+            show: true,
+            text: 'You have no votes left for this week.',
+            color: 'error'
+          });
         });
     },
     openSkillProfile(skillId) {

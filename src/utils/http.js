@@ -30,7 +30,7 @@ http.interceptors.response.use(
     if (401 === error.response.status) {
       localStorage.removeItem('accessToken');
       store.state.accessToken = null;
-      router.push({ path: '/login' });
+      router.push({ path: '/login' }).catch(() => {});
     }
     return Promise.reject(error);
   }

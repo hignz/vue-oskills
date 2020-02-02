@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="loaded">
+  <v-container v-if="loaded" fluid="">
     <v-card class="mb-3">
       <v-row align="center" justify="center">
         <v-col cols="12" sm="12" md="3" class="text-center">
@@ -176,7 +176,7 @@ export default {
     });
   },
   methods: {
-    ...mapActions(['fetchCategories', 'fetchUser']),
+    ...mapActions(['fetchCategories', 'fetchUser', 'toggleSnackbar']),
     switchUsersList(menuItem, i) {
       this.usersCardTitle = menuItem.title;
       this.usersMenuIndex = i;
