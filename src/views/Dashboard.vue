@@ -125,7 +125,11 @@
         ></SkillList>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <ActivityFeed></ActivityFeed>
+        <ActivityFeed
+          v-if="recentActivityData.length"
+          :activity-data="recentActivityData"
+          :is-real-time="true"
+        ></ActivityFeed>
       </v-col>
     </v-row>
   </v-container>
@@ -159,7 +163,8 @@ export default {
       ],
       usersMenuIndex: 0,
       usersCardTitle: 'Recently Joined',
-      skillCategories: []
+      skillCategories: [],
+      recentActivityData: []
     };
   },
   computed: {
@@ -174,9 +179,18 @@ export default {
     this.fetchCategories().then(res => {
       this.skillCategories = res.categories;
     });
+
+    this.fetchRecentActivity().then(res => {
+      this.recentActivityData = res;
+    });
   },
   methods: {
-    ...mapActions(['fetchCategories', 'fetchUser', 'toggleSnackbar']),
+    ...mapActions([
+      'fetchCategories',
+      'fetchUser',
+      'toggleSnackbar',
+      'fetchRecentActivity'
+    ]),
     switchUsersList(menuItem, i) {
       this.usersCardTitle = menuItem.title;
       this.usersMenuIndex = i;
