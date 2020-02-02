@@ -8,8 +8,15 @@
               <v-img :src="randomUserImg"></v-img>
             </v-avatar>
           </v-row>
-          <v-row class="subheading-1" justify="center" align="center">{{ user.name }}</v-row>
-          <v-row class="subtitle-2 grey--text" justify="center" align="center">{{ user.role }}</v-row>
+          <v-row class="subheading-1" justify="center" align="center">{{
+            user.name
+          }}</v-row>
+          <v-row
+            class="subtitle-2 grey--text"
+            justify="center"
+            align="center"
+            >{{ user.role }}</v-row
+          >
           <v-row class="subtitle-2 grey--text" justify="center" align="center">
             <v-col cols="12" sm="12" class="text-center">
               <v-tooltip v-if="getLowestSkill" bottom>
@@ -55,7 +62,9 @@
       <v-col cols="12" sm="12" md="4">
         <v-card>
           <v-toolbar dense flat>
-            <v-toolbar-title class="subtitle-2 grey--text">CATEGORIES</v-toolbar-title>
+            <v-toolbar-title class="subtitle-2 grey--text"
+              >CATEGORIES</v-toolbar-title
+            >
           </v-toolbar>
           <RadarChart
             :user-skills="skills"
@@ -69,11 +78,21 @@
       <v-col cols="12" sm="12" md="4">
         <v-card>
           <v-toolbar dense flat>
-            <v-toolbar-title class="subtitle-2 grey--text">SKILLS</v-toolbar-title>
+            <v-toolbar-title class="subtitle-2 grey--text"
+              >SKILLS</v-toolbar-title
+            >
           </v-toolbar>
 
-          <v-list subheader class="overflow-y-auto" dense style="max-height: 345px">
-            <div v-for="(category, i) in getSkillsByCategories" :key="category.name">
+          <v-list
+            subheader
+            class="overflow-y-auto"
+            dense
+            style="max-height: 345px"
+          >
+            <div
+              v-for="(category, i) in getSkillsByCategories"
+              :key="category.name"
+            >
               <v-subheader inset>{{ category.name }}</v-subheader>
 
               <v-list-item
@@ -95,14 +114,17 @@
                     <v-icon
                       v-if="!skill.votedBy.includes(getUser._id)"
                       color="grey lighten-1"
-                    >mdi-arrow-up-bold-outline</v-icon>
+                      >mdi-arrow-up-bold-outline</v-icon
+                    >
 
                     <v-icon v-else color="primary">mdi-arrow-up-bold</v-icon>
                   </v-btn>
                 </v-list-item-action>
               </v-list-item>
 
-              <v-divider v-if="i !== getSkillsByCategories.length - 1"></v-divider>
+              <v-divider
+                v-if="i !== getSkillsByCategories.length - 1"
+              ></v-divider>
             </div>
           </v-list>
         </v-card>
@@ -219,7 +241,7 @@ export default {
       'fetchUserById',
       'fetchCategories',
       'voteSkill',
-      'fetchParticipantActivity'
+      'fetchParticipantActivity',
       'toggleSnackbar'
     ]),
     vote(skill) {
