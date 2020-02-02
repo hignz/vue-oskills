@@ -1,21 +1,11 @@
 <template>
-  <v-card>
+  <div>
     <v-toolbar dense flat>
       <v-toolbar-title class="subtitle-2 grey--text">ACTIVITY</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon :loading="loading" @click="getActivity()">
-        <v-icon>mdi-refresh</v-icon>
-      </v-btn>
     </v-toolbar>
 
-    <v-list
-      v-if="loaded"
-      dense
-      two-line
-      flat
-      class="overflow-y-auto"
-      :style="maxHeight"
-    >
+    <v-list dense two-line flat class="overflow-y-auto" max-height="14.5em">
       <v-list-item-group color="primary">
         <v-list-item
           v-for="(activity, i) in activities"
@@ -39,7 +29,7 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
-  </v-card>
+  </div>
 </template>
 
 <script>
@@ -49,15 +39,15 @@ import Pusher from 'pusher-js';
 
 export default {
   props: {
-    participantId: {
-      type: String,
-      required: false,
+    activityData: {
+      type: Array,
+      required: true,
       default: null
     },
-    skillId: {
-      type: String,
+    isRealTime: {
+      type: Boolean,
       required: false,
-      default: null
+      default: false
     }
   },
   data() {
@@ -68,15 +58,20 @@ export default {
       formatDistanceToNow
     };
   },
-  computed: {
-    maxHeight() {
-      return this.participantId || this.skillId
-        ? 'max-height: 350px'
-        : 'max-height: 232px';
-    }
-  },
   created() {
-    this.getRecentActivity();
+    this.activities = this.activityData;
+
+    if (this.isRealTime) {
+      var pusher = new Pusher('0dcf669b79776f397e0b', {
+        cluster: 'eu',
+        forceTLS: true
+      });
+
+      var channel = pusher.subscribe('recent-activity');
+      channel.bind('activity-event', data => {
+        this.activities.unshift(data.fullDocument);
+      });
+    }
   },
   methods: {
     ...mapActions([
@@ -84,60 +79,7 @@ export default {
       'fetchUserActivity',
       'fetchSkillActivity'
     ]),
-    getActivity() {
-      this.loading = true;
 
-      if (this.participantId) {
-        this.getUserActivity();
-      } else if (this.skillId) {
-        this.getSkillActivity();
-      } else {
-        this.getRecentActivity();
-      }
-    },
-    getRecentActivity() {
-      this.fetchRecentActivity()
-        .then(res => {
-          this.activities = res;
-          this.loaded = true;
-
-          var pusher = new Pusher('0dcf669b79776f397e0b', {
-            cluster: 'eu',
-            forceTLS: true
-          });
-
-          var channel = pusher.subscribe('activity');
-          channel.bind('activity-event', data => {
-            this.activities.unshift(data.fullDocument);
-          });
-        })
-        .catch(() => {
-          this.loaded = false;
-        })
-        .finally(() => (this.loading = false));
-    },
-    getUserActivity() {
-      this.fetchUserActivity(this.participantId)
-        .then(res => {
-          this.activities = res;
-          this.loaded = true;
-        })
-        .catch(() => {
-          this.loaded = false;
-        })
-        .finally(() => (this.loading = false));
-    },
-    getSkillActivity() {
-      this.fetchSkillActivity(this.skillId)
-        .then(res => {
-          this.activities = res;
-          this.loaded = true;
-        })
-        .catch(() => {
-          this.loaded = false;
-        })
-        .finally(() => (this.loading = false));
-    },
     openSkillProfile(skillId) {
       this.$router.push({
         name: 'skillProfile',

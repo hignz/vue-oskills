@@ -125,7 +125,11 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <ActivityFeed :skill-id="skill._id"></ActivityFeed>
+        <ActivityFeed
+          v-if="skillActivityData.length"
+          :activity-data="skillActivityData"
+          :is-real-time="false"
+        ></ActivityFeed>
       </v-col>
     </v-row>
   </v-container>
@@ -145,6 +149,7 @@ export default {
   data() {
     return {
       skill: {},
+      skillActivityData: [],
       loaded: false
     };
   },
@@ -165,13 +170,22 @@ export default {
       .catch(err => {
         console.log(err);
       });
+
+    this.fetchSkillActivity(skillId)
+      .then(res => {
+        this.skillActivityData = res;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
   methods: {
     ...mapActions([
       'addSkillToUser',
       'setLoading',
       'fetchSkillInfo',
-      'toggleSnackbar'
+      'toggleSnackbar',
+      'fetchSkillActivity'
     ]),
     addSkill() {
       this.addSkillToUser({ skillId: this.skill._id })

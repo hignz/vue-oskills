@@ -72,7 +72,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row class="text-center" align="center" justify="space-around">
+    <v-row align="center" justify="space-around">
       <v-col cols="12" sm="12" md="4">
         <v-card>
           <v-card-text>
@@ -89,9 +89,11 @@
       </v-col>
       <v-col cols="12" sm="12" md="4">
         <v-card>
-          <v-card-text>
-            Row 3 Col 3
-          </v-card-text>
+          <ActivityFeed
+            v-if="recentActivityData.length"
+            :activity-data="recentActivityData"
+            :is-real-time="true"
+          ></ActivityFeed>
         </v-card>
       </v-col>
     </v-row>
@@ -102,12 +104,29 @@
 import InviteUserDialog from '../components/InviteUserDialog';
 import AdminAddCategoryDialog from '../components/AdminAddCategoryDialog';
 import AdminAddSkillDialog from '../components/AdminAddSkillDialog';
+import { mapActions } from 'vuex';
+
+const ActivityFeed = () => import('../components/ActivityFeed');
 
 export default {
   components: {
     InviteUserDialog,
     AdminAddCategoryDialog,
-    AdminAddSkillDialog
+    AdminAddSkillDialog,
+    ActivityFeed
+  },
+  data() {
+    return {
+      recentActivityData: []
+    };
+  },
+  created() {
+    this.fetchRecentActivity().then(res => {
+      this.recentActivityData = res;
+    });
+  },
+  methods: {
+    ...mapActions(['fetchRecentActivity'])
   }
 };
 </script>
