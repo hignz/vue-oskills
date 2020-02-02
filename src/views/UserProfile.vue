@@ -130,7 +130,11 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <ActivityFeed :participant-id="user._id"></ActivityFeed>
+        <ActivityFeed
+          v-if="userActivity.length"
+          :activity-data="userActivity"
+          :is-real-time="false"
+        ></ActivityFeed>
       </v-col>
     </v-row>
   </v-container>
@@ -157,7 +161,7 @@ export default {
       similarUsers: [],
       categories: [],
       skillCategories: [],
-      userActivities: [],
+      userActivity: [],
       lightFormat,
       parseISO
     };
@@ -219,7 +223,7 @@ export default {
         this.fetchParticipantActivity(this.user._id)
           .then(res => {
             console.log('test', res);
-            this.userActivities = res;
+            this.userActivity = res;
           })
           .catch(err => {
             console.log(err);
