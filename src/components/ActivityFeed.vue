@@ -62,8 +62,6 @@ export default {
     this.activities = this.activityData;
 
     if (this.isRealTime) {
-      console.log('Hello');
-
       var pusher = new Pusher('0dcf669b79776f397e0b', {
         cluster: 'eu',
         forceTLS: true
@@ -81,50 +79,7 @@ export default {
       'fetchUserActivity',
       'fetchSkillActivity'
     ]),
-    // getActivity() {
-    //   this.loading = true;
 
-    //   if (this.participantId) {
-    //     this.getUserActivity();
-    //   } else if (this.skillId) {
-    //     this.getSkillActivity();
-    //   } else {
-    //     this.getRecentActivity();
-    //   }
-    // },
-    // getRecentActivity() {
-    //   this.fetchRecentActivity()
-    //     .then(res => {
-    //       this.activities = res;
-    //       this.loaded = true;
-    //     })
-    //     .catch(() => {
-    //       this.loaded = false;
-    //     })
-    //     .finally(() => (this.loading = false));
-    // },
-    // getUserActivity() {
-    //   this.fetchUserActivity(this.participantId)
-    //     .then(res => {
-    //       this.activities = res;
-    //       this.loaded = true;
-    //     })
-    //     .catch(() => {
-    //       this.loaded = false;
-    //     })
-    //     .finally(() => (this.loading = false));
-    // },
-    // getSkillActivity() {
-    //   this.fetchSkillActivity(this.skillId)
-    //     .then(res => {
-    //       this.activities = res;
-    //       this.loaded = true;
-    //     })
-    //     .catch(() => {
-    //       this.loaded = false;
-    //     })
-    //     .finally(() => (this.loading = false));
-    // },
     openSkillProfile(skillId) {
       this.$router.push({
         name: 'skillProfile',
