@@ -7,7 +7,7 @@
       <v-spacer></v-spacer>
       <AddSkillDialog :skill-categories="skillCategories"></AddSkillDialog>
       <v-btn icon @click="openAllSkills">
-        <v-icon>mdi-arrow-expand</v-icon>
+        <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
     </v-toolbar>
     <v-list v-if="skills && skills.length" dense two-line>

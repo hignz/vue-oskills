@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="loaded" fluid="">
+  <v-container v-if="loaded" fluid>
     <v-card class="mb-3">
       <v-row align="center" justify="center">
         <v-col cols="12" sm="12" md="3" class="text-center">
@@ -10,8 +10,18 @@
                 align="center"
                 justify="center"
                 justify-md="start"
-                >Hello, {{ user.name.split(' ')[0] }}</v-row
+                >Hello, {{ user.name.split(' ')[0] }}
+                <v-icon v-if="user.isAdmin" class="ml-2 mb-1"
+                  >mdi-account-tie</v-icon
+                >
+              </v-row>
+              <v-row
+                class="subtitle-2 ml-md-12"
+                align="center"
+                justify="center"
+                justify-md="start"
               >
+              </v-row>
               <v-row
                 class="caption grey--text ml-md-12 font-weight-bold"
                 justify="center"
@@ -55,12 +65,9 @@
               <v-row class="caption grey--text" justify="end" justify-md="end">
                 {{ skill.name }}
               </v-row>
-              <v-row
-                class="headline mr-2 mr-md-2"
-                justify="end"
-                justify-md="end"
-                >{{ skill.rating }}</v-row
-              >
+              <v-row class="headline mr-md-2" justify="end" justify-md="end">{{
+                skill.rating
+              }}</v-row>
             </v-col>
             <v-col sm="6" class="text-center">
               <v-row justify="start" class="mt-3">

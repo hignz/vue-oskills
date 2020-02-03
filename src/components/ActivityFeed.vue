@@ -62,12 +62,12 @@ export default {
     this.activities = this.activityData;
 
     if (this.isRealTime) {
-      var pusher = new Pusher('0dcf669b79776f397e0b', {
+      const pusher = new Pusher('0dcf669b79776f397e0b', {
         cluster: 'eu',
         forceTLS: true
       });
 
-      var channel = pusher.subscribe('recent-activity');
+      const channel = pusher.subscribe('recent-activity');
       channel.bind('activity-event', data => {
         this.activities.unshift(data.fullDocument);
       });

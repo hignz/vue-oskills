@@ -1,13 +1,14 @@
 <template>
   <v-card>
     <v-card-title
-      >Categories
+      >Manage categories
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
         append-icon="mdi-magnify"
         label="Search"
         single-line
+        clearable
         hide-details
       ></v-text-field>
     </v-card-title>
@@ -15,10 +16,12 @@
       v-if="loaded"
       :headers="headers"
       :items="categories"
-      :items-per-page="10"
       :search="search"
+      no-data-text="No categories loaded"
+      no-results-text="No categories found"
       class="elevation-1"
-    ></v-data-table>
+    >
+    </v-data-table>
   </v-card>
 </template>
 
