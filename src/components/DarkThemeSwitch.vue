@@ -1,5 +1,5 @@
 <template>
-  <v-switch v-model="darkMode" label="Dark Mode" color="primary"></v-switch>
+  <v-switch v-model="darkMode" label="Dark theme" color="primary"></v-switch>
 </template>
 
 <script>

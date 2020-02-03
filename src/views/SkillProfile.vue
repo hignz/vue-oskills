@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="loaded" fluid="">
+  <v-container v-if="loaded" fluid>
     <v-card>
       <v-row justify="center" align="center">
         <v-col cols="12" sm="12" md="12">
@@ -7,7 +7,9 @@
             <v-col cols="12" sm="12" md="4">
               <v-row justify="center" align="center" class="mb-6">
                 <v-avatar color="primary" size="62">
-                  <span class="white--text headline">{{ skill.name[0] }}</span>
+                  <span v-if="skill.name" class="white--text headline">{{
+                    skill.name[0]
+                  }}</span>
                 </v-avatar>
               </v-row>
               <v-row class="subheading-1" justify="center" align="center">
@@ -48,7 +50,7 @@
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <v-btn
-                      v-if="isAdded"
+                      v-if="user && isAdded"
                       icon
                       small
                       color="primary"
@@ -104,32 +106,18 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <v-card :height="392">
-          <v-card-title>Under construction</v-card-title>
-          <!-- <v-row no-gutters="">
-            <v-col cols="12" sm="12" md="6">
-              <RadialChart
-                :series-data="[skill.averageEsteem]"
-                series-name="Average Esteem"
-                :size="100"
-              ></RadialChart>
-            </v-col>
-            <v-col cols="12" sm="12" md="6">
-              <RadialChart
-                :series-data="[skill.usersWith]"
-                series-name="Average Esteem"
-                :size="100"
-              ></RadialChart>
-            </v-col>
-          </v-row> -->
+        <v-card>
+          <v-card-title class=" grey--text">Under construction</v-card-title>
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <ActivityFeed
-          v-if="skillActivityData.length"
-          :activity-data="skillActivityData"
-          :is-real-time="false"
-        ></ActivityFeed>
+        <v-card>
+          <ActivityFeed
+            v-if="skillActivityData.length"
+            :activity-data="skillActivityData"
+            :is-real-time="false"
+          ></ActivityFeed>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -154,9 +142,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['skills']),
+    ...mapGetters(['user']),
     isAdded() {
-      return !this.skills.filter(e => e.skillId === this.skill._id).length > 0;
+      return (
+        !this.user.skills.filter(e => e.skillId === this.skill._id).length > 0
+      );
     }
   },
   created() {

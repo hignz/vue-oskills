@@ -12,6 +12,7 @@
             v-model="email"
             label="Email"
             :rules="emailRules"
+            validate-on-blur
             prepend-inner-icon="mdi-account"
             required
           >
@@ -22,7 +23,7 @@
             prepend-inner-icon="mdi-lock"
             :append-icon="hidePassword ? 'mdi-eye-off' : 'mdi-eye'"
             :type="hidePassword ? 'password' : 'text'"
-            :rules="requiredRule"
+            :rules="requiredRules"
             required
             @click:append="() => (hidePassword = !hidePassword)"
           >
@@ -41,27 +42,22 @@
 
 <script>
 import { mapActions } from 'vuex';
+import validationRules from '../mixins/validationRules';
 
 export default {
+  mixins: [validationRules],
   data() {
     return {
       valid: false,
       email: '',
       password: '',
-      hidePassword: true,
-      emailRules: [
-        v => !!v || 'Email is required',
-        v => /.+@.+/.test(v) || 'Email must be valid'
-      ],
-      requiredRule: [v => !!v || 'Field is required']
+      hidePassword: true
     };
   },
   methods: {
     ...mapActions(['doLogin', 'toggleSnackbar']),
     login() {
       if (this.$refs.loginForm.validate()) {
-        console.log('aushndahbd');
-
         this.doLogin({
           email: this.email,
           password: this.password

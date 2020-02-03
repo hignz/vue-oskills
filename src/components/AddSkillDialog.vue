@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="600px">
+  <v-dialog v-model="dialog" max-width="500" @input="v => v || close()">
     <template v-slot:activator="{ on }">
       <v-btn icon v-on="on">
         <v-icon>mdi-plus</v-icon>
@@ -43,7 +43,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn text @click="dialog = false">Close</v-btn>
+        <v-btn text @click="close()">Close</v-btn>
         <v-btn
           color="primary"
           :disabled="selectedSkill ? false : true"
@@ -133,6 +133,10 @@ export default {
           });
         })
         .finally(() => (this.addSkillLoading = false));
+    },
+    close() {
+      this.$refs.form.reset();
+      this.dialog = !this.dialog;
     }
   }
 };

@@ -2,13 +2,13 @@
   <v-container v-if="loaded" fluid>
     <v-card>
       <v-card-title>
-        Skill list
+        My skills
         <v-spacer></v-spacer>
         <AddSkillDialog :skill-categories="skillCategories" />
         <v-form>
           <v-text-field
             v-model="searchTerm"
-            class="mb-5 ml-5"
+            class="mb-5 mx-5"
             prepend-inner-icon="mdi-magnify"
             label="Search skills..."
             single-line

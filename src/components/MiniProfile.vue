@@ -14,9 +14,9 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-list dense nav>
+    <v-list v-if="sortedSkills.length" dense nav>
       <v-subheader class="caption">Top Skills</v-subheader>
-      <v-list-item-group v-if="sortedSkills.length" color="primary">
+      <v-list-item-group color="primary">
         <v-list-item
           v-for="(skill, i) in sortedSkills"
           :key="i"
@@ -45,6 +45,10 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
+    <v-card-text v-else class="text-center mt-12">
+      <v-icon x-large class="grey--text mb-2">mdi-alert-circle-outline</v-icon>
+      <p>This user has not added any skills yet</p>
+    </v-card-text>
   </v-card>
 </template>
 

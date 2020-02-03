@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row justify="center" align="center">
       <v-col cols="12" sm="12">
         <ManageSkills />

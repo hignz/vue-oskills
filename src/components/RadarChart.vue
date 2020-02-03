@@ -59,8 +59,10 @@ export default {
           background: this.isDark ? '#282c34' : '#ffffff'
         },
         stroke: {
-          width: 0,
-          curve: 'smooth'
+          show: true,
+          width: 3,
+          colors: [localStorage.getItem('accentColor')],
+          dashArray: 0
         },
         theme: {
           mode: this.isDark ? 'dark' : 'light'
@@ -79,6 +81,7 @@ export default {
             }
           }
         },
+
         yaxis: {
           labels: {
             formatter: val => val.toFixed(0)
@@ -86,7 +89,7 @@ export default {
         },
         markers: {
           colors: [localStorage.getItem('accentColor')],
-          size: 2.5
+          size: 4
         },
         tooltip: {
           y: {

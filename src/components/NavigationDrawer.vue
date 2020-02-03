@@ -14,25 +14,49 @@
     </v-list-item>
 
     <v-list dense nav>
-      <v-list-item
-        v-for="item in filteredLinks"
-        :key="item.title"
-        :to="item.route"
-        links
-      >
-        <v-tooltip right>
-          <template v-slot:activator="{ on }">
-            <v-list-item-icon v-on="on">
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-icon>
-          </template>
-          <span>{{ item.text }}</span>
-        </v-tooltip>
+      <v-list-item-group value="true">
+        <v-list-item
+          v-for="item in adminLinks"
+          :key="item.title"
+          :to="item.route"
+          links
+        >
+          <v-tooltip right>
+            <template v-slot:activator="{ on }">
+              <v-list-item-icon v-on="on">
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+            </template>
+            <span>{{ item.text }}</span>
+          </v-tooltip>
 
-        <v-list-item-content>
-          <v-list-item-title>{{ item.text }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.text }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-item-group>
+      <v-divider v-if="adminLinks.length" class="my-4" />
+      <v-list-item-group value="true">
+        <v-list-item
+          v-for="item in memberLinks"
+          :key="item.title"
+          :to="item.route"
+          links
+        >
+          <v-tooltip right>
+            <template v-slot:activator="{ on }">
+              <v-list-item-icon v-on="on">
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+            </template>
+            <span>{{ item.text }}</span>
+          </v-tooltip>
+
+          <v-list-item-content>
+            <v-list-item-title>{{ item.text }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-item-group>
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -47,9 +71,15 @@ export default {
       mini: true,
       links: [
         {
-          icon: 'mdi-account-key',
+          icon: 'mdi-account-tie',
           text: 'Admin',
           route: '/admin',
+          requiresAdmin: true
+        },
+        {
+          icon: 'mdi-account-details',
+          text: 'Manage',
+          route: '/manage',
           requiresAdmin: true
         },
         {
@@ -82,6 +112,12 @@ export default {
       return this.links.filter(
         e => !e.requiresAdmin || (this.user.isAdmin && e.requiresAdmin)
       );
+    },
+    adminLinks() {
+      return this.links.filter(e => this.user.isAdmin && e.requiresAdmin);
+    },
+    memberLinks() {
+      return this.links.filter(e => !e.requiresAdmin);
     },
     expandedNavDrawer: {
       get: function() {

@@ -44,7 +44,7 @@ export default {
     };
   },
   created() {
-    this.fetchRecentUsersSlim(3)
+    this.fetchRecentUsersSlim('3')
       .then(response => {
         this.users = response.users;
       })

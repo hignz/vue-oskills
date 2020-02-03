@@ -40,7 +40,7 @@
             <v-icon>mdi-theme-light-dark</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Dark Theme</v-list-item-title>
+            <v-list-item-title>Dark mode</v-list-item-title>
           </v-list-item-content>
           <v-list-item-action @click.stop>
             <v-switch v-model="darkMode" color="primary"></v-switch>
