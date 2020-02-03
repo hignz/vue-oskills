@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="600px">
+  <v-dialog v-model="dialog" max-width="500" @input="v => v || close()">
     <template v-slot:activator="{ on }">
       <v-btn icon v-on="on">
         <v-icon>mdi-account-plus</v-icon>
@@ -16,6 +16,7 @@
             v-model="email"
             prepend-icon="mdi-mail"
             label="Email"
+            validate-on-blur
             :rules="emailRules"
             clearable
           ></v-text-field>
@@ -24,7 +25,7 @@
             label="Role"
             prepend-icon="mdi-account"
             :items="['Senior Developer', 'Junior Developer']"
-            :rules="requiredRule"
+            :rules="requiredRules"
           ></v-select>
           <v-checkbox v-model="isAdmin" label="Admin"></v-checkbox>
         </v-form>
@@ -32,7 +33,7 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn text @click="dialog = !dialog">Close</v-btn>
+        <v-btn text @click="close()">Close</v-btn>
         <v-btn color="primary" :disabled="!valid" @click="onSubmit"
           >Invite</v-btn
         >
@@ -43,20 +44,17 @@
 
 <script>
 import { mapActions } from 'vuex';
+import validationRules from '../mixins/validationRules';
 
 export default {
+  mixins: [validationRules],
   data() {
     return {
       valid: false,
       email: '',
       role: '',
       isAdmin: false,
-      dialog: false,
-      emailRules: [
-        v => !!v || 'Email is required',
-        v => /.+@.+/.test(v) || 'Email must be valid'
-      ],
-      requiredRule: [v => !!v || 'Field is required']
+      dialog: false
     };
   },
   methods: {
@@ -84,6 +82,10 @@ export default {
             });
           });
       }
+    },
+    close() {
+      this.$refs.form.reset();
+      this.dialog = !this.dialog;
     }
   }
 };

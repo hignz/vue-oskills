@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="400">
+  <v-dialog v-model="dialog" max-width="500" @input="v => v || close()">
     <template v-slot:activator="{ on }">
       <v-btn icon v-on="on">
         <v-icon>mdi-flask-plus-outline</v-icon>
@@ -8,23 +8,30 @@
     <v-card>
       <v-card-title>Add Skill</v-card-title>
       <v-card-text>
-        <v-form ref="form">
+        <v-form ref="form" v-model="valid">
           <v-select
             v-model="selectedCategory"
             label="Category"
             :items="categories"
             item-text="categoryName"
             item-value="categoryId"
-            return-object=""
+            :rules="requiredRules"
+            return-object
           >
           </v-select>
-          <v-text-field v-model="skillName" label="Skill"></v-text-field>
+          <v-text-field
+            v-model="skillName"
+            label="Skill"
+            :rules="requiredRules"
+          ></v-text-field>
         </v-form>
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-        <v-btn text @click="dialog = false">Close</v-btn>
-        <v-btn color="primary" @click="addNewSkill"> Add</v-btn>
+        <v-btn text @click="close()">Close</v-btn>
+        <v-btn color="primary" :disabled="!valid" @click="addNewSkill">
+          Add</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -32,17 +39,17 @@
 
 <script>
 import { mapActions } from 'vuex';
+import validationRules from '../mixins/validationRules';
 
 export default {
+  mixins: [validationRules],
   data() {
     return {
       categories: [],
       selectedCategory: null,
       skillName: null,
       dialog: false,
-      showSnackbar: false,
-      snackbarText: '',
-      snackbarColor: ''
+      valid: false
     };
   },
   created() {
@@ -67,7 +74,6 @@ export default {
       'toggleSnackbar'
     ]),
     addNewSkill() {
-      console.log(this.selectedCategory);
       this.addSkill({
         name: this.skillName,
         categoryId: this.selectedCategory.categoryId,
@@ -88,6 +94,10 @@ export default {
             color: 'error'
           });
         });
+    },
+    close() {
+      this.$refs.form.reset();
+      this.dialog = !this.dialog;
     }
   }
 };
