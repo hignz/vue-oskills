@@ -146,6 +146,11 @@ export default {
       return res.data;
     });
   },
+  addAdmin(_, userId) {
+    return http.post('/add-admin', { userId }).then(res => {
+      return res.data;
+    });
+  },
   setLoading({ commit }, isLoading) {
     commit(constants.SET_LOADING, isLoading);
   },
