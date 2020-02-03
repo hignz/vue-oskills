@@ -113,8 +113,8 @@ export default {
       return res.data;
     });
   },
-  fetchRecentUsersSlim(amount) {
-    return http.get(`/recent-users-slim/${amount}`).then(res => {
+  fetchRecentUsersSlim(_, amount) {
+    return http.get(`/recent-users-slim/?amount=${amount}`).then(res => {
       return res.data;
     });
   },
