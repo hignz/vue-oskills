@@ -24,6 +24,7 @@
             label="Skill"
             :rules="requiredRules"
           ></v-text-field>
+          <v-checkbox v-model="archived" label="Archive" value></v-checkbox>
         </v-form>
       </v-card-text>
       <v-card-actions>
@@ -49,7 +50,8 @@ export default {
       selectedCategory: null,
       skillName: null,
       dialog: false,
-      valid: false
+      valid: false,
+      archived: false
     };
   },
   created() {
@@ -74,13 +76,15 @@ export default {
       'toggleSnackbar'
     ]),
     addNewSkill() {
+      console.log(this.archived);
       this.addSkill({
         name: this.skillName,
         categoryId: this.selectedCategory.categoryId,
-        categoryName: this.selectedCategory.categoryName
+        categoryName: this.selectedCategory.categoryName,
+        archived: this.archived
       })
         .then(() => {
-          this.$refs.form.reset();
+          this.close();
           this.toggleSnackbar({
             show: true,
             text: 'Skill added successfully',
