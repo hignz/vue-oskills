@@ -256,8 +256,6 @@ export default {
       'addAdmin'
     ]),
     promoteToAdmin(user) {
-      console.log(user.isAdmin);
-      console.log(!user.isAdmin);
       this.addAdmin({
         uId: user._id,
         isAdmin: !user.isAdmin,
