@@ -262,10 +262,13 @@ export default {
         email: user.email
       })
         .then(() => {
+          this.user.isAdmin = !this.user.isAdmin;
           this.toggleSnackbar({
             show: true,
-            text: 'User updated successfully',
-            color: 'success'
+            text: this.user.isAdmin
+              ? `${this.user.name} has been promoted to admin`
+              : `${this.user.name} has been demoted from admin`,
+            color: this.user.isAdmin ? 'success' : 'orange darken-3'
           });
         })
         .catch(() => {
