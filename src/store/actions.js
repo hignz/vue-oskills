@@ -86,8 +86,8 @@ export default {
       return res.data;
     });
   },
-  fetchDeleteSkill({ commit }, id) {
-    return http.post('/remove-user-skill', { id }).then(res => {
+  fetchDeleteSkill({ commit }, skillId) {
+    return http.post('/remove-user-skill', { skillId }).then(res => {
       commit(constants.SET_SKILLS, res.data.skills);
       return res.data;
     });
@@ -156,6 +156,11 @@ export default {
       return res.data;
     });
   },
+  addAdmin(_, userData) {
+    return http.post('/add-admin', userData).then(res => {
+      return res.data;
+    });
+  },
   setLoading({ commit }, isLoading) {
     commit(constants.SET_LOADING, isLoading);
   },
@@ -181,5 +186,15 @@ export default {
   },
   toggleSnackbar({ commit }, snackbarData) {
     commit(constants.TOGGLE_SNACKBAR, snackbarData);
+  },
+  archiveSkill(_, skillId) {
+    return http.post('/archive-skill', { skillId: skillId }).then(res => {
+      return res.data;
+    });
+  },
+  unarchiveSkill(_, skillId) {
+    return http.post('/unarchive-skill', { skillId: skillId }).then(res => {
+      return res.data;
+    });
   }
 };

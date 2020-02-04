@@ -49,7 +49,7 @@ export default {
         name: this.categoryName
       })
         .then(() => {
-          this.$refs.form.reset();
+          this.close();
           this.toggleSnackbar({
             show: true,
             text: 'Category added successfully',

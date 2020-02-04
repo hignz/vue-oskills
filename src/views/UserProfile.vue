@@ -49,7 +49,13 @@
             </v-col>
           </v-row>
           <v-row justify="center" align="center">
-            <v-btn v-if="getUser.isAdmin" small color="primary" outlined>
+            <v-btn
+              v-if="getUser.isAdmin"
+              small
+              color="primary"
+              outlined
+              @click="promoteToAdmin(user)"
+            >
               <v-icon small>mdi-plus</v-icon>
               {{ promoteBtnText }}
             </v-btn>
@@ -246,8 +252,33 @@ export default {
       'fetchCategories',
       'voteSkill',
       'fetchParticipantActivity',
-      'toggleSnackbar'
+      'toggleSnackbar',
+      'addAdmin'
     ]),
+    promoteToAdmin(user) {
+      this.addAdmin({
+        uId: user._id,
+        isAdmin: !user.isAdmin,
+        email: user.email
+      })
+        .then(() => {
+          this.user.isAdmin = !this.user.isAdmin;
+          this.toggleSnackbar({
+            show: true,
+            text: this.user.isAdmin
+              ? `${this.user.name} has been promoted to admin`
+              : `${this.user.name} has been demoted from admin`,
+            color: this.user.isAdmin ? 'success' : 'orange darken-3'
+          });
+        })
+        .catch(() => {
+          this.toggleSnackbar({
+            show: true,
+            text: 'Something went wrong',
+            color: 'error'
+          });
+        });
+    },
     vote(skill) {
       this.voteSkill(skill._id)
         .then(response => {
