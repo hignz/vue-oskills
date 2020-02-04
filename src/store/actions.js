@@ -146,8 +146,8 @@ export default {
       return res.data;
     });
   },
-  addAdmin(_, userId) {
-    return http.post('/add-admin', { userId }).then(res => {
+  addAdmin(_, userData) {
+    return http.post('/add-admin', userData).then(res => {
       return res.data;
     });
   },
