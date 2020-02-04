@@ -49,7 +49,13 @@
             </v-col>
           </v-row>
           <v-row justify="center" align="center">
-            <v-btn v-if="getUser.isAdmin" small color="primary" outlined>
+            <v-btn
+              v-if="getUser.isAdmin"
+              small
+              color="primary"
+              outlined
+              @click="promoteToAdmin(user)"
+            >
               <v-icon small>mdi-plus</v-icon>
               {{ promoteBtnText }}
             </v-btn>
