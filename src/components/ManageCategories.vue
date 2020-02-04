@@ -3,14 +3,16 @@
     <v-card-title
       >Manage categories
       <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        clearable
-        hide-details
-      ></v-text-field>
+      <v-form>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          clearable
+          hide-details
+        ></v-text-field>
+      </v-form>
     </v-card-title>
     <v-data-table
       v-if="loaded"
