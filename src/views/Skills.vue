@@ -40,7 +40,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <v-btn icon v-on="on">
-                <v-icon small @click="openSkillProfile(item.skillId)">
+                <v-icon small @click="openSkillProfile(item.skill._id)">
                   mdi-file-star-outline
                 </v-icon>
               </v-btn>
@@ -63,11 +63,15 @@
                 {
                   text: 'Skill',
                   align: 'center',
-                  value: 'name'
+                  value: 'skill.name'
                 },
                 { text: 'Rating', value: 'rating', align: 'center' },
                 { text: 'Esteem', value: 'esteem', align: 'center' },
-                { text: 'Category', value: 'categoryName', align: 'left' }
+                {
+                  text: 'Category',
+                  value: 'skill.category.name',
+                  align: 'left'
+                }
               ]"
               :items="[selectedSkill]"
               hide-default-footer
@@ -112,11 +116,11 @@ export default {
           text: 'Skill',
           align: 'left',
           sortable: true,
-          value: 'name'
+          value: 'skill.name'
         },
         { text: 'Esteem', value: 'esteem', align: 'center' },
         { text: 'Esteem Points', value: 'rating', align: 'center' },
-        { text: 'Category', value: 'categoryName', align: 'center' },
+        { text: 'Category', value: 'skill.category.name', align: 'center' },
         { text: 'Actions', value: 'action', sortable: false, align: 'center' }
       ],
       searchTerm: '',

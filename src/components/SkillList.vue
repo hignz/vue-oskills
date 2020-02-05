@@ -13,26 +13,26 @@
     <v-list v-if="skills && skills.length" dense two-line>
       <v-list-item-group>
         <v-list-item
-          v-for="(skill, i) in skills"
+          v-for="(s, i) in skills"
           :key="i"
           :to="{
             name: 'skillProfile',
-            params: { id: skill.skillId }
+            params: { id: s.skill._id }
           }"
         >
           <v-list-item-avatar>
-            <EsteemBadge :esteem="skill.esteem"></EsteemBadge>
+            <EsteemBadge :esteem="s.esteem"></EsteemBadge>
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title v-text="skill.name"></v-list-item-title>
+            <v-list-item-title v-text="s.skill.name"></v-list-item-title>
             <v-list-item-subtitle
               class="grey--text"
-              v-text="skill.categoryName"
+              v-text="s.skill.category.name"
             ></v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-action-text>
-            {{ skill.rating }}
+            {{ s.skill.rating }}
           </v-list-item-action-text>
         </v-list-item>
       </v-list-item-group>
@@ -67,6 +67,9 @@ export default {
       dialog: false,
       selectedSkill: {}
     };
+  },
+  created() {
+    console.log(this.skills[1]);
   },
   methods: {
     openAllSkills() {

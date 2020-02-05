@@ -108,7 +108,7 @@ export default {
       const s = this.userSkills.length ? this.userSkills : this.user.skills;
       categories.forEach(category => {
         s.forEach(skill => {
-          if (skill.categoryName === category.name) {
+          if (skill.skill.category.name === category.name) {
             category.skills.push(skill);
           }
         });

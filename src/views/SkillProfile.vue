@@ -19,9 +19,9 @@
                 class="subtitle-2 grey--text link"
                 justify="center"
                 align="center"
-                @click="openCategoryProfile(skill.categoryId)"
+                @click="openCategoryProfile(skill.category._id)"
               >
-                {{ skill.categoryName }}
+                {{ skill.category.name }}
               </v-row>
 
               <v-row class="mt-5" justify="center" align="center">

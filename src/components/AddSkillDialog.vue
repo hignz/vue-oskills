@@ -18,7 +18,6 @@
                 :items="categories"
                 item-text="text"
                 item-value="value"
-                :loading="loadingCategories"
                 prepend-inner-icon="mdi-playlist-star"
                 required
                 @change="populateSkills"
@@ -69,25 +68,24 @@ export default {
   },
   data() {
     return {
-      categories: [],
       skills: [],
       selectedSkill: null,
       dialog: false,
-      loadingCategories: false,
       loadingSkills: false,
       addSkillLoading: false
     };
   },
-  created() {
-    this.loadingCategories = true;
-    this.categories = this.skillCategories.map(o => {
-      return {
-        text: o.name,
-        value: o._id
-      };
-    });
-    this.loadingCategories = false;
+  computed: {
+    categories() {
+      return this.skillCategories.map(o => {
+        return {
+          text: o.name,
+          value: o._id
+        };
+      });
+    }
   },
+  created() {},
   methods: {
     ...mapActions([
       'fetchSkillsByCategory',

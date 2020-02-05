@@ -70,7 +70,7 @@ export default {
             text: 'Esteem Points'
           },
           categories: this.user.skills.map(el => {
-            return el.name;
+            return el.skill.name;
           })
         },
         yaxis: {},

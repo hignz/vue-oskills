@@ -24,7 +24,12 @@
             label="Skill"
             :rules="requiredRules"
           ></v-text-field>
-          <v-checkbox v-model="archived" label="Archive" value></v-checkbox>
+          <v-checkbox
+            v-model="archived"
+            label="Archive"
+            input-value="false"
+            value
+          ></v-checkbox>
         </v-form>
       </v-card-text>
       <v-card-actions>
@@ -80,7 +85,6 @@ export default {
       this.addSkill({
         name: this.skillName,
         categoryId: this.selectedCategory.categoryId,
-        categoryName: this.selectedCategory.categoryName,
         archived: this.archived
       })
         .then(() => {
