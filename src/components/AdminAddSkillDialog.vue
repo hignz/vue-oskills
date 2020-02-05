@@ -81,7 +81,6 @@ export default {
       'toggleSnackbar'
     ]),
     addNewSkill() {
-      console.log(this.archived);
       this.addSkill({
         name: this.skillName,
         categoryId: this.selectedCategory.categoryId,

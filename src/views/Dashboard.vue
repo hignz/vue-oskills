@@ -182,7 +182,6 @@ export default {
   },
   created() {
     this.fetchUser().then(() => {
-      console.log('user', this.user);
       this.loaded = true;
     });
 

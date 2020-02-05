@@ -32,6 +32,8 @@ export default {
   created() {
     this.fetchRecentUsers()
       .then(response => {
+        console.log(response.users);
+
         this.users = response.users;
         this.loaded = true;
       })
