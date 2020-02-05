@@ -60,7 +60,7 @@
                   align: 'center',
                   value: 'name'
                 },
-                { text: 'Category', value: 'categoryName', align: 'left' }
+                { text: 'Category', value: 'category.name', align: 'left' }
               ]"
               :items="[selectedSkill]"
               hide-default-footer
@@ -109,7 +109,7 @@ export default {
           sortable: true,
           value: 'name'
         },
-        { text: 'Category', value: 'categoryName' },
+        { text: 'Category', value: 'category.name' },
         { text: 'Actions', value: 'action', sortable: false, align: 'center' }
       ],
       selectedSkill: {},

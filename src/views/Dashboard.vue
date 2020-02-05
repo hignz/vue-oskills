@@ -53,25 +53,25 @@
           </v-row>
         </v-col>
         <v-col
-          v-for="(skill, i) in topThreeSkills"
+          v-for="(s, i) in topThreeSkills"
           :key="i"
           sm="12"
           md="3"
           cols="12"
           class="text-center"
         >
-          <v-row v-if="skill" align="center" justify="center">
+          <v-row v-if="s.skill" align="center" justify="center">
             <v-col sm="6" class="text-center">
               <v-row class="caption grey--text" justify="end" justify-md="end">
-                {{ skill.name }}
+                {{ s.skill.name }}
               </v-row>
               <v-row class="headline mr-md-2" justify="end" justify-md="end">{{
-                skill.rating
+                s.rating
               }}</v-row>
             </v-col>
             <v-col sm="6" class="text-center">
               <v-row justify="start" class="mt-3">
-                <EsteemBadge :esteem="skill.esteem" />
+                <EsteemBadge :esteem="s.esteem" />
               </v-row>
             </v-col>
           </v-row>
@@ -132,11 +132,13 @@
         ></SkillList>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <ActivityFeed
-          v-if="recentActivityData.length"
-          :activity-data="recentActivityData"
-          :is-real-time="true"
-        ></ActivityFeed>
+        <v-card>
+          <ActivityFeed
+            v-if="recentActivityData.length"
+            :activity-data="recentActivityData"
+            :is-real-time="true"
+          ></ActivityFeed>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -180,6 +182,7 @@ export default {
   },
   created() {
     this.fetchUser().then(() => {
+      console.log('user', this.user);
       this.loaded = true;
     });
 
