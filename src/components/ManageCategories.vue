@@ -3,6 +3,7 @@
     <v-card-title
       >Manage categories
       <v-spacer></v-spacer>
+      <EditCategoryDialog></EditCategoryDialog>
       <v-form>
         <v-text-field
           v-model="search"
@@ -16,7 +17,6 @@
     </v-card-title>
 
     <v-data-table
-      v-if="loaded"
       :headers="headers"
       :items="categories"
       :search="search"
@@ -41,18 +41,21 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 import EditCategoryDialog from '../components/EditCategoryDialog';
 
 export default {
   components: {
     EditCategoryDialog
   },
+  props: {
+    categories: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     return {
       search: '',
-      loaded: false,
-      categories: [],
       headers: [
         {
           text: 'Name',
@@ -69,15 +72,8 @@ export default {
       ]
     };
   },
-  created() {
-    this.fetchCategories().then(res => {
-      this.categories = res.categories;
-      this.loaded = true;
-    });
-  },
-  methods: {
-    ...mapActions(['fetchCategories'])
-  }
+  created() {},
+  methods: {}
 };
 </script>
 
