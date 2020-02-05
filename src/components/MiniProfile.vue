@@ -20,13 +20,13 @@
         <v-list-item
           v-for="(skill, i) in sortedSkills"
           :key="i"
-          @click="openSkillProfile(skill.skillId)"
+          @click="openSkillProfile(skill._id)"
         >
           <v-list-item-avatar>
             <EsteemBadge :esteem="skill.esteem"></EsteemBadge>
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title v-text="skill.name"></v-list-item-title>
+            <v-list-item-title v-text="skill.skill.name"></v-list-item-title>
           </v-list-item-content>
           <v-list-item-action>
             <v-btn icon @click="vote(skill)" @click.stop>

@@ -68,9 +68,6 @@ export default {
       selectedSkill: {}
     };
   },
-  created() {
-    console.log(this.skills[1]);
-  },
   methods: {
     openAllSkills() {
       this.$router.push({ name: 'skills' });
