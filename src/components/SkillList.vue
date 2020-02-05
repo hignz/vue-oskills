@@ -37,9 +37,14 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
-    <v-list v-else dense two-line>
-      <v-list-item>You have no skills, please add some.</v-list-item>
-    </v-list>
+    <v-card-text v-else>
+      <p class="text-center grey--text">
+        You have not added any skills yet.
+      </p>
+      <p class="text-center grey--text">
+        Click the plus icon above to get started.
+      </p>
+    </v-card-text>
   </v-card>
 </template>
 

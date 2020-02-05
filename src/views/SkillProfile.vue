@@ -27,7 +27,7 @@
               <v-row class="mt-5" justify="center" align="center">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-chip class="ma-2" color="primary" v-on="on">
+                    <v-chip class="ma-2" v-on="on">
                       <v-icon class="pa-1 mb-1" left>mdi-account-group</v-icon>
                       {{ skill.usersWith }}
                     </v-chip>
@@ -37,7 +37,7 @@
 
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-chip class="ma-2" color="primary" v-on="on">
+                    <v-chip class="ma-2" v-on="on">
                       <v-icon class="pa-1" left>mdi-division</v-icon>
                       {{ skill.averageEsteem.toFixed(1) }}
                     </v-chip>
