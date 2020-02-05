@@ -74,12 +74,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'fetchRecentActivity',
-      'fetchUserActivity',
-      'fetchSkillActivity'
-    ]),
-
     openSkillProfile(skillId) {
       this.$router.push({
         name: 'skillProfile',
