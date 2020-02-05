@@ -14,7 +14,7 @@
         />
       </v-col>
       <v-col cols="12" sm="12">
-        <ManageCategories />
+        <ManageCategories :categories="allCategories" />
       </v-col>
     </v-row>
   </v-container>
@@ -35,6 +35,7 @@ export default {
   data() {
     return {
       allSkills: [],
+      allCategories: [],
       loaded: false
     };
   },
@@ -44,6 +45,12 @@ export default {
     },
     archivedSkills() {
       return this.allSkills.filter(el => el.archived);
+    },
+    unarchivedCategories() {
+      return this.allCategories.filter(el => !el.archived);
+    },
+    archivedCategories() {
+      return this.allCategories.filter(el => el.archived);
     }
   },
   created() {
@@ -51,9 +58,14 @@ export default {
       this.allSkills = res.skills;
       this.loaded = true;
     });
+
+    this.fetchCategories().then(res => {
+      this.allCategories = res.categories;
+      this.loaded = true;
+    });
   },
   methods: {
-    ...mapActions(['fetchAllSkills']),
+    ...mapActions(['fetchAllSkills', 'fetchCategories']),
     addToUnarchivedSkills(skill) {
       skill.archived = false;
     },
