@@ -3,63 +3,7 @@
     <v-card>
       <v-row justify="center" align="center">
         <v-col cols="12" sm="12">
-          <v-row justify="center" align="center" class="ma-4">
-            <v-avatar size="128">
-              <v-img :src="randomUserImg"></v-img>
-            </v-avatar>
-          </v-row>
-          <v-row class="subheading-1" justify="center" align="center">{{
-            user.name
-          }}</v-row>
-          <v-row
-            class="subtitle-2 grey--text"
-            justify="center"
-            align="center"
-            >{{ user.role }}</v-row
-          >
-          <v-row class="subtitle-2 grey--text" justify="center" align="center">
-            <v-col cols="12" sm="12" class="text-center">
-              <v-tooltip v-if="getLowestSkill" bottom>
-                <template v-slot:activator="{ on }">
-                  <v-chip class="ma-2" color="primary" v-on="on">
-                    <v-icon class="pa-1" left>mdi-flag</v-icon>
-                    {{ getLowestSkill.name }}
-                  </v-chip>
-                </template>
-                <span>{{ user.name }} wants to improve this skill.</span>
-              </v-tooltip>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <v-chip class="ma-2" color="primary" v-on="on">
-                    <v-icon class="pa-1" left>mdi-calendar-range</v-icon>
-                    {{ lightFormat(parseISO(user.dateJoined), 'dd-mm-yyyy') }}
-                  </v-chip>
-                </template>
-                <span>When {{ user.name }} joined OSkills.</span>
-              </v-tooltip>
-              <v-tooltip v-if="getBestSkill" bottom>
-                <template v-slot:activator="{ on }">
-                  <v-chip class="ma-2" color="primary" v-on="on">
-                    <v-icon class="pa-1" left>mdi-star</v-icon>
-                    {{ getBestSkill.name }}
-                  </v-chip>
-                </template>
-                <span>{{ user.name }}'s' best skill.</span>
-              </v-tooltip>
-            </v-col>
-          </v-row>
-          <v-row justify="center" align="center">
-            <v-btn
-              v-if="getUser.isAdmin"
-              small
-              color="primary"
-              outlined
-              @click="promoteToAdmin(user)"
-            >
-              <v-icon small>mdi-plus</v-icon>
-              {{ promoteBtnText }}
-            </v-btn>
-          </v-row>
+          <ProfileBanner :user="user" />
         </v-col>
       </v-row>
     </v-card>
@@ -73,7 +17,7 @@
             >
           </v-toolbar>
           <RadarChart
-            :user-skills="skills"
+            :user-skills="user.skills"
             :size="120"
             :height="330"
             :skill-categories="skillCategories"
@@ -95,24 +39,23 @@
             dense
             style="max-height: 345px"
           >
-            <div
-              v-for="(category, i) in getSkillsByCategories"
-              :key="category.name"
-            >
-              <v-subheader inset>{{ category.name }}</v-subheader>
+            <div v-for="(category, i) in categories" :key="category.name">
+              <v-subheader inset>{{ category.categoryName }}</v-subheader>
 
               <v-list-item
                 v-for="skill in category.skills"
-                :key="skill.name"
+                :key="skill._id"
                 link
-                @click="openSkillProfile(skill.skillId)"
+                @click="openSkillProfile(skill.skill._id)"
               >
                 <v-list-item-avatar>
                   <EsteemBadge :esteem="skill.esteem"></EsteemBadge>
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                  <v-list-item-title v-text="skill.name"></v-list-item-title>
+                  <v-list-item-title
+                    v-text="skill.skill.name"
+                  ></v-list-item-title>
                 </v-list-item-content>
 
                 <v-list-item-action>
@@ -128,9 +71,7 @@
                 </v-list-item-action>
               </v-list-item>
 
-              <v-divider
-                v-if="i !== getSkillsByCategories.length - 1"
-              ></v-divider>
+              <v-divider v-if="i !== categories.length - 1"></v-divider>
             </div>
           </v-list>
         </v-card>
@@ -150,6 +91,7 @@
 const EsteemBadge = () => import('../components/EsteemBadge');
 const RadarChart = () => import('../components/RadarChart');
 const ActivityFeed = () => import('../components/ActivityFeed');
+const ProfileBanner = () => import('../components/ProfileBanner');
 import { lightFormat, parseISO } from 'date-fns';
 import { mapGetters, mapActions } from 'vuex';
 
@@ -157,7 +99,8 @@ export default {
   components: {
     ActivityFeed,
     EsteemBadge,
-    RadarChart
+    RadarChart,
+    ProfileBanner
   },
   data() {
     return {
@@ -165,7 +108,6 @@ export default {
       loaded: false,
       user: {},
       similarUsers: [],
-      categories: [],
       skillCategories: [],
       userActivity: [],
       lightFormat,
@@ -174,77 +116,36 @@ export default {
   },
   computed: {
     ...mapGetters(['getUser']),
-    promoteBtnText() {
-      return this.user.isAdmin ? 'Demote' : 'Promote';
-    },
-    randomUserImg() {
-      return `https://randomuser.me/api/portraits/men/${Math.floor(
-        Math.random() * (Math.floor(65) - Math.ceil(1) + 1)
-      ) + 1}.jpg`;
-    },
-    skills() {
-      return this.user.skills;
-    },
-    getBestSkill() {
-      return this.user.skills.reduce(
-        (prev, current) => (prev.rating > current.rating ? prev : current),
-        0
-      );
-    },
-    getLowestSkill() {
-      return this.user.skills.reduce(
-        (prev, current) => (prev.rating > current.rating ? current : prev),
-        this.user.skills[0]
-      );
-    },
-    getSkillsByCategories() {
-      let cats = this.user.skills
-        .map(e => e['categoryName'])
-        .map((e, i, final) => final.indexOf(e) === i && i)
-        .filter(e => this.user.skills[e])
-        .map(e => {
-          return {
-            name: this.user.skills[e].categoryName,
-            skills: []
-          };
-        });
+    categories() {
+      const arr = [
+        ...new Set(this.user.skills.flat().map(el => el.skill.category.name))
+      ];
 
-      cats.forEach(cat => {
-        this.user.skills.forEach(skill => {
-          if (skill.categoryName === cat.name) {
-            cat.skills.push(skill);
-          }
-        });
-      });
+      const categories = arr.map(el => ({
+        categoryName: el,
+        skills: this.user.skills.filter(elm => elm.skill.category.name === el)
+      }));
 
-      return cats;
+      return categories;
     }
   },
   created() {
-    this.fetchUserById(this.$route.params.id)
-      .then(response => {
-        this.user = response.data;
-        this.loaded = true;
+    this.fetchUserById(this.$route.params.id).then(response => {
+      this.user = response.data;
+      this.loaded = true;
 
-        this.fetchParticipantActivity(this.user._id)
-          .then(res => {
-            console.log('test', res);
-            this.userActivity = res;
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      })
-      .catch(err => {
-        console.log(err);
-      })
-      .finally(() => this.$store.dispatch('setLoading', false));
+      this.fetchParticipantActivity(this.user._id)
+        .then(res => {
+          this.userActivity = res;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    });
 
-    this.fetchCategories()
-      .then(res => {
-        this.skillCategories = res.categories;
-      })
-      .catch(err => console.log(err));
+    this.fetchCategories().then(res => {
+      this.skillCategories = res.categories;
+    });
   },
   methods: {
     ...mapActions([
@@ -294,8 +195,9 @@ export default {
           });
 
           const skill = response.skill;
+
           this.user.skills = this.user.skills.map(x =>
-            x._id == skill._id ? skill : x
+            x._id == skill._id ? skill.skill : x
           );
         })
         .catch(() => {
