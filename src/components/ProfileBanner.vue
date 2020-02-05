@@ -65,7 +65,8 @@ export default {
   data() {
     return {
       lightFormat,
-      parseISO
+      parseISO,
+      vWeight: Number
     };
   },
   computed: {
@@ -87,9 +88,16 @@ export default {
   methods: {
     ...mapActions(['addAdmin', 'toggleSnackbar']),
     promoteToAdmin(user) {
+      if (!user.isAdmin === false) {
+        this.vWeight = 1;
+      } else {
+        this.vWeight = 5;
+      }
+      console.log(this.vWeight);
       this.addAdmin({
         uId: user._id,
         isAdmin: !user.isAdmin,
+        voteWeight: this.vWeight,
         email: user.email
       })
         .then(() => {
