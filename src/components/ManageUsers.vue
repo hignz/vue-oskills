@@ -31,11 +31,21 @@
             <template v-slot:activator="{ on }">
               <v-btn icon v-on="on">
                 <v-icon small>
-                  mdi-pencil
+                  mdi-delete
                 </v-icon>
               </v-btn>
             </template>
-            <span>Edit</span>
+            <span>Delete user</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn icon v-on="on">
+                <v-icon small @click="openUserProfile(item._id)">
+                  mdi-account-card-details
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>User profile</span>
           </v-tooltip>
         </template>
         <template v-slot:expanded-item="{ headers }">
@@ -92,7 +102,13 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['toggleSnackbar'])
+    ...mapActions(['toggleSnackbar']),
+    openUserProfile(userId) {
+      this.$router.push({
+        name: 'profile',
+        params: { id: userId }
+      });
+    }
   }
 };
 </script>
