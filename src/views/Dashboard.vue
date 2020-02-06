@@ -185,7 +185,7 @@ export default {
       this.loaded = true;
     });
 
-    this.fetchCategories().then(res => {
+    this.fetchCategoriesArchived('false').then(res => {
       this.skillCategories = res.categories;
     });
 
@@ -195,7 +195,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'fetchCategories',
+      'fetchCategoriesArchived',
       'fetchUser',
       'toggleSnackbar',
       'fetchRecentActivity'
