@@ -46,6 +46,11 @@ export default {
       return res.data;
     });
   },
+  fetchCategoriesArchived(_, value) {
+    return http.get(`/get-all-categories?archived=${value}`).then(res => {
+      return res.data;
+    });
+  },
   fetchAllSkills() {
     return http.get('/get-all-skills').then(res => {
       return res.data;
