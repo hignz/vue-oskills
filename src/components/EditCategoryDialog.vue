@@ -1,25 +1,31 @@
 <template>
-  <v-dialog v-model="dialog" max-width="500" @input="v => v || close()">
+  <v-dialog v-model="editDialog" max-width="500" @input="v => v || close()">
+          <template v-slot:activator="{ on }">
+            <v-btn icon v-on="on">
+              <v-icon small>
+                mdi-pencil
+              </v-icon>
+            </v-btn>
+          </template>
     <v-card>
-      <v-card-title>Edit Category</v-card-title>
+      <v-card-title class="mb-4">Edit Category</v-card-title>
 
-      <v-card-text>
-        <v-form ref="form" v-model="valid">
-          <v-text-field
-            v-model="name"
-            label="Name"
-            validate-on-blur
-            :rules="validationRules"
-            clearable
-          ></v-text-field>
-        </v-form>
-      </v-card-text>
+      <v-form ref="form" v-model="valid" @submit.prevent="onSubmit">
+        <v-card-text>
+            <v-text-field
+              v-model="name"
+              label="Name"
+              :rules="requiredRules"
+              clearable
+            ></v-text-field>
+        </v-card-text>
 
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn text @click="close()">Close</v-btn>
-        <v-btn color="primary" :disabled="!valid" @click="onSubmit">Edit Name</v-btn>
-      </v-card-actions>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text @click="close()">Close</v-btn>
+          <v-btn color="primary" :disabled="!valid" type="submit">Edit Name</v-btn>
+        </v-card-actions>
+      </v-form>
     </v-card>
   </v-dialog>
 </template>
@@ -33,30 +39,36 @@ export default {
   props: {
     category: {
       type: Object,
-      required: true,
-      default: null
+      default: () => null
     }
   },
   data() {
     return {
-      name: ''
+      valid: false,
+      name: '',
+      editDialog: false
     };
   },
   methods: {
     ...mapActions(['editCategory', 'toggleSnackbar']),
     onSubmit() {
+      console.log('test', this.category._id)
       if (this.$refs.form.validate()) {
         this.editCategory({
-          _id: this.category._id,
+          categoryId: this.category._id,
           name: this.name
         })
           .then(() => {
-            this.$refs.form.reset();
             this.toggleSnackbar({
               show: true,
               text: 'Category name has been changed',
               color: 'success'
             });
+            this.$emit('update', {
+          categoryId: this.category._id,
+          name: this.name
+              });
+            this.close();
           })
           .catch(err => {
             this.toggleSnackbar({
@@ -69,7 +81,7 @@ export default {
     },
     close() {
       this.$refs.form.reset();
-      this.dialog = !this.dialog;
+      this.editDialog = !this.editDialog;
     }
   }
 };
