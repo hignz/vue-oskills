@@ -173,30 +173,6 @@ export default {
       'toggleSnackbar',
       'addAdmin'
     ]),
-    promoteToAdmin(user) {
-      this.addAdmin({
-        uId: user._id,
-        isAdmin: !user.isAdmin,
-        email: user.email
-      })
-        .then(() => {
-          this.user.isAdmin = !this.user.isAdmin;
-          this.toggleSnackbar({
-            show: true,
-            text: this.user.isAdmin
-              ? `${this.user.name} has been promoted to admin`
-              : `${this.user.name} has been demoted from admin`,
-            color: this.user.isAdmin ? 'success' : 'orange darken-3'
-          });
-        })
-        .catch(() => {
-          this.toggleSnackbar({
-            show: true,
-            text: 'Something went wrong',
-            color: 'error'
-          });
-        });
-    },
     vote(skill) {
       this.voteSkill(skill._id)
         .then(response => {
