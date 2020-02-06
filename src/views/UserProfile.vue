@@ -160,18 +160,17 @@ export default {
       });
     });
 
-    this.fetchCategories().then(res => {
+    this.fetchCategoriesArchived('false').then(res => {
       this.skillCategories = res.categories;
     });
   },
   methods: {
     ...mapActions([
       'fetchUserById',
-      'fetchCategories',
+      'fetchCategoriesArchived',
       'voteSkill',
       'fetchParticipantActivity',
-      'toggleSnackbar',
-      'addAdmin'
+      'toggleSnackbar'
     ]),
     vote(skill) {
       this.voteSkill(skill._id)
