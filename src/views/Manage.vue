@@ -111,9 +111,10 @@ export default {
   },
   created() {
     this.fetchSkillsAndCategories();
+    this.fetchUsers();
   },
   methods: {
-    ...mapActions(['fetchAllSkills', 'fetchCategories']),
+    ...mapActions(['fetchAllSkills', 'fetchCategories', 'fetchAllUsers']),
     fetchSkillsAndCategories() {
       this.fetchAllSkills().then(res => {
         this.allSkills = res.skills;
@@ -133,6 +134,14 @@ export default {
     },
     update() {
       this.fetchSkillsAndCategories();
+    },
+    fetchUsers() {
+      this.fetchAllUsers().then(res => {
+        console.log(res);
+        console.log(res.data);
+        this.allUsers = res.data;
+        this.loaded = true;
+      });
     }
   }
 };
