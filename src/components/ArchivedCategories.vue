@@ -1,8 +1,10 @@
 <template>
   <v-card flat>
     <v-card-title
-      >Archived skills <span class="caption ml-2">({{ skills.length }})</span>
+      >Archived categories
+      <span class="caption ml-2">({{ categories.length }})</span>
       <v-spacer></v-spacer>
+      <EditCategoryDialog></EditCategoryDialog>
       <v-form>
         <v-text-field
           v-model="search"
@@ -16,20 +18,27 @@
     </v-card-title>
 
     <v-data-table
-      v-if="skills"
       :headers="headers"
-      :items="skills"
-      :items-per-page="10"
+      :items="categories"
       :search="search"
-      no-data-text="No archived skills loaded"
-      no-results-text="No archived skills found"
-      multi-sort
+      no-data-text="No archived categories loaded"
+      no-results-text="No archived categories found"
     >
       <template v-slot:item.action="{ item }">
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn icon v-on="on">
-              <v-icon small @click="showArchivedDialog(item)">
+              <v-icon small @click="showEditDialog(item)">
+                mdi-pencil
+              </v-icon>
+            </v-btn>
+          </template>
+          <span>Edit</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn icon v-on="on">
+              <v-icon small @click="showUnarchiveDialog(item)">
                 mdi-archive-arrow-up
               </v-icon>
             </v-btn>
@@ -38,7 +47,7 @@
         </v-tooltip>
       </template>
     </v-data-table>
-    <v-dialog v-model="archivedDialog" width="500" @input="v => v || close()">
+    <v-dialog v-model="unarchiveDialog" width="500" @input="v => v || close()">
       <v-card>
         <v-card-title class="headline" primary-title>
           Are you sure?
@@ -50,17 +59,18 @@
             disable-sort
             :headers="[
               {
-                text: 'Skill',
-                align: 'center',
+                text: 'Name',
+                align: 'left',
                 value: 'name'
-              },
-              { text: 'Category', value: 'categoryName', align: 'left' }
+              }
             ]"
-            :items="[selectedSkill]"
+            :items="[selectedCategory]"
             hide-default-footer
           >
           </v-data-table>
-          Are you sure you want to unarchive {{ selectedSkill.name }}?
+          Are you sure you want to unarchive {{ selectedCategory.name }}? This
+          action will also unarchive all skills under this category, making them
+          available for users.
         </v-card-text>
 
         <v-divider></v-divider>
@@ -70,7 +80,7 @@
           <v-btn text @click="closeDialog()">
             Close
           </v-btn>
-          <v-btn color="error" @click="doUnarchiveSkill()">
+          <v-btn color="error" @click="doUnarchiveCategory()">
             Unarchive
           </v-btn>
         </v-card-actions>
@@ -80,11 +90,15 @@
 </template>
 
 <script>
+import EditCategoryDialog from '../components/EditCategoryDialog';
 import { mapActions } from 'vuex';
 
 export default {
+  components: {
+    EditCategoryDialog
+  },
   props: {
-    skills: {
+    categories: {
       type: Array,
       default: () => []
     }
@@ -92,7 +106,6 @@ export default {
   data() {
     return {
       search: '',
-      loaded: false,
       headers: [
         {
           text: 'Name',
@@ -100,38 +113,37 @@ export default {
           sortable: true,
           value: 'name'
         },
-        { text: 'Category', value: 'category.name' },
-        { text: 'Actions', value: 'action', sortable: false, align: 'center' }
+        {
+          text: 'Actions',
+          value: 'action',
+          sortable: false,
+          align: 'center'
+        }
       ],
-      selectedSkill: {},
-      archivedDialog: false
+      unarchiveDialog: false,
+      selectedCategory: {}
     };
   },
-  computed: {
-    archivedSkills() {
-      return this.skills;
-    }
-  },
   methods: {
-    ...mapActions(['unarchiveSkill', 'toggleSnackbar']),
-    doUnarchiveSkill() {
-      this.unarchiveSkill(this.selectedSkill._id).then(res => {
+    ...mapActions(['unarchiveCategory', 'toggleSnackbar']),
+    showUnarchiveDialog(item) {
+      this.selectedCategory = item;
+      this.unarchiveDialog = true;
+    },
+    doUnarchiveCategory() {
+      this.unarchiveCategory(this.selectedCategory._id).then(res => {
         this.toggleSnackbar({
           show: true,
           color: 'success',
           text: res.message
         });
 
-        this.$emit('unarchive', this.selectedSkill);
+        this.$emit('unarchive', this.selectedCategory);
         this.closeDialog();
       });
     },
-    showArchivedDialog(item) {
-      this.selectedSkill = item;
-      this.archivedDialog = true;
-    },
     closeDialog() {
-      this.archivedDialog = !this.archivedDialog;
+      this.unarchiveDialog = !this.unarchiveDialog;
     }
   }
 };

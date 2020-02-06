@@ -1,22 +1,57 @@
 <template>
   <v-container fluid>
-    <v-row v-if="loaded" justify="center" align="center">
-      <v-col cols="12" sm="12">
-        <ManageSkills
-          :skills="unarchivedSkills"
-          @archived="addToArchivedSkills"
-        />
-      </v-col>
-      <v-col cols="12" sm="12">
-        <ManageArchivedSkills
-          :skills="archivedSkills"
-          @unarchived="addToUnarchivedSkills"
-        />
-      </v-col>
-      <v-col cols="12" sm="12">
-        <ManageCategories :categories="allCategories" />
-      </v-col>
-    </v-row>
+    <v-tabs v-model="tab" @change="update">
+      <v-tabs-slider></v-tabs-slider>
+
+      <v-tab href="#tab-1">
+        Skills
+      </v-tab>
+      <v-tab href="#tab-2">
+        Categories
+      </v-tab>
+
+      <v-tabs-items v-model="tab">
+        <v-tab-item
+          value="tab-1"
+          :transition="false"
+          :reverse-transition="false"
+        >
+          <v-row v-if="loaded" justify="center" align="center">
+            <v-col cols="12" sm="12">
+              <ManageSkills :skills="unarchivedSkills" @archive="archive" />
+              <v-divider></v-divider>
+            </v-col>
+            <v-col cols="12" sm="12">
+              <ManageArchivedSkills
+                :skills="archivedSkills"
+                @unarchive="unarchive"
+              />
+            </v-col>
+          </v-row>
+        </v-tab-item>
+        <v-tab-item
+          value="tab-2"
+          :transition="false"
+          :reverse-transition="false"
+        >
+          <v-row v-if="loaded" justify="center" align="center">
+            <v-col cols="12" sm="12">
+              <ManageCategories
+                :categories="unarchivedCategories"
+                @archive="archive"
+              />
+              <v-divider></v-divider>
+            </v-col>
+            <v-col cols="12" sm="12">
+              <ArchivedCategories
+                :categories="archivedCategories"
+                @unarchive="unarchive"
+              />
+            </v-col>
+          </v-row>
+        </v-tab-item>
+      </v-tabs-items>
+    </v-tabs>
   </v-container>
 </template>
 
@@ -24,19 +59,22 @@
 import ManageSkills from '../components/ManageSkills';
 import ManageArchivedSkills from '../components/ManageArchivedSkills';
 import ManageCategories from '../components/ManageCategories';
+import ArchivedCategories from '../components/ArchivedCategories';
 import { mapActions } from 'vuex';
 
 export default {
   components: {
     ManageSkills,
     ManageCategories,
-    ManageArchivedSkills
+    ManageArchivedSkills,
+    ArchivedCategories
   },
   data() {
     return {
       allSkills: [],
       allCategories: [],
-      loaded: false
+      loaded: false,
+      tab: null
     };
   },
   computed: {
@@ -54,23 +92,29 @@ export default {
     }
   },
   created() {
-    this.fetchAllSkills().then(res => {
-      this.allSkills = res.skills;
-      this.loaded = true;
-    });
-
-    this.fetchCategories().then(res => {
-      this.allCategories = res.categories;
-      this.loaded = true;
-    });
+    this.fetchSkillsAndCategories();
   },
   methods: {
     ...mapActions(['fetchAllSkills', 'fetchCategories']),
-    addToUnarchivedSkills(skill) {
-      skill.archived = false;
+    fetchSkillsAndCategories() {
+      this.fetchAllSkills().then(res => {
+        this.allSkills = res.skills;
+        this.loaded = true;
+      });
+
+      this.fetchCategories().then(res => {
+        this.allCategories = res.categories;
+        this.loaded = true;
+      });
     },
-    addToArchivedSkills(skill) {
-      skill.archived = true;
+    unarchive(item) {
+      item.archived = false;
+    },
+    archive(item) {
+      item.archived = true;
+    },
+    update() {
+      this.fetchSkillsAndCategories();
     }
   }
 };

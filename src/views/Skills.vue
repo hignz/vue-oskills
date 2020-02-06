@@ -138,7 +138,7 @@ export default {
       })
       .catch(err => console.log(err));
 
-    this.fetchCategories()
+    this.fetchCategoriesArchived('false')
       .then(res => {
         this.skillCategories = res.categories;
       })
@@ -147,7 +147,7 @@ export default {
   methods: {
     ...mapActions([
       'fetchUserSkills',
-      'fetchCategories',
+      'fetchCategoriesArchived',
       'fetchDeleteSkill',
       'toggleSnackbar'
     ]),

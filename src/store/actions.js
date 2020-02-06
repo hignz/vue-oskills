@@ -46,6 +46,11 @@ export default {
       return res.data;
     });
   },
+  fetchCategoriesArchived(_, value) {
+    return http.get(`/get-all-categories?archived=${value}`).then(res => {
+      return res.data;
+    });
+  },
   fetchAllSkills() {
     return http.get('/get-all-skills').then(res => {
       return res.data;
@@ -188,12 +193,27 @@ export default {
     commit(constants.TOGGLE_SNACKBAR, snackbarData);
   },
   archiveSkill(_, skillId) {
-    return http.post('/archive-skill', { skillId: skillId }).then(res => {
+    return http.post('/archive-skill', { skillId }).then(res => {
       return res.data;
     });
   },
   unarchiveSkill(_, skillId) {
-    return http.post('/unarchive-skill', { skillId: skillId }).then(res => {
+    return http.post('/unarchive-skill', { skillId }).then(res => {
+      return res.data;
+    });
+  },
+  archiveCategory(_, categoryId) {
+    return http.post('/archive-category', { categoryId }).then(res => {
+      return res.data;
+    });
+  },
+  unarchiveCategory(_, categoryId) {
+    return http.post('/unarchive-category', { categoryId }).then(res => {
+      return res.data;
+    });
+  },
+  fetchAdminDashboardData(_) {
+    return http.get('/admin-dashboard').then(res => {
       return res.data;
     });
   }

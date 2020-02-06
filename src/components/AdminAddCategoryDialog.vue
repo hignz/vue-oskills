@@ -6,7 +6,7 @@
       </v-btn>
     </template>
     <v-card>
-      <v-card-title>Add Category</v-card-title>
+      <v-card-title class="mb-4">Add category</v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid">
           <v-text-field

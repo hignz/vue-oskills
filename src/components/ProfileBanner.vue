@@ -24,16 +24,16 @@
         </v-tooltip> -->
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-chip class="ma-2" color="primary" v-on="on">
+            <v-chip class="ma-2" v-on="on">
               <v-icon class="pa-1" left>mdi-calendar-range</v-icon>
-              {{ lightFormat(parseISO(user.dateJoined), 'dd-mm-yyyy') }}
+              {{ (lightFormat(user.dateJoined), 'dd-mm-yyyy') }}
             </v-chip>
           </template>
           <span>When {{ user.name }} joined OSkills.</span>
         </v-tooltip>
         <v-tooltip v-if="bestSkill" bottom>
           <template v-slot:activator="{ on }">
-            <v-chip class="ma-2" color="primary" v-on="on">
+            <v-chip class="ma-2" v-on="on">
               <v-icon class="pa-1" left>mdi-star</v-icon>
               {{ bestSkill.skill.name }}
             </v-chip>
@@ -65,7 +65,8 @@ export default {
   data() {
     return {
       lightFormat,
-      parseISO
+      parseISO,
+      vWeight: Number
     };
   },
   computed: {
@@ -87,9 +88,15 @@ export default {
   methods: {
     ...mapActions(['addAdmin', 'toggleSnackbar']),
     promoteToAdmin(user) {
+      if (user.isAdmin === false) {
+        this.vWeight = 5;
+      } else {
+        this.vWeight = 1;
+      }
       this.addAdmin({
         uId: user._id,
         isAdmin: !user.isAdmin,
+        voteWeight: this.vWeight,
         email: user.email
       })
         .then(() => {
