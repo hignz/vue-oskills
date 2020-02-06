@@ -88,12 +88,11 @@ export default {
   methods: {
     ...mapActions(['addAdmin', 'toggleSnackbar']),
     promoteToAdmin(user) {
-      if (!user.isAdmin === false) {
-        this.vWeight = 1;
-      } else {
+      if (user.isAdmin === false) {
         this.vWeight = 5;
+      } else {
+        this.vWeight = 1;
       }
-      console.log(this.vWeight);
       this.addAdmin({
         uId: user._id,
         isAdmin: !user.isAdmin,
