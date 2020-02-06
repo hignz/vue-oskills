@@ -21,8 +21,8 @@
       :headers="headers"
       :items="categories"
       :search="search"
-      no-data-text="No categories loaded"
-      no-results-text="No categories found"
+      no-data-text="No archived categories loaded"
+      no-results-text="No archived categories found"
     >
       <template v-slot:item.action="{ item }">
         <v-tooltip bottom>

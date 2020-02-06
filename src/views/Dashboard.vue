@@ -38,18 +38,6 @@
                 >
               </v-row>
             </v-col>
-            <v-col sm="12" md="6">
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <v-btn icon :to="{ path: 'admin' }" v-on="on">
-                    <v-icon large>
-                      mdi-swap-horizontal
-                    </v-icon>
-                  </v-btn>
-                </template>
-                <span>Admin</span>
-              </v-tooltip>
-            </v-col>
           </v-row>
         </v-col>
         <v-col
@@ -77,6 +65,18 @@
           </v-row>
         </v-col>
       </v-row>
+      <v-card-actions class="pt-0 ml-8">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn icon :to="{ path: 'admin' }" v-on="on">
+              <v-icon large>
+                mdi-swap-horizontal
+              </v-icon>
+            </v-btn>
+          </template>
+          <span>Admin</span>
+        </v-tooltip>
+      </v-card-actions>
     </v-card>
 
     <v-row>
