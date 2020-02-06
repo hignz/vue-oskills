@@ -1,12 +1,12 @@
 <template>
   <v-dialog v-model="editDialog" max-width="500" @input="v => v || close()">
-          <template v-slot:activator="{ on }">
-            <v-btn icon v-on="on">
-              <v-icon small>
-                mdi-pencil
-              </v-icon>
-            </v-btn>
-          </template>
+    <template v-slot:activator="{ on }">
+      <v-btn icon v-on="on">
+        <v-icon small>
+          mdi-pencil
+        </v-icon>
+      </v-btn>
+    </template>
     <v-card>
       <v-card-title class="mb-4">Edit Category</v-card-title>
 
