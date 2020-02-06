@@ -188,12 +188,27 @@ export default {
     commit(constants.TOGGLE_SNACKBAR, snackbarData);
   },
   archiveSkill(_, skillId) {
-    return http.post('/archive-skill', { skillId: skillId }).then(res => {
+    return http.post('/archive-skill', { skillId }).then(res => {
       return res.data;
     });
   },
   unarchiveSkill(_, skillId) {
-    return http.post('/unarchive-skill', { skillId: skillId }).then(res => {
+    return http.post('/unarchive-skill', { skillId }).then(res => {
+      return res.data;
+    });
+  },
+  archiveCategory(_, categoryId) {
+    return http.post('/archive-category', { categoryId }).then(res => {
+      return res.data;
+    });
+  },
+  unarchiveCategory(_, categoryId) {
+    return http.post('/unarchive-category', { categoryId }).then(res => {
+      return res.data;
+    });
+  },
+  fetchAdminDashboardData(_) {
+    return http.get('/admin-dashboard').then(res => {
       return res.data;
     });
   }

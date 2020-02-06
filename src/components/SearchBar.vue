@@ -85,7 +85,7 @@ export default {
           ? { name: 'skillProfile', params: { id: this.model._id } }
           : {
               name: 'profile',
-              params: { id: this.model._id, user: this.model }
+              params: { id: this.model._id }
             };
         this.$router.push(route);
       }

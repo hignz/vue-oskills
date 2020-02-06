@@ -17,12 +17,18 @@
             >
           </v-toolbar>
           <RadarChart
+            v-if="user.skills.length"
             :user-skills="user.skills"
             :size="120"
             :height="330"
             :skill-categories="skillCategories"
             class="pr-2"
           ></RadarChart>
+          <v-card-text v-else>
+            <p class="text-center grey--text">
+              This user has not added any skills yet
+            </p>
+          </v-card-text>
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
@@ -34,6 +40,7 @@
           </v-toolbar>
 
           <v-list
+            v-if="categories.length"
             subheader
             class="overflow-y-auto"
             dense
@@ -74,14 +81,25 @@
               <v-divider v-if="i !== categories.length - 1"></v-divider>
             </div>
           </v-list>
+          <v-card-text v-else>
+            <p class="text-center grey--text">
+              This user has not added any skills yet
+            </p>
+          </v-card-text>
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <ActivityFeed
-          v-if="userActivity.length"
-          :activity-data="userActivity"
-          :is-real-time="false"
-        ></ActivityFeed>
+        <v-card>
+          <ActivityFeed
+            v-if="userActivity.length"
+            :activity-data="userActivity"
+            :is-real-time="false"
+          ></ActivityFeed>
+
+          <v-card-text v-else>
+            <p>dsadsa</p>
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -117,6 +135,9 @@ export default {
   computed: {
     ...mapGetters(['getUser']),
     categories() {
+      if (!this.user.skills.length) {
+        return [];
+      }
       const arr = [
         ...new Set(this.user.skills.flat().map(el => el.skill.category.name))
       ];
@@ -134,13 +155,9 @@ export default {
       this.user = response.data;
       this.loaded = true;
 
-      this.fetchParticipantActivity(this.user._id)
-        .then(res => {
-          this.userActivity = res;
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      this.fetchParticipantActivity(this.user._id).then(res => {
+        this.userActivity = res;
+      });
     });
 
     this.fetchCategories().then(res => {

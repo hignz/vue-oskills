@@ -55,8 +55,6 @@ export default {
   methods: {
     ...mapActions(['fetchRecentUsersSlim', 'setLoading']),
     openProfile(userId) {
-      this.setLoading(true);
-
       this.$router.push({
         name: 'profile',
         params: { id: userId }
