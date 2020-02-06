@@ -9,6 +9,9 @@
       <v-tab href="#tab-2">
         Categories
       </v-tab>
+      <v-tab href="#tab-3">
+        Users
+      </v-tab>
 
       <v-tabs-items v-model="tab">
         <v-tab-item
@@ -50,6 +53,18 @@
             </v-col>
           </v-row>
         </v-tab-item>
+        <v-tab-item
+          value="tab-3"
+          :transition="false"
+          :reverse-transition="false"
+        >
+          <v-row v-if="loaded" justify="center" align="center">
+            <v-col cols="12" sm="12">
+              <ManageUsers :users="allUsers" />
+              <v-divider></v-divider>
+            </v-col>
+          </v-row>
+        </v-tab-item>
       </v-tabs-items>
     </v-tabs>
   </v-container>
@@ -60,6 +75,7 @@ import ManageSkills from '../components/ManageSkills';
 import ManageArchivedSkills from '../components/ManageArchivedSkills';
 import ManageCategories from '../components/ManageCategories';
 import ArchivedCategories from '../components/ArchivedCategories';
+import ManageUsers from '../components/ManageUsers';
 import { mapActions } from 'vuex';
 
 export default {
@@ -67,12 +83,14 @@ export default {
     ManageSkills,
     ManageCategories,
     ManageArchivedSkills,
-    ArchivedCategories
+    ArchivedCategories,
+    ManageUsers
   },
   data() {
     return {
       allSkills: [],
       allCategories: [],
+      allUsers: [],
       loaded: false,
       tab: null
     };
