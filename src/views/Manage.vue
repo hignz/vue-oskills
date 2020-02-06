@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-tabs v-model="tab">
+    <v-tabs v-model="tab" @change="update">
       <v-tabs-slider></v-tabs-slider>
 
       <v-tab href="#tab-1">
@@ -92,23 +92,29 @@ export default {
     }
   },
   created() {
-    this.fetchAllSkills().then(res => {
-      this.allSkills = res.skills;
-      this.loaded = true;
-    });
-
-    this.fetchCategories().then(res => {
-      this.allCategories = res.categories;
-      this.loaded = true;
-    });
+    this.fetchSkillsAndCategories();
   },
   methods: {
     ...mapActions(['fetchAllSkills', 'fetchCategories']),
+    fetchSkillsAndCategories() {
+      this.fetchAllSkills().then(res => {
+        this.allSkills = res.skills;
+        this.loaded = true;
+      });
+
+      this.fetchCategories().then(res => {
+        this.allCategories = res.categories;
+        this.loaded = true;
+      });
+    },
     unarchive(item) {
       item.archived = false;
     },
     archive(item) {
       item.archived = true;
+    },
+    update() {
+      this.fetchSkillsAndCategories();
     }
   }
 };
