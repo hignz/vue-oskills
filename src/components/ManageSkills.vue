@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-card>
+    <v-card flat>
       <v-card-title
-        >Skills ({{ skills.length }})
+        >Skills <span class="caption ml-2">({{ skills.length }})</span>
         <v-spacer></v-spacer>
         <v-form>
           <v-text-field
@@ -25,7 +25,6 @@
         no-data-text="No skills loaded"
         no-results-text="No skills found"
         multi-sort
-        class="elevation-1"
       >
         <template v-slot:item.action="{ item }">
           <v-tooltip bottom>
@@ -130,7 +129,7 @@ export default {
           text: res.message
         });
 
-        this.$emit('archived', this.selectedSkill);
+        this.$emit('archive', this.selectedSkill);
         this.closeDialog();
       });
     },

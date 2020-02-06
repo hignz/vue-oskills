@@ -1,7 +1,7 @@
 <template>
-  <v-card>
+  <v-card flat>
     <v-card-title
-      >Archived skills ({{ skills.length }})
+      >Archived skills <span class="caption ml-2">({{ skills.length }})</span>
       <v-spacer></v-spacer>
       <v-form>
         <v-text-field
@@ -24,7 +24,6 @@
       no-data-text="No archived skills loaded"
       no-results-text="No archived skills found"
       multi-sort
-      class="elevation-1"
     >
       <template v-slot:item.action="{ item }">
         <v-tooltip bottom>
@@ -101,7 +100,7 @@ export default {
           sortable: true,
           value: 'name'
         },
-        { text: 'Category', value: 'categoryName' },
+        { text: 'Category', value: 'category.name' },
         { text: 'Actions', value: 'action', sortable: false, align: 'center' }
       ],
       selectedSkill: {},
@@ -123,7 +122,7 @@ export default {
           text: res.message
         });
 
-        this.$emit('unarchived', this.selectedSkill);
+        this.$emit('unarchive', this.selectedSkill);
         this.closeDialog();
       });
     },
