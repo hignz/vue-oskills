@@ -152,7 +152,7 @@ export default {
     });
   },
   editCategory(_, categoryData) {
-    return http.post('/edit-category', { categoryData }).then(res => {
+    return http.post('/edit-category', categoryData).then(res => {
       return res.data;
     });
   },
