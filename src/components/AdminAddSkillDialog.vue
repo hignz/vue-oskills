@@ -6,7 +6,7 @@
       </v-btn>
     </template>
     <v-card>
-      <v-card-title>Add Skill</v-card-title>
+      <v-card-title class="mb-4">Add skill</v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid">
           <v-select
@@ -19,14 +19,21 @@
             return-object
           >
           </v-select>
+          <v-checkbox
+            v-model="showArchivedCategories"
+            label="Show archived categories"
+            input-value="false"
+            value
+          ></v-checkbox>
           <v-text-field
             v-model="skillName"
             label="Skill"
             :rules="requiredRules"
           ></v-text-field>
           <v-checkbox
-            v-model="archived"
+            v-model="archiveSkill"
             label="Archive"
+            :disabled="lockArchiveSkill"
             input-value="false"
             value
           ></v-checkbox>
@@ -56,35 +63,66 @@ export default {
       skillName: null,
       dialog: false,
       valid: false,
-      archived: false
+      archiveSkill: false,
+      showArchivedCategories: false,
+      lockArchiveSkill: false
     };
   },
+  watch: {
+    showArchivedCategories(newValue, oldValue) {
+      if (newValue) {
+        this.lockArchiveSkill = true;
+        this.archiveSkill = true;
+
+        this.fetchArchivedCategories();
+      } else {
+        this.$refs.form.reset();
+
+        this.lockArchiveSkill = false;
+        this.archiveSkill = false;
+
+        this.fetchUnarchivedCategories();
+      }
+    }
+  },
   created() {
-    this.fetchCategories()
-      .then(response => {
-        this.categories = response.categories.map(c => {
+    this.fetchUnarchivedCategories();
+  },
+  methods: {
+    ...mapActions([
+      'fetchCategories',
+      'fetchCategoriesArchived',
+      'fetchAllSkills',
+      'addSkill',
+      'toggleSnackbar'
+    ]),
+    fetchArchivedCategories() {
+      this.fetchCategoriesArchived('true').then(res => {
+        this.categories = res.categories.map(c => {
           return {
             categoryName: c.name,
             categoryId: c._id
           };
         });
-      })
-      .catch(err => {
-        console.log(err);
       });
-  },
-  methods: {
-    ...mapActions([
-      'fetchCategories',
-      'fetchAllSkills',
-      'addSkill',
-      'toggleSnackbar'
-    ]),
+    },
+    fetchUnarchivedCategories() {
+      this.fetchCategoriesArchived('false').then(res => {
+        this.categories = res.categories.map(c => {
+          return {
+            categoryName: c.name,
+            categoryId: c._id
+          };
+        });
+      });
+    },
     addNewSkill() {
+      const archived = this.archiveSkill;
+
       this.addSkill({
         name: this.skillName,
         categoryId: this.selectedCategory.categoryId,
-        archived: this.archived
+        archived: this.archiveSkill
       })
         .then(() => {
           this.close();
@@ -93,11 +131,13 @@ export default {
             text: 'Skill added successfully',
             color: 'success'
           });
+
+          this.$emit('skillAdded', archived ? 0 : 1);
         })
-        .catch(() => {
+        .catch(err => {
           this.toggleSnackbar({
             show: true,
-            text: 'Something went wrong',
+            text: err.response.data.error,
             color: 'error'
           });
         });
