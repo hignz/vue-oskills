@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container v-if="loaded" fluid>
     <v-row class="text-center" align="stretch" justify="space-around">
       <v-col cols="12" sm="12" md="4">
         <v-card>Hello, admin</v-card>
@@ -8,7 +8,7 @@
         <v-card>
           <v-card-subtitle class="title">Total users</v-card-subtitle>
           <v-card-text class="title font-weight-bold primary--text">
-            54
+            {{ stats.userCount }}
           </v-card-text>
           <v-card-actions class="justify-center pt-0">
             <InviteUserDialog />
@@ -27,7 +27,7 @@
         <v-card>
           <v-card-subtitle class="title">Total skills</v-card-subtitle>
           <v-card-text class="title font-weight-bold primary--text">
-            124
+            {{ stats.skillCount }}
           </v-card-text>
           <v-card-actions class="justify-center pt-0">
             <AdminAddSkillDialog></AdminAddSkillDialog>
@@ -117,16 +117,23 @@ export default {
   },
   data() {
     return {
-      recentActivityData: []
+      loaded: false,
+      recentActivityData: [],
+      stats: {}
     };
   },
   created() {
+    this.fetchAdminDashboardData().then(res => {
+      this.stats = res;
+    });
     this.fetchRecentActivity().then(res => {
       this.recentActivityData = res;
+
+      this.loaded = true;
     });
   },
   methods: {
-    ...mapActions(['fetchRecentActivity'])
+    ...mapActions(['fetchRecentActivity', 'fetchAdminDashboardData'])
   }
 };
 </script>
