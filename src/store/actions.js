@@ -14,6 +14,11 @@ export default {
       return res.data;
     });
   },
+  deleteUser(_, userId) {
+    return http.delete('/delete/' + userId).then(res => {
+      return res.data;
+    });
+  },
   fetchUserById(_, id) {
     return http.get('/user/' + id).then(res => {
       return res.data;
