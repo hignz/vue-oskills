@@ -10,6 +10,10 @@ export default {
         v => !!v || 'Password is required',
         v => v === this.password || 'Passwords must match',
         v => v.length > 7 || 'Password must be at least 8 characters'
+      ],
+      nameRules: [
+        v => !!v || 'Required',
+        v => v.length > 2 || 'Name must be at least 3 characters'
       ]
     };
   },
