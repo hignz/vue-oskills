@@ -60,19 +60,14 @@
 import { mapActions } from 'vuex';
 
 export default {
-  props: {
-    skillCategories: {
-      type: Array,
-      default: () => []
-    }
-  },
   data() {
     return {
       skills: [],
       selectedSkill: null,
       dialog: false,
       loadingSkills: false,
-      addSkillLoading: false
+      addSkillLoading: false,
+      skillCategories: []
     };
   },
   computed: {
@@ -85,12 +80,21 @@ export default {
       });
     }
   },
-  created() {},
+  watch: {
+    dialog(opened) {
+      if (opened) {
+        this.fetchCategoriesArchived('false').then(res => {
+          this.skillCategories = res.categories;
+        });
+      }
+    }
+  },
   methods: {
     ...mapActions([
       'fetchSkillsByCategory',
       'addSkillToUser',
-      'toggleSnackbar'
+      'toggleSnackbar',
+      'fetchCategoriesArchived'
     ]),
     populateSkills(categoryId) {
       this.loadingSkills = true;

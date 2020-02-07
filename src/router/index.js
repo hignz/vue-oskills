@@ -85,7 +85,18 @@ const routes = [
     component: () => import('@/views/Manage'),
     meta: { requiresAdmin: true }
   },
-
+  {
+    path: '/forgot-password',
+    name: 'forgotpassword',
+    component: () => import('@/views/ForgotPassword'),
+    meta: { requiresVisitor: true }
+  },
+  {
+    path: '/change-password/:resetToken',
+    name: 'changePassword',
+    component: () => import('@/views/ChangePassword'),
+    meta: { requiresVisitor: true }
+  },
   {
     path: '*',
     redirect: '/'

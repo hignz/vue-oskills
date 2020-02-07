@@ -4,7 +4,7 @@
       <v-card-title>
         My skills
         <v-spacer></v-spacer>
-        <AddSkillDialog :skill-categories="skillCategories" />
+        <AddSkillDialog />
         <v-form>
           <v-text-field
             v-model="searchTerm"
@@ -135,12 +135,6 @@ export default {
       .then(() => {
         this.initialize();
         this.loaded = true;
-      })
-      .catch(err => console.log(err));
-
-    this.fetchCategoriesArchived('false')
-      .then(res => {
-        this.skillCategories = res.categories;
       })
       .catch(err => console.log(err));
   },

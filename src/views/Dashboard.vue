@@ -126,10 +126,7 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <SkillList
-          :skills="topThreeSkills"
-          :skill-categories="skillCategories"
-        ></SkillList>
+        <SkillList :skills="topThreeSkills"></SkillList>
       </v-col>
       <v-col cols="12" md="4" sm="12">
         <v-card>
@@ -181,25 +178,13 @@ export default {
     ...mapGetters(['topThreeSkills', 'skills'])
   },
   created() {
-    this.fetchUser().then(() => {
-      this.loaded = true;
-    });
-
-    this.fetchCategoriesArchived('false').then(res => {
-      this.skillCategories = res.categories;
-    });
-
     this.fetchRecentActivity().then(res => {
       this.recentActivityData = res;
+      this.loaded = true;
     });
   },
   methods: {
-    ...mapActions([
-      'fetchCategoriesArchived',
-      'fetchUser',
-      'toggleSnackbar',
-      'fetchRecentActivity'
-    ]),
+    ...mapActions(['fetchRecentActivity']),
     switchUsersList(menuItem, i) {
       this.usersCardTitle = menuItem.title;
       this.usersMenuIndex = i;

@@ -28,6 +28,9 @@
             @click:append="() => (hidePassword = !hidePassword)"
           >
           </v-text-field>
+          <v-btn text small color="primary" :to="{ path: 'forgot-password' }"
+            >Forgot password?</v-btn
+          >
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
