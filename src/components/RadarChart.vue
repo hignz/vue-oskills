@@ -4,7 +4,6 @@
       v-if="userSkills.length || user.skills.length"
       type="radar"
       :height="height"
-      width="100%"
       :options="chartOptions"
       :series="chartSeries"
     />
@@ -12,7 +11,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters, mapState, mapActions } from 'vuex';
 import VueApexCharts from 'vue-apexcharts';
 
 export default {
@@ -20,10 +19,6 @@ export default {
     apexcharts: VueApexCharts
   },
   props: {
-    skillCategories: {
-      type: Array,
-      default: () => []
-    },
     userSkills: {
       type: Array,
       default: () => []
@@ -41,16 +36,21 @@ export default {
       default: () => 500
     }
   },
+  data() {
+    return {
+      skillCategories: []
+    };
+  },
+  created() {
+    this.fetchCategoriesArchived('false').then(res => {
+      this.skillCategories = res.categories;
+    });
+  },
   computed: {
     ...mapGetters(['skills', 'isDark', 'accentColor']),
     ...mapState(['user']),
     chartSeries() {
-      return [
-        {
-          name: 'Total Category Esteem',
-          data: this.categoryTotals
-        }
-      ];
+      return this.seris;
     },
     chartOptions() {
       return {
@@ -61,7 +61,7 @@ export default {
         stroke: {
           show: true,
           width: 3,
-          colors: [localStorage.getItem('accentColor')],
+          colors: [localStorage.getItem('accentColor'), '#DC3912'],
           dashArray: 0
         },
         theme: {
@@ -69,7 +69,7 @@ export default {
         },
         fill: {
           opacity: 0.7,
-          colors: [localStorage.getItem('accentColor')]
+          colors: [localStorage.getItem('accentColor'), '#DC3912']
         },
         plotOptions: {
           radar: {
@@ -81,14 +81,13 @@ export default {
             }
           }
         },
-
         yaxis: {
           labels: {
             formatter: val => val.toFixed(0)
           }
         },
         markers: {
-          colors: [localStorage.getItem('accentColor')],
+          colors: [localStorage.getItem('accentColor'), '#DC3912'],
           size: 4
         },
         tooltip: {
@@ -100,35 +99,40 @@ export default {
         labels: this.categoryLabels
       };
     },
-    categories() {
-      let categories = this.skillCategories.map(e => {
-        return { name: e.name, skills: [] };
-      });
 
-      const s = this.userSkills.length ? this.userSkills : this.user.skills;
-      categories.forEach(category => {
-        s.forEach(skill => {
-          if (skill.skill.category.name === category.name) {
-            category.skills.push(skill);
-          }
-        });
-      });
-
-      return categories.sort((a, b) => b.name - a.name);
-    },
     categoryLabels() {
-      return this.categories.map(el => el.name);
+      return this.skillCategories.map(el => el.name);
     },
-    categoryTotals() {
-      let l = this.categories.map(el =>
+    seris() {
+      const series = this.userSkills.length
+        ? [
+            {
+              name: 'You',
+              data: this.categories(this.user.skills)
+            },
+            {
+              name: 'User',
+              data: this.categories(this.userSkills)
+            }
+          ]
+        : [{ name: 'You', data: this.categories(this.user.skills) }];
+
+      return series;
+    }
+  },
+  methods: {
+    ...mapActions(['fetchCategoriesArchived']),
+    categories(skills) {
+      let categories = this.skillCategories
+        .map(el => ({
+          name: el.name,
+          skills: skills.filter(elm => elm.skill.category.name === el.name)
+        }))
+        .sort((a, b) => b.name - a.name);
+
+      return categories.map(el =>
         el.skills.reduce((acc, curr) => acc + curr.esteem, 0)
       );
-
-      return l;
-    },
-
-    bestSkill() {
-      return [...this.categoryTotals].sort((a, b) => b - a).slice(0, 1);
     }
   }
 };
