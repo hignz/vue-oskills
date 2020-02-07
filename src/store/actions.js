@@ -216,5 +216,20 @@ export default {
     return http.get('/admin-dashboard').then(res => {
       return res.data;
     });
+  },
+  doPasswordResetRequest(_, email) {
+    return http.post('/forgot-password', { email }).then(res => {
+      return res.data;
+    });
+  },
+  verifyResetRequest(_, resetToken) {
+    return http.post('/verify-reset-request', { resetToken }).then(res => {
+      return res.data;
+    });
+  },
+  resetPassword(_, resetData) {
+    return http.post('/reset-password', resetData).then(res => {
+      return res.data;
+    });
   }
 };
