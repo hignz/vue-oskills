@@ -26,7 +26,7 @@
           <template v-slot:activator="{ on }">
             <v-chip class="ma-2" v-on="on">
               <v-icon class="pa-1" left>mdi-calendar-range</v-icon>
-              {{ (lightFormat(user.dateJoined), 'dd-mm-yyyy') }}
+              {{ dateJoined }}
             </v-chip>
           </template>
           <span>When {{ user.name }} joined OSkills.</span>
@@ -43,8 +43,8 @@
       </v-col>
     </v-row>
     <v-row justify="center" align="center">
-      <v-btn small color="primary" @click="promoteToAdmin(user)">
-        <v-icon small class="pr-2">mdi-plus</v-icon>
+      <v-btn small :color="promoteBtnColor" @click="promoteToAdmin(user)">
+        <v-icon small class="pr-2">{{ promoteBtnIcon }}</v-icon>
         {{ promoteBtnText }}
       </v-btn>
     </v-row>
@@ -79,10 +79,19 @@ export default {
     promoteBtnText() {
       return this.user.isAdmin ? 'Demote' : 'Promote';
     },
+    promoteBtnColor() {
+      return this.user.isAdmin ? 'warning' : 'success';
+    },
+    promoteBtnIcon() {
+      return this.user.isAdmin ? 'mdi-minus' : 'mdi-plus';
+    },
     randomUserImg() {
       return `https://randomuser.me/api/portraits/men/${Math.floor(
         Math.random() * (Math.floor(65) - Math.ceil(1) + 1)
       ) + 1}.jpg`;
+    },
+    dateJoined() {
+      return lightFormat(new Date(this.user.dateJoined), 'dd-MM-yyyy');
     }
   },
   methods: {
