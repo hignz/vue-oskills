@@ -48,8 +48,29 @@
             <span>User profile</span>
           </v-tooltip>
         </template>
-        <template v-slot:expanded-item="{ headers }">
-          <td :colspan="headers.length">Under construction</td>
+        <template v-slot:expanded-item="{ item }">
+          <td :colspan="headers.length">
+            <RadarChart
+              v-if="item.skills.length"
+              :user-skills="item.skills"
+              :size="120"
+              :height="330"
+              :skill-categories="skillCategories"
+              class="pr-2"
+            ></RadarChart>
+
+            <!--  <v-list-item v-for="skill in item.skills" :key="skill._id">
+              <v-list-item-avatar>
+                <EsteemBadge :esteem="skill.esteem"></EsteemBadge>
+              </v-list-item-avatar>
+
+              <v-list-item-content>
+                <v-list-item-title
+                  v-text="skill.skill.name"
+                ></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item> -->
+          </td>
         </template>
       </v-data-table>
     </template>
@@ -59,8 +80,14 @@
 <script>
 import { mapActions } from 'vuex';
 import { lightFormat } from 'date-fns';
+import EsteemBadge from '../components/EsteemBadge';
+import RadarChart from '../components/RadarChart';
 
 export default {
+  components: {
+    EsteemBadge,
+    RadarChart
+  },
   props: {
     users: {
       type: Array,
@@ -98,11 +125,34 @@ export default {
           align: 'center'
         }
       ],
-      selectedUser: {}
+      selectedUser: {},
+      skillCategories: []
     };
   },
+  computed: {
+    categories() {
+      if (!this.users.skills.length) {
+        return [];
+      }
+      const arr = [
+        ...new Set(this.users.skills.flat().map(el => el.skill.category.name))
+      ];
+
+      const categories = arr.map(el => ({
+        categoryName: el,
+        skills: this.user.skills.filter(elm => elm.skill.category.name === el)
+      }));
+
+      return categories;
+    }
+  },
+  created() {
+    this.fetchCategoriesArchived('false').then(res => {
+      this.skillCategories = res.categories;
+    });
+  },
   methods: {
-    ...mapActions(['toggleSnackbar']),
+    ...mapActions(['toggleSnackbar', 'fetchCategoriesArchived']),
     openUserProfile(userId) {
       this.$router.push({
         name: 'profile',
