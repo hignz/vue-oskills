@@ -41,35 +41,39 @@ export default {
       skillCategories: []
     };
   },
-  created() {
-    this.fetchCategoriesArchived('false').then(res => {
-      this.skillCategories = res.categories;
-    });
-  },
+
   computed: {
     ...mapGetters(['skills', 'isDark', 'accentColor']),
     ...mapState(['user']),
     chartSeries() {
-      return this.seris;
+      return this.series;
     },
     chartOptions() {
       return {
         chart: {
           type: 'radar',
-          background: this.isDark ? '#282c34' : '#ffffff'
+          background: this.isDark ? '#282c34' : '#ffffff',
+          dropShadow: {
+            enabled: true,
+            blur: 1,
+            left: 1,
+            top: 1
+          },
+          animations: {
+            enabled: false
+          }
         },
         stroke: {
-          show: true,
-          width: 3,
-          colors: [localStorage.getItem('accentColor'), '#DC3912'],
-          dashArray: 0
+          width: 0
+        },
+        fill: {
+          opacity: 0.4
+        },
+        markers: {
+          size: 0
         },
         theme: {
           mode: this.isDark ? 'dark' : 'light'
-        },
-        fill: {
-          opacity: 0.7,
-          colors: [localStorage.getItem('accentColor'), '#DC3912']
         },
         plotOptions: {
           radar: {
@@ -81,29 +85,13 @@ export default {
             }
           }
         },
-        yaxis: {
-          labels: {
-            formatter: val => val.toFixed(0)
-          }
-        },
-        markers: {
-          colors: [localStorage.getItem('accentColor'), '#DC3912'],
-          size: 4
-        },
-        tooltip: {
-          y: {
-            formatter: val => val
-          }
-        },
-
         labels: this.categoryLabels
       };
     },
-
     categoryLabels() {
       return this.skillCategories.map(el => el.name);
     },
-    seris() {
+    series() {
       const series = this.userSkills.length
         ? [
             {
@@ -119,6 +107,11 @@ export default {
 
       return series;
     }
+  },
+  created() {
+    this.fetchCategoriesArchived('false').then(res => {
+      this.skillCategories = res.categories;
+    });
   },
   methods: {
     ...mapActions(['fetchCategoriesArchived']),
