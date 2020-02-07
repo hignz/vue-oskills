@@ -11,7 +11,7 @@
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md6>
           <v-card>
-            <v-form ref="form" v-model="valid" :lazy-validation="lazy">
+            <v-form ref="form" v-model="valid" :lazy-validation="true">
               <v-stepper v-model="n" vertical class="elevation-0">
                 <v-stepper-step :complete="n > 1" :step="1" :editable="true">
                   Personal details
@@ -160,12 +160,14 @@
 import AccentColorPicker from '../components/AccentColorPicker';
 import DarkThemeSwitch from '../components/DarkThemeSwitch';
 import { mapActions } from 'vuex';
+import validationRules from '../mixins/validationRules';
 
 export default {
   components: {
     AccentColorPicker,
     DarkThemeSwitch
   },
+  mixins: [validationRules],
   data() {
     return {
       valid: true,
@@ -176,15 +178,6 @@ export default {
       lastName: '',
       password: '',
       confirmPassword: '',
-      passwordRules: [
-        v => !!v || 'Password is required',
-        v => v === this.password || 'Passwords must match',
-        v => v.length > 7 || 'Password must be at least 8 characters'
-      ],
-      nameRules: [
-        v => !!v || 'Required',
-        v => v.length > 2 || 'Name must be at least 3 characters'
-      ],
       skills: [],
       selectedSkills: [],
       verified: null,
@@ -234,6 +227,6 @@ export default {
 
 <style>
 .theme--dark.v-stepper {
-  background: #343a40;
+  background: #282c34;
 }
 </style>
