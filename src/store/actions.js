@@ -51,8 +51,9 @@ export default {
       return res.data;
     });
   },
-  fetchAllSkills() {
+  fetchAllSkills({ commit }) {
     return http.get('/get-all-skills').then(res => {
+      commit(constants.SET_LOADING, false);
       return res.data;
     });
   },
