@@ -10,7 +10,7 @@
         <v-list-item
           v-for="(activity, i) in activities"
           :key="i"
-          @click="openSkillProfile(activity.skillId._id)"
+          @click="navigateTo(activity)"
         >
           <v-list-item-avatar>
             <v-icon>mdi-circle-medium</v-icon>
@@ -34,7 +34,6 @@
 
 <script>
 import { formatDistanceToNow } from 'date-fns';
-import { mapActions } from 'vuex';
 import Pusher from 'pusher-js';
 
 export default {
@@ -74,11 +73,13 @@ export default {
     }
   },
   methods: {
-    openSkillProfile(skillId) {
-      this.$router.push({
-        name: 'skillProfile',
-        params: { id: skillId }
-      });
+    navigateTo(activity) {
+      const to =
+        this.$router.currentRoute.name === 'skillProfile'
+          ? { name: 'profile', params: { id: activity.participantId } }
+          : { name: 'skillProfile', params: { id: activity.skillId._id } };
+
+      this.$router.push(to);
     }
   }
 };
