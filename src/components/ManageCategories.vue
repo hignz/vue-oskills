@@ -3,7 +3,6 @@
     <v-card-title
       >Categories <span class="caption ml-2">({{ categories.length }})</span>
       <v-spacer></v-spacer>
-      <EditCategoryDialog></EditCategoryDialog>
       <v-form>
         <v-text-field
           v-model="search"
@@ -27,16 +26,6 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn icon v-on="on">
-              <v-icon small @click="showEditDialog(item)">
-                mdi-pencil
-              </v-icon>
-            </v-btn>
-          </template>
-          <span>Edit</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <v-btn icon v-on="on">
               <v-icon small @click="showArchiveDialog(item)">
                 mdi-archive
               </v-icon>
@@ -44,6 +33,10 @@
           </template>
           <span>Archive</span>
         </v-tooltip>
+        <EditCategoryDialog
+          :category="item"
+          @update="updateCategory"
+        ></EditCategoryDialog>
       </template>
     </v-data-table>
     <v-dialog v-model="archiveDialog" width="500" @input="v => v || close()">
@@ -129,6 +122,9 @@ export default {
       this.selectedCategory = item;
       this.archiveDialog = true;
     },
+    showEditDialog(item) {
+      this.selectedCategory = item;
+    },
     doArchiveCategory() {
       this.archiveCategory(this.selectedCategory._id).then(res => {
         this.toggleSnackbar({
@@ -143,6 +139,13 @@ export default {
     },
     closeDialog() {
       this.archiveDialog = !this.archiveDialog;
+    },
+    updateCategory(i) {
+      this.categories.forEach(e => {
+        if (e._id === i.categoryId) {
+          e.name = i.name;
+        }
+      });
     }
   }
 };

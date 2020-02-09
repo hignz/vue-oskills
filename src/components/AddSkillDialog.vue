@@ -11,33 +11,27 @@
       </v-card-title>
       <v-card-text>
         <v-form ref="form">
-          <v-row>
-            <v-col cols="12">
-              <v-select
-                label="Category"
-                :items="categories"
-                item-text="text"
-                item-value="value"
-                prepend-inner-icon="mdi-playlist-star"
-                required
-                @change="populateSkills"
-              ></v-select>
-            </v-col>
-            <v-col cols="12">
-              <v-autocomplete
-                v-model="selectedSkill"
-                label="Skill"
-                no-data-text="No skills available"
-                :items="skills"
-                autocomplete="off"
-                auto-select-first
-                :loading="loadingSkills"
-                clearable
-                prepend-inner-icon="mdi-star"
-                required
-              ></v-autocomplete>
-            </v-col>
-          </v-row>
+          <v-select
+            label="Category"
+            :items="categories"
+            item-text="text"
+            item-value="value"
+            prepend-inner-icon="mdi-playlist-star"
+            required
+            @change="populateSkills"
+          ></v-select>
+          <v-autocomplete
+            v-model="selectedSkill"
+            label="Skill"
+            no-data-text="No skills available"
+            :items="skills"
+            autocomplete="off"
+            auto-select-first
+            :loading="loadingSkills"
+            clearable
+            prepend-inner-icon="mdi-star"
+            required
+          ></v-autocomplete>
         </v-form>
       </v-card-text>
       <v-card-actions>
