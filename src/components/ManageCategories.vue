@@ -23,7 +23,6 @@
       no-results-text="No categories found"
     >
       <template v-slot:item.action="{ item }">
-        
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn icon v-on="on">
@@ -34,9 +33,11 @@
           </template>
           <span>Archive</span>
         </v-tooltip>
-        <EditCategoryDialog :category="item" @update="updateCategory"></EditCategoryDialog>
+        <EditCategoryDialog
+          :category="item"
+          @update="updateCategory"
+        ></EditCategoryDialog>
       </template>
-
     </v-data-table>
     <v-dialog v-model="archiveDialog" width="500" @input="v => v || close()">
       <v-card>
@@ -92,7 +93,7 @@ export default {
     categories: {
       type: Array,
       default: () => []
-    },
+    }
   },
   data() {
     return {
@@ -141,7 +142,7 @@ export default {
     },
     updateCategory(i) {
       this.categories.forEach(e => {
-        if(e._id === i.categoryId) {
+        if (e._id === i.categoryId) {
           e.name = i.name;
         }
       });
