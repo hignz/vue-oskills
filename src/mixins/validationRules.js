@@ -8,7 +8,7 @@ export default {
       requiredRules: [v => !!v || 'Field is required'],
       passwordRules: [
         v => !!v || 'Password is required',
-        v => v === this.password || 'Passwords must match',
+        v => v === this.password2 || 'Passwords must match',
         v => v.length > 7 || 'Password must be at least 8 characters'
       ],
       nameRules: [
@@ -21,6 +21,9 @@ export default {
     minLength(min) {
       return v =>
         (v || '').length >= min || `A minimum of ${min} characters is needed`;
+    },
+    mustMatch(other) {
+      return v => v !== other || 'Passwords must match';
     }
   }
 };
