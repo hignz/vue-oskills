@@ -1,5 +1,9 @@
 <template>
-  <v-dialog v-model="editDialog" max-width="500" @input="v => v || close()">
+  <v-dialog
+    v-model="editCategoryDialog"
+    max-width="500"
+    @input="v => v || close()"
+  >
     <template v-slot:activator="{ on }">
       <v-btn icon v-on="on">
         <v-icon small>
@@ -12,18 +16,20 @@
 
       <v-form ref="form" v-model="valid" @submit.prevent="onSubmit">
         <v-card-text>
-            <v-text-field
-              v-model="name"
-              label="Name"
-              :rules="requiredRules"
-              clearable
-            ></v-text-field>
+          <v-text-field
+            v-model="name"
+            label="Name"
+            :rules="requiredRules"
+            clearable
+          ></v-text-field>
         </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn text @click="close()">Close</v-btn>
-          <v-btn color="primary" :disabled="!valid" type="submit">Edit Name</v-btn>
+          <v-btn color="primary" :disabled="!valid" type="submit"
+            >Edit Name</v-btn
+          >
         </v-card-actions>
       </v-form>
     </v-card>
@@ -46,13 +52,19 @@ export default {
     return {
       valid: false,
       name: '',
-      editDialog: false
+      editCategoryDialog: false
     };
+  },
+  watch: {
+    editCategoryDialog(opened) {
+      if (opened) {
+        this.name = this.category.name;
+      }
+    }
   },
   methods: {
     ...mapActions(['editCategory', 'toggleSnackbar']),
     onSubmit() {
-      console.log('test', this.category._id)
       if (this.$refs.form.validate()) {
         this.editCategory({
           categoryId: this.category._id,
@@ -65,9 +77,9 @@ export default {
               color: 'success'
             });
             this.$emit('update', {
-          categoryId: this.category._id,
-          name: this.name
-              });
+              categoryId: this.category._id,
+              name: this.name
+            });
             this.close();
           })
           .catch(err => {
@@ -81,7 +93,7 @@ export default {
     },
     close() {
       this.$refs.form.reset();
-      this.editDialog = !this.editDialog;
+      this.editCategoryDialog = !this.editCategoryDialog;
     }
   }
 };
