@@ -1,12 +1,10 @@
 <template>
-  <v-container v-if="loaded" fluid>
-    <v-card>
-      <v-row justify="center" align="center">
-        <v-col cols="12" sm="12">
-          <ProfileBanner :user="user" />
-        </v-col>
-      </v-row>
-    </v-card>
+  <v-container v-if="loaded">
+    <v-row justify="center" align="center">
+      <v-col cols="12" sm="12">
+        <ProfileBanner :user="user" />
+      </v-col>
+    </v-row>
 
     <v-row>
       <v-col cols="12" sm="12" md="4">
@@ -47,7 +45,12 @@
             style="max-height: 345px"
           >
             <div v-for="(category, i) in categories" :key="category.name">
-              <v-subheader inset>{{ category.categoryName }}</v-subheader>
+              <v-subheader
+                class="subtitle-2"
+                inset
+                @click="navigateTo({ name: 'category', id: category._id })"
+                >{{ category.categoryName }}</v-subheader
+              >
 
               <v-list-item
                 v-for="skill in category.skills"
@@ -66,15 +69,7 @@
                 </v-list-item-content>
 
                 <v-list-item-action>
-                  <v-btn icon @click="vote(skill)" @click.stop>
-                    <v-icon
-                      v-if="!skill.votedBy.includes(getUser._id)"
-                      color="grey lighten-1"
-                      >mdi-arrow-up-bold-outline</v-icon
-                    >
-
-                    <v-icon v-else color="primary">mdi-arrow-up-bold</v-icon>
-                  </v-btn>
+                  <Vote :skill="skill" />
                 </v-list-item-action>
               </v-list-item>
 
@@ -89,15 +84,23 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <v-card>
+        <v-card v-if="userActivity.length">
           <ActivityFeed
-            v-if="userActivity.length"
             :activity-data="userActivity"
             :is-real-time="false"
+            :full-size="true"
           ></ActivityFeed>
-
-          <v-card-text v-else>
-            <p>dsadsa</p>
+        </v-card>
+        <v-card v-else>
+          <v-toolbar dense flat>
+            <v-toolbar-title class="subtitle-2 grey--text"
+              >Activity</v-toolbar-title
+            >
+          </v-toolbar>
+          <v-card-text>
+            <p class="text-center grey--text">
+              This user has no activity
+            </p>
           </v-card-text>
         </v-card>
       </v-col>
@@ -110,7 +113,7 @@ const EsteemBadge = () => import('../components/EsteemBadge');
 const RadarChart = () => import('../components/RadarChart');
 const ActivityFeed = () => import('../components/ActivityFeed');
 const ProfileBanner = () => import('../components/ProfileBanner');
-import { lightFormat, parseISO } from 'date-fns';
+const Vote = () => import('../components/Vote');
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -118,7 +121,8 @@ export default {
     ActivityFeed,
     EsteemBadge,
     RadarChart,
-    ProfileBanner
+    ProfileBanner,
+    Vote
   },
   data() {
     return {
@@ -127,17 +131,12 @@ export default {
       user: {},
       similarUsers: [],
       skillCategories: [],
-      userActivity: [],
-      lightFormat,
-      parseISO
+      userActivity: []
     };
   },
   computed: {
     ...mapGetters(['getUser']),
     categories() {
-      if (!this.user.skills.length) {
-        return [];
-      }
       const arr = [
         ...new Set(this.user.skills.flat().map(el => el.skill.category.name))
       ];
@@ -151,6 +150,10 @@ export default {
     }
   },
   created() {
+    if (this.$router.currentRoute.params.id === this.getUser._id) {
+      return this.$router.push({ name: 'dashboard' });
+    }
+
     this.fetchUserById(this.$route.params.id).then(response => {
       this.user = response.data;
       this.loaded = true;
@@ -168,43 +171,16 @@ export default {
     ...mapActions([
       'fetchUserById',
       'fetchCategoriesArchived',
-      'voteSkill',
-      'fetchParticipantActivity',
-      'toggleSnackbar'
+      'fetchParticipantActivity'
     ]),
-    vote(skill) {
-      this.voteSkill(skill._id)
-        .then(response => {
-          const remainingVotes = response.remainingVotes;
-          const snackbarText = response.upvoted
-            ? `Voted! Remaining votes: ${remainingVotes}`
-            : `Vote removed! Remaining votes ${remainingVotes}`;
-
-          this.toggleSnackbar({
-            show: true,
-            text: snackbarText,
-            color: response.upvoted ? 'success' : 'orange'
-          });
-
-          const skill = response.skill;
-
-          this.user.skills = this.user.skills.map(x =>
-            x._id == skill._id ? skill.skill : x
-          );
-        })
-        .catch(() => {
-          this.toggleSnackbar({
-            show: true,
-            text: 'You have no votes left for this week.',
-            color: 'error'
-          });
-        });
-    },
     openSkillProfile(skillId) {
       this.$router.push({
         name: 'skillProfile',
         params: { id: skillId }
       });
+    },
+    navigateTo(route) {
+      this.$router.push(route);
     }
   }
 };

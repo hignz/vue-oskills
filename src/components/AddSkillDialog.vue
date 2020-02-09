@@ -11,33 +11,27 @@
       </v-card-title>
       <v-card-text>
         <v-form ref="form">
-          <v-row>
-            <v-col cols="12">
-              <v-select
-                label="Category"
-                :items="categories"
-                item-text="text"
-                item-value="value"
-                prepend-inner-icon="mdi-playlist-star"
-                required
-                @change="populateSkills"
-              ></v-select>
-            </v-col>
-            <v-col cols="12">
-              <v-autocomplete
-                v-model="selectedSkill"
-                label="Skill"
-                no-data-text="No skills available"
-                :items="skills"
-                autocomplete="off"
-                auto-select-first
-                :loading="loadingSkills"
-                clearable
-                prepend-inner-icon="mdi-star"
-                required
-              ></v-autocomplete>
-            </v-col>
-          </v-row>
+          <v-select
+            label="Category"
+            :items="categories"
+            item-text="text"
+            item-value="value"
+            prepend-inner-icon="mdi-playlist-star"
+            required
+            @change="populateSkills"
+          ></v-select>
+          <v-autocomplete
+            v-model="selectedSkill"
+            label="Skill"
+            no-data-text="No skills available"
+            :items="skills"
+            autocomplete="off"
+            auto-select-first
+            :loading="loadingSkills"
+            clearable
+            prepend-inner-icon="mdi-star"
+            required
+          ></v-autocomplete>
         </v-form>
       </v-card-text>
       <v-card-actions>
@@ -60,19 +54,14 @@
 import { mapActions } from 'vuex';
 
 export default {
-  props: {
-    skillCategories: {
-      type: Array,
-      default: () => []
-    }
-  },
   data() {
     return {
       skills: [],
       selectedSkill: null,
       dialog: false,
       loadingSkills: false,
-      addSkillLoading: false
+      addSkillLoading: false,
+      skillCategories: []
     };
   },
   computed: {
@@ -85,12 +74,21 @@ export default {
       });
     }
   },
-  created() {},
+  watch: {
+    dialog(opened) {
+      if (opened) {
+        this.fetchCategoriesArchived('false').then(res => {
+          this.skillCategories = res.categories;
+        });
+      }
+    }
+  },
   methods: {
     ...mapActions([
       'fetchSkillsByCategory',
       'addSkillToUser',
-      'toggleSnackbar'
+      'toggleSnackbar',
+      'fetchCategoriesArchived'
     ]),
     populateSkills(categoryId) {
       this.loadingSkills = true;

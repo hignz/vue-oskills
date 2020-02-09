@@ -11,7 +11,7 @@
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md6>
           <v-card>
-            <v-form ref="form" v-model="valid" :lazy-validation="lazy">
+            <v-form ref="form" v-model="valid" :lazy-validation="true">
               <v-stepper v-model="n" vertical class="elevation-0">
                 <v-stepper-step :complete="n > 1" :step="1" :editable="true">
                   Personal details
@@ -96,7 +96,7 @@
                         :rules="passwordRules"
                         :type="show1 ? 'text' : 'password'"
                         label="Password"
-                        hint="At least 8 characters"
+                        hint="Make sure it's at least 8 characters."
                         counter
                         class="pb-3"
                         required
@@ -108,7 +108,7 @@
                         :rules="passwordRules"
                         :type="show2 ? 'text' : 'password'"
                         label="Confirm password"
-                        hint="At least 8 characters"
+                        hint="Make sure it's at least 8 characters."
                         counter
                         required
                         class="pb-3"
@@ -134,25 +134,27 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <v-col
-      v-if="verified === false"
-      sm="12"
-      md="6"
-      offset-md="3"
-      class="text-center"
-    >
-      <v-alert text color="error" icon="mdi-exclamation" border="left">
-        User not found.
-        <p class="my-0 py-0"></p>
-      </v-alert>
-    </v-col>
-    <v-col v-if="completed" class="text-center">
-      <v-alert text color="accent" icon="mdi-login" border="left">
-        Registration complete! Please login.
-        <p class="my-0 py-0"></p>
-        <v-btn class="accent mt-4" to="/login">Login</v-btn>
-      </v-alert>
-    </v-col>
+    <v-row justify="center">
+      <v-col
+        v-if="verified === false"
+        sm="12"
+        md="6"
+        offset-md="3"
+        class="text-center"
+      >
+        <v-alert text color="error" icon="mdi-exclamation" border="left">
+          User not found.
+          <p class="my-0 py-0"></p>
+        </v-alert>
+      </v-col>
+      <v-col v-if="completed" class="text-center">
+        <v-alert text color="accent" icon="mdi-login" border="left">
+          Registration complete! Please login.
+          <p class="my-0 py-0"></p>
+          <v-btn class="accent mt-4" to="/login">Login</v-btn>
+        </v-alert>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -160,12 +162,14 @@
 import AccentColorPicker from '../components/AccentColorPicker';
 import DarkThemeSwitch from '../components/DarkThemeSwitch';
 import { mapActions } from 'vuex';
+import validationRules from '../mixins/validationRules';
 
 export default {
   components: {
     AccentColorPicker,
     DarkThemeSwitch
   },
+  mixins: [validationRules],
   data() {
     return {
       valid: true,
@@ -176,15 +180,6 @@ export default {
       lastName: '',
       password: '',
       confirmPassword: '',
-      passwordRules: [
-        v => !!v || 'Password is required',
-        v => v === this.password || 'Passwords must match',
-        v => v.length > 7 || 'Password must be at least 8 characters'
-      ],
-      nameRules: [
-        v => !!v || 'Required',
-        v => v.length > 2 || 'Name must be at least 3 characters'
-      ],
       skills: [],
       selectedSkills: [],
       verified: null,
@@ -234,6 +229,6 @@ export default {
 
 <style>
 .theme--dark.v-stepper {
-  background: #343a40;
+  background: #282c34;
 }
 </style>

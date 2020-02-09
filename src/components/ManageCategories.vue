@@ -1,14 +1,13 @@
 <template>
   <v-card flat>
     <v-card-title
-      >Categories <span class="caption ml-2">({{ categories.length }})</span>
+      >Active <span class="caption ml-2">({{ categories.length }})</span>
       <v-spacer></v-spacer>
-      <EditCategoryDialog></EditCategoryDialog>
       <v-form>
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
-          label="Search"
+          label="Search active categories..."
           single-line
           clearable
           hide-details
@@ -23,17 +22,11 @@
       no-data-text="No categories loaded"
       no-results-text="No categories found"
     >
+      <template v-slot:item.dateAdded="{ item }">
+        {{ formatRelative(new Date(item.dateAdded), Date.now()) }}
+      </template>
+
       <template v-slot:item.action="{ item }">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <v-btn icon v-on="on">
-              <v-icon small @click="showEditDialog(item)">
-                mdi-pencil
-              </v-icon>
-            </v-btn>
-          </template>
-          <span>Edit</span>
-        </v-tooltip>
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn icon v-on="on">
@@ -44,6 +37,10 @@
           </template>
           <span>Archive</span>
         </v-tooltip>
+        <EditCategoryDialog
+          :category="item"
+          @update="updateCategory"
+        ></EditCategoryDialog>
       </template>
     </v-data-table>
     <v-dialog v-model="archiveDialog" width="500" @input="v => v || close()">
@@ -91,6 +88,7 @@
 <script>
 import EditCategoryDialog from '../components/EditCategoryDialog';
 import { mapActions } from 'vuex';
+import { formatRelative } from 'date-fns';
 
 export default {
   components: {
@@ -112,6 +110,7 @@ export default {
           sortable: true,
           value: 'name'
         },
+        { text: 'Added', value: 'dateAdded' },
         {
           text: 'Actions',
           value: 'action',
@@ -120,7 +119,8 @@ export default {
         }
       ],
       archiveDialog: false,
-      selectedCategory: {}
+      selectedCategory: {},
+      formatRelative
     };
   },
   methods: {
@@ -128,6 +128,9 @@ export default {
     showArchiveDialog(item) {
       this.selectedCategory = item;
       this.archiveDialog = true;
+    },
+    showEditDialog(item) {
+      this.selectedCategory = item;
     },
     doArchiveCategory() {
       this.archiveCategory(this.selectedCategory._id).then(res => {
@@ -137,12 +140,20 @@ export default {
           text: res.message
         });
 
+        this.selectedCategory.dateArchived = Date.now();
         this.$emit('archive', this.selectedCategory);
         this.closeDialog();
       });
     },
     closeDialog() {
       this.archiveDialog = !this.archiveDialog;
+    },
+    updateCategory(i) {
+      this.categories.forEach(e => {
+        if (e._id === i.categoryId) {
+          e.name = i.name;
+        }
+      });
     }
   }
 };

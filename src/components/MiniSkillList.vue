@@ -5,7 +5,7 @@
         >TOP SKILLS</v-toolbar-title
       >
       <v-spacer></v-spacer>
-      <AddSkillDialog :skill-categories="skillCategories"></AddSkillDialog>
+      <AddSkillDialog />
       <v-btn icon @click="openAllSkills">
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
@@ -32,7 +32,7 @@
             ></v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-action-text>
-            {{ s.skill.rating }}
+            {{ s.rating }}
           </v-list-item-action-text>
         </v-list-item>
       </v-list-item-group>
@@ -61,15 +61,10 @@ export default {
     skills: {
       type: Array,
       required: true
-    },
-    skillCategories: {
-      type: Array,
-      required: true
     }
   },
   data() {
     return {
-      dialog: false,
       selectedSkill: {}
     };
   },

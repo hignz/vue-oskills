@@ -78,7 +78,13 @@
             >
           </v-toolbar>
 
-          <v-list two-line class="overflow-y-auto" style="max-height: 345px">
+          <v-list
+            v-if="skill.owners.length"
+            two-line
+            class="overflow-y-auto"
+            style="max-height: 345px"
+            dense
+          >
             <v-list-item
               v-for="(owner, i) in skill.owners"
               :key="owner._id"
@@ -103,20 +109,43 @@
               </v-list-item-action>
             </v-list-item>
           </v-list>
+          <v-card-text v-else>
+            <p class="text-center grey--text">
+              No users have added this skill to their profile
+            </p>
+          </v-card-text>
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
         <v-card>
-          <v-card-title class=" grey--text">Under construction</v-card-title>
+          <v-toolbar flat dense>
+            <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
+              >Something will eventually go here</v-toolbar-title
+            >
+          </v-toolbar>
+          <v-card-text class=" grey--text"
+            ><p class="text-center grey--text">
+              We promise
+            </p></v-card-text
+          >
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <v-card>
+        <v-card v-if="skillActivityData.length">
           <ActivityFeed
-            v-if="skillActivityData.length"
             :activity-data="skillActivityData"
             :is-real-time="false"
           ></ActivityFeed>
+        </v-card>
+        <v-card v-else>
+          <v-toolbar dense flat>
+            <v-toolbar-title class="subtitle-2 grey--text"
+              >Activity</v-toolbar-title
+            >
+          </v-toolbar>
+          <v-card-text class="text-center grey--text">
+            <p>This skill has no activity</p>
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
@@ -152,22 +181,14 @@ export default {
   created() {
     const skillId = this.$route.params.id;
 
-    this.fetchSkillInfo(skillId)
-      .then(res => {
-        this.skill = res;
-        this.loaded = true;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.fetchSkillInfo(skillId).then(res => {
+      this.skill = res;
+      this.loaded = true;
+    });
 
-    this.fetchSkillActivity(skillId)
-      .then(res => {
-        this.skillActivityData = res;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.fetchSkillActivity(skillId).then(res => {
+      this.skillActivityData = res;
+    });
   },
   methods: {
     ...mapActions([
@@ -195,8 +216,6 @@ export default {
         });
     },
     openProfile(ownerId) {
-      this.setLoading(true);
-
       this.$router.push({
         name: 'profile',
         params: { id: ownerId }

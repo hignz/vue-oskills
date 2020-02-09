@@ -5,12 +5,12 @@
       <v-spacer></v-spacer>
     </v-toolbar>
 
-    <v-list dense two-line flat class="overflow-y-auto" max-height="14.5em">
+    <v-list dense two-line flat class="overflow-y-auto" :max-height="size">
       <v-list-item-group color="primary">
         <v-list-item
           v-for="(activity, i) in activities"
           :key="i"
-          @click="openSkillProfile(activity.skillId._id)"
+          @click="navigateTo(activity)"
         >
           <v-list-item-avatar>
             <v-icon>mdi-circle-medium</v-icon>
@@ -34,7 +34,6 @@
 
 <script>
 import { formatDistanceToNow } from 'date-fns';
-import { mapActions } from 'vuex';
 import Pusher from 'pusher-js';
 
 export default {
@@ -48,6 +47,10 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    fullSize: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -58,6 +61,11 @@ export default {
       formatDistanceToNow
     };
   },
+  computed: {
+    size() {
+      return this.fullSize ? '345px' : '14.5em';
+    }
+  },
   created() {
     this.activities = this.activityData;
 
@@ -67,18 +75,20 @@ export default {
         forceTLS: true
       });
 
-      const channel = pusher.subscribe('recent-activity');
+      const channel = pusher.subscribe('recent');
       channel.bind('activity-event', data => {
         this.activities.unshift(data.fullDocument);
       });
     }
   },
   methods: {
-    openSkillProfile(skillId) {
-      this.$router.push({
-        name: 'skillProfile',
-        params: { id: skillId }
-      });
+    navigateTo(activity) {
+      const to =
+        this.$router.currentRoute.name === 'skillProfile'
+          ? { name: 'profile', params: { id: activity.participantId } }
+          : { name: 'skillProfile', params: { id: activity.skillId._id } };
+
+      this.$router.push(to);
     }
   }
 };

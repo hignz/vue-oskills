@@ -3,10 +3,10 @@
     <v-tabs v-model="tab" @change="update">
       <v-tabs-slider></v-tabs-slider>
 
-      <v-tab href="#tab-1">
+      <v-tab href="#0">
         Skills
       </v-tab>
-      <v-tab href="#tab-2">
+      <v-tab href="#1">
         Categories
       </v-tab>
       <v-tab href="#tab-3">
@@ -14,11 +14,7 @@
       </v-tab>
 
       <v-tabs-items v-model="tab">
-        <v-tab-item
-          value="tab-1"
-          :transition="false"
-          :reverse-transition="false"
-        >
+        <v-tab-item value="0" :transition="false" :reverse-transition="false">
           <v-row v-if="loaded" justify="center" align="center">
             <v-col cols="12" sm="12">
               <ManageSkills :skills="unarchivedSkills" @archive="archive" />
@@ -32,11 +28,7 @@
             </v-col>
           </v-row>
         </v-tab-item>
-        <v-tab-item
-          value="tab-2"
-          :transition="false"
-          :reverse-transition="false"
-        >
+        <v-tab-item value="1" :transition="false" :reverse-transition="false">
           <v-row v-if="loaded" justify="center" align="center">
             <v-col cols="12" sm="12">
               <ManageCategories
@@ -71,12 +63,11 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import ManageSkills from '../components/ManageSkills';
 import ManageArchivedSkills from '../components/ManageArchivedSkills';
 import ManageCategories from '../components/ManageCategories';
 import ArchivedCategories from '../components/ArchivedCategories';
-import ManageUsers from '../components/ManageUsers';
-import { mapActions } from 'vuex';
 
 export default {
   components: {
@@ -109,18 +100,18 @@ export default {
       return this.allCategories.filter(el => el.archived);
     }
   },
-  created() {
-    this.fetchSkillsAndCategories();
-    this.fetchUsers();
+  mounted() {
+    this.$store.dispatch('setLoading', true);
   },
   methods: {
-    ...mapActions(['fetchAllSkills', 'fetchCategories', 'fetchAllUsers']),
-    fetchSkillsAndCategories() {
+    ...mapActions(['fetchAllSkills', 'fetchCategories']),
+    fetchSkills() {
       this.fetchAllSkills().then(res => {
         this.allSkills = res.skills;
         this.loaded = true;
       });
-
+    },
+    fetchAllCategories() {
       this.fetchCategories().then(res => {
         this.allCategories = res.categories;
         this.loaded = true;
@@ -132,16 +123,12 @@ export default {
     archive(item) {
       item.archived = true;
     },
-    update() {
-      this.fetchSkillsAndCategories();
-    },
-    fetchUsers() {
-      this.fetchAllUsers().then(res => {
-        console.log(res);
-        console.log(res.data);
-        this.allUsers = res.data;
-        this.loaded = true;
-      });
+    update(tab) {
+      if (tab === '0') {
+        this.fetchSkills();
+      } else {
+        this.fetchAllCategories();
+      }
     }
   }
 };

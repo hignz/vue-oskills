@@ -65,18 +65,6 @@
           </v-row>
         </v-col>
       </v-row>
-      <v-card-actions class="pt-0 ml-8">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <v-btn icon :to="{ path: 'admin' }" v-on="on">
-              <v-icon large>
-                mdi-swap-horizontal
-              </v-icon>
-            </v-btn>
-          </template>
-          <span>Admin</span>
-        </v-tooltip>
-      </v-card-actions>
     </v-card>
 
     <v-row>
@@ -126,10 +114,7 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <SkillList
-          :skills="topThreeSkills"
-          :skill-categories="skillCategories"
-        ></SkillList>
+        <MiniSkillList :skills="topThreeSkills" />
       </v-col>
       <v-col cols="12" md="4" sm="12">
         <v-card>
@@ -148,7 +133,7 @@
 import { mapGetters, mapActions, mapState } from 'vuex';
 
 import RecentUsers from '../components/RecentUsers';
-import SkillList from '../components/SkillList';
+import MiniSkillList from '../components/MiniSkillList';
 import ActivityFeed from '../components/ActivityFeed';
 import EsteemBadge from '../components/EsteemBadge';
 import BarChart from '../components/BarChart';
@@ -159,7 +144,7 @@ export default {
     ActivityFeed,
     EsteemBadge,
     RecentUsers,
-    SkillList,
+    MiniSkillList,
     BarChart,
     RadarChart
   },
@@ -181,25 +166,13 @@ export default {
     ...mapGetters(['topThreeSkills', 'skills'])
   },
   created() {
-    this.fetchUser().then(() => {
-      this.loaded = true;
-    });
-
-    this.fetchCategoriesArchived('false').then(res => {
-      this.skillCategories = res.categories;
-    });
-
     this.fetchRecentActivity().then(res => {
       this.recentActivityData = res;
+      this.loaded = true;
     });
   },
   methods: {
-    ...mapActions([
-      'fetchCategoriesArchived',
-      'fetchUser',
-      'toggleSnackbar',
-      'fetchRecentActivity'
-    ]),
+    ...mapActions(['fetchRecentActivity']),
     switchUsersList(menuItem, i) {
       this.usersCardTitle = menuItem.title;
       this.usersMenuIndex = i;

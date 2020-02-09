@@ -4,7 +4,6 @@
       v-if="userSkills.length || user.skills.length"
       type="radar"
       :height="height"
-      width="100%"
       :options="chartOptions"
       :series="chartSeries"
     />
@@ -12,7 +11,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters, mapState, mapActions } from 'vuex';
 import VueApexCharts from 'vue-apexcharts';
 
 export default {
@@ -20,10 +19,6 @@ export default {
     apexcharts: VueApexCharts
   },
   props: {
-    skillCategories: {
-      type: Array,
-      default: () => []
-    },
     userSkills: {
       type: Array,
       default: () => []
@@ -41,35 +36,44 @@ export default {
       default: () => 500
     }
   },
+  data() {
+    return {
+      skillCategories: []
+    };
+  },
+
   computed: {
     ...mapGetters(['skills', 'isDark', 'accentColor']),
     ...mapState(['user']),
     chartSeries() {
-      return [
-        {
-          name: 'Total Category Esteem',
-          data: this.categoryTotals
-        }
-      ];
+      return this.series;
     },
     chartOptions() {
       return {
         chart: {
           type: 'radar',
-          background: this.isDark ? '#282c34' : '#ffffff'
+          background: this.isDark ? '#282c34' : '#ffffff',
+          dropShadow: {
+            enabled: true,
+            blur: 1,
+            left: 1,
+            top: 1
+          },
+          animations: {
+            enabled: false
+          }
         },
         stroke: {
-          show: true,
-          width: 3,
-          colors: [localStorage.getItem('accentColor')],
-          dashArray: 0
+          width: 0
+        },
+        fill: {
+          opacity: 0.5
+        },
+        markers: {
+          size: 0
         },
         theme: {
           mode: this.isDark ? 'dark' : 'light'
-        },
-        fill: {
-          opacity: 0.7,
-          colors: [localStorage.getItem('accentColor')]
         },
         plotOptions: {
           radar: {
@@ -81,54 +85,47 @@ export default {
             }
           }
         },
-
-        yaxis: {
-          labels: {
-            formatter: val => val.toFixed(0)
-          }
-        },
-        markers: {
-          colors: [localStorage.getItem('accentColor')],
-          size: 4
-        },
-        tooltip: {
-          y: {
-            formatter: val => val
-          }
-        },
-
         labels: this.categoryLabels
       };
     },
-    categories() {
-      let categories = this.skillCategories.map(e => {
-        return { name: e.name, skills: [] };
-      });
-
-      const s = this.userSkills.length ? this.userSkills : this.user.skills;
-      categories.forEach(category => {
-        s.forEach(skill => {
-          if (skill.skill.category.name === category.name) {
-            category.skills.push(skill);
-          }
-        });
-      });
-
-      return categories.sort((a, b) => b.name - a.name);
-    },
     categoryLabels() {
-      return this.categories.map(el => el.name);
+      return this.skillCategories.map(el => el.name);
     },
-    categoryTotals() {
-      let l = this.categories.map(el =>
-        el.skills.reduce((acc, curr) => acc + curr.esteem, 0)
+    series() {
+      const series = this.userSkills.length
+        ? [
+            {
+              name: 'You',
+              data: this.categories(this.user.skills)
+            },
+            {
+              name: 'User',
+              data: this.categories(this.userSkills)
+            }
+          ]
+        : [{ name: 'You', data: this.categories(this.user.skills) }];
+
+      return series;
+    }
+  },
+  created() {
+    this.fetchCategoriesArchived('false').then(res => {
+      this.skillCategories = res.categories;
+    });
+  },
+  methods: {
+    ...mapActions(['fetchCategoriesArchived']),
+    categories(skills) {
+      let categories = this.skillCategories
+        .map(el => ({
+          name: el.name,
+          skills: skills.filter(elm => elm.skill.category.name === el.name)
+        }))
+        .sort((a, b) => b.name - a.name);
+
+      return categories.map(el =>
+        el.skills.reduce((acc, curr) => acc + curr.esteem, 1)
       );
-
-      return l;
-    },
-
-    bestSkill() {
-      return [...this.categoryTotals].sort((a, b) => b - a).slice(0, 1);
     }
   }
 };
