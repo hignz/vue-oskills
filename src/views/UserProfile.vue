@@ -1,12 +1,10 @@
 <template>
-  <v-container v-if="loaded" fluid>
-    <v-card>
-      <v-row justify="center" align="center">
-        <v-col cols="12" sm="12">
-          <ProfileBanner :user="user" />
-        </v-col>
-      </v-row>
-    </v-card>
+  <v-container v-if="loaded">
+    <v-row justify="center" align="center">
+      <v-col cols="12" sm="12">
+        <ProfileBanner :user="user" />
+      </v-col>
+    </v-row>
 
     <v-row>
       <v-col cols="12" sm="12" md="4">
@@ -47,7 +45,12 @@
             style="max-height: 345px"
           >
             <div v-for="(category, i) in categories" :key="category.name">
-              <v-subheader inset>{{ category.categoryName }}</v-subheader>
+              <v-subheader
+                class="subtitle-2"
+                inset
+                @click="navigateTo({ name: 'category', id: category._id })"
+                >{{ category.categoryName }}</v-subheader
+              >
 
               <v-list-item
                 v-for="skill in category.skills"
@@ -85,6 +88,7 @@
           <ActivityFeed
             :activity-data="userActivity"
             :is-real-time="false"
+            :full-size="true"
           ></ActivityFeed>
         </v-card>
         <v-card v-else>
@@ -133,9 +137,6 @@ export default {
   computed: {
     ...mapGetters(['getUser']),
     categories() {
-      if (!this.user.skills.length) {
-        return [];
-      }
       const arr = [
         ...new Set(this.user.skills.flat().map(el => el.skill.category.name))
       ];
@@ -177,6 +178,9 @@ export default {
         name: 'skillProfile',
         params: { id: skillId }
       });
+    },
+    navigateTo(route) {
+      this.$router.push(route);
     }
   }
 };
