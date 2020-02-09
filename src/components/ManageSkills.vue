@@ -37,6 +37,10 @@
             </template>
             <span>Archive</span>
           </v-tooltip>
+          <EditSkillDialog
+            :skill="item"
+            @update="updateSkill"
+          ></EditSkillDialog>
         </template>
       </v-data-table>
       <v-dialog
@@ -89,8 +93,12 @@
 
 <script>
 import { mapActions } from 'vuex';
+import EditSkillDialog from './EditSkillDialog';
 
 export default {
+  components: {
+    EditSkillDialog
+  },
   props: {
     skills: {
       type: Array,
@@ -135,6 +143,14 @@ export default {
     },
     closeDialog() {
       this.unArchivedDialog = !this.unArchivedDialog;
+    },
+    updateSkill(e) {
+      this.skills.forEach(s => {
+        if (s._id === e.skillId) {
+          s.name = e.name;
+          s.category.name = e.categoryName;
+        }
+      });
     }
   }
 };
