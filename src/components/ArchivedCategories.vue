@@ -1,14 +1,14 @@
 <template>
   <v-card flat>
     <v-card-title
-      >Archived categories
+      >Archived
       <span class="caption ml-2">({{ categories.length }})</span>
       <v-spacer></v-spacer>
       <v-form>
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
-          label="Search"
+          label="Search archived categories..."
           single-line
           clearable
           hide-details
@@ -23,6 +23,10 @@
       no-data-text="No archived categories loaded"
       no-results-text="No archived categories found"
     >
+      <template v-slot:item.dateArchived="{ item }">
+        {{ formatRelative(new Date(item.dateArchived), Date.now()) }}
+      </template>
+
       <template v-slot:item.action="{ item }">
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
@@ -83,8 +87,9 @@
 </template>
 
 <script>
-import EditCategoryDialog from '../components/EditCategoryDialog';
 import { mapActions } from 'vuex';
+import { formatRelative } from 'date-fns';
+import EditCategoryDialog from '../components/EditCategoryDialog';
 
 export default {
   components: {
@@ -106,6 +111,8 @@ export default {
           sortable: true,
           value: 'name'
         },
+        { text: 'Archived', value: 'dateArchived' },
+
         {
           text: 'Actions',
           value: 'action',
@@ -114,7 +121,8 @@ export default {
         }
       ],
       unarchiveDialog: false,
-      selectedCategory: {}
+      selectedCategory: {},
+      formatRelative
     };
   },
   methods: {

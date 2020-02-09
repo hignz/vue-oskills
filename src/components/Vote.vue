@@ -1,5 +1,5 @@
 <template>
-  <v-btn icon :loading="voting" @click="vote()" @click.stop>
+  <v-btn icon :loading="voting" color="primary" @click="vote()" @click.stop>
     <v-icon v-if="votedByUser" color="primary">mdi-arrow-up-bold</v-icon>
     <v-icon v-else color="grey lighten-1">mdi-arrow-up-bold-outline</v-icon>
   </v-btn>

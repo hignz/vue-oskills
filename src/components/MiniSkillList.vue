@@ -32,7 +32,7 @@
             ></v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-action-text>
-            {{ s.skill.rating }}
+            {{ s.rating }}
           </v-list-item-action-text>
         </v-list-item>
       </v-list-item-group>

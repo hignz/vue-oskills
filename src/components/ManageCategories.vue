@@ -1,13 +1,13 @@
 <template>
   <v-card flat>
     <v-card-title
-      >Categories <span class="caption ml-2">({{ categories.length }})</span>
+      >Active <span class="caption ml-2">({{ categories.length }})</span>
       <v-spacer></v-spacer>
       <v-form>
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
-          label="Search"
+          label="Search active categories..."
           single-line
           clearable
           hide-details
@@ -22,6 +22,10 @@
       no-data-text="No categories loaded"
       no-results-text="No categories found"
     >
+      <template v-slot:item.dateAdded="{ item }">
+        {{ formatRelative(new Date(item.dateAdded), Date.now()) }}
+      </template>
+
       <template v-slot:item.action="{ item }">
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
@@ -84,6 +88,7 @@
 <script>
 import EditCategoryDialog from '../components/EditCategoryDialog';
 import { mapActions } from 'vuex';
+import { formatRelative } from 'date-fns';
 
 export default {
   components: {
@@ -105,6 +110,7 @@ export default {
           sortable: true,
           value: 'name'
         },
+        { text: 'Added', value: 'dateAdded' },
         {
           text: 'Actions',
           value: 'action',
@@ -113,7 +119,8 @@ export default {
         }
       ],
       archiveDialog: false,
-      selectedCategory: {}
+      selectedCategory: {},
+      formatRelative
     };
   },
   methods: {
@@ -133,6 +140,7 @@ export default {
           text: res.message
         });
 
+        this.selectedCategory.dateArchived = Date.now();
         this.$emit('archive', this.selectedCategory);
         this.closeDialog();
       });

@@ -5,7 +5,7 @@
       <v-spacer></v-spacer>
     </v-toolbar>
 
-    <v-list dense two-line flat class="overflow-y-auto" max-height="14.5em">
+    <v-list dense two-line flat class="overflow-y-auto" :max-height="size">
       <v-list-item-group color="primary">
         <v-list-item
           v-for="(activity, i) in activities"
@@ -47,6 +47,10 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    fullSize: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -57,6 +61,11 @@ export default {
       formatDistanceToNow
     };
   },
+  computed: {
+    size() {
+      return this.fullSize ? '345px' : '14.5em';
+    }
+  },
   created() {
     this.activities = this.activityData;
 
@@ -66,7 +75,7 @@ export default {
         forceTLS: true
       });
 
-      const channel = pusher.subscribe('recent-activity');
+      const channel = pusher.subscribe('recent');
       channel.bind('activity-event', data => {
         this.activities.unshift(data.fullDocument);
       });

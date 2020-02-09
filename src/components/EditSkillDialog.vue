@@ -17,12 +17,12 @@
         <v-card-text>
           <v-select
             v-model="category"
-            return-object
             label="Category"
             :items="skillCategories"
             item-text="text"
             item-value="value"
             prepend-inner-icon="mdi-playlist-star"
+            return-object
             required
           ></v-select>
           <v-text-field
@@ -36,7 +36,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn text @click="close()">Close</v-btn>
-          <v-btn color="primary" :disabled="!valid" type="submit"
+          <v-btn color="success" :disabled="!valid" type="submit"
             >Edit Skill</v-btn
           >
         </v-card-actions>
@@ -79,6 +79,10 @@ export default {
     editSkillDialog(opened) {
       if (opened) {
         this.name = this.skill.name;
+        this.category = {
+          text: this.skill.category.name,
+          value: this.skill.category._id
+        };
       }
     }
   },

@@ -96,7 +96,7 @@
                         :rules="passwordRules"
                         :type="show1 ? 'text' : 'password'"
                         label="Password"
-                        hint="At least 8 characters"
+                        hint="Make sure it's at least 8 characters."
                         counter
                         class="pb-3"
                         required
@@ -108,7 +108,7 @@
                         :rules="passwordRules"
                         :type="show2 ? 'text' : 'password'"
                         label="Confirm password"
-                        hint="At least 8 characters"
+                        hint="Make sure it's at least 8 characters."
                         counter
                         required
                         class="pb-3"
@@ -134,25 +134,27 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <v-col
-      v-if="verified === false"
-      sm="12"
-      md="6"
-      offset-md="3"
-      class="text-center"
-    >
-      <v-alert text color="error" icon="mdi-exclamation" border="left">
-        User not found.
-        <p class="my-0 py-0"></p>
-      </v-alert>
-    </v-col>
-    <v-col v-if="completed" class="text-center">
-      <v-alert text color="accent" icon="mdi-login" border="left">
-        Registration complete! Please login.
-        <p class="my-0 py-0"></p>
-        <v-btn class="accent mt-4" to="/login">Login</v-btn>
-      </v-alert>
-    </v-col>
+    <v-row justify="center">
+      <v-col
+        v-if="verified === false"
+        sm="12"
+        md="6"
+        offset-md="3"
+        class="text-center"
+      >
+        <v-alert text color="error" icon="mdi-exclamation" border="left">
+          User not found.
+          <p class="my-0 py-0"></p>
+        </v-alert>
+      </v-col>
+      <v-col v-if="completed" class="text-center">
+        <v-alert text color="accent" icon="mdi-login" border="left">
+          Registration complete! Please login.
+          <p class="my-0 py-0"></p>
+          <v-btn class="accent mt-4" to="/login">Login</v-btn>
+        </v-alert>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 

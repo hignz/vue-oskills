@@ -2,13 +2,13 @@
   <div>
     <v-card flat>
       <v-card-title
-        >Skills <span class="caption ml-2">({{ skills.length }})</span>
+        >Active <span class="caption ml-2">({{ skills.length }})</span>
         <v-spacer></v-spacer>
         <v-form>
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
-            label="Search"
+            label="Search active skills..."
             single-line
             clearable
             hide-details
@@ -42,6 +42,9 @@
             @update="updateSkill"
           ></EditSkillDialog>
         </template>
+        <template v-slot:item.dateAdded="{ item }">
+          {{ formatRelative(new Date(item.dateAdded), Date.now()) }}
+        </template>
       </v-data-table>
       <v-dialog
         v-model="unArchivedDialog"
@@ -63,11 +66,19 @@
                   align: 'center',
                   value: 'name'
                 },
-                { text: 'Category', value: 'category.name', align: 'left' }
+                { text: 'Category', value: 'category.name', align: 'left' },
+                {
+                  text: 'Added',
+                  value: 'dateAdded',
+                  align: 'left'
+                }
               ]"
               :items="[selectedSkill]"
               hide-default-footer
             >
+              <template v-slot:item.dateAdded="{ item }">
+                {{ lightFormat(new Date(item.dateAdded), 'dd-MM-yyyy') }}
+              </template>
             </v-data-table>
             Are you sure you want to archive {{ selectedSkill.name }}? Archived
             skills are no longer available to users, but can be unarchived at
@@ -93,6 +104,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import { formatRelative } from 'date-fns';
 import EditSkillDialog from './EditSkillDialog';
 
 export default {
@@ -117,10 +129,12 @@ export default {
           value: 'name'
         },
         { text: 'Category', value: 'category.name' },
+        { text: 'Added', value: 'dateAdded' },
         { text: 'Actions', value: 'action', sortable: false, align: 'center' }
       ],
       selectedSkill: {},
-      unArchivedDialog: false
+      unArchivedDialog: false,
+      formatRelative
     };
   },
   methods: {
@@ -128,6 +142,9 @@ export default {
     showUnarchivedDialog(item) {
       this.selectedSkill = item;
       this.unArchivedDialog = true;
+    },
+    dateJoined(date) {
+      return lightFormat(new Date(date), 'dd-MM-yyyy');
     },
     doArchiveSkill() {
       this.archiveSkill(this.selectedSkill._id).then(res => {
@@ -137,6 +154,7 @@ export default {
           text: res.message
         });
 
+        this.selectedSkill.dateArchived = Date.now();
         this.$emit('archive', this.selectedSkill);
         this.closeDialog();
       });

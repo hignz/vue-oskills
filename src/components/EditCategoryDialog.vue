@@ -27,7 +27,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn text @click="close()">Close</v-btn>
-          <v-btn color="primary" :disabled="!valid" type="submit"
+          <v-btn color="success" :disabled="!valid" type="submit"
             >Edit Name</v-btn
           >
         </v-card-actions>
