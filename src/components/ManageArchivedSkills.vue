@@ -1,7 +1,7 @@
 <template>
   <v-card flat>
     <v-card-title
-      >Archived skills <span class="caption ml-2">({{ skills.length }})</span>
+      >Archived <span class="caption ml-2">({{ skills.length }})</span>
       <v-spacer></v-spacer>
       <v-form>
         <v-text-field
@@ -25,6 +25,10 @@
       no-results-text="No archived skills found"
       multi-sort
     >
+      <template v-slot:item.dateArchived="{ item }">
+        {{ formatRelative(new Date(item.dateArchived), Date.now()) }}
+      </template>
+
       <template v-slot:item.action="{ item }">
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
@@ -81,6 +85,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import { formatRelative } from 'date-fns';
 
 export default {
   props: {
@@ -101,10 +106,12 @@ export default {
           value: 'name'
         },
         { text: 'Category', value: 'category.name' },
+        { text: 'Archived', value: 'dateArchived' },
         { text: 'Actions', value: 'action', sortable: false, align: 'center' }
       ],
       selectedSkill: {},
-      archivedDialog: false
+      archivedDialog: false,
+      formatRelative
     };
   },
   computed: {
@@ -116,6 +123,8 @@ export default {
     ...mapActions(['unarchiveSkill', 'toggleSnackbar']),
     doUnarchiveSkill() {
       this.unarchiveSkill(this.selectedSkill._id).then(res => {
+        console.log(this.selectedSkill);
+
         this.toggleSnackbar({
           show: true,
           color: 'success',

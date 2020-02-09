@@ -48,6 +48,9 @@
             <span>Skill profile</span>
           </v-tooltip>
         </template>
+        <template v-slot:item.esteem="{ item }">
+          <EsteemBadge :esteem="item.esteem" />
+        </template>
       </v-data-table>
       <v-dialog v-model="deleteDialog" width="500">
         <v-card>
@@ -59,14 +62,15 @@
             <v-data-table
               v-if="loaded"
               class="mb-4"
+              disable-sort
               :headers="[
                 {
                   text: 'Skill',
                   align: 'center',
                   value: 'skill.name'
                 },
-                { text: 'Rating', value: 'rating', align: 'center' },
                 { text: 'Esteem', value: 'esteem', align: 'center' },
+                { text: 'Esteem Points', value: 'rating', align: 'center' },
                 {
                   text: 'Category',
                   value: 'skill.category.name',
@@ -76,6 +80,9 @@
               :items="[selectedSkill]"
               hide-default-footer
             >
+              <template v-slot:item.esteem="{ item }">
+                <EsteemBadge :esteem="item.esteem" />
+              </template>
             </v-data-table>
             Are you sure you want to delete {{ selectedSkill.name }}? This
             action is irreversible, all esteem gained will be lost.
@@ -101,10 +108,12 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import AddSkillDialog from '../components/AddSkillDialog';
+import EsteemBadge from '../components/EsteemBadge';
 
 export default {
   components: {
-    AddSkillDialog
+    AddSkillDialog,
+    EsteemBadge
   },
   data() {
     return {
