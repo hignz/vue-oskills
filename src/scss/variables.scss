@@ -5,6 +5,7 @@ $body-font-family: 'Poppins', sans-serif !important;
 $oskillsDark: (
   'base': #21252b,
   'lighten-1': #282c34,
+  'lighten-2': #474f57,
   'darken-1': #343a40,
 );
 
@@ -18,6 +19,7 @@ $material-dark: map-merge(
     'app-bar': map-get($oskillsDark, 'base'),
     "background": map-get($oskillsDark, "base"),
     'cards': map-get($oskillsDark, 'lighten-1'),
+    'chips': map-get($oskillsDark, 'lighten-2'),
     'navigation-drawer': map-get($oskillsDark, 'base'),
     'toolbar': map-get($oskillsDark, 'lighten-1'),
   )
