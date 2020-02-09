@@ -147,7 +147,7 @@ export default {
     });
   },
   editSkill(_, skillData) {
-    return http.post('/edit-skill', { skillData }).then(res => {
+    return http.post('/edit-skill', skillData).then(res => {
       return res.data;
     });
   },
