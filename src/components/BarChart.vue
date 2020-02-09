@@ -26,20 +26,15 @@ export default {
   computed: {
     ...mapGetters(['isDark', 'accentColor']),
     ...mapState(['user']),
-    bestSkill() {
-      return this.user.skills.reduce(
-        (prev, current) => (prev.rating > current.rating ? prev : current),
-        0
-      );
-    },
-
     barChartSeries() {
       return [
         {
           name: 'Esteem level',
-          data: this.user.skills.map(e => {
-            return e.rating;
-          })
+          data: this.user.skills
+            .map(e => {
+              return e.rating;
+            })
+            .sort((a, b) => b - a)
         }
       ];
     },
@@ -58,30 +53,25 @@ export default {
         },
         chart: {
           background: this.isDark ? '#282c34' : '#ffffff',
-          foreColor: this.isDark ? '#ffffff' : '#424242'
-        },
-        stroke: {
-          show: true,
-          width: 1,
-          colors: ['transparent']
+          foreColor: this.isDark ? '#eeeeef' : '#5e5e5e'
         },
         xaxis: {
-          title: {
-            text: 'Esteem Points'
-          },
-          categories: this.user.skills.map(el => {
-            return el.skill.name;
-          })
+          title: {},
+          categories: this.user.skills
+            .map(el => {
+              return el.skill.name;
+            })
+            .sort((a, b) => b - a)
         },
         yaxis: {},
         fill: {
-          opacity: 0.7,
+          opacity: 0.5,
           colors: [localStorage.getItem('accentColor')]
         },
         tooltip: {
           y: {
             formatter: function(val) {
-              return Math.ceil(val / 5);
+              return val;
             }
           }
         }

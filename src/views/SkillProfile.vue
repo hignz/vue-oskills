@@ -83,6 +83,7 @@
             two-line
             class="overflow-y-auto"
             style="max-height: 345px"
+            dense
           >
             <v-list-item
               v-for="(owner, i) in skill.owners"
@@ -180,22 +181,14 @@ export default {
   created() {
     const skillId = this.$route.params.id;
 
-    this.fetchSkillInfo(skillId)
-      .then(res => {
-        this.skill = res;
-        this.loaded = true;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.fetchSkillInfo(skillId).then(res => {
+      this.skill = res;
+      this.loaded = true;
+    });
 
-    this.fetchSkillActivity(skillId)
-      .then(res => {
-        this.skillActivityData = res;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.fetchSkillActivity(skillId).then(res => {
+      this.skillActivityData = res;
+    });
   },
   methods: {
     ...mapActions([
@@ -223,8 +216,6 @@ export default {
         });
     },
     openProfile(ownerId) {
-      this.setLoading(true);
-
       this.$router.push({
         name: 'profile',
         params: { id: ownerId }

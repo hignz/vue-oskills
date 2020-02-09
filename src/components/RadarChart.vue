@@ -67,7 +67,7 @@ export default {
           width: 0
         },
         fill: {
-          opacity: 0.4
+          opacity: 0.5
         },
         markers: {
           size: 0
@@ -124,7 +124,7 @@ export default {
         .sort((a, b) => b.name - a.name);
 
       return categories.map(el =>
-        el.skills.reduce((acc, curr) => acc + curr.esteem, 0)
+        el.skills.reduce((acc, curr) => acc + curr.esteem, 1)
       );
     }
   }
