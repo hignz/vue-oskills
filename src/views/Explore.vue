@@ -1,15 +1,18 @@
 <template>
   <v-container fluid>
+    <RecentlyAddedSkills class="mb-12" />
     <RecentlyJoined />
   </v-container>
 </template>
 
 <script>
 import RecentlyJoined from '../components/RecentlyJoined';
+import RecentlyAddedSkills from '../components/RecentlyAddedSkills';
 
 export default {
   components: {
-    RecentlyJoined
+    RecentlyJoined,
+    RecentlyAddedSkills
   },
   data() {
     return {

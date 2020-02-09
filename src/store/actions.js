@@ -249,5 +249,10 @@ export default {
       .then(res => {
         return res.data;
       });
+  },
+  fetchRecentlyAddedSkills() {
+    return http.get('skill/recently-added').then(res => {
+      return res.data;
+    });
   }
 };
