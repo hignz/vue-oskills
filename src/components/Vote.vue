@@ -46,6 +46,8 @@ export default {
               el => el !== this.user._id
             );
           }
+
+          this.$emit('voted', response.skill);
         })
         .catch(() => {
           this.toggleSnackbar({
