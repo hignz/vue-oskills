@@ -34,7 +34,10 @@
           </template>
           <span>Unarchive</span>
         </v-tooltip>
-        <EditCategoryDialog :category="item" @update="updateArchivedCategory"></EditCategoryDialog>
+        <EditCategoryDialog
+          :category="item"
+          @update="updateArchivedCategory"
+        ></EditCategoryDialog>
       </template>
     </v-data-table>
     <v-dialog v-model="unarchiveDialog" width="500" @input="v => v || close()">
@@ -137,7 +140,7 @@ export default {
     },
     updateArchivedCategory(i) {
       this.categories.forEach(e => {
-        if(e._id === i.categoryId) {
+        if (e._id === i.categoryId) {
           e.name = i.name;
         }
       });
