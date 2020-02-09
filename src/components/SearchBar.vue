@@ -60,14 +60,12 @@ export default {
 
   watch: {
     search(val) {
-      if (!val) {
+      if (!val || val.trim() === '') {
         this.entries = [];
         return;
       }
 
-      if (this.items.length > 0) return;
-
-      if (this.isLoading) return;
+      if (this.items.length > 0 || this.isLoading) return;
 
       this.isLoading = true;
 
