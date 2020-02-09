@@ -27,7 +27,7 @@
         :sort-desc="true"
       >
         <template v-slot:item.action="{ item }">
-          <v-tooltip bottom>
+          <v-tooltip left>
             <template v-slot:activator="{ on }">
               <v-btn icon v-on="on">
                 <v-icon small @click="showDeleteDialog(item)">
@@ -37,7 +37,7 @@
             </template>
             <span>Delete</span>
           </v-tooltip>
-          <v-tooltip bottom>
+          <v-tooltip right>
             <template v-slot:activator="{ on }">
               <v-btn icon v-on="on">
                 <v-icon small @click="openSkillProfile(item.skill._id)">

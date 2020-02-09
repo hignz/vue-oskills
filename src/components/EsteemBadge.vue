@@ -1,5 +1,5 @@
 <template>
-  <v-tooltip bottom>
+  <v-tooltip left>
     <template v-slot:activator="{ on }">
       <v-icon large :color="badge.color" v-on="on">
         {{ badge.icon }}
