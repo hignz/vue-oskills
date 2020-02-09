@@ -4,7 +4,6 @@
       >Archived
       <span class="caption ml-2">({{ categories.length }})</span>
       <v-spacer></v-spacer>
-      <EditCategoryDialog></EditCategoryDialog>
       <v-form>
         <v-text-field
           v-model="search"
@@ -32,16 +31,6 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn icon v-on="on">
-              <v-icon small @click="showEditDialog(item)">
-                mdi-pencil
-              </v-icon>
-            </v-btn>
-          </template>
-          <span>Edit</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <v-btn icon v-on="on">
               <v-icon small @click="showUnarchiveDialog(item)">
                 mdi-archive-arrow-up
               </v-icon>
@@ -49,6 +38,10 @@
           </template>
           <span>Unarchive</span>
         </v-tooltip>
+        <EditCategoryDialog
+          :category="item"
+          @update="updateArchivedCategory"
+        ></EditCategoryDialog>
       </template>
     </v-data-table>
     <v-dialog v-model="unarchiveDialog" width="500" @input="v => v || close()">
@@ -152,6 +145,13 @@ export default {
     },
     closeDialog() {
       this.unarchiveDialog = !this.unarchiveDialog;
+    },
+    updateArchivedCategory(i) {
+      this.categories.forEach(e => {
+        if (e._id === i.categoryId) {
+          e.name = i.name;
+        }
+      });
     }
   }
 };

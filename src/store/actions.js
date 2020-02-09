@@ -155,7 +155,7 @@ export default {
     });
   },
   editSkill(_, skillData) {
-    return http.post('/skill/edit', { skillData }).then(res => {
+    return http.post('/skill/edit', skillData).then(res => {
       return res.data;
     });
   },
@@ -165,7 +165,7 @@ export default {
     });
   },
   editCategory(_, categoryData) {
-    return http.post('/category/edit', { categoryData }).then(res => {
+    return http.post('/category/edit', categoryData).then(res => {
       return res.data;
     });
   },
