@@ -41,11 +41,11 @@
             <template v-slot:activator="{ on }">
               <v-btn icon v-on="on">
                 <v-icon small @click="openSkillProfile(item.skill._id)">
-                  mdi-file-star-outline
+                  mdi-open-in-new
                 </v-icon>
               </v-btn>
             </template>
-            <span>Skill profile</span>
+            <span>Open</span>
           </v-tooltip>
         </template>
         <template v-slot:item.esteem="{ item }">
@@ -127,9 +127,9 @@ export default {
           sortable: true,
           value: 'skill.name'
         },
-        { text: 'Esteem', value: 'esteem', align: 'center' },
-        { text: 'Esteem Points', value: 'rating', align: 'center' },
-        { text: 'Category', value: 'skill.category.name', align: 'center' },
+        { text: 'Esteem', value: 'esteem', align: 'left' },
+        { text: 'Esteem Points', value: 'rating', align: 'left' },
+        { text: 'Category', value: 'skill.category.name', align: 'left' },
         { text: 'Actions', value: 'action', sortable: false, align: 'center' }
       ],
       searchTerm: '',
