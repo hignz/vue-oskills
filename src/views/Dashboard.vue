@@ -6,14 +6,11 @@
           <v-row>
             <v-col sm="12" md="6">
               <v-row
-                class="subtitle-2 ml-md-12"
+                class="subtitle-1 ml-md-12"
                 align="center"
                 justify="center"
                 justify-md="start"
                 >Hello, {{ user.name.split(' ')[0] }}
-                <v-icon v-if="user.isAdmin" class="ml-2 mb-1"
-                  >mdi-account-tie</v-icon
-                >
               </v-row>
               <v-row
                 class="subtitle-2 ml-md-12"
@@ -40,25 +37,18 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col
-          v-for="(s, i) in topThreeSkills"
-          :key="i"
-          sm="12"
-          md="3"
-          cols="12"
-          class="text-center"
-        >
-          <v-row v-if="s.skill" align="center" justify="center">
-            <v-col sm="6" class="text-center">
-              <v-row class="caption grey--text" justify="end" justify-md="end">
+        <v-col v-for="(s, i) in topThreeSkills" :key="i" sm="3" md="3">
+          <v-row justify="center" align="end" align-md="center">
+            <v-col cols="12" sm="4" class="text-center">
+              <p class="body-1 mb-0">
                 {{ s.skill.name }}
-              </v-row>
-              <v-row class="headline mr-md-2" justify="end" justify-md="end">{{
-                s.rating
-              }}</v-row>
+              </p>
+              <p class="title grey--text mb-0">
+                {{ s.rating }}
+              </p>
             </v-col>
-            <v-col sm="6" class="text-center">
-              <v-row justify="start" class="mt-3">
+            <v-col cols="12" sm="6">
+              <v-row justify="center" justify-md="start" class="mt-md-3">
                 <EsteemBadge :esteem="s.esteem" />
               </v-row>
             </v-col>
