@@ -21,25 +21,25 @@
       v-if="showChangePasswordInput"
       v-model="newPassword"
       label="Password"
+      :rules="passwordRules"
       :append-icon="hidePassword ? 'mdi-eye-off' : 'mdi-eye'"
       :type="hidePassword ? 'password' : 'text'"
-      :rules="passwordRules"
       hint="Make sure it's at least 8 characters."
       counter
       required
-      @click:append="() => (hidePassword = !hidePassword)"
+      @click:append="hidePassword = !hidePassword"
     >
     </v-text-field>
     <v-text-field
       v-if="showChangePasswordInput"
       v-model="newPasswordConfirm"
-      label="Confirm password"
       :rules="passwordRules"
+      label="Confirm password"
       hint="Make sure it's at least 8 characters."
       :append-icon="hidePasswordConfirm ? 'mdi-eye-off' : 'mdi-eye'"
       :type="hidePasswordConfirm ? 'password' : 'text'"
       required
-      @click:append="() => (hidePasswordConfirm = !hidePasswordConfirm)"
+      @click:append="hidePasswordConfirm = !hidePasswordConfirm"
     >
     </v-text-field>
     <v-btn
@@ -51,7 +51,7 @@
       >Change password</v-btn
     >
     <div v-if="showChangePasswordInput" class="">
-      <p class="text-center caption">
+      <p class="text-center caption mt-4">
         You will be logged out after successfully changing your password
       </p>
       <v-btn-toggle dense class="ml-7 mt-4">
@@ -90,13 +90,10 @@ export default {
       hidePasswordConfirm: true,
       passwordRules: [
         v => !!v || 'Password is required',
-        v => v === this.newPasswordConfirm || 'Passwords must match',
+        v => v === this.newPassword || 'Passwords must match',
         v => v.length > 7 || 'Password must be at least 8 characters'
       ]
     };
-  },
-  created() {
-    console.log(this.$data);
   },
   methods: {
     ...mapActions(['doChangePassword', 'doLogout', 'toggleSnackbar']),
@@ -105,12 +102,10 @@ export default {
         oldPassword: this.oldPassword,
         newPassword: this.newPassword
       })
-        .then(res => {
-          console.log(res);
-
+        .then(() => {
           this.doLogout();
         })
-        .catch(err => {
+        .catch(() => {
           this.incorrectOldPassword = true;
           this.toggleSnackbar({
             show: true,
