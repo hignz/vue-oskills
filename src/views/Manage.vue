@@ -4,17 +4,26 @@
       <v-tabs-slider></v-tabs-slider>
 
       <v-tab href="#0">
-        Skills
+        Users
       </v-tab>
       <v-tab href="#1">
         Categories
       </v-tab>
-      <v-tab href="#tab-3">
-        Users
+      <v-tab href="#2">
+        Skills
       </v-tab>
 
       <v-tabs-items v-model="tab">
         <v-tab-item value="0" :transition="false" :reverse-transition="false">
+          <v-row v-if="loaded" justify="center" align="center">
+            <v-col cols="12" sm="12">
+              <ManageUsers :users="verifiedUsers" />
+              <v-divider></v-divider>
+              <InvitedUsers :users="invitedUsers" />
+            </v-col>
+          </v-row>
+        </v-tab-item>
+        <v-tab-item value="1" :transition="false" :reverse-transition="false">
           <v-row v-if="loaded" justify="center" align="center">
             <v-col cols="12" sm="12">
               <ManageSkills :skills="unarchivedSkills" @archive="archive" />
@@ -28,7 +37,8 @@
             </v-col>
           </v-row>
         </v-tab-item>
-        <v-tab-item value="1" :transition="false" :reverse-transition="false">
+
+        <v-tab-item value="2" :transition="false" :reverse-transition="false">
           <v-row v-if="loaded" justify="center" align="center">
             <v-col cols="12" sm="12">
               <ManageCategories
@@ -45,18 +55,6 @@
             </v-col>
           </v-row>
         </v-tab-item>
-        <v-tab-item
-          value="tab-3"
-          :transition="false"
-          :reverse-transition="false"
-        >
-          <v-row v-if="loaded" justify="center" align="center">
-            <v-col cols="12" sm="12">
-              <ManageUsers :users="allUsers" />
-              <v-divider></v-divider>
-            </v-col>
-          </v-row>
-        </v-tab-item>
       </v-tabs-items>
     </v-tabs>
   </v-container>
@@ -68,6 +66,8 @@ import ManageSkills from '../components/ManageSkills';
 import ManageArchivedSkills from '../components/ManageArchivedSkills';
 import ManageCategories from '../components/ManageCategories';
 import ArchivedCategories from '../components/ArchivedCategories';
+import ManageUsers from '../components/ManageUsers';
+import InvitedUsers from '../components/InvitedUsers';
 
 export default {
   components: {
@@ -75,7 +75,8 @@ export default {
     ManageCategories,
     ManageArchivedSkills,
     ArchivedCategories,
-    ManageUsers
+    ManageUsers,
+    InvitedUsers
   },
   data() {
     return {
@@ -98,13 +99,26 @@ export default {
     },
     archivedCategories() {
       return this.allCategories.filter(el => el.archived);
+    },
+    verifiedUsers() {
+      return this.allUsers.filter(el => el.isVerified);
+    },
+    invitedUsers() {
+      return this.allUsers.filter(el => !el.isVerified);
     }
   },
   mounted() {
     this.$store.dispatch('setLoading', true);
   },
   methods: {
-    ...mapActions(['fetchAllSkills', 'fetchCategories']),
+    ...mapActions(['fetchAllSkills', 'fetchCategories', 'fetchAllUsers']),
+    fetchUsers() {
+      this.fetchAllUsers().then(res => {
+        console.log(res);
+        this.allUsers = res.users;
+        this.loaded = true;
+      });
+    },
     fetchSkills() {
       this.fetchAllSkills().then(res => {
         this.allSkills = res.skills;
@@ -125,6 +139,8 @@ export default {
     },
     update(tab) {
       if (tab === '0') {
+        this.fetchUsers();
+      } else if (tab === '1') {
         this.fetchSkills();
       } else {
         this.fetchAllCategories();
