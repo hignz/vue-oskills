@@ -27,6 +27,9 @@
         show-expand
         :items-per-page="10"
       >
+        <template v-slot:item.dateJoined="{ item }">
+          {{ userDateJoined(item.dateJoined) }}
+        </template>
         <template v-slot:item.action="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
@@ -163,6 +166,9 @@ export default {
         name: 'profile',
         params: { id: userId }
       });
+    },
+    userDateJoined(date) {
+      return lightFormat(new Date(date), 'dd-MM-yyyy');
     }
   }
 };
