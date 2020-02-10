@@ -1,7 +1,7 @@
 <template>
   <v-card flat>
     <v-card-title
-      >Users
+      >Registered
       <v-spacer></v-spacer>
       <v-form>
         <v-text-field
@@ -22,9 +22,10 @@
         :single-expand="singleExpand"
         :expanded.sync="expanded"
         item-key="name"
-        show-expand
         no-data-text="No users loaded"
         no-results-text="No users found"
+        show-expand
+        :items-per-page="10"
       >
         <template v-slot:item.action="{ item }">
           <v-tooltip bottom>
@@ -50,26 +51,32 @@
         </template>
         <template v-slot:expanded-item="{ item }">
           <td :colspan="headers.length">
-            <RadarChart
-              v-if="item.skills.length"
-              :user-skills="item.skills"
-              :size="120"
-              :height="330"
-              :skill-categories="skillCategories"
-              class="pr-2"
-            ></RadarChart>
-
-            <!--  <v-list-item v-for="skill in item.skills" :key="skill._id">
-              <v-list-item-avatar>
-                <EsteemBadge :esteem="skill.esteem"></EsteemBadge>
-              </v-list-item-avatar>
-
-              <v-list-item-content>
-                <v-list-item-title
-                  v-text="skill.skill.name"
-                ></v-list-item-title>
-              </v-list-item-content>
-            </v-list-item> -->
+            <v-row>
+              <v-col>
+                <RadarChart
+                  v-if="item.skills.length"
+                  :user-skills="item.skills"
+                  :size="120"
+                  :height="330"
+                  :skill-categories="skillCategories"
+                  class="pr-2"
+                ></RadarChart>
+              </v-col>
+              <v-col>
+                <v-data-table
+                  :headers="headers1"
+                  :items="item.skills"
+                  item-key="name"
+                  no-data-text="No skills loaded"
+                  no-results-text="No skills found"
+                  :items-per-page="5"
+                >
+                  <template v-slot:item.esteem="{ item }">
+                    <EsteemBadge :esteem="item.esteem"></EsteemBadge>
+                  </template>
+                </v-data-table>
+              </v-col>
+            </v-row>
           </td>
         </template>
       </v-data-table>
@@ -79,14 +86,14 @@
 
 <script>
 import { mapActions } from 'vuex';
-import { lightFormat } from 'date-fns';
-import EsteemBadge from '../components/EsteemBadge';
 import RadarChart from '../components/RadarChart';
+import EsteemBadge from '../components/EsteemBadge';
+import { lightFormat } from 'date-fns';
 
 export default {
   components: {
-    EsteemBadge,
-    RadarChart
+    RadarChart,
+    EsteemBadge
   },
   props: {
     users: {
@@ -98,7 +105,7 @@ export default {
     return {
       searchTerm: '',
       expanded: [],
-      singleExpand: true,
+      singleExpand: false,
       headers: [
         {
           text: 'Name',
@@ -125,34 +132,32 @@ export default {
           align: 'center'
         }
       ],
+      headers1: [
+        {
+          text: 'Name',
+          align: 'left',
+          sortable: true,
+          value: 'skill.name'
+        },
+        {
+          text: 'Category',
+          align: 'left',
+          sortable: true,
+          value: 'skill.category.name'
+        },
+        {
+          text: 'Esteem',
+          align: 'center',
+          sortable: true,
+          value: 'esteem'
+        }
+      ],
       selectedUser: {},
       skillCategories: []
     };
   },
-  computed: {
-    categories() {
-      if (!this.users.skills.length) {
-        return [];
-      }
-      const arr = [
-        ...new Set(this.users.skills.flat().map(el => el.skill.category.name))
-      ];
-
-      const categories = arr.map(el => ({
-        categoryName: el,
-        skills: this.user.skills.filter(elm => elm.skill.category.name === el)
-      }));
-
-      return categories;
-    }
-  },
-  created() {
-    this.fetchCategoriesArchived('false').then(res => {
-      this.skillCategories = res.categories;
-    });
-  },
   methods: {
-    ...mapActions(['toggleSnackbar', 'fetchCategoriesArchived']),
+    ...mapActions(['toggleSnackbar']),
     openUserProfile(userId) {
       this.$router.push({
         name: 'profile',
