@@ -38,7 +38,7 @@
           </v-tooltip>
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-btn icon v-on="on">
+              <v-btn icon v-on="on" @click="showEditInviteDialog(item)">
                 <v-icon small>
                   mdi-pencil
                 </v-icon>
@@ -93,6 +93,35 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+
+      <v-dialog
+        v-model="editInviteDialog"
+        width="500"
+        @input="v => v || close()"
+      >
+        <v-card>
+          <v-card-title class="headline" primary-title>
+            Edit
+          </v-card-title>
+
+          <v-card-text>
+            testing
+            <v-spacer></v-spacer>
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-spacer />
+            <v-btn text @click="close()">
+              Close
+            </v-btn>
+            <v-btn color="error" @click="editInvite(newInvite)">
+              Send
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </template>
   </v-card>
 </template>
@@ -131,21 +160,48 @@ export default {
         }
       ],
       selectedUser: {},
-      inviteDialog: false
+      inviteDialog: false,
+      newInvite: {},
+      editInviteDialog: false
     };
   },
   methods: {
-    ...mapActions(['toggleSnackbar', 'inviteUser']),
+    ...mapActions(['toggleSnackbar', 'inviteUser', 'updateInvite']),
     openUserProfile(userId) {
       this.$router.push({
         name: 'profile',
         params: { id: userId }
       });
     },
+    showEditInviteDialog(item) {
+      this.newInvite = item;
+      this.editInviteDialog = true;
+    },
+    editInvite(inviteData) {
+      this.updateInvite({
+        userId: inviteData._id,
+        email: inviteData.email,
+        role: inviteData.role,
+        isAdmin: inviteData.isAdmin
+      })
+        .then(() => {
+          this.close();
+          this.toggleSnackbar({
+            show: true,
+            text: 'User updated successfully',
+            color: 'success'
+          });
+        })
+        .catch(err => {
+          this.toggleSnackbar({
+            show: true,
+            text: err.response.data,
+            color: 'error'
+          });
+        });
+    },
     showInviteDialog(item) {
-      console.log(item);
       this.selectedUser = item;
-      console.log(this.selectedUser);
       this.inviteDialog = true;
     },
     resendInvite(email, role, isAdmin) {
