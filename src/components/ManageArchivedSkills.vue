@@ -44,6 +44,11 @@
           :skill="item"
           @update="updateArchivedSkill"
         ></EditSkillDialog>
+        <v-btn icon>
+          <v-icon @click="openSkillProfile(item._id)">
+            mdi-star
+          </v-icon>
+        </v-btn>
       </template>
     </v-data-table>
     <v-dialog v-model="archivedDialog" width="500" @input="v => v || close()">
@@ -156,6 +161,12 @@ export default {
           s.name = e.name;
           s.category.name = e.categoryName;
         }
+      });
+    },
+    openSkillProfile(skillId) {
+      this.$router.push({
+        name: 'skillProfile',
+        params: { id: skillId }
       });
     }
   }
