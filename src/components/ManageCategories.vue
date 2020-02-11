@@ -41,6 +41,11 @@
           :category="item"
           @update="updateCategory"
         ></EditCategoryDialog>
+        <v-btn icon>
+          <v-icon @click="openCategoryProfile(item._id)">
+            mdi-star
+          </v-icon>
+        </v-btn>
       </template>
     </v-data-table>
     <v-dialog v-model="archiveDialog" width="500" @input="v => v || close()">
@@ -153,6 +158,12 @@ export default {
         if (e._id === i.categoryId) {
           e.name = i.name;
         }
+      });
+    },
+    openCategoryProfile(categoryId) {
+      this.$router.push({
+        name: 'category',
+        params: { id: categoryId }
       });
     }
   }
