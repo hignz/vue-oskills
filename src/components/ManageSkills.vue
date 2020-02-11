@@ -41,6 +41,11 @@
             :skill="item"
             @update="updateSkill"
           ></EditSkillDialog>
+          <v-btn icon>
+            <v-icon @click="openSkillProfile(item._id)">
+              mdi-star
+            </v-icon>
+          </v-btn>
         </template>
         <template v-slot:item.dateAdded="{ item }">
           {{ formatRelative(new Date(item.dateAdded), Date.now()) }}
@@ -168,6 +173,12 @@ export default {
           s.name = e.name;
           s.category.name = e.categoryName;
         }
+      });
+    },
+    openSkillProfile(skillId) {
+      this.$router.push({
+        name: 'skillProfile',
+        params: { id: skillId }
       });
     }
   }
