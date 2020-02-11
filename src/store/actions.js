@@ -15,6 +15,11 @@ export default {
       return res.data;
     });
   },
+  deleteUser(_, userId) {
+    return http.delete('/admin/delete/', { userId }).then(res => {
+      return res.data;
+    });
+  },
   fetchUserById(_, id) {
     return http.get(`/user/${id}`).then(res => {
       return res.data;
@@ -194,6 +199,11 @@ export default {
   },
   inviteUser(_, inviteData) {
     return http.post('/user/invite', inviteData).then(res => {
+      return res.data;
+    });
+  },
+  updateInvite(_, inviteData) {
+    return http.post('/admin/update-invite', inviteData).then(res => {
       return res.data;
     });
   },
