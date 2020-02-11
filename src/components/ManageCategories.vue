@@ -1,7 +1,8 @@
 <template>
   <v-card flat>
     <v-card-title
-      >Active <span class="caption ml-2">({{ categories.length }})</span>
+      >Active
+      <span class="caption ml-2 grey--text">({{ categories.length }})</span>
       <v-spacer></v-spacer>
       <v-form>
         <v-text-field

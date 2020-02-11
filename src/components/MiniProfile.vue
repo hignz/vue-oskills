@@ -27,7 +27,7 @@
             <v-list-item-title v-text="skill.skill.name"></v-list-item-title>
           </v-list-item-content>
           <v-list-item-action>
-            <Vote :skill="skill" />
+            <Vote :skill="skill" @voted="updateSkills" />
           </v-list-item-action>
         </v-list-item>
       </v-list-item-group>
@@ -83,6 +83,11 @@ export default {
         name: 'skillProfile',
         params: { id: skillId }
       });
+    },
+    updateSkills(skill) {
+      this.user.skills = this.user.skills.map(el =>
+        el._id === skill._id ? skill : el
+      );
     }
   }
 };

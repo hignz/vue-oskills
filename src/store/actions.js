@@ -259,5 +259,15 @@ export default {
       .then(res => {
         return res.data;
       });
+  },
+  fetchRecentlyAddedSkills() {
+    return http.get('skill/recently-added').then(res => {
+      return res.data;
+    });
+  },
+  fetchUsersByFilter(_, filterData) {
+    return http.post('user/find-by-filter', filterData).then(res => {
+      return res.data;
+    });
   }
 };

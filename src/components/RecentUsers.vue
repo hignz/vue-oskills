@@ -1,32 +1,46 @@
 <template>
-  <v-list v-if="users.length" dense two-line>
-    <v-list-item-group color="primary">
-      <v-list-item
-        v-for="(user, i) in users.slice(0, 3)"
-        :key="i"
-        link
-        @click="openProfile(user._id)"
-      >
-        <v-list-item-avatar>
-          <v-img
-            :src="`https://randomuser.me/api/portraits/men/${i}.jpg`"
-          ></v-img>
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title v-text="user.name"></v-list-item-title>
-          <v-list-item-subtitle
-            class="grey--text"
-            v-text="user.role"
-          ></v-list-item-subtitle>
-        </v-list-item-content>
-        <v-list-item-action-text>
-          {{
-            formatDistanceToNow(parseISO(user.dateJoined), { addSuffix: true })
-          }}
-        </v-list-item-action-text>
-      </v-list-item>
-    </v-list-item-group>
-  </v-list>
+  <div>
+    <v-list v-if="users.length" dense two-line>
+      <v-list-item-group color="primary">
+        <v-list-item
+          v-for="(user, i) in users"
+          :key="user._id"
+          link
+          @click="openProfile(user._id)"
+        >
+          <v-list-item-avatar>
+            <v-img
+              :src="`https://randomuser.me/api/portraits/men/${i}.jpg`"
+            ></v-img>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title v-text="user.name"></v-list-item-title>
+            <v-list-item-subtitle
+              class="grey--text"
+              v-text="user.role"
+            ></v-list-item-subtitle>
+          </v-list-item-content>
+          <v-list-item-action-text>
+            {{
+              formatDistanceToNow(parseISO(user.dateJoined), {
+                addSuffix: true
+              })
+            }}
+          </v-list-item-action-text>
+        </v-list-item>
+      </v-list-item-group>
+    </v-list>
+    <template v-else>
+      <v-card-text class="mt-8">
+        <p class="text-center grey--text">
+          No users have joined up yet.
+        </p>
+        <p class="text-center grey--text">
+          This makes us sad.
+        </p>
+      </v-card-text>
+    </template>
+  </div>
 </template>
 
 <script>

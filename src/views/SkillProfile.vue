@@ -79,17 +79,17 @@
           </v-toolbar>
 
           <v-list
-            v-if="skill.owners.length"
+            v-if="skill.owners && skill.owners.length"
             two-line
             class="overflow-y-auto"
             style="max-height: 345px"
             dense
           >
             <v-list-item
-              v-for="(owner, i) in skill.owners"
-              :key="owner._id"
+              v-for="(o, i) in skill.owners"
+              :key="o.owner._id"
               link
-              @click="openProfile(owner._id)"
+              @click="openProfile(o.owner._id)"
             >
               <v-list-item-avatar>
                 <v-img
@@ -98,14 +98,14 @@
               </v-list-item-avatar>
 
               <v-list-item-content>
-                <v-list-item-title v-text="owner.name"></v-list-item-title>
+                <v-list-item-title v-text="o.owner.name"></v-list-item-title>
                 <v-list-item-subtitle
                   class="grey--text"
-                  v-text="owner.role"
+                  v-text="o.owner.role"
                 ></v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
-                <EsteemBadge :esteem="owner.esteem"></EsteemBadge>
+                <EsteemBadge :esteem="o.esteem"></EsteemBadge>
               </v-list-item-action>
             </v-list-item>
           </v-list>

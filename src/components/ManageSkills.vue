@@ -2,7 +2,8 @@
   <div>
     <v-card flat>
       <v-card-title
-        >Active <span class="caption ml-2">({{ skills.length }})</span>
+        >Active
+        <span class="caption ml-2 grey--text">({{ skills.length }})</span>
         <v-spacer></v-spacer>
         <v-form>
           <v-text-field
@@ -29,7 +30,7 @@
         <template v-slot:item.action="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-btn icon v-on="on">
+              <v-btn icon text v-on="on">
                 <v-icon small @click="showUnarchivedDialog(item)">
                   mdi-archive
                 </v-icon>

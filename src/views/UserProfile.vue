@@ -69,7 +69,7 @@
                 </v-list-item-content>
 
                 <v-list-item-action>
-                  <Vote :skill="skill" />
+                  <Vote :skill="skill" @voted="updateSkills" />
                 </v-list-item-action>
               </v-list-item>
 
@@ -181,6 +181,11 @@ export default {
     },
     navigateTo(route) {
       this.$router.push(route);
+    },
+    updateSkills(skill) {
+      this.user.skills = this.user.skills.map(el =>
+        el._id === skill._id ? skill : el
+      );
     }
   }
 };

@@ -42,11 +42,12 @@ export default {
       return {
         plotOptions: {
           bar: {
-            horizontal: true
+            horizontal: true,
+            barHeight: '60%'
           }
         },
         dataLabels: {
-          enabled: true
+          enabled: false
         },
         theme: {
           mode: this.isDark ? 'dark' : 'light'
@@ -56,14 +57,12 @@ export default {
           foreColor: this.isDark ? '#eeeeef' : '#5e5e5e'
         },
         xaxis: {
-          title: {},
           categories: this.user.skills
             .map(el => {
               return el.skill.name;
             })
             .sort((a, b) => b - a)
         },
-        yaxis: {},
         fill: {
           opacity: 0.5,
           colors: [localStorage.getItem('accentColor')]

@@ -6,14 +6,11 @@
           <v-row>
             <v-col sm="12" md="6">
               <v-row
-                class="subtitle-2 ml-md-12"
+                class="subtitle-1 ml-md-12"
                 align="center"
                 justify="center"
                 justify-md="start"
                 >Hello, {{ user.name.split(' ')[0] }}
-                <v-icon v-if="user.isAdmin" class="ml-2 mb-1"
-                  >mdi-account-tie</v-icon
-                >
               </v-row>
               <v-row
                 class="subtitle-2 ml-md-12"
@@ -40,52 +37,82 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col
-          v-for="(s, i) in topThreeSkills"
-          :key="i"
-          sm="12"
-          md="3"
-          cols="12"
-          class="text-center"
-        >
-          <v-row v-if="s.skill" align="center" justify="center">
-            <v-col sm="6" class="text-center">
-              <v-row class="caption grey--text" justify="end" justify-md="end">
-                {{ s.skill.name }}
-              </v-row>
-              <v-row class="headline mr-md-2" justify="end" justify-md="end">{{
-                s.rating
-              }}</v-row>
-            </v-col>
-            <v-col sm="6" class="text-center">
-              <v-row justify="start" class="mt-3">
-                <EsteemBadge :esteem="s.esteem" />
-              </v-row>
-            </v-col>
-          </v-row>
-        </v-col>
+        <template v-if="topThreeSkills.length">
+          <v-col v-for="(s, i) in topThreeSkills" :key="i" sm="3" md="3">
+            <v-row justify="center" align="end" align-md="center">
+              <v-col cols="12" sm="4" class="text-center">
+                <p class="body-2 grey--text mb-0">
+                  {{ s.skill.name }}
+                </p>
+                <p class="title mb-0">
+                  {{ s.rating }}
+                </p>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-row justify="center" justify-md="start" class="mt-md-3">
+                  <EsteemBadge :esteem="s.esteem" />
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-col>
+        </template>
+
+        <template v-else>
+          <v-col v-for="(s, i) in 3" :key="i" sm="3" md="3">
+            <v-row justify="center" align="end" align-md="center">
+              <v-col cols="12" sm="4" class="text-center">
+                <p class="body-2 grey--text mb-0">
+                  N/A
+                </p>
+                <p class="title mb-0">
+                  N/A
+                </p>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-row justify="center" justify-md="start" class="mt-md-3">
+                  <EsteemBadge :placeholder="true" />
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-col>
+        </template>
       </v-row>
     </v-card>
 
     <v-row>
-      <v-col v-if="user.skills.length" cols="12" md="8" sm="12">
+      <v-col cols="12" md="8" sm="12">
         <BarChart :skills="user.skills" class="pr-2"></BarChart>
       </v-col>
-      <v-col v-if="user.skills.length" cols="12" md="4" sm="12">
-        <v-card>
+      <v-col cols="12" md="4" sm="12">
+        <v-card height="364">
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text"
               >CATEGORIES</v-toolbar-title
             >
           </v-toolbar>
-          <RadarChart :skill-categories="skillCategories" />
+          <RadarChart
+            v-if="user.skills.length"
+            :skill-categories="skillCategories"
+          />
+          <template v-else>
+            <v-card-text class="mt-12">
+              <p class="text-center grey--text">
+                A sexy ass chart will go here once you add some skills.
+              </p>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer />
+              <AddSkillDialog :is-icon="false"></AddSkillDialog>
+              <v-spacer />
+            </v-card-actions>
+          </template>
         </v-card>
       </v-col>
     </v-row>
 
     <v-row>
       <v-col cols="12" md="4" sm="12">
-        <v-card>
+        <v-card height="280">
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
               >{{ usersCardTitle }}
@@ -111,13 +138,16 @@
             </v-menu>
           </v-toolbar>
           <RecentUsers v-if="usersMenuIndex === 0" />
+          <SimilarUsers v-if="usersMenuIndex === 1" />
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <MiniSkillList :skills="topThreeSkills" />
+        <v-card height="280">
+          <MiniSkillList :skills="topThreeSkills" />
+        </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <v-card>
+        <v-card height="280">
           <ActivityFeed
             v-if="recentActivityData.length"
             :activity-data="recentActivityData"
@@ -133,11 +163,13 @@
 import { mapGetters, mapActions, mapState } from 'vuex';
 
 import RecentUsers from '../components/RecentUsers';
+import SimilarUsers from '../components/SimilarUsers';
 import MiniSkillList from '../components/MiniSkillList';
 import ActivityFeed from '../components/ActivityFeed';
 import EsteemBadge from '../components/EsteemBadge';
 import BarChart from '../components/BarChart';
 import RadarChart from '../components/RadarChart';
+import AddSkillDialog from '../components/AddSkillDialog';
 
 export default {
   components: {
@@ -146,7 +178,9 @@ export default {
     RecentUsers,
     MiniSkillList,
     BarChart,
-    RadarChart
+    RadarChart,
+    SimilarUsers,
+    AddSkillDialog
   },
   data() {
     return {

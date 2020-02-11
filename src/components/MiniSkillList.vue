@@ -1,11 +1,11 @@
 <template>
-  <v-card>
+  <div>
     <v-toolbar dense flat>
       <v-toolbar-title class="subtitle-2 grey--text"
         >TOP SKILLS</v-toolbar-title
       >
       <v-spacer></v-spacer>
-      <AddSkillDialog />
+      <AddSkillDialog v-if="skills && skills.length" />
       <v-btn icon @click="openAllSkills">
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
@@ -25,11 +25,10 @@
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title v-text="s.skill.name"></v-list-item-title>
-            <v-list-item-subtitle
-              class="grey--text"
-              v-text="s.skill.category.name"
-            ></v-list-item-subtitle>
+            <v-list-item-title>{{ s.skill.name }}</v-list-item-title>
+            <v-list-item-subtitle class="grey--text">
+              {{ s.skill.category.name }}</v-list-item-subtitle
+            >
           </v-list-item-content>
           <v-list-item-action-text>
             {{ s.rating }}
@@ -37,15 +36,22 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
-    <v-card-text v-else>
-      <p class="text-center grey--text">
-        You have not added any skills yet.
-      </p>
-      <p class="text-center grey--text">
-        Click the plus icon above to get started.
-      </p>
-    </v-card-text>
-  </v-card>
+    <template v-else>
+      <v-card-text class="mt-8">
+        <p class="text-center grey--text">
+          You have not added any skills yet.
+        </p>
+        <p class="text-center grey--text">
+          Add a skill to get started.
+        </p>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer />
+        <AddSkillDialog :is-icon="false" />
+        <v-spacer />
+      </v-card-actions>
+    </template>
+  </div>
 </template>
 
 <script>

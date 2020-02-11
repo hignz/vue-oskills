@@ -1,7 +1,8 @@
 <template>
   <v-card flat>
     <v-card-title
-      >Archived <span class="caption ml-2">({{ skills.length }})</span>
+      >Archived
+      <span class="caption ml-2 grey--text">({{ skills.length }})</span>
       <v-spacer></v-spacer>
       <v-form>
         <v-text-field

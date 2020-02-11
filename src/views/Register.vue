@@ -71,7 +71,7 @@
                 </v-stepper-step>
                 <v-stepper-content step="2">
                   <v-row>
-                    <v-col sm="6" class="text-center">
+                    <v-col sm="12" class="text-center">
                       <DarkThemeSwitch class="pl-3"></DarkThemeSwitch>
                       <AccentColorPicker></AccentColorPicker>
                     </v-col>
@@ -135,23 +135,16 @@
       </v-layout>
     </v-container>
     <v-row justify="center">
-      <v-col
-        v-if="verified === false"
-        sm="12"
-        md="6"
-        offset-md="3"
-        class="text-center"
-      >
+      <v-col v-if="!verified" sm="4" class="text-center">
         <v-alert text color="error" icon="mdi-exclamation" border="left">
           User not found.
           <p class="my-0 py-0"></p>
         </v-alert>
       </v-col>
-      <v-col v-if="completed" class="text-center">
-        <v-alert text color="accent" icon="mdi-login" border="left">
-          Registration complete! Please login.
-          <p class="my-0 py-0"></p>
-          <v-btn class="accent mt-4" to="/login">Login</v-btn>
+      <v-col v-if="completed" sm="4" class="text-center">
+        <v-alert text color="primary" border="left">
+          Registration complete! Please login to continue.
+          <v-btn class="success mt-4" to="/login">Login</v-btn>
         </v-alert>
       </v-col>
     </v-row>
@@ -183,7 +176,12 @@ export default {
       skills: [],
       selectedSkills: [],
       verified: null,
-      completed: null
+      completed: null,
+      passwordRules: [
+        v => !!v || 'Password is required',
+        v => v === this.password || 'Passwords must match',
+        v => v.length > 7 || 'Password must be at least 8 characters'
+      ]
     };
   },
   created() {
