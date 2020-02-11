@@ -19,7 +19,9 @@
             <v-col cols="12" sm="12">
               <ManageUsers :users="verifiedUsers" />
               <v-divider></v-divider>
-              <InvitedUsers :users="invitedUsers" />
+              <v-col cols="12" sm="12">
+                <InvitedUsers :users="invitedUsers" />
+              </v-col>
             </v-col>
           </v-row>
         </v-tab-item>
