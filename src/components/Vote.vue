@@ -1,7 +1,24 @@
 <template>
-  <v-btn icon :loading="voting" color="primary" @click="vote()" @click.stop>
-    <v-icon v-if="votedByUser" color="primary">mdi-arrow-up-bold</v-icon>
-    <v-icon v-else color="grey lighten-1">mdi-arrow-up-bold-outline</v-icon>
+  <v-btn
+    icon
+    :loading="voting"
+    color="primary"
+    @click="vote()"
+    @click.stop
+    @animationend="animated = false"
+  >
+    <v-icon
+      v-if="votedByUser"
+      color="primary"
+      :class="{ 'animated fadeOutUp faster': animated }"
+      >mdi-arrow-up-bold</v-icon
+    >
+    <v-icon
+      v-else
+      color="grey lighten-1"
+      :class="{ 'animated fadeOutDown faster': animated }"
+      >mdi-arrow-up-bold-outline</v-icon
+    >
   </v-btn>
 </template>
 
@@ -17,7 +34,8 @@ export default {
   },
   data() {
     return {
-      voting: false
+      voting: false,
+      animated: false
     };
   },
   computed: {
@@ -33,6 +51,7 @@ export default {
       this.voting = true;
       this.voteSkill(this.skill._id)
         .then(response => {
+          this.animated = true;
           this.toggleSnackbar({
             show: true,
             text: response.message,
