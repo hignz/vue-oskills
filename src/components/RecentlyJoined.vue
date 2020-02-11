@@ -17,7 +17,7 @@
       align="center"
     >
       <v-col
-        v-for="(user, i) in users.slice(0, 4)"
+        v-for="user in users.slice(0, 4)"
         :key="user._id"
         cols="12"
         sm="12"

@@ -2,7 +2,7 @@
   <v-card flat>
     <v-card-title
       >Archived
-      <span class="caption ml-2">({{ categories.length }})</span>
+      <span class="caption ml-2 grey--text">({{ categories.length }})</span>
       <v-spacer></v-spacer>
       <v-form>
         <v-text-field

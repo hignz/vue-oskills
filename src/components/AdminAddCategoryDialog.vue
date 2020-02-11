@@ -21,7 +21,7 @@
       <v-card-actions>
         <v-spacer />
         <v-btn text @click="close()">Close</v-btn>
-        <v-btn color="primary" :disabled="!valid" @click="addNewCategory">
+        <v-btn color="success" :disabled="!valid" @click="addNewCategory">
           Add</v-btn
         >
       </v-card-actions>
