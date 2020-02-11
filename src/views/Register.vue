@@ -162,6 +162,7 @@ export default {
     AccentColorPicker,
     DarkThemeSwitch
   },
+  mixins: [validationRules],
   data() {
     return {
       valid: true,
