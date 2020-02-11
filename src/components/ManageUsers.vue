@@ -198,7 +198,6 @@ export default {
       this.deleteDialog = true;
     },
     removeUser(userId) {
-      console.log(userId);
       this.deleteUser(userId)
         .then(() => {
           this.close();

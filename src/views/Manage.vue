@@ -109,9 +109,6 @@ export default {
       return this.allUsers.filter(el => !el.isVerified);
     }
   },
-  mounted() {
-    this.$store.dispatch('setLoading', true);
-  },
   methods: {
     ...mapActions(['fetchAllSkills', 'fetchCategories', 'fetchAllUsers']),
     fetchUsers() {
