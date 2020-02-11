@@ -26,21 +26,96 @@ export default {
       let icon = '';
       let color = '';
 
+      switch (this.esteem) {
+        case 0:
+          icon = 'mdi-hexagon-slice-1';
+          break;
+        case 1:
+          icon = 'mdi-hexagon-slice-3';
+          break;
+        case 2:
+          icon = 'mdi-hexagon-slice-5';
+          break;
+        case 3:
+          icon = 'mdi-hexagon-slice-1';
+          break;
+        case 4:
+          icon = 'mdi-hexagon-slice-2';
+          break;
+        case 5:
+          icon = 'mdi-hexagon-slice-4';
+          break;
+        case 6:
+          icon = 'mdi-hexagon-slice-5';
+          break;
+        case 7:
+          icon = 'mdi-hexagon-slice-1';
+          break;
+        case 8:
+          icon = 'mdi-hexagon-slice-2';
+          break;
+        case 9:
+          icon = 'mdi-hexagon-slice-3';
+          break;
+        case 10:
+          icon = 'mdi-hexagon-slice-4';
+          break;
+        case 11:
+          icon = 'mdi-hexagon-slice-5';
+          break;
+        case 12:
+          icon = 'mdi-hexagon-slice-1';
+          break;
+        case 13:
+          icon = 'mdi-hexagon-slice-2';
+          break;
+        case 14:
+          icon = 'mdi-hexagon-slice-3';
+          break;
+        case 15:
+          icon = 'mdi-hexagon-slice-4';
+          break;
+        case 16:
+          icon = 'mdi-hexagon-slice-5';
+          break;
+        case 17:
+          icon = 'mdi-hexagon-slice-5';
+          break;
+        case 18:
+          icon = 'mdi-hexagon-slice-1';
+          break;
+        case 19:
+          icon = 'mdi-hexagon-slice-2';
+          break;
+        case 20:
+          icon = 'mdi-hexagon-slice-3';
+          break;
+        case 21:
+          icon = 'mdi-hexagon-slice-4';
+          break;
+        case 22:
+          icon = 'mdi-hexagon-slice-5';
+          break;
+        case 23:
+          icon = 'mdi-hexagon-slice-5';
+          break;
+        default:
+          icon = 'mdi-hexagon-slice-6';
+          break;
+      }
+
       if (this.esteem >= 0 && this.esteem < 3) {
-        icon = 'mdi-hexagon-slice-1';
         color = '#FF7733';
-      } else if (this.esteem >= 3 && this.esteem <= 5) {
-        icon = 'mdi-hexagon-slice-2';
+      } else if (this.esteem >= 3 && this.esteem <= 6) {
         color = '#FFC914';
-      } else if (this.esteem > 5 && this.esteem <= 10) {
-        icon = 'mdi-hexagon-slice-3';
+      } else if (this.esteem >= 7 && this.esteem <= 11) {
         color = '#FFC914';
-      } else if (this.esteem >= 11 && this.esteem <= 16) {
-        icon = 'mdi-hexagon-slice-4';
+      } else if (this.esteem >= 12 && this.esteem <= 17) {
         color = '#5EEB5B';
-      } else {
-        icon = 'mdi-hexagon-slice-5';
+      } else if (this.esteem >= 18 && this.esteem <= 23) {
         color = '#3DD6D0';
+      } else {
+        color = '#BD93F9';
       }
 
       return { icon, color };
