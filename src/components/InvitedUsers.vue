@@ -97,23 +97,41 @@
       <v-dialog
         v-model="editInviteDialog"
         width="500"
-        @input="v => v || close()"
+        @input="v => v || closeEdit()"
       >
         <v-card>
           <v-card-title class="headline" primary-title>
             Edit
           </v-card-title>
-
+          <v-spacer></v-spacer>
           <v-card-text>
-            testing
+            <v-row>
+              <v-col>
+                <p>{{ newInvite.email }}</p>
+              </v-col>
+              <v-col>
+                <p>{{ newInvite.role }}</p>
+              </v-col>
+            </v-row>
+            <v-divider></v-divider>
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="email"
+              label="Email"
+              placeholder="Email"
+            ></v-text-field>
+            <v-select
+              v-model="role"
+              label="Role"
+              :items="['Senior Developer', 'Junior Developer']"
+            ></v-select>
+            <v-checkbox v-model="isAdmin" label="Admin"></v-checkbox>
             <v-spacer></v-spacer>
           </v-card-text>
-
           <v-divider></v-divider>
-
           <v-card-actions>
             <v-spacer />
-            <v-btn text @click="close()">
+            <v-btn text @click="closeEdit()">
               Close
             </v-btn>
             <v-btn color="error" @click="editInvite(newInvite)">
@@ -162,7 +180,10 @@ export default {
       selectedUser: {},
       inviteDialog: false,
       newInvite: {},
-      editInviteDialog: false
+      editInviteDialog: false,
+      email: null,
+      role: null,
+      isAdmin: false
     };
   },
   methods: {
@@ -174,18 +195,19 @@ export default {
       });
     },
     showEditInviteDialog(item) {
+      console.log(item);
       this.newInvite = item;
       this.editInviteDialog = true;
     },
     editInvite(inviteData) {
       this.updateInvite({
         userId: inviteData._id,
-        email: inviteData.email,
-        role: inviteData.role,
-        isAdmin: inviteData.isAdmin
+        email: this.email,
+        role: this.role,
+        isAdmin: this.isAdmin
       })
         .then(() => {
-          this.close();
+          this.closeEdit();
           this.toggleSnackbar({
             show: true,
             text: 'User updated successfully',
@@ -228,6 +250,9 @@ export default {
     },
     close() {
       this.inviteDialog = !this.inviteDialog;
+    },
+    closeEdit() {
+      this.editInviteDialog = !this.editInviteDialog;
     }
   }
 };
