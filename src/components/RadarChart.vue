@@ -1,5 +1,5 @@
 <template>
-  <div v-if="categories" id="chart">
+  <div id="chart">
     <apexcharts
       v-if="userSkills.length || user.skills.length"
       type="radar"
@@ -66,6 +66,7 @@ export default {
         stroke: {
           width: 0
         },
+        colors: [localStorage.getItem('accentColor'), '#BD93F9'],
         fill: {
           opacity: 0.5
         },
