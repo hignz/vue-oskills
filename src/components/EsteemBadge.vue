@@ -1,11 +1,11 @@
 <template>
   <v-tooltip left>
     <template v-slot:activator="{ on }">
-      <v-icon large :color="badge.color" v-on="on">
-        {{ badge.icon }}
+      <v-icon large :color="placeholder ? 'grey' : badge.color" v-on="on">
+        {{ placeholder ? 'mdi-hexagon-outline' : badge.icon }}
       </v-icon>
     </template>
-    <span>{{ esteem }}</span>
+    <span>{{ esteem || 0 }}</span>
   </v-tooltip>
 </template>
 
@@ -14,7 +14,11 @@ export default {
   props: {
     esteem: {
       type: Number,
-      required: true
+      default: 0
+    },
+    placeholder: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
