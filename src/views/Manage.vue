@@ -7,10 +7,10 @@
         Users
       </v-tab>
       <v-tab href="#1">
-        Categories
+        Skills
       </v-tab>
       <v-tab href="#2">
-        Skills
+        Categories
       </v-tab>
 
       <v-tabs-items v-model="tab">
