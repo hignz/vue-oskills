@@ -32,31 +32,32 @@
           {{ userDateJoined(item.joinedAt) }}
         </template>
 
+        <template v-slot:item.action="{ item }">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn icon v-on="on">
+                <v-icon small @click="showDeleteDialog(item)">
+                  mdi-delete
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Delete user</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn icon v-on="on">
+                <v-icon small @click="openUserProfile(item._id)">
+                  mdi-account-card-details
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>User profile</span>
+          </v-tooltip>
+        </template>
+
         <template v-slot:expanded-item="{ item }">
           <td :colspan="12">
-            <v-row class="ml-4 mt-2">
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <v-btn icon v-on="on">
-                    <v-icon small @click="showDeleteDialog(item)">
-                      mdi-delete
-                    </v-icon>
-                  </v-btn>
-                </template>
-                <span>Delete user</span>
-              </v-tooltip>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <v-btn icon v-on="on">
-                    <v-icon small @click="openUserProfile(item._id)">
-                      mdi-account-card-details
-                    </v-icon>
-                  </v-btn>
-                </template>
-                <span>User profile</span>
-              </v-tooltip>
-            </v-row>
-            <v-row>
+            <v-row v-if="item.skills.length">
               <v-col cols="12" sm="12" md="6">
                 <RadarChart
                   v-if="item.skills.length"
@@ -101,6 +102,11 @@
                 </v-data-table>
               </v-col>
             </v-row>
+            <div v-else class="text-center grey--text mt-3">
+              <p class="text-center grey--text">
+                This user have not added any skills yet
+              </p>
+            </div>
           </td>
         </template>
       </v-data-table>
@@ -175,6 +181,11 @@ export default {
           align: 'center',
           sortable: true,
           value: 'joinedAt'
+        },
+        {
+          text: 'Actions',
+          value: 'action',
+          align: 'center'
         }
       ],
       selectedUser: {},
