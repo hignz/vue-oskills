@@ -26,7 +26,11 @@ $material-dark: map-merge(
 );
 
 $material-light: (
-  'app-bar': #FAFAFA, 
-  'background': #FAFAFA, 
-  'navigation-drawer': #FAFAFA
+  'app-bar': #ffffff, 
+  'background': #ffffff, 
+  'navigation-drawer': #ffffff,
+  'toolbar': #ffffff,
+  
+  'cards': #fafafa,
+  'chips': #fafafa,
 );
