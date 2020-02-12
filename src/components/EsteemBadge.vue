@@ -5,7 +5,6 @@
         large
         :color="placeholder ? 'grey' : color"
         :class="animatedClass"
-        @animationend="animated = false"
         v-on="on"
       >
         {{ placeholder ? 'mdi-hexagon-outline' : icon }}
@@ -43,9 +42,7 @@ export default {
   computed: {
     icon() {
       const index =
-        this.esteem === 0
-          ? 1
-          : Math.ceil(this.esteem % 5) === 0
+        this.esteem === 0 || Math.ceil(this.esteem % 5) === 0
           ? 1
           : (this.esteem % 5) + 1;
 
