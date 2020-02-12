@@ -16,7 +16,7 @@ export default {
     });
   },
   deleteUser(_, userId) {
-    return http.delete('/admin/delete/', { userId }).then(res => {
+    return http.delete('/admin/delete/', { data: userId }).then(res => {
       return res.data;
     });
   },
