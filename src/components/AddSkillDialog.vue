@@ -30,6 +30,7 @@
             :items="skills"
             autocomplete="off"
             auto-select-first
+            spellcheck="false"
             :loading="loadingSkills"
             clearable
             prepend-inner-icon="mdi-star"
