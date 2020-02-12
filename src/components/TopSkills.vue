@@ -6,7 +6,7 @@
     </v-card-title>
 
     <v-data-table
-     v-if="loaded"
+      v-if="loaded"
       :headers="headers"
       :items="topSkills"
       :disable-filtering="true"
@@ -56,8 +56,8 @@ export default {
   },
   created() {
     this.fetchTopSkills()
-      .then((res) => {
-        this.initialize();        
+      .then(res => {
+        this.initialize();
         this.topSkills = res.skills;
         this.loaded = true;
       })
