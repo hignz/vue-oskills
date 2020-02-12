@@ -25,6 +25,14 @@
         no-results-text="No users found"
         :items-per-page="10"
       >
+        <template v-slot:item.invitedAt="{ item }">
+          {{
+            formatDistanceToNow(new Date(item.invitedAt), {
+              addSuffix: true
+            })
+          }}
+        </template>
+
         <template v-slot:item.action="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
@@ -146,6 +154,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import { formatDistanceToNow } from 'date-fns';
 
 export default {
   props: {
@@ -171,9 +180,14 @@ export default {
           value: 'role'
         },
         {
+          text: 'Invited',
+          align: 'center',
+          sortable: true,
+          value: 'invitedAt'
+        },
+        {
           text: 'Actions',
           value: 'action',
-          sortable: false,
           align: 'center'
         }
       ],
@@ -183,7 +197,8 @@ export default {
       editInviteDialog: false,
       email: null,
       role: null,
-      isAdmin: false
+      isAdmin: false,
+      formatDistanceToNow
     };
   },
   methods: {
