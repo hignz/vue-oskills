@@ -71,7 +71,16 @@ export default {
           opacity: 0.5
         },
         markers: {
-          size: 0
+          size: 3,
+          strokeWidth: 0
+        },
+        yaxis: {
+          tickAmount: 3,
+          labels: {
+            formatter: function(val) {
+              return Math.floor(val);
+            }
+          }
         },
         theme: {
           mode: this.isDark ? 'dark' : 'light'
@@ -125,7 +134,7 @@ export default {
         .sort((a, b) => b.name - a.name);
 
       return categories.map(el =>
-        el.skills.reduce((acc, curr) => acc + curr.esteem, 1)
+        el.skills.reduce((acc, curr) => acc + curr.esteem, 0.1)
       );
     }
   }
