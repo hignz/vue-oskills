@@ -31,32 +31,33 @@
         <template v-slot:item.dateJoined="{ item }">
           {{ userDateJoined(item.dateJoined) }}
         </template>
-        <template v-slot:item.action="{ item }">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-btn icon v-on="on">
-                <v-icon small @click="showDeleteDialog(item)">
-                  mdi-delete
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Delete user</span>
-          </v-tooltip>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-btn icon v-on="on">
-                <v-icon small @click="openUserProfile(item._id)">
-                  mdi-account-card-details
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>User profile</span>
-          </v-tooltip>
-        </template>
+
         <template v-slot:expanded-item="{ item }">
-          <td :colspan="headers.length">
+          <td :colspan="12">
+            <v-row class="ml-4 mt-2">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn icon v-on="on">
+                    <v-icon small @click="showDeleteDialog(item)">
+                      mdi-delete
+                    </v-icon>
+                  </v-btn>
+                </template>
+                <span>Delete user</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn icon v-on="on">
+                    <v-icon small @click="openUserProfile(item._id)">
+                      mdi-account-card-details
+                    </v-icon>
+                  </v-btn>
+                </template>
+                <span>User profile</span>
+              </v-tooltip>
+            </v-row>
             <v-row>
-              <v-col>
+              <v-col cols="12" sm="12" md="6">
                 <RadarChart
                   v-if="item.skills.length"
                   :user-skills="item.skills"
@@ -66,7 +67,7 @@
                   class="pr-2"
                 ></RadarChart>
               </v-col>
-              <v-col>
+              <v-col cols="12" sm="12" md="6">
                 <v-data-table
                   :headers="[
                     {
@@ -119,6 +120,7 @@
 
           <v-card-actions>
             <v-spacer />
+
             <v-btn text @click="close()">
               Close
             </v-btn>
@@ -173,12 +175,6 @@ export default {
           align: 'center',
           sortable: true,
           value: 'dateJoined'
-        },
-        {
-          text: 'Actions',
-          value: 'action',
-          sortable: false,
-          align: 'center'
         }
       ],
       selectedUser: {},
@@ -198,7 +194,7 @@ export default {
       this.deleteDialog = true;
     },
     removeUser(userId) {
-      this.deleteUser(userId)
+      this.deleteUser({ userId: userId })
         .then(() => {
           this.close();
           this.toggleSnackbar({
@@ -206,6 +202,7 @@ export default {
             text: 'User deleted successfully',
             color: 'success'
           });
+          this.$emit('userDeleted', userId);
         })
         .catch(err => {
           this.toggleSnackbar({
