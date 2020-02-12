@@ -17,7 +17,7 @@
         <v-tab-item value="0" :transition="false" :reverse-transition="false">
           <v-row v-if="loaded" justify="center" align="center">
             <v-col cols="12" sm="12">
-              <ManageUsers :users="verifiedUsers" />
+              <ManageUsers :users="verifiedUsers" @userDeleted="deleteUser" />
               <v-divider></v-divider>
               <v-col cols="12" sm="12">
                 <InvitedUsers :users="invitedUsers" />
@@ -144,6 +144,9 @@ export default {
       } else {
         this.fetchAllCategories();
       }
+    },
+    deleteUser(item) {
+      this.allUsers = this.allUsers.filter(el => el._id !== item);
     }
   }
 };
