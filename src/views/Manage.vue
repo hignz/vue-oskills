@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-tabs v-model="tab" @change="update">
+    <v-tabs v-model="tab" class="elevation-2" @change="update">
       <v-tabs-slider></v-tabs-slider>
 
       <v-tab href="#0">
