@@ -28,8 +28,8 @@
         show-expand
         :items-per-page="10"
       >
-        <template v-slot:item.dateJoined="{ item }">
-          {{ userDateJoined(item.dateJoined) }}
+        <template v-slot:item.joinedAt="{ item }">
+          {{ userDateJoined(item.joinedAt) }}
         </template>
 
         <template v-slot:expanded-item="{ item }">
@@ -174,7 +174,7 @@ export default {
           text: 'Date Joined',
           align: 'center',
           sortable: true,
-          value: 'dateJoined'
+          value: 'joinedAt'
         }
       ],
       selectedUser: {},
