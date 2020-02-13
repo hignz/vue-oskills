@@ -103,8 +103,6 @@ export default {
     populateSkills(categoryId) {
       this.loadingSkills = true;
 
-      console.log(categoryId);
-
       this.fetchSkillsByCategory(categoryId)
         .then(response => {
           this.skills = response.skills.map(o => {
