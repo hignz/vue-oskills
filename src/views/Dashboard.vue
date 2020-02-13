@@ -6,6 +6,7 @@
           <v-row>
             <v-col sm="12" md="6">
               <v-row
+                v-if="user.name"
                 class="subtitle-2 ml-md-12"
                 align="center"
                 justify="center"
