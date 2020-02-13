@@ -21,7 +21,7 @@
           </v-list-item-content>
           <v-list-item-action-text>
             {{
-              formatDistanceToNow(parseISO(user.dateJoined), {
+              formatDistanceToNow(parseISO(user.joinedAt), {
                 addSuffix: true
               })
             }}

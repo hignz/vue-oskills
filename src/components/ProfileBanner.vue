@@ -31,7 +31,7 @@
               <template v-slot:activator="{ on }">
                 <v-chip class="ma-2" v-on="on">
                   <v-icon class="pa-1" left>mdi-calendar-range</v-icon>
-                  {{ dateJoined }}
+                  {{ joinedAt }}
                 </v-chip>
               </template>
               <span>When {{ user.name }} joined OSkills.</span>
@@ -109,7 +109,7 @@ export default {
       ) + 1}.jpg`;
     },
     dateJoined() {
-      return lightFormat(new Date(this.user.dateJoined), 'dd-MM-yyyy');
+      return lightFormat(new Date(this.user.joinedAt), 'dd-MM-yyyy');
     }
   },
   methods: {

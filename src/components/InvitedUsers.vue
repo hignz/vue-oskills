@@ -25,6 +25,14 @@
         no-results-text="No users found"
         :items-per-page="10"
       >
+        <template v-slot:item.invitedAt="{ item }">
+          {{
+            formatDistanceToNow(new Date(item.invitedAt), {
+              addSuffix: true
+            })
+          }}
+        </template>
+
         <template v-slot:item.action="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
@@ -48,7 +56,7 @@
           </v-tooltip>
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-btn icon v-on="on">
+              <v-btn icon v-on="on" @click="showDeleteInviteDialog(item)">
                 <v-icon small>
                   mdi-delete
                 </v-icon>
@@ -64,11 +72,13 @@
           <v-card-title class="headline" primary-title>
             Resend Invitation
           </v-card-title>
-
+          <v-divider></v-divider>
           <v-card-text>
-            Please check if the details are correct
+            Please check if the details below are correct
             <v-spacer></v-spacer>
-            <p>{{ selectedUser.email }}</p>
+            <p class="mt-2 mb-0">Email : {{ selectedUser.email }}</p>
+            <p class="mt-0 mb-0">Role : {{ selectedUser.role }}</p>
+            <p class="mt-0 mb-0">Admin : {{ selectedUser.isAdmin }}</p>
           </v-card-text>
 
           <v-divider></v-divider>
@@ -105,20 +115,12 @@
           </v-card-title>
           <v-spacer></v-spacer>
           <v-card-text>
-            <v-row>
-              <v-col>
-                <p>{{ newInvite.email }}</p>
-              </v-col>
-              <v-col>
-                <p>{{ newInvite.role }}</p>
-              </v-col>
-            </v-row>
             <v-divider></v-divider>
-            <v-spacer></v-spacer>
             <v-text-field
               v-model="email"
               label="Email"
               placeholder="Email"
+              class="mt-3"
             ></v-text-field>
             <v-select
               v-model="role"
@@ -135,7 +137,37 @@
               Close
             </v-btn>
             <v-btn color="error" @click="editInvite(newInvite)">
-              Send
+              Edit
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog
+        v-model="deleteInviteDialog"
+        width="500"
+        @input="v => v || closeDelete()"
+      >
+        <v-card>
+          <v-card-title class="headline" primary-title>
+            Are you sure?
+          </v-card-title>
+          <v-divider></v-divider>
+          <v-card-text class="mt-4">
+            Are you sure you want to delete invitation for
+            {{ deleteInvite.email }} ? This action is irreversible
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-spacer />
+
+            <v-btn text @click="closeDelete()">
+              Close
+            </v-btn>
+            <v-btn color="error" @click="deleteUserInvite(deleteInvite._id)">
+              Delete
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -146,6 +178,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import { formatDistanceToNow } from 'date-fns';
 
 export default {
   props: {
@@ -171,23 +204,45 @@ export default {
           value: 'role'
         },
         {
+          text: 'Invited',
+          align: 'center',
+          sortable: true,
+          value: 'invitedAt'
+        },
+        {
           text: 'Actions',
           value: 'action',
-          sortable: false,
           align: 'center'
         }
       ],
       selectedUser: {},
       inviteDialog: false,
       newInvite: {},
+      deleteInvite: {},
       editInviteDialog: false,
+      deleteInviteDialog: false,
       email: null,
       role: null,
-      isAdmin: false
+      isAdmin: false,
+      formatDistanceToNow
     };
   },
+  watch: {
+    editInviteDialog(opened) {
+      if (opened) {
+        this.email = this.newInvite.email;
+        this.role = this.newInvite.role;
+        this.isAdmin = this.newInvite.isAdmin;
+      }
+    }
+  },
   methods: {
-    ...mapActions(['toggleSnackbar', 'inviteUser', 'updateInvite']),
+    ...mapActions([
+      'toggleSnackbar',
+      'inviteUser',
+      'updateInvite',
+      'deleteUser'
+    ]),
     openUserProfile(userId) {
       this.$router.push({
         name: 'profile',
@@ -213,6 +268,7 @@ export default {
             text: 'User updated successfully',
             color: 'success'
           });
+          this.$emit('invite', inviteData._id);
         })
         .catch(err => {
           this.toggleSnackbar({
@@ -248,11 +304,37 @@ export default {
           });
         });
     },
+    showDeleteInviteDialog(item) {
+      this.deleteInvite = item;
+      this.deleteInviteDialog = true;
+    },
+    deleteUserInvite(userId) {
+      this.deleteUser({ userId: userId })
+        .then(() => {
+          this.closeDelete();
+          this.toggleSnackbar({
+            show: true,
+            text: 'Invitation deleted successfully',
+            color: 'success'
+          });
+          this.$emit('invite', userId);
+        })
+        .catch(err => {
+          this.toggleSnackbar({
+            show: true,
+            text: err.response.data.error,
+            color: 'error'
+          });
+        });
+    },
     close() {
       this.inviteDialog = !this.inviteDialog;
     },
     closeEdit() {
       this.editInviteDialog = !this.editInviteDialog;
+    },
+    closeDelete() {
+      this.deleteInviteDialog = !this.deleteInviteDialog;
     }
   }
 };

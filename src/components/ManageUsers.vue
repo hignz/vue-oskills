@@ -26,11 +26,13 @@
         no-data-text="No users loaded"
         no-results-text="No users found"
         show-expand
+        expand-icon="mdi-chevron-down"
         :items-per-page="10"
       >
-        <template v-slot:item.dateJoined="{ item }">
-          {{ userDateJoined(item.dateJoined) }}
+        <template v-slot:item.joinedAt="{ item }">
+          {{ userDateJoined(item.joinedAt) }}
         </template>
+
         <template v-slot:item.action="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
@@ -53,10 +55,11 @@
             <span>User profile</span>
           </v-tooltip>
         </template>
+
         <template v-slot:expanded-item="{ item }">
-          <td :colspan="headers.length">
-            <v-row>
-              <v-col>
+          <td :colspan="12">
+            <v-row v-if="item.skills.length">
+              <v-col cols="12" sm="12" md="6">
                 <RadarChart
                   v-if="item.skills.length"
                   :user-skills="item.skills"
@@ -66,7 +69,7 @@
                   class="pr-2"
                 ></RadarChart>
               </v-col>
-              <v-col>
+              <v-col cols="12" sm="12" md="6">
                 <v-data-table
                   :headers="[
                     {
@@ -100,6 +103,11 @@
                 </v-data-table>
               </v-col>
             </v-row>
+            <div v-else class="text-center grey--text mt-3">
+              <p class="text-center grey--text">
+                This user have not added any skills yet
+              </p>
+            </div>
           </td>
         </template>
       </v-data-table>
@@ -119,6 +127,7 @@
 
           <v-card-actions>
             <v-spacer />
+
             <v-btn text @click="close()">
               Close
             </v-btn>
@@ -172,12 +181,11 @@ export default {
           text: 'Date Joined',
           align: 'center',
           sortable: true,
-          value: 'dateJoined'
+          value: 'joinedAt'
         },
         {
           text: 'Actions',
           value: 'action',
-          sortable: false,
           align: 'center'
         }
       ],
@@ -198,7 +206,7 @@ export default {
       this.deleteDialog = true;
     },
     removeUser(userId) {
-      this.deleteUser(userId)
+      this.deleteUser({ userId: userId })
         .then(() => {
           this.close();
           this.toggleSnackbar({
@@ -206,6 +214,7 @@ export default {
             text: 'User deleted successfully',
             color: 'success'
           });
+          this.$emit('userDeleted', userId);
         })
         .catch(err => {
           this.toggleSnackbar({

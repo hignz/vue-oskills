@@ -7,20 +7,20 @@
         Users
       </v-tab>
       <v-tab href="#1">
-        Categories
+        Skills
       </v-tab>
       <v-tab href="#2">
-        Skills
+        Categories
       </v-tab>
 
       <v-tabs-items v-model="tab">
         <v-tab-item value="0" :transition="false" :reverse-transition="false">
           <v-row v-if="loaded" justify="center" align="center">
             <v-col cols="12" sm="12">
-              <ManageUsers :users="verifiedUsers" />
+              <ManageUsers :users="verifiedUsers" @userDeleted="deleteUser" />
               <v-divider></v-divider>
               <v-col cols="12" sm="12">
-                <InvitedUsers :users="invitedUsers" />
+                <InvitedUsers :users="invitedUsers" @invite="editInvite" />
               </v-col>
             </v-col>
           </v-row>
@@ -113,7 +113,6 @@ export default {
     ...mapActions(['fetchAllSkills', 'fetchCategories', 'fetchAllUsers']),
     fetchUsers() {
       this.fetchAllUsers().then(res => {
-        console.log(res);
         this.allUsers = res.users;
         this.loaded = true;
       });
@@ -144,6 +143,12 @@ export default {
       } else {
         this.fetchAllCategories();
       }
+    },
+    deleteUser(item) {
+      this.allUsers = this.allUsers.filter(el => el._id !== item);
+    },
+    editInvite(item) {
+      this.allUsers = this.allUsers.filter(el => el._id !== item);
     }
   }
 };
