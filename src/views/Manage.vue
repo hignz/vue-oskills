@@ -20,7 +20,7 @@
               <ManageUsers :users="verifiedUsers" @userDeleted="deleteUser" />
               <v-divider></v-divider>
               <v-col cols="12" sm="12">
-                <InvitedUsers :users="invitedUsers" />
+                <InvitedUsers :users="invitedUsers" @invite="editInvite" />
               </v-col>
             </v-col>
           </v-row>
@@ -113,7 +113,6 @@ export default {
     ...mapActions(['fetchAllSkills', 'fetchCategories', 'fetchAllUsers']),
     fetchUsers() {
       this.fetchAllUsers().then(res => {
-        console.log(res);
         this.allUsers = res.users;
         this.loaded = true;
       });
@@ -146,6 +145,9 @@ export default {
       }
     },
     deleteUser(item) {
+      this.allUsers = this.allUsers.filter(el => el._id !== item);
+    },
+    editInvite(item) {
       this.allUsers = this.allUsers.filter(el => el._id !== item);
     }
   }
