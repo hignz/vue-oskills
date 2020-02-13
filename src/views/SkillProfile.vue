@@ -71,7 +71,7 @@
 
     <v-row>
       <v-col cols="12" sm="12" md="4">
-        <v-card>
+        <v-card height="345">
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
               >USERS WITH THIS SKILL</v-toolbar-title
@@ -86,22 +86,21 @@
             dense
           >
             <v-list-item
-              v-for="(o, i) in skill.owners"
+              v-for="o in skill.owners"
               :key="o.owner._id"
               link
               @click="openProfile(o.owner._id)"
             >
               <v-list-item-avatar>
-                <v-img
-                  :src="`https://randomuser.me/api/portraits/men/${i}.jpg`"
-                ></v-img>
+                <v-img v-if="o.owner.image" :src="o.owner.image"></v-img>
+                <v-icon v-else large>mdi-account-circle</v-icon>
               </v-list-item-avatar>
 
               <v-list-item-content>
                 <v-list-item-title v-text="o.owner.name"></v-list-item-title>
                 <v-list-item-subtitle
                   class="grey--text"
-                  v-text="o.owner.role"
+                  v-text="o.owner.role.title"
                 ></v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
@@ -117,7 +116,7 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <v-card>
+        <v-card height="345">
           <v-toolbar flat dense>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
               >Something will eventually go here</v-toolbar-title
@@ -153,7 +152,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 import ActivityFeed from '../components/ActivityFeed';
 import EsteemBadge from '../components/EsteemBadge';
@@ -171,7 +170,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user']),
+    ...mapState(['user']),
     isAdded() {
       return (
         !this.user.skills.filter(e => e.skillId === this.skill._id).length > 0
