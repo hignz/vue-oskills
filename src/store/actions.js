@@ -185,6 +185,9 @@ export default {
   updateUser({ commit }, user) {
     commit(constants.SET_USER, user);
   },
+  updateUserAvatar({ commit }, url) {
+    commit(constants.SET_USER_AVATAR, url);
+  },
   toggleDrawer({ commit }, showDrawer) {
     commit(constants.SET_EXPANDED_DRAWER, showDrawer);
   },
@@ -261,12 +264,24 @@ export default {
       });
   },
   fetchRecentlyAddedSkills() {
-    return http.get('skill/recently-added').then(res => {
+    return http.get('/skill/recently-added').then(res => {
       return res.data;
     });
   },
   fetchUsersByFilter(_, filterData) {
-    return http.post('user/find-by-filter', filterData).then(res => {
+    return http.post('/user/find-by-filter', filterData).then(res => {
+      return res.data;
+    });
+  },
+  uploadProfilePicture(_, file) {
+    const formData = new FormData();
+    formData.append('image', file);
+    return http.post('/upload', formData).then(res => {
+      return res.data;
+    });
+  },
+  fetchRoles() {
+    return http.get('/role').then(res => {
       return res.data;
     });
   }

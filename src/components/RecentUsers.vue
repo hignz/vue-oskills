@@ -3,21 +3,20 @@
     <v-list v-if="users.length" dense two-line>
       <v-list-item-group color="primary">
         <v-list-item
-          v-for="(user, i) in users"
+          v-for="user in users"
           :key="user._id"
           link
           @click="openProfile(user._id)"
         >
           <v-list-item-avatar>
-            <v-img
-              :src="`https://randomuser.me/api/portraits/men/${i}.jpg`"
-            ></v-img>
+            <v-img v-if="user.image" :src="user.image"></v-img>
+            <v-icon v-else large>mdi-account-circle</v-icon>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title v-text="user.name"></v-list-item-title>
             <v-list-item-subtitle
               class="grey--text"
-              v-text="user.role"
+              v-text="user.role.title"
             ></v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-action-text>

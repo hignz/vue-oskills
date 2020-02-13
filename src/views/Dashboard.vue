@@ -1,16 +1,16 @@
 <template>
-  <v-container v-if="loaded" fluid>
+  <v-container v-if="user" fluid>
     <v-card class="mb-3">
       <v-row align="center" justify="center">
         <v-col cols="12" sm="12" md="3" class="text-center">
           <v-row>
             <v-col sm="12" md="6">
               <v-row
-                class="subtitle-1 ml-md-12"
+                class="subtitle-2 ml-md-12"
                 align="center"
                 justify="center"
                 justify-md="start"
-                >Hello, {{ user.name.split(' ')[0] }}
+                >Hello, {{ firstName }}
               </v-row>
               <v-row
                 class="subtitle-2 ml-md-12"
@@ -23,7 +23,7 @@
                 class="caption grey--text ml-md-12 font-weight-bold"
                 justify="center"
                 justify-md="start"
-                >{{ user.role }}</v-row
+                >{{ user.role.title }}</v-row
               >
               <v-row
                 class="caption grey--text ml-md-12 font-weight-bold"
@@ -197,7 +197,10 @@ export default {
   },
   computed: {
     ...mapState(['user']),
-    ...mapGetters(['topThreeSkills', 'skills'])
+    ...mapGetters(['topThreeSkills', 'skills']),
+    firstName() {
+      return this.user.name.split(' ')[0];
+    }
   },
   created() {
     this.fetchRecentActivity().then(res => {

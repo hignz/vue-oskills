@@ -5,7 +5,8 @@
         <v-col cols="12" sm="12">
           <v-col cols="12" sm="2" offset-sm="5" class="pb-0 text-center">
             <v-avatar size="128">
-              <v-img :src="randomUserImg"></v-img>
+              <v-img v-if="user.image" :src="user.image"></v-img>
+              <v-icon v-else large>mdi-account-circle</v-icon>
             </v-avatar>
           </v-col>
           <v-col cols="12" sm="2" offset-sm="5" class="pb-0 text-center">
@@ -13,7 +14,7 @@
               user.name
             }}</v-card-subtitle>
             <v-card-subtitle class="pt-0 grey--text">{{
-              user.role
+              user.role.title
             }}</v-card-subtitle>
           </v-col>
           <v-col cols="12" sm="6" offset-sm="3" class="py-0 text-center">
@@ -45,7 +46,13 @@
               <span>{{ user.name }}'s' best skill.</span>
             </v-tooltip>
           </v-col>
-          <v-col cols="12" sm="6" offset-sm="3" class="text-center mt-2">
+          <v-col
+            v-if="loggedInUser.isAdmin"
+            cols="12"
+            sm="6"
+            offset-sm="3"
+            class="text-center mt-2"
+          >
             <v-btn
               small
               outlined=""
@@ -63,8 +70,8 @@
 </template>
 
 <script>
-import { lightFormat, parseISO } from 'date-fns';
-import { mapActions } from 'vuex';
+import { lightFormat } from 'date-fns';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   props: {
@@ -76,11 +83,11 @@ export default {
   data() {
     return {
       lightFormat,
-      parseISO,
       vWeight: Number
     };
   },
   computed: {
+    ...mapState({ loggedInUser: 'user' }),
     bestSkill() {
       return this.user.skills.reduce(
         (prev, current) => (prev.esteem > current.esteem ? prev : current),
@@ -108,11 +115,6 @@ export default {
   methods: {
     ...mapActions(['addAdmin', 'toggleSnackbar']),
     promoteToAdmin(user) {
-      if (user.isAdmin === false) {
-        this.vWeight = 5;
-      } else {
-        this.vWeight = 1;
-      }
       this.addAdmin({
         uId: user._id,
         isAdmin: !user.isAdmin,

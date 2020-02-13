@@ -175,7 +175,7 @@ export default {
           text: 'Role',
           align: 'center',
           sortable: true,
-          value: 'role'
+          value: 'role.title'
         },
         {
           text: 'Date Joined',

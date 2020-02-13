@@ -10,12 +10,7 @@
         >
       </v-col>
     </v-row>
-    <v-row
-      v-if="users.length"
-      class="mt-0 pt-0"
-      justify="center"
-      align="center"
-    >
+    <v-row v-if="users.length" class="mt-0 pt-0" justify="start" align="center">
       <v-col
         v-for="user in users.slice(0, 4)"
         :key="user._id"
