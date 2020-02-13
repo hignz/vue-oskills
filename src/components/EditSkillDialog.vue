@@ -77,6 +77,9 @@ export default {
   },
   watch: {
     editSkillDialog(opened) {
+      this.fetchCategories().then(res => {
+        this.categories = res.categories;
+      });
       if (opened) {
         this.name = this.skill.name;
         this.category = {
@@ -86,11 +89,7 @@ export default {
       }
     }
   },
-  created() {
-    this.fetchCategories().then(res => {
-      this.categories = res.categories;
-    });
-  },
+  created() {},
   methods: {
     ...mapActions(['editSkill', 'toggleSnackbar', 'fetchCategories']),
     onSubmit() {
