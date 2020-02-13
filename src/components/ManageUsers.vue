@@ -3,7 +3,8 @@
     <v-card-title
       >Registered
       <v-spacer></v-spacer>
-      <v-form>
+      <InviteUserDialog />
+      <v-form class="mb-6 ml-6">
         <v-text-field
           v-model="searchTerm"
           append-icon="mdi-magnify"
@@ -146,11 +147,13 @@ import { mapActions } from 'vuex';
 import RadarChart from '../components/RadarChart';
 import EsteemBadge from '../components/EsteemBadge';
 import { lightFormat } from 'date-fns';
+import InviteUserDialog from '../components/InviteUserDialog';
 
 export default {
   components: {
     RadarChart,
-    EsteemBadge
+    EsteemBadge,
+    InviteUserDialog
   },
   props: {
     users: {
