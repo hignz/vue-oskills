@@ -4,7 +4,8 @@
       >Active
       <span class="caption ml-2 grey--text">({{ categories.length }})</span>
       <v-spacer></v-spacer>
-      <v-form>
+      <AdminAddCategoryDialog />
+      <v-form class="mb-6 ml-6">
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
@@ -95,10 +96,12 @@
 import EditCategoryDialog from '../components/EditCategoryDialog';
 import { mapActions } from 'vuex';
 import { formatRelative } from 'date-fns';
+import AdminAddCategoryDialog from '../components/AdminAddCategoryDialog';
 
 export default {
   components: {
-    EditCategoryDialog
+    EditCategoryDialog,
+    AdminAddCategoryDialog
   },
   props: {
     categories: {
