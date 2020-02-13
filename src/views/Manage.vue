@@ -20,7 +20,7 @@
               <ManageUsers :users="verifiedUsers" @userDeleted="deleteUser" />
               <v-divider></v-divider>
               <v-col cols="12" sm="12">
-                <InvitedUsers :users="invitedUsers" @invite="editInvite" />
+                <InvitedUsers :users="invitedUsers" @invite="invite" />
               </v-col>
             </v-col>
           </v-row>
@@ -147,7 +147,7 @@ export default {
     deleteUser(item) {
       this.allUsers = this.allUsers.filter(el => el._id !== item);
     },
-    editInvite(item) {
+    invite(item) {
       this.allUsers = this.allUsers.filter(el => el._id !== item);
     }
   }
