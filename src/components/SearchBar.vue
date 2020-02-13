@@ -73,7 +73,6 @@ export default {
       this.fetchByName(val)
         .then(res => {
           this.entries = res.data;
-          console.log(this.entries);
         })
         .catch(error => console.log(error))
         .finally(() => (this.isLoading = false));
