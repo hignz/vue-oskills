@@ -20,6 +20,7 @@
       <template v-slot:item="{ parent, item }">
         <v-list-item-avatar>
           <v-icon v-if="item.category">mdi-star</v-icon>
+          <v-img v-else-if="item.image" :src="item.image"></v-img>
           <v-icon v-else>mdi-account</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
@@ -28,7 +29,7 @@
           ></v-list-item-title>
           <v-list-item-subtitle class="grey--text">
             {{
-              item.category ? item.category.name : item.role
+              item.category ? item.category.name : item.role.title
             }}</v-list-item-subtitle
           >
         </v-list-item-content>
@@ -72,6 +73,7 @@ export default {
       this.fetchByName(val)
         .then(res => {
           this.entries = res.data;
+          console.log(this.entries);
         })
         .catch(error => console.log(error))
         .finally(() => (this.isLoading = false));

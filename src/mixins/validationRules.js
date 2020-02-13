@@ -2,10 +2,10 @@ export default {
   data() {
     return {
       emailRules: [
-        v => !!v || 'Email is required',
+        v => !!v || 'Required',
         v => /.+@.+/.test(v) || 'Email must be valid'
       ],
-      requiredRules: [v => !!v || 'Field is required'],
+      requiredRules: [v => !!v || 'Required'],
       nameRules: [
         v => !!v || 'Required',
         v => v.length > 2 || 'Name must be at least 3 characters'

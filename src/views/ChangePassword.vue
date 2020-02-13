@@ -10,8 +10,7 @@
               </v-toolbar-title>
             </v-toolbar>
             <v-card-subtitle
-              >Please enter your account's verified email address below and we
-              will send you a password reset link</v-card-subtitle
+              >Please enter your new password below</v-card-subtitle
             >
             <v-card-text>
               <v-text-field
@@ -49,7 +48,7 @@
         </v-card>
         <v-card v-else>
           <v-card-text class="text-center">
-            YAAAAAAY
+            Your password was successfully changed. Please login to continue.
           </v-card-text>
 
           <v-card-actions>

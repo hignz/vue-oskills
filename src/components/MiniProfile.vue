@@ -3,12 +3,13 @@
     <v-list-item dense @click="openProfile">
       <v-list-item-avatar>
         <v-avatar size="50">
-          <v-img :src="randomUserImg"></v-img>
+          <v-img v-if="user.image" :src="user.image"></v-img>
+          <v-icon v-else large>mdi-account-circle</v-icon>
         </v-avatar>
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="title">{{ user.name }}</v-list-item-title>
-        <v-list-item-subtitle>{{ user.role }}</v-list-item-subtitle>
+        <v-list-item-subtitle>{{ user.role.title }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
