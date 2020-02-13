@@ -67,18 +67,31 @@
         </template>
       </v-data-table>
 
-      <v-dialog v-model="inviteDialog" width="500" @input="v => v || close()">
+      <v-dialog v-model="inviteDialog" width="600" @input="v => v || close()">
         <v-card>
           <v-card-title class="headline" primary-title>
             Resend Invitation
           </v-card-title>
-          <v-divider></v-divider>
           <v-card-text>
-            Please check if the details below are correct
-            <v-spacer></v-spacer>
-            <p class="mt-2 mb-0">Email : {{ selectedUser.email }}</p>
-            <p class="mt-0 mb-0">Role : {{ selectedUser.role }}</p>
-            <p class="mt-0 mb-0">Admin : {{ selectedUser.isAdmin }}</p>
+            <v-data-table
+              class="mb-4"
+              disable-sort
+              :headers="[
+                {
+                  text: 'Email',
+                  align: 'center',
+                  value: 'email'
+                },
+                { text: 'Role', value: 'role', align: 'center' },
+                { text: 'Admin', align: 'center' }
+              ]"
+              :items="[selectedUser]"
+              hide-default-footer
+            >
+            </v-data-table>
+            <template v-slot:item.isAdmin="{ item }">
+              <v-checkbox input-value="true" disabled></v-checkbox>
+            </template>
           </v-card-text>
 
           <v-divider></v-divider>
@@ -115,7 +128,6 @@
           </v-card-title>
           <v-spacer></v-spacer>
           <v-card-text>
-            <v-divider></v-divider>
             <v-text-field
               v-model="email"
               label="Email"
@@ -152,7 +164,6 @@
           <v-card-title class="headline" primary-title>
             Are you sure?
           </v-card-title>
-          <v-divider></v-divider>
           <v-card-text class="mt-4">
             Are you sure you want to delete invitation for
             {{ deleteInvite.email }} ? This action is irreversible
