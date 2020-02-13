@@ -26,6 +26,7 @@
         no-data-text="No users loaded"
         no-results-text="No users found"
         show-expand
+        expand-icon="mdi-chevron-down"
         :items-per-page="10"
       >
         <template v-slot:item.joinedAt="{ item }">
