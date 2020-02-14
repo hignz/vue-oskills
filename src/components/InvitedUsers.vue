@@ -74,24 +74,23 @@
           </v-card-title>
           <v-card-text>
             <v-data-table
-              class="mb-4"
               disable-sort
               :headers="[
                 {
                   text: 'Email',
-                  align: 'center',
+                  align: 'left',
                   value: 'email'
                 },
-                { text: 'Role', value: 'role', align: 'center' },
-                { text: 'Admin', align: 'center' }
+                { text: 'Role', value: 'role.title', align: '`left`' },
+                { text: 'Admin', value: 'isAdmin', align: 'center' }
               ]"
               :items="[selectedUser]"
               hide-default-footer
             >
+              <template v-slot:item.isAdmin="{ item }">
+                <v-simple-checkbox v-model="item.isAdmin"></v-simple-checkbox>
+              </template>
             </v-data-table>
-            <template v-slot:item.isAdmin="{ item }">
-              <v-checkbox input-value="true" disabled></v-checkbox>
-            </template>
           </v-card-text>
 
           <v-divider></v-divider>
@@ -106,7 +105,7 @@
               @click="
                 resendInvite(
                   selectedUser.email,
-                  selectedUser.role,
+                  selectedUser.role._id,
                   selectedUser.isAdmin
                 )
               "
@@ -131,13 +130,14 @@
             <v-text-field
               v-model="email"
               label="Email"
-              placeholder="Email"
               class="mt-3"
             ></v-text-field>
             <v-select
-              v-model="role"
+              v-model="selectedRole"
               label="Role"
-              :items="['Senior Developer', 'Junior Developer']"
+              :items="roles"
+              item-text="title"
+              item-value="_id"
             ></v-select>
             <v-checkbox v-model="isAdmin" label="Admin"></v-checkbox>
             <v-spacer></v-spacer>
@@ -212,7 +212,7 @@ export default {
           text: 'Role',
           align: 'center',
           sortable: true,
-          value: 'role'
+          value: 'role.title'
         },
         {
           text: 'Invited',
@@ -233,16 +233,21 @@ export default {
       editInviteDialog: false,
       deleteInviteDialog: false,
       email: null,
-      role: null,
+      selectedRole: null,
       isAdmin: false,
-      formatDistanceToNow
+      formatDistanceToNow,
+      roles: []
     };
   },
   watch: {
     editInviteDialog(opened) {
       if (opened) {
+        this.fetchRoles().then(res => {
+          this.roles = res.roles;
+        });
         this.email = this.newInvite.email;
-        this.role = this.newInvite.role;
+        this.selectedRole = this.newInvite.role._id;
+        console.log(this.selectedRole);
         this.isAdmin = this.newInvite.isAdmin;
       }
     }
@@ -252,7 +257,8 @@ export default {
       'toggleSnackbar',
       'inviteUser',
       'updateInvite',
-      'deleteUser'
+      'deleteUser',
+      'fetchRoles'
     ]),
     openUserProfile(userId) {
       this.$router.push({
@@ -261,18 +267,20 @@ export default {
       });
     },
     showEditInviteDialog(item) {
-      console.log(item);
       this.newInvite = item;
+      console.log(this.newInvite);
       this.editInviteDialog = true;
     },
     editInvite(inviteData) {
       this.updateInvite({
         userId: inviteData._id,
         email: this.email,
-        role: this.role,
+        roleId: this.selectedRole,
         isAdmin: this.isAdmin
       })
         .then(() => {
+          console.log(inviteData);
+          console.log(this.selectedRole);
           this.closeEdit();
           this.toggleSnackbar({
             show: true,
