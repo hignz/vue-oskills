@@ -72,9 +72,6 @@ export default {
   methods: {
     ...mapActions(['inviteUser', 'toggleSnackbar', 'fetchRoles']),
     onSubmit() {
-      console.log(this.selectedRole);
-      console.log(this.selectedRole._id);
-
       if (this.$refs.form.validate()) {
         this.inviteUser({
           email: this.email,
