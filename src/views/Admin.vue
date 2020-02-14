@@ -94,8 +94,17 @@
     <v-row align="center" justify="space-around">
       <v-col cols="12" sm="12" md="4">
         <v-card>
+          <v-toolbar dense flat>
+            <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
+              >Invited users
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-toolbar>
           <v-card-text>
-            Row 3 Col 1
+            <AdminInvitedUsers
+              :users="invitedUsers"
+              @invited="invited"
+            ></AdminInvitedUsers>
           </v-card-text>
         </v-card>
       </v-col>
@@ -124,6 +133,7 @@ import InviteUserDialog from '../components/InviteUserDialog';
 import AdminAddCategoryDialog from '../components/AdminAddCategoryDialog';
 import AdminAddSkillDialog from '../components/AdminAddSkillDialog';
 import { mapActions } from 'vuex';
+import AdminInvitedUsers from '../components/AdminInvitedUsers';
 
 const ActivityFeed = () => import('../components/ActivityFeed');
 
@@ -132,14 +142,21 @@ export default {
     InviteUserDialog,
     AdminAddCategoryDialog,
     AdminAddSkillDialog,
-    ActivityFeed
+    ActivityFeed,
+    AdminInvitedUsers
   },
   data() {
     return {
       loaded: false,
       recentActivityData: [],
-      stats: {}
+      stats: {},
+      allUsers: []
     };
+  },
+  computed: {
+    invitedUsers() {
+      return this.allUsers.filter(el => !el.isVerified);
+    }
   },
   created() {
     this.fetchAdminDashboardData().then(res => {
@@ -150,13 +167,24 @@ export default {
 
       this.loaded = true;
     });
+    this.fetchAllUsers().then(res => {
+      this.allUsers = res.users;
+      this.loaded = true;
+    });
   },
   methods: {
-    ...mapActions(['fetchRecentActivity', 'fetchAdminDashboardData']),
+    ...mapActions([
+      'fetchRecentActivity',
+      'fetchAdminDashboardData',
+      'fetchAllUsers'
+    ]),
     incrementSkillCount(value) {
       console.log(value);
 
       this.stats.skillCount += value;
+    },
+    invited(item) {
+      this.allUsers = this.allUsers.filter(el => el._id !== item);
     }
   }
 };
