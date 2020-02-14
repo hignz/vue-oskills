@@ -247,7 +247,6 @@ export default {
         });
         this.email = this.newInvite.email;
         this.selectedRole = this.newInvite.role._id;
-        console.log(this.selectedRole);
         this.isAdmin = this.newInvite.isAdmin;
       }
     }
@@ -268,7 +267,6 @@ export default {
     },
     showEditInviteDialog(item) {
       this.newInvite = item;
-      console.log(this.newInvite);
       this.editInviteDialog = true;
     },
     editInvite(inviteData) {
@@ -279,8 +277,6 @@ export default {
         isAdmin: this.isAdmin
       })
         .then(() => {
-          console.log(inviteData);
-          console.log(this.selectedRole);
           this.closeEdit();
           this.toggleSnackbar({
             show: true,
