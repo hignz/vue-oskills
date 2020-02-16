@@ -66,7 +66,7 @@
               :headers="[
                 {
                   text: 'Skill',
-                  align: 'center',
+                  align: 'left',
                   value: 'skill.name'
                 },
                 { text: 'Esteem', value: 'esteem', align: 'center' },

@@ -16,12 +16,12 @@
             <v-list-item-title v-text="user.name"></v-list-item-title>
             <v-list-item-subtitle
               class="grey--text"
-              v-text="user.role.title"
+              v-text="user.role"
             ></v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-action-text>
             {{
-              formatDistanceToNow(parseISO(user.joinedAt), {
+              formatDistanceToNow(new Date(user.joinedAt), {
                 addSuffix: true
               })
             }}
