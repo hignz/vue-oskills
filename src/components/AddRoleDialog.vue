@@ -63,11 +63,12 @@ export default {
   methods: {
     ...mapActions(['doAddRole', 'toggleSnackbar']),
     addNewRole() {
-      this.doAddRole({
+      const role = {
         title: this.roleName,
         voteWeight: this.voteWeight,
         voteCount: this.voteCount
-      })
+      };
+      this.doAddRole(role)
         .then(() => {
           this.close();
           this.toggleSnackbar({
@@ -76,7 +77,7 @@ export default {
             color: 'success'
           });
 
-          this.$emit('roleAdded');
+          this.$emit('roleAdded', role);
         })
         .catch(() => {
           this.toggleSnackbar({

@@ -81,19 +81,31 @@
 
     <v-row>
       <v-col cols="12" md="8" sm="12">
-        <BarChart :skills="user.skills" class="pr-2"></BarChart>
+        <v-card height="370" outlined="">
+          <v-toolbar dense flat>
+            <v-toolbar-title class="subtitle-2 grey--text"
+              >SKILLS</v-toolbar-title
+            >
+          </v-toolbar>
+
+          <v-card-text>
+            <BarChart
+              v-if="user.skills.length"
+              :skills="user.skills"
+            ></BarChart>
+          </v-card-text>
+        </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <v-card height="364">
+        <v-card height="370" outlined>
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text"
               >CATEGORIES</v-toolbar-title
             >
           </v-toolbar>
-          <RadarChart
-            v-if="user.skills.length"
-            :skill-categories="skillCategories"
-          />
+          <v-card-text v-if="user.skills.length">
+            <RadarChart :skill-categories="skillCategories" />
+          </v-card-text>
           <template v-else>
             <v-card-text class="mt-12">
               <p class="text-center grey--text">
@@ -184,6 +196,7 @@ export default {
   },
   data() {
     return {
+      user: null,
       loaded: false,
       usersMenuItems: [
         { title: 'Recently Joined' },
@@ -196,20 +209,22 @@ export default {
     };
   },
   computed: {
-    ...mapState(['user']),
     ...mapGetters(['topThreeSkills', 'skills']),
     firstName() {
       return this.user.name.split(' ')[0];
     }
   },
   created() {
+    this.fetchUser().then(res => {
+      this.user = res.data;
+    });
     this.fetchRecentActivity().then(res => {
       this.recentActivityData = res;
       this.loaded = true;
     });
   },
   methods: {
-    ...mapActions(['fetchRecentActivity']),
+    ...mapActions(['fetchUser', 'fetchRecentActivity']),
     switchUsersList(menuItem, i) {
       this.usersCardTitle = menuItem.title;
       this.usersMenuIndex = i;
