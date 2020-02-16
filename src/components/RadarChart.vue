@@ -34,6 +34,10 @@ export default {
     width: {
       type: Number,
       default: () => 500
+    },
+    hideLoggedInUser: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -52,7 +56,7 @@ export default {
       return {
         chart: {
           type: 'radar',
-          background: this.isDark ? '#282c34' : '#ffffff',
+          background: this.isDark ? '#282c34' : '#fafafa',
           dropShadow: {
             enabled: true,
             blur: 1,
@@ -71,7 +75,7 @@ export default {
           opacity: 0.5
         },
         markers: {
-          size: 3,
+          size: 4,
           strokeWidth: 0
         },
         yaxis: {
@@ -90,7 +94,7 @@ export default {
             size: this.size,
             polygons: {
               fill: {
-                colors: this.isDark ? ['#282c34'] : ['#ffffff']
+                colors: this.isDark ? ['#282c34'] : ['#fafafa']
               }
             }
           }
@@ -102,7 +106,9 @@ export default {
       return this.skillCategories.map(el => el.name);
     },
     series() {
-      const series = this.userSkills.length
+      const series = this.hideLoggedInUser
+        ? [{ name: 'User', data: this.categories(this.userSkills) }]
+        : this.userSkills.length
         ? [
             {
               name: 'You',
