@@ -36,11 +36,7 @@
         <template v-slot:item.action="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-btn icon v-on="on" @click="showInviteDialog(item)">
-                <v-icon small>
-                  mdi-email-send-outline
-                </v-icon>
-              </v-btn>
+              <ResendInviteDialog :invited-user="item"></ResendInviteDialog>
             </template>
             <span>Resend invitation</span>
           </v-tooltip>
@@ -66,43 +62,6 @@
           </v-tooltip>
         </template>
       </v-data-table>
-
-      <v-dialog v-model="inviteDialog" width="500" @input="v => v || close()">
-        <v-card>
-          <v-card-title class="headline" primary-title>
-            Resend Invitation
-          </v-card-title>
-          <v-divider></v-divider>
-          <v-card-text>
-            Please check if the details below are correct
-            <v-spacer></v-spacer>
-            <p class="mt-2 mb-0">Email : {{ selectedUser.email }}</p>
-            <p class="mt-0 mb-0">Role : {{ selectedUser.role }}</p>
-            <p class="mt-0 mb-0">Admin : {{ selectedUser.isAdmin }}</p>
-          </v-card-text>
-
-          <v-divider></v-divider>
-
-          <v-card-actions>
-            <v-spacer />
-            <v-btn text @click="close()">
-              Close
-            </v-btn>
-            <v-btn
-              color="error"
-              @click="
-                resendInvite(
-                  selectedUser.email,
-                  selectedUser.role,
-                  selectedUser.isAdmin
-                )
-              "
-            >
-              Send
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
 
       <v-dialog
         v-model="editInviteDialog"
@@ -179,8 +138,12 @@
 <script>
 import { mapActions } from 'vuex';
 import { formatDistanceToNow } from 'date-fns';
+import ResendInviteDialog from '../components/ResendInviteDialog';
 
 export default {
+  components: {
+    ResendInviteDialog
+  },
   props: {
     users: {
       type: Array,
@@ -215,8 +178,6 @@ export default {
           align: 'center'
         }
       ],
-      selectedUser: {},
-      inviteDialog: false,
       newInvite: {},
       deleteInvite: {},
       editInviteDialog: false,
@@ -278,32 +239,6 @@ export default {
           });
         });
     },
-    showInviteDialog(item) {
-      this.selectedUser = item;
-      this.inviteDialog = true;
-    },
-    resendInvite(email, role, isAdmin) {
-      this.inviteUser({
-        email: email,
-        role: role,
-        isAdmin: isAdmin
-      })
-        .then(() => {
-          this.close();
-          this.toggleSnackbar({
-            show: true,
-            text: 'Invite has been sent',
-            color: 'success'
-          });
-        })
-        .catch(err => {
-          this.toggleSnackbar({
-            show: true,
-            text: err.response.data,
-            color: 'error'
-          });
-        });
-    },
     showDeleteInviteDialog(item) {
       this.deleteInvite = item;
       this.deleteInviteDialog = true;
@@ -326,9 +261,6 @@ export default {
             color: 'error'
           });
         });
-    },
-    close() {
-      this.inviteDialog = !this.inviteDialog;
     },
     closeEdit() {
       this.editInviteDialog = !this.editInviteDialog;
