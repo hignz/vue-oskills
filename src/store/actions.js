@@ -75,16 +75,14 @@ export default {
     });
   },
   fetchTopSkills() {
-    return http.get('/skill/get-top-skills').then(res => {
+    return http.get('/skill/top').then(res => {
       return res.data;
     });
   },
-  fetchSkillsByCategory(_, categoryId) {
-    return http
-      .post('/skill/get-skills-by-category', { categoryId })
-      .then(res => {
-        return res.data;
-      });
+  fetchSkillsByCategory(_, options) {
+    return http.post('/skill/get-skills-by-category', options).then(res => {
+      return res.data;
+    });
   },
   voteSkill(_, skillId) {
     return http.post('/skill/vote', { userSkillId: skillId }).then(res => {
@@ -98,13 +96,20 @@ export default {
     });
   },
   doRegister(_, registerData) {
-    return http.post('/user/register', registerData).then(res => {
+    const formData = new FormData();
+    formData.append('image', registerData.image);
+    formData.append('skills', JSON.stringify(registerData.skills));
+    formData.append('name', registerData.name);
+    formData.append('password', registerData.password);
+    formData.append('verificationToken', registerData.verificationToken);
+
+    return http.post('/user/register', formData).then(res => {
       return res.data;
     });
   },
   fetchDeleteSkill({ commit }, skillId) {
     return http.post('/skill/remove-user-skill', { skillId }).then(res => {
-      commit(constants.SET_SKILLS, res.data.skills);
+      state.user.skills = state.user.skills.filter(s => s._id !== skillId);
       return res.data;
     });
   },
@@ -141,10 +146,10 @@ export default {
       return res.data;
     });
   },
-  fetchSkillInfo({ commit }, skillId) {
+  fetchSkill({ commit }, skillId) {
     commit(constants.SET_LOADING, true);
 
-    return http.post('/skill/get-skill', { skillId }).then(res => {
+    return http.get(`/skill/${skillId}`).then(res => {
       commit(constants.SET_LOADING, false);
       return res.data;
     });
@@ -268,8 +273,8 @@ export default {
       return res.data;
     });
   },
-  fetchUsersByFilter(_, filterData) {
-    return http.post('/user/find-by-filter', filterData).then(res => {
+  fetchUsersWithSkills(_, filterData) {
+    return http.post('/user/find-users-with-skills', filterData).then(res => {
       return res.data;
     });
   },
@@ -282,6 +287,21 @@ export default {
   },
   fetchRoles() {
     return http.get('/role').then(res => {
+      return res.data;
+    });
+  },
+  doAddRole(_, roleData) {
+    return http.post('/role/add', roleData).then(res => {
+      return res.data;
+    });
+  },
+  fetchAllRoles() {
+    return http.get('role/').then(res => {
+      return res.data;
+    });
+  },
+  fetchAllUserSkills() {
+    return http.get('skill/userskills').then(res => {
       return res.data;
     });
   }
