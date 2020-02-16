@@ -1,6 +1,6 @@
 <template>
   <v-container v-if="loaded" fluid>
-    <v-row class="text-center" align="stretch" justify="space-around">
+    <v-row class="text-center">
       <v-col cols="12" sm="12" md="4">
         <v-card>
           <v-card-text>
@@ -54,9 +54,14 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row class="text-center" align="center" justify="space-around">
+    <v-row class="text-center">
       <v-col cols="12" sm="12" md="8">
         <v-card>
+          <v-toolbar dense flat>
+            <v-toolbar-title class="subtitle-2 grey--text"
+              >Top skills</v-toolbar-title
+            >
+          </v-toolbar>
           <TopSkills />
         </v-card>
       </v-col>
@@ -68,26 +73,26 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row align="center" justify="space-around">
-      <v-col cols="12" sm="12" md="4">
+    <v-row>
+      <v-col cols="12" sm="12" md="8">
         <v-card>
           <v-card-text>
-            Row 3 Col 1
+            <Heatmap :categories="categories" :skills="userSkills" />
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="12" md="4">
+      <!-- <v-col cols="12" sm="12" md="4">
         <v-card>
           <v-card-text>
             Row 3 Col 2
           </v-card-text>
         </v-card>
-      </v-col>
+      </v-col> -->
       <v-col cols="12" sm="12" md="4">
         <v-card>
           <ActivityFeed
-            v-if="recentActivityData.length"
-            :activity-data="recentActivityData"
+            v-if="recentActivity.length"
+            :activity-data="recentActivity"
             :is-real-time="true"
           ></ActivityFeed>
         </v-card>
@@ -102,6 +107,7 @@ import AdminAddCategoryDialog from '../components/AdminAddCategoryDialog';
 import AdminAddSkillDialog from '../components/AdminAddSkillDialog';
 import AddRoleDialog from '../components/AddRoleDialog';
 import TopSkills from '../components/TopSkills';
+import Heatmap from '../components/HeatmapChart';
 import { mapActions } from 'vuex';
 
 const ActivityFeed = () => import('../components/ActivityFeed');
@@ -113,26 +119,42 @@ export default {
     AdminAddSkillDialog,
     ActivityFeed,
     AddRoleDialog,
-    TopSkills
+    TopSkills,
+    Heatmap
   },
   data() {
     return {
       loaded: false,
-      recentActivityData: [],
-      stats: {}
+      recentActivity: [],
+      stats: {},
+      categories: [],
+      userSkills: []
     };
   },
+  computed: {},
   created() {
     this.fetchAdminDashboardData().then(res => {
       this.stats = res;
       this.loaded = true;
     });
     this.fetchRecentActivity().then(res => {
-      this.recentActivityData = res;
+      this.recentActivity = res;
+    });
+    this.fetchCategories().then(res => {
+      this.categories = res.categories;
+      this.loaded = true;
+    });
+    this.fetchAllUserSkills().then(res => {
+      this.userSkills = res;
     });
   },
   methods: {
-    ...mapActions(['fetchRecentActivity', 'fetchAdminDashboardData']),
+    ...mapActions([
+      'fetchRecentActivity',
+      'fetchAdminDashboardData',
+      'fetchCategories',
+      'fetchAllUserSkills'
+    ]),
     incrementSkillCount(value) {
       this.stats.skillCount += value;
     },
