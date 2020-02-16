@@ -1,15 +1,17 @@
 <template>
   <v-form ref="form">
     <v-file-input
-      v-model="file"
+      v-model="image"
       :rules="rules"
       placeholder="Change your avatar"
       accept="image/png, image/jpeg, image/bmp"
       show-size
       required
+      @change="preview"
     ></v-file-input>
+    <img v-if="image" :src="imageURL" />
 
-    <v-btn text color="primary" block @click="upload">Change avatar</v-btn>
+    <v-btn text color="primary" block @click="upload">Upload</v-btn>
   </v-form>
 </template>
 
@@ -19,7 +21,8 @@ import { mapActions } from 'vuex';
 export default {
   data() {
     return {
-      file: null,
+      image: null,
+      imageURL: '',
       rules: [
         v => !!v || 'Required',
         v => !v || v.size < 1000000 || 'Avatar size should be less than 1 MB!'
@@ -32,9 +35,20 @@ export default {
       'toggleSnackbar',
       'updateUserAvatar'
     ]),
+    preview() {
+      if (!this.image) {
+        return;
+      }
+      const fileReader = new FileReader();
+      fileReader.addEventListener('load', () => {
+        this.imageURL = fileReader.result;
+      });
+
+      fileReader.readAsDataURL(this.image);
+    },
     upload() {
       if (this.$refs.form.validate()) {
-        this.uploadProfilePicture(this.file)
+        this.uploadProfilePicture(this.image)
           .then(res => {
             this.toggleSnackbar({
               show: true,
