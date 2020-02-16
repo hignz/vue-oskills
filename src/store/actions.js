@@ -284,5 +284,12 @@ export default {
     return http.get('/role').then(res => {
       return res.data;
     });
+  },
+  fetchInvitedUsersSlim(_, amount) {
+    return http
+      .get(`user/recently-invited-slim/?amount=${amount}`)
+      .then(res => {
+        return res.data;
+      });
   }
 };
