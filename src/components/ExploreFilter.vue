@@ -4,15 +4,15 @@
       <v-col class="mb-0 pb-0">
         <span class="grey--text">
           <v-icon color="grey" class="pb-1">
-            mdi-filter-variant
+            mdi-account-search
           </v-icon>
-          Filter</span
+          Find</span
         >
       </v-col>
 
-      <v-col cols="12">
-        <v-form ref="form" v-model="valid" lazy-validation>
-          <v-row align="start" justify="space-around">
+      <v-col cols="12" class="pt-0">
+        <v-form ref="form" v-model="valid">
+          <v-row align="start">
             <v-col cols="12" sm="12" md="3">
               <v-select
                 v-model="selectedCategory"
@@ -22,25 +22,29 @@
                 item-value="value"
                 :rules="requiredRules"
                 return-object
+                chips
+                dense
                 required
                 @change="populateSkills"
               ></v-select>
             </v-col>
             <v-col cols="12" sm="12" md="3">
               <v-select
-                v-model="selectedSkill"
-                label="Skill"
+                v-model="selectedSkills"
+                label="Skills"
                 no-data-text="No skills found"
                 :items="skills"
                 autocomplete="off"
-                auto-select-first
                 :rules="requiredRules"
                 clearable
+                multiple
+                dense
+                chips
                 return-object
                 required
               ></v-select>
             </v-col>
-            <v-col cols="12" sm="12" md="3" class="pt-8">
+            <v-col cols="12" sm="12" md="3" class="pt-6">
               <v-range-slider
                 v-model="range"
                 step="1"
@@ -52,9 +56,8 @@
             </v-col>
             <v-col cols="12" sm="12" md="3" class="pa-6">
               <v-btn
-                text
                 block
-                color="primary"
+                color="success"
                 :loading="searching"
                 @click="doSearch()"
                 >Search</v-btn
@@ -63,7 +66,17 @@
           </v-row>
         </v-form>
 
-        <p v-if="searched && !results.length">No results found</p>
+        <div v-if="!results.length" class="grey--text text-center mt-12">
+          <v-icon x-large class="grey--text mb-2">{{
+            searched ? 'mdi-account-off' : 'mdi-account-search'
+          }}</v-icon>
+          <p v-if="searched">
+            No results found
+          </p>
+          <p v-else class="title">
+            Please search pls
+          </p>
+        </div>
         <v-row v-else>
           <v-col v-for="result in results" :key="result._id" sm="12" md="3">
             <MiniProfile :user="result.owner" />
@@ -91,7 +104,7 @@ export default {
       categories: [],
       skills: [],
       selectedCategory: null,
-      selectedSkill: {},
+      selectedSkills: [],
       searched: false,
       valid: false,
       searching: false
@@ -109,7 +122,7 @@ export default {
     ...mapActions([
       'fetchCategoriesArchived',
       'fetchSkillsByCategory',
-      'fetchUsersByFilter'
+      'fetchUsersWithSkills'
     ]),
     fetchCategories() {
       this.fetchCategoriesArchived('false').then(res => {
@@ -122,7 +135,10 @@ export default {
       });
     },
     populateSkills() {
-      this.fetchSkillsByCategory(this.selectedCategory.value).then(response => {
+      this.fetchSkillsByCategory({
+        categoryId: this.selectedCategory.value,
+        filter: false
+      }).then(response => {
         this.skills = response.skills.map(o => {
           return {
             text: o.name,
@@ -134,8 +150,8 @@ export default {
     doSearch() {
       if (this.$refs.form.validate()) {
         this.searching = true;
-        this.fetchUsersByFilter({
-          skillId: this.selectedSkill.value,
+        this.fetchUsersWithSkills({
+          skillIds: this.selectedSkills.map(el => el.value),
           min: this.range[0],
           max: this.range[1]
         }).then(res => {
