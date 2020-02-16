@@ -96,13 +96,13 @@
         <v-card>
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
-              >Invited users
+              >Recently Invited
             </v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
           <v-card-text>
             <AdminInvitedUsers
-              :users="invitedUsers"
+              :users="users"
               @invited="invited"
             ></AdminInvitedUsers>
           </v-card-text>
@@ -150,7 +150,7 @@ export default {
       loaded: false,
       recentActivityData: [],
       stats: {},
-      allUsers: []
+      users: []
     };
   },
   computed: {
@@ -167,16 +167,21 @@ export default {
 
       this.loaded = true;
     });
-    this.fetchAllUsers().then(res => {
-      this.allUsers = res.users;
-      this.loaded = true;
-    });
+    this.fetchInvitedUsersSlim('3')
+      .then(response => {
+        this.users = response.users;
+        console.log(this.users);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
   methods: {
     ...mapActions([
       'fetchRecentActivity',
       'fetchAdminDashboardData',
-      'fetchAllUsers'
+      'fetchAllUsers',
+      'fetchInvitedUsersSlim'
     ]),
     incrementSkillCount(value) {
       console.log(value);
