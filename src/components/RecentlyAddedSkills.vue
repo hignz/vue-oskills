@@ -15,6 +15,7 @@
         <v-chip
           v-for="skill in skills"
           :key="skill._id"
+          small
           :to="{ name: 'skillProfile', params: { id: skill._id } }"
         >
           {{ skill.name }}

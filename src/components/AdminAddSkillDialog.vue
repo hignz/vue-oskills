@@ -69,6 +69,11 @@ export default {
     };
   },
   watch: {
+    dialog(opened) {
+      if (opened) {
+        this.fetchUnarchivedCategories();
+      }
+    },
     showArchivedCategories(newValue, oldValue) {
       if (newValue) {
         this.lockArchiveSkill = true;
@@ -84,9 +89,6 @@ export default {
         this.fetchUnarchivedCategories();
       }
     }
-  },
-  created() {
-    this.fetchUnarchivedCategories();
   },
   methods: {
     ...mapActions([

@@ -43,7 +43,7 @@
             @update="updateSkill"
           ></EditSkillDialog>
           <v-btn icon>
-            <v-icon @click="openSkillProfile(item._id)">
+            <v-icon small @click="openSkillProfile(item._id)">
               mdi-star
             </v-icon>
           </v-btn>
@@ -63,33 +63,35 @@
           </v-card-title>
 
           <v-card-text>
-            <v-data-table
-              class="mb-4"
-              disable-sort
-              :headers="[
-                {
-                  text: 'Skill',
-                  align: 'center',
-                  value: 'name'
-                },
-                { text: 'Category', value: 'category.name', align: 'left' },
-                {
-                  text: 'Added',
-                  value: 'dateAdded',
-                  align: 'left'
-                }
-              ]"
-              :items="[selectedSkill]"
-              hide-default-footer
-            >
-              <template v-slot:item.dateAdded="{ item }">
-                {{ lightFormat(new Date(item.dateAdded), 'dd-MM-yyyy') }}
-              </template>
-            </v-data-table>
-            Are you sure you want to archive {{ selectedSkill.name }}? Archived
-            skills are no longer available to users, but can be unarchived at
-            any time.
+            Are you sure you want to archive
+            <strong>{{ selectedSkill.name }}</strong
+            >? Archived skills are no longer available to users, but can be
+            unarchived at any time.
           </v-card-text>
+
+          <v-data-table
+            class="mb-4"
+            disable-sort
+            :headers="[
+              {
+                text: 'Skill',
+                value: 'name',
+                align: 'center'
+              },
+              { text: 'Category', value: 'category.name', align: 'center' },
+              {
+                text: 'Added',
+                value: 'dateAdded',
+                align: 'left'
+              }
+            ]"
+            :items="[selectedSkill]"
+            hide-default-footer
+          >
+            <template v-slot:item.dateAdded="{ item }">
+              {{ formatRelative(new Date(item.dateAdded), Date.now()) }}
+            </template>
+          </v-data-table>
 
           <v-divider></v-divider>
 
@@ -110,7 +112,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import { formatRelative } from 'date-fns';
+import { formatRelative, lightFormat } from 'date-fns';
 import EditSkillDialog from './EditSkillDialog';
 
 export default {
@@ -140,7 +142,8 @@ export default {
       ],
       selectedSkill: {},
       unArchivedDialog: false,
-      formatRelative
+      formatRelative,
+      lightFormat
     };
   },
   methods: {

@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form" class="mt-4" @submit.prevent>
+  <v-form ref="form" class="mt-4 mr-md-8" @submit.prevent>
     <v-autocomplete
       v-model="model"
       clearable
@@ -73,9 +73,8 @@ export default {
       this.fetchByName(val)
         .then(res => {
           this.entries = res.data;
-          console.log(this.entries);
         })
-        .catch(error => console.log(error))
+        .catch(() => {})
         .finally(() => (this.isLoading = false));
     }
   },

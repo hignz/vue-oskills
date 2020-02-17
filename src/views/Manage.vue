@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-tabs v-model="tab" class="elevation-2" @change="update">
+    <v-tabs v-model="tab" class="elevation-2" @change="load">
       <v-tabs-slider></v-tabs-slider>
 
       <v-tab href="#0">
@@ -11,6 +11,9 @@
       </v-tab>
       <v-tab href="#2">
         Categories
+      </v-tab>
+      <v-tab href="#3">
+        Roles
       </v-tab>
 
       <v-tabs-items v-model="tab">
@@ -57,6 +60,14 @@
             </v-col>
           </v-row>
         </v-tab-item>
+        <v-tab-item value="3" :transition="false" :reverse-transition="false">
+          <v-row v-if="loaded" justify="center" align="center">
+            <v-col cols="12" sm="12">
+              <ManageRoles :roles="allRoles" @roleAdded="updateRoles" />
+              <v-divider></v-divider>
+            </v-col>
+          </v-row>
+        </v-tab-item>
       </v-tabs-items>
     </v-tabs>
   </v-container>
@@ -70,6 +81,7 @@ import ManageCategories from '../components/ManageCategories';
 import ArchivedCategories from '../components/ArchivedCategories';
 import ManageUsers from '../components/ManageUsers';
 import InvitedUsers from '../components/InvitedUsers';
+import ManageRoles from '../components/ManageRoles';
 
 export default {
   components: {
@@ -78,13 +90,15 @@ export default {
     ManageArchivedSkills,
     ArchivedCategories,
     ManageUsers,
-    InvitedUsers
+    InvitedUsers,
+    ManageRoles
   },
   data() {
     return {
       allSkills: [],
       allCategories: [],
       allUsers: [],
+      allRoles: [],
       loaded: false,
       tab: null
     };
@@ -110,7 +124,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchAllSkills', 'fetchCategories', 'fetchAllUsers']),
+    ...mapActions([
+      'fetchAllSkills',
+      'fetchCategories',
+      'fetchAllUsers',
+      'fetchAllRoles'
+    ]),
     fetchUsers() {
       this.fetchAllUsers().then(res => {
         this.allUsers = res.users;
@@ -129,19 +148,27 @@ export default {
         this.loaded = true;
       });
     },
+    fetchRoles() {
+      this.fetchAllRoles().then(res => {
+        this.allRoles = res.roles;
+        this.loaded = true;
+      });
+    },
     unarchive(item) {
       item.archived = false;
     },
     archive(item) {
       item.archived = true;
     },
-    update(tab) {
+    load(tab) {
       if (tab === '0') {
         this.fetchUsers();
       } else if (tab === '1') {
         this.fetchSkills();
-      } else {
+      } else if (tab === '2') {
         this.fetchAllCategories();
+      } else {
+        this.fetchRoles();
       }
     },
     deleteUser(item) {
@@ -149,6 +176,9 @@ export default {
     },
     editInvite(item) {
       this.allUsers = this.allUsers.filter(el => el._id !== item);
+    },
+    updateRoles(item) {
+      this.allRoles.push(item);
     }
   }
 };

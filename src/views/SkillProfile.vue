@@ -109,7 +109,7 @@
             </v-list-item>
           </v-list>
           <v-card-text v-else>
-            <p class="text-center grey--text">
+            <p class="text-center grey--text mt-12">
               No users have added this skill to their profile
             </p>
           </v-card-text>
@@ -180,7 +180,7 @@ export default {
   created() {
     const skillId = this.$route.params.id;
 
-    this.fetchSkillInfo(skillId).then(res => {
+    this.fetchSkill(skillId).then(res => {
       this.skill = res;
       this.loaded = true;
     });
@@ -193,7 +193,7 @@ export default {
     ...mapActions([
       'addSkillToUser',
       'setLoading',
-      'fetchSkillInfo',
+      'fetchSkill',
       'toggleSnackbar',
       'fetchSkillActivity'
     ]),

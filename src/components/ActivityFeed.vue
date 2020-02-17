@@ -5,11 +5,12 @@
       <v-spacer></v-spacer>
     </v-toolbar>
 
-    <v-list dense two-line flat class="overflow-y-auto" :max-height="size">
+    <v-list dense two-line class="overflow-y-auto" :max-height="size">
       <v-list-item-group color="primary">
         <v-list-item
           v-for="(activity, i) in activities"
           :key="i"
+          class="ml-0 pl-0"
           @click="navigateTo(activity)"
         >
           <v-list-item-avatar>
@@ -63,7 +64,7 @@ export default {
   },
   computed: {
     size() {
-      return this.fullSize ? '345px' : '14.5em';
+      return this.fullSize ? '300px' : '14.5em';
     }
   },
   created() {
@@ -86,7 +87,7 @@ export default {
       const to =
         this.$router.currentRoute.name === 'skillProfile'
           ? { name: 'profile', params: { id: activity.participantId } }
-          : { name: 'skillProfile', params: { id: activity.skillId._id } };
+          : { name: 'skillProfile', params: { id: activity.skillId } };
 
       this.$router.push(to);
     }

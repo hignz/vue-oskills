@@ -2,7 +2,7 @@
   <v-tooltip left>
     <template v-slot:activator="{ on }">
       <v-icon
-        large
+        x-large
         :color="placeholder ? 'grey' : color"
         :class="animatedClass"
         v-on="on"
@@ -42,15 +42,16 @@ export default {
   computed: {
     icon() {
       const index =
-        this.esteem === 0 || Math.ceil(this.esteem % 5) === 0
+        this.esteem <= 0 || Math.ceil(this.esteem % 5) <= 0
           ? 1
           : (this.esteem % 5) + 1;
 
       return `mdi-hexagon-slice-${index}`;
     },
     color() {
-      const x = Math.floor(this.esteem / 5);
-      return this.colors[x];
+      const i =
+        Math.floor(this.esteem / 5) <= 5 ? Math.floor(this.esteem / 5) : 5;
+      return this.colors[i];
     },
     animatedClass() {
       return this.upvoted === null

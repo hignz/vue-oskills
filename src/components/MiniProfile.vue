@@ -65,11 +65,6 @@ export default {
         .concat()
         .sort((a, b) => b.esteem - a.esteem)
         .slice(0, 3);
-    },
-    randomUserImg() {
-      return `https://randomuser.me/api/portraits/men/${Math.floor(
-        Math.random() * (Math.floor(65) - Math.ceil(1) + 1)
-      ) + 1}.jpg`;
     }
   },
   methods: {

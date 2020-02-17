@@ -103,9 +103,7 @@ export default {
     populateSkills(categoryId) {
       this.loadingSkills = true;
 
-      console.log(categoryId);
-
-      this.fetchSkillsByCategory(categoryId)
+      this.fetchSkillsByCategory({ categoryId, filter: true })
         .then(response => {
           this.skills = response.skills.map(o => {
             return {
@@ -114,9 +112,7 @@ export default {
             };
           });
         })
-        .catch(err => {
-          console.log(err);
-        })
+        .catch(() => {})
         .finally(() => (this.loadingSkills = false));
     },
     addSkill() {
@@ -135,9 +131,7 @@ export default {
             color: 'success'
           });
         })
-        .catch(err => {
-          console.log(err);
-
+        .catch(() => {
           this.toggleSnackbar({
             show: true,
             text: 'Something went wrong',
