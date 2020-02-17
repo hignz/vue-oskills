@@ -250,7 +250,6 @@ export default {
       });
     },
     showEditInviteDialog(item) {
-      console.log(item);
       this.newInvite = item;
       this.editInviteDialog = true;
     },

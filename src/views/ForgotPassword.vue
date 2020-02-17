@@ -69,8 +69,6 @@ export default {
     ...mapActions(['doPasswordResetRequest']),
     requestReset() {
       this.doPasswordResetRequest(this.email).then(res => {
-        console.log(res);
-
         this.sent = true;
         this.sentText = res.message;
         this.$refs.form.reset();

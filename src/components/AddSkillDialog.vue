@@ -112,9 +112,7 @@ export default {
             };
           });
         })
-        .catch(err => {
-          console.log(err);
-        })
+        .catch(() => {})
         .finally(() => (this.loadingSkills = false));
     },
     addSkill() {

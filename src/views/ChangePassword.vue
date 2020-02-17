@@ -101,9 +101,7 @@ export default {
         .then(() => {
           this.submitted = true;
         })
-        .catch(() => {
-          console.log('something went wrong');
-        });
+        .catch(() => {});
     }
   }
 };

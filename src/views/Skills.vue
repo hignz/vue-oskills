@@ -145,7 +145,7 @@ export default {
         this.initialize();
         this.loaded = true;
       })
-      .catch(err => console.log(err));
+      .catch(() => {});
   },
   methods: {
     ...mapActions([
@@ -169,7 +169,7 @@ export default {
             color: 'success'
           });
         })
-        .catch(err => console.log(err));
+        .catch(() => {});
     },
     openSkillProfile(skillId) {
       this.$router.push({

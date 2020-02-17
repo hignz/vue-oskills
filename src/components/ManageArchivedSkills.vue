@@ -137,8 +137,6 @@ export default {
     ...mapActions(['unarchiveSkill', 'toggleSnackbar']),
     doUnarchiveSkill() {
       this.unarchiveSkill(this.selectedSkill._id).then(res => {
-        console.log(this.selectedSkill);
-
         this.toggleSnackbar({
           show: true,
           color: 'success',

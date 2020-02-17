@@ -74,7 +74,7 @@ export default {
         .then(res => {
           this.entries = res.data;
         })
-        .catch(error => console.log(error))
+        .catch(error => {})
         .finally(() => (this.isLoading = false));
     }
   },

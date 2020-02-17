@@ -61,9 +61,7 @@ export default {
       .then(response => {
         this.users = response.users;
       })
-      .catch(err => {
-        console.log(err);
-      });
+      .catch(() => {});
   },
   methods: {
     ...mapActions(['fetchRecentUsersSlim', 'setLoading']),

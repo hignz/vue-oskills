@@ -143,7 +143,7 @@ router.beforeEach((to, from, next) => {
             next();
           }
         })
-        .catch(err => console.log(err));
+        .catch(() => {});
     } else {
       if (!store.getters.getUser.isAdmin) {
         next({
