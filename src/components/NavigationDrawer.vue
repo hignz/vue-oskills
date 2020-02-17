@@ -5,12 +5,15 @@
     mini-variant-width="80"
     app
   >
-    <v-list-item>
-      <v-list-item-avatar size="47">
-        <v-icon color="primary" class="animated rollIn">mdi-star</v-icon>
+    <v-list-item class="mt-1">
+      <v-list-item-avatar size="40">
+        <v-img
+          v-if="!isDark"
+          :src="require('../assets/OrangeLogo_NoBG.png')"
+        ></v-img>
+        <v-img v-if="isDark" :src="require('../assets/oskills.png')"></v-img>
+        <!-- <v-icon color="primary" class="animated rollIn">mdi-star</v-icon> -->
       </v-list-item-avatar>
-
-      <v-list-item-title>Welcome</v-list-item-title>
     </v-list-item>
 
     <v-list dense nav>
@@ -107,7 +110,7 @@ export default {
   },
   computed: {
     ...mapState(['user']),
-    ...mapGetters(['expandedNavDrawer']),
+    ...mapGetters(['expandedNavDrawer', 'isDark']),
     filteredLinks() {
       return this.links.filter(
         e => !e.requiresAdmin || (this.user.isAdmin && e.requiresAdmin)
