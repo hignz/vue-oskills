@@ -290,6 +290,13 @@ export default {
       return res.data;
     });
   },
+  fetchInvitedUsersSlim(_, amount) {
+    return http
+      .get(`user/recently-invited-slim/?amount=${amount}`)
+      .then(res => {
+        return res.data;
+      });
+  },
   doAddRole(_, roleData) {
     return http.post('/role/add', roleData).then(res => {
       return res.data;
