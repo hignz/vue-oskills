@@ -76,6 +76,9 @@
     <v-row>
       <v-col cols="12" sm="12" md="8">
         <v-card>
+          <v-toolbar>
+            <v-toolbar-title>Heatmap</v-toolbar-title>
+          </v-toolbar>
           <v-card-text>
             <Heatmap :categories="categories" :skills="userSkills" />
           </v-card-text>
