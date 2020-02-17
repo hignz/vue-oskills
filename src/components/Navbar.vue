@@ -22,7 +22,6 @@
 import { mapGetters } from 'vuex';
 import ProfileMenu from './ProfileMenu';
 import SearchBar from './SearchBar';
-import vuetify from '../plugins/vuetify';
 
 export default {
   components: {
@@ -35,10 +34,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['accessToken']),
-    backgroundColor() {
-      return vuetify.framework.theme.isDark ? '#21252b' : '#f9f9f9';
-    }
+    ...mapGetters(['accessToken'])
   },
   methods: {
     toggleDrawer() {

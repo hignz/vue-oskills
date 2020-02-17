@@ -30,12 +30,12 @@ export default {
     Snackbar
   },
   computed: {
-    ...mapState(['accessToken', 'loading', 'isDark'])
+    ...mapState(['accessToken', 'loading', 'isDark', 'user'])
   },
   created() {
     vuetify.framework.theme.dark = this.isDark;
 
-    if (this.accessToken) {
+    if (this.accessToken && !this.user.length) {
       this.fetchUser();
     }
   },

@@ -4,10 +4,10 @@
       <v-row justify="center">
         <v-col cols="12" sm="12">
           <v-col cols="12" sm="2" offset-sm="5" class="pb-0 text-center">
-            <v-avatar size="128">
-              <v-img v-if="user.image" :src="user.image"></v-img>
-              <v-icon v-else large>mdi-account-circle</v-icon>
+            <v-avatar v-if="user.image" size="128">
+              <v-img :src="user.image"></v-img>
             </v-avatar>
+            <v-icon v-else x-large="">mdi-account-circle</v-icon>
           </v-col>
           <v-col cols="12" sm="2" offset-sm="5" class="pb-0 text-center">
             <v-card-subtitle class="title pb-0">{{
@@ -108,7 +108,7 @@ export default {
         Math.random() * (Math.floor(65) - Math.ceil(1) + 1)
       ) + 1}.jpg`;
     },
-    dateJoined() {
+    joinedAt() {
       return lightFormat(new Date(this.user.joinedAt), 'dd-MM-yyyy');
     }
   },

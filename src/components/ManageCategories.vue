@@ -55,25 +55,27 @@
           Are you sure?
         </v-card-title>
 
-        <v-card-text>
-          <v-data-table
-            class="mb-4"
-            disable-sort
-            :headers="[
-              {
-                text: 'Name',
-                align: 'left',
-                value: 'name'
-              }
-            ]"
-            :items="[selectedCategory]"
-            hide-default-footer
-          >
-          </v-data-table>
-          Are you sure you want to archive {{ selectedCategory.name }}? This
-          action will also archive all skills under this category, thus
+        <v-card-text class="text-center">
+          Are you sure you want to archive
+          <strong>{{ selectedCategory.name }}</strong
+          >? This action will also archive all skills under this category, thus
           rendering them unavailable to users.
         </v-card-text>
+        <!-- 
+        <v-data-table
+          class="mb-4"
+          disable-sort
+          :headers="[
+            {
+              text: 'Name',
+              align: 'left',
+              value: 'name'
+            }
+          ]"
+          :items="[selectedCategory]"
+          hide-default-footer
+        >
+        </v-data-table> -->
 
         <v-divider></v-divider>
 

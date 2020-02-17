@@ -1,8 +1,8 @@
 <template>
   <v-container fluid>
     <RecentlyAddedSkills class="mb-12" />
-    <RecentlyJoined />
     <ExploreFilter></ExploreFilter>
+    <!-- <RecentlyJoined /> -->
   </v-container>
 </template>
 

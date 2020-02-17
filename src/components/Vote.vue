@@ -41,7 +41,7 @@ export default {
   computed: {
     ...mapState(['user']),
     votedByUser() {
-      return this.skill.votedBy.filter(el => el === this.user._id).length > 0;
+      return this.skill.votedBy.some(el => el === this.user._id);
     }
   },
   created() {},

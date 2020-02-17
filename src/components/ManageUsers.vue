@@ -66,6 +66,7 @@
                   :size="120"
                   :height="330"
                   :skill-categories="skillCategories"
+                  :hide-logged-in-user="true"
                   class="pr-2"
                 ></RadarChart>
               </v-col>

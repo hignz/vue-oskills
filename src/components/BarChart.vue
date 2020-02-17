@@ -1,18 +1,12 @@
 <template>
-  <v-card>
-    <v-toolbar dense flat>
-      <v-toolbar-title class="subtitle-2 grey--text">SKILLS</v-toolbar-title>
-    </v-toolbar>
-
-    <div id="chart">
-      <apexcharts
-        type="bar"
-        height="300"
-        :options="barChartOptions"
-        :series="barChartSeries"
-      />
-    </div>
-  </v-card>
+  <div id="chart">
+    <apexcharts
+      type="bar"
+      height="300"
+      :options="barChartOptions"
+      :series="barChartSeries"
+    />
+  </div>
 </template>
 
 <script>
@@ -26,15 +20,19 @@ export default {
   computed: {
     ...mapGetters(['isDark', 'accentColor']),
     ...mapState(['user']),
+    sortedSkills() {
+      return [...this.user.skills].sort((a, b) => b.rating - a.rating);
+    },
+    categories() {
+      return this.sortedSkills.map(el => el.skill.name);
+    },
     barChartSeries() {
       return [
         {
-          name: 'Esteem level',
-          data: this.user.skills
-            .map(e => {
-              return e.rating;
-            })
-            .sort((a, b) => b - a)
+          name: 'Esteem Points',
+          data: this.sortedSkills.map(e => {
+            return e.rating;
+          })
         }
       ];
     },
@@ -42,7 +40,7 @@ export default {
       return {
         plotOptions: {
           bar: {
-            horizontal: true,
+            horizontal: false,
             barHeight: '60%'
           }
         },
@@ -53,16 +51,21 @@ export default {
           mode: this.isDark ? 'dark' : 'light'
         },
         chart: {
-          background: this.isDark ? '#282c34' : '#ffffff',
+          background: this.isDark ? '#282c34' : '#fafafa',
           foreColor: this.isDark ? '#eeeeef' : '#5e5e5e'
         },
         xaxis: {
-          categories: this.user.skills
-            .map(el => {
-              return el.skill.name;
-            })
-            .sort((a, b) => b - a)
+          categories: this.categories
         },
+        yaxis: {
+          labels: {
+            formatter: function(val) {
+              return Math.floor(val);
+            }
+          }
+        },
+        colors: [localStorage.getItem('accentColor')],
+
         fill: {
           opacity: 0.5,
           colors: [localStorage.getItem('accentColor')]

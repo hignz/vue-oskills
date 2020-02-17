@@ -1,48 +1,139 @@
 <template>
   <v-container v-if="loaded" fluid>
-    <v-row justify="center" align="center">
-      <v-col cols="12" sm="12">
-        <ProfileBanner :user="user" />
+    <v-row class="fill-height mt-md-12" justify="center" align="center">
+      <v-col cols="12" sm="2">
+        <v-card outlined height="222">
+          <v-card-text class="text-center">
+            <v-avatar v-if="user.image" size="128">
+              <v-img :src="user.image" max-height="175" max-width="175">
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="grey lighten-5"
+                    ></v-progress-circular>
+                  </v-row>
+                </template>
+              </v-img>
+            </v-avatar>
+            <v-avatar v-else size="128">
+              <v-icon x-large>mdi-account-circle</v-icon>
+            </v-avatar>
+          </v-card-text>
+          <v-card-text class="text-center">
+            <v-tooltip v-if="user.isAdmin" bottom>
+              <template v-slot:activator="{ on }">
+                <v-icon class="pa-1" left color="primary" v-on="on"
+                  >mdi-account-tie</v-icon
+                >
+              </template>
+              <span>OSkills admin.</span>
+            </v-tooltip>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" sm="10">
+        <v-card outlined>
+          <v-row align="center">
+            <v-col cols="12" sm="12" md="4">
+              <v-col cols="12" sm="12">
+                <v-card-text class="title pb-0">
+                  {{ user.name }}
+                </v-card-text>
+                <v-card-text>
+                  <div class="subtitle-2 grey--text">
+                    {{ user.role.title }}
+                  </div>
+                </v-card-text>
+              </v-col>
+
+              <v-col cols="12" sm="12" class="text-center text-md-left">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-chip class="ma-2" v-on="on">
+                      <v-icon class="pa-1" left>mdi-calendar-range</v-icon>
+                      {{ joinedAt }}
+                    </v-chip>
+                  </template>
+                  <span>When {{ user.name }} joined OSkills.</span>
+                </v-tooltip>
+                <v-tooltip v-if="bestSkill" bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-chip class="ma-2" v-on="on">
+                      <v-icon class="pa-1" left>mdi-star</v-icon>
+                      {{ bestSkill.skill.name }}
+                    </v-chip>
+                  </template>
+                  <span>{{ user.name }}'s' best skill.</span>
+                </v-tooltip>
+              </v-col>
+            </v-col>
+            <v-col cols="12" sm="12" md="8">
+              <v-row v-if="topThreeSkills.length">
+                <v-col
+                  v-for="skill in topThreeSkills"
+                  :key="skill._id"
+                  md="3"
+                  class="text-center"
+                >
+                  <v-card-text>
+                    <EsteemBadge :esteem="skill.esteem" />
+                    <p class="body-2 grey--text mt-2">
+                      {{ skill.skill.name }}
+                    </p>
+                  </v-card-text>
+                </v-col>
+              </v-row>
+              <v-row v-else>
+                <v-col v-for="i in 3" :key="i" md="3" class="text-center">
+                  <v-card-text>
+                    <EsteemBadge :placeholder="true" />
+                    <p class="body-2 grey--text mt-2">
+                      N/A
+                    </p>
+                  </v-card-text>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-card>
       </v-col>
     </v-row>
-
-    <v-row>
-      <v-col cols="12" sm="12" md="4">
-        <v-card>
-          <v-toolbar dense flat>
-            <v-toolbar-title class="subtitle-2 grey--text"
-              >CATEGORIES</v-toolbar-title
-            >
-          </v-toolbar>
-          <RadarChart
-            v-if="user.skills.length"
-            :user-skills="user.skills"
-            :size="120"
-            :height="330"
-            :skill-categories="skillCategories"
-            class="pr-2"
-          ></RadarChart>
+    <v-row class="fill-height">
+      <v-col cols="12" sm="4">
+        <v-card outlined>
+          <v-card-text v-if="user.skills.length">
+            <RadarChart
+              v-if="user.skills.length"
+              :user-skills="user.skills"
+              :size="120"
+              :height="330"
+              :skill-categories="skillCategories"
+              class="pr-2"
+            ></RadarChart>
+          </v-card-text>
           <v-card-text v-else>
-            <p class="text-center grey--text">
-              This user has not added any skills yet
+            <p class="text-center grey--text mt-4">
+              {{ user.name }} has not added any skills yet
             </p>
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="12" md="4">
-        <v-card>
-          <v-toolbar dense flat>
-            <v-toolbar-title class="subtitle-2 grey--text"
-              >SKILLS</v-toolbar-title
-            >
-          </v-toolbar>
-
+      <v-col cols="12" sm="4">
+        <v-card outlined>
+          <v-card-text v-if="user.skills.length">
+            Skills
+          </v-card-text>
           <v-list
             v-if="categories.length"
             subheader
             class="overflow-y-auto"
             dense
-            style="max-height: 345px"
+            style="max-height: 325px"
           >
             <div v-for="(category, i) in categories" :key="category.name">
               <v-subheader
@@ -77,29 +168,24 @@
             </div>
           </v-list>
           <v-card-text v-else>
-            <p class="text-center grey--text">
-              This user has not added any skills yet
+            <p class="text-center grey--text mt-4">
+              {{ user.name }} has not added any skills yet
             </p>
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="12" md="4">
-        <v-card v-if="userActivity.length">
-          <ActivityFeed
-            :activity-data="userActivity"
-            :is-real-time="false"
-            :full-size="true"
-          ></ActivityFeed>
-        </v-card>
-        <v-card v-else>
-          <v-toolbar dense flat>
-            <v-toolbar-title class="subtitle-2 grey--text"
-              >Activity</v-toolbar-title
-            >
-          </v-toolbar>
-          <v-card-text>
-            <p class="text-center grey--text">
-              This user has no activity
+      <v-col cols="12" sm="4">
+        <v-card outlined>
+          <v-card-text v-if="userActivity.length">
+            <ActivityFeed
+              :activity-data="userActivity"
+              :is-real-time="false"
+              :full-size="true"
+            ></ActivityFeed>
+          </v-card-text>
+          <v-card-text v-else>
+            <p class="text-center grey--text mt-4">
+              {{ user.name }} has no activity yet
             </p>
           </v-card-text>
         </v-card>
@@ -114,6 +200,7 @@ const RadarChart = () => import('../components/RadarChart');
 const ActivityFeed = () => import('../components/ActivityFeed');
 const ProfileBanner = () => import('../components/ProfileBanner');
 const Vote = () => import('../components/Vote');
+import { lightFormat } from 'date-fns';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -131,7 +218,8 @@ export default {
       user: {},
       similarUsers: [],
       skillCategories: [],
-      userActivity: []
+      userActivity: [],
+      lightFormat
     };
   },
   computed: {
@@ -147,6 +235,21 @@ export default {
       }));
 
       return categories;
+    },
+    joinedAt() {
+      return lightFormat(new Date(this.user.joinedAt), 'dd-MM-yyyy');
+    },
+    bestSkill() {
+      return this.user.skills.reduce(
+        (prev, current) => (prev.esteem > current.esteem ? prev : current),
+        0
+      );
+    },
+    topThreeSkills() {
+      return this.user.skills
+        .concat()
+        .sort((a, b) => b.esteem - a.esteem)
+        .slice(0, 3);
     }
   },
   created() {

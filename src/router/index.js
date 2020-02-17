@@ -131,18 +131,28 @@ router.beforeEach((to, from, next) => {
       next();
     }
   } else if (to.matched.some(record => record.meta.requiresAdmin)) {
-    store
-      .dispatch('fetchUser')
-      .then(() => {
-        if (!store.getters.getUser.isAdmin) {
-          next({
-            path: '/dashboard'
-          });
-        } else {
-          next();
-        }
-      })
-      .catch(err => console.log(err));
+    if (!Object.keys(store.getters.getUser).length) {
+      store
+        .dispatch('fetchUser')
+        .then(() => {
+          if (!store.getters.getUser.isAdmin) {
+            next({
+              path: '/dashboard'
+            });
+          } else {
+            next();
+          }
+        })
+        .catch(err => console.log(err));
+    } else {
+      if (!store.getters.getUser.isAdmin) {
+        next({
+          path: '/dashboard'
+        });
+      } else {
+        next();
+      }
+    }
   } else {
     next();
   }
