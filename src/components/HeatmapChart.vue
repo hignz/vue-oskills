@@ -38,8 +38,51 @@ export default {
         },
         plotOptions: {
           heatmap: {
-            shadeIntensity: 0.5
+            shadeIntensity: 0,
+            colorScale: {
+              ranges: [
+                {
+                  from: -1,
+                  to: 1,
+                  color: this.isDark ? '#282c34' : '#fafafa',
+                  name: 'low'
+                },
+                {
+                  from: 1,
+                  to: 5,
+                  color: '#D4FBEB',
+                  name: 'med'
+                },
+                {
+                  from: 6,
+                  to: 10,
+                  color: '#9FF1D4',
+                  name: 'high'
+                },
+                {
+                  from: 10,
+                  to: 20,
+                  color: '#6EE3BF',
+                  name: 'high'
+                },
+                {
+                  from: 21,
+                  to: 30,
+                  color: '#41D1AB',
+                  name: 'higher'
+                },
+                {
+                  from: 31,
+                  to: 45,
+                  color: '#3695B6',
+                  name: 'highest'
+                }
+              ]
+            }
           }
+        },
+        legend: {
+          show: false
         },
         dataLabels: {
           enabled: false

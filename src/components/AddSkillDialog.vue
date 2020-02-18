@@ -42,7 +42,7 @@
         <v-spacer></v-spacer>
         <v-btn text @click="close()">Close</v-btn>
         <v-btn
-          color="primary"
+          color="success"
           :disabled="selectedSkill ? false : true"
           :loading="addSkillLoading"
           @click="addSkill"

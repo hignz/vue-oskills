@@ -1,12 +1,7 @@
 <template>
-  <v-col sm="8" md="4">
-    <v-card class="elevation-12">
+  <v-col sm="6" md="4" lg="3">
+    <v-card outlined>
       <v-form ref="loginForm" v-model="valid" @submit.prevent="login">
-        <v-toolbar flat>
-          <v-toolbar-title>
-            Sign in to OSkills
-          </v-toolbar-title>
-        </v-toolbar>
         <v-card-text>
           <v-text-field
             v-model="email"

@@ -64,7 +64,7 @@ export default {
             top: 1
           },
           animations: {
-            enabled: false
+            enabled: true
           }
         },
         stroke: {
