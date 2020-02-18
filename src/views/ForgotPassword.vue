@@ -1,14 +1,21 @@
 <template>
-  <v-container fill-height>
+  <v-container>
     <v-row align="center" justify="center">
-      <v-col sm="8" md="3">
-        <v-card v-if="!sent" class="elevation-12">
+      <v-col sm="6" class="text-center my-12">
+        <v-toolbar-title class="text-uppercase">
+          <span class="display-1 font-weight-bold primary--text">O</span>
+          <span class="display-1 font-weight-light grey--text">Skills</span>
+        </v-toolbar-title>
+        <v-toolbar-title class="primary--text mt-4"
+          >Forgot password</v-toolbar-title
+        >
+      </v-col>
+    </v-row>
+
+    <v-row align="center" justify="center">
+      <v-col sm="6" md="4" lg="3">
+        <v-card v-if="!sent" outlined>
           <v-form ref="form" v-model="valid" @submit.prevent="requestReset">
-            <v-toolbar flat>
-              <v-toolbar-title>
-                Forgot password
-              </v-toolbar-title>
-            </v-toolbar>
             <v-card-subtitle
               >Please enter your account's verified email address below and we
               will send you a password reset link</v-card-subtitle
@@ -32,7 +39,7 @@
             </v-card-actions>
           </v-form>
         </v-card>
-        <v-card v-else>
+        <v-card v-else outlined>
           <v-card-text class="text-center">
             {{ sentText }}
           </v-card-text>
