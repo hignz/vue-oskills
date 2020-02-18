@@ -42,7 +42,7 @@
       <v-card-actions>
         <v-spacer />
         <v-btn text @click="close()">Close</v-btn>
-        <v-btn color="primary" :disabled="!valid" @click="addNewSkill">
+        <v-btn color="success" :disabled="!valid" @click="addNewSkill">
           Add</v-btn
         >
       </v-card-actions>

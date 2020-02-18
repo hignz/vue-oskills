@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-card outlined="">
+    <v-card outlined>
       <v-tabs v-model="tab" @change="load">
         <v-tabs-slider></v-tabs-slider>
 
