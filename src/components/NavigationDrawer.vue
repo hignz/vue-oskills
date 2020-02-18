@@ -63,6 +63,13 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
+    <template v-slot:append>
+      <div class="pa-2 d-md-none">
+        <v-btn block text @click="logout()">
+          <v-icon>mdi-logout-variant</v-icon>
+        </v-btn>
+      </div>
+    </template>
   </v-navigation-drawer>
 </template>
 
