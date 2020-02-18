@@ -1,6 +1,6 @@
 <template>
   <v-container v-if="user" fluid>
-    <v-card class="mb-3">
+    <v-card outlined class="mb-3">
       <v-row align="center" justify="center">
         <v-col cols="12" sm="12" md="3" class="text-center">
           <v-row>
@@ -81,7 +81,7 @@
 
     <v-row>
       <v-col cols="12" md="8" sm="12">
-        <v-card height="370" outlined="">
+        <v-card outlined height="370">
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text"
               >SKILLS</v-toolbar-title
@@ -97,7 +97,7 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <v-card height="370" outlined>
+        <v-card outlined height="370" outlined>
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text"
               >CATEGORIES</v-toolbar-title
@@ -124,7 +124,7 @@
 
     <v-row>
       <v-col cols="12" md="4" sm="12">
-        <v-card height="280">
+        <v-card outlined height="285">
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
               >{{ usersCardTitle }}
@@ -154,12 +154,12 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <v-card height="280">
+        <v-card outlined height="285">
           <MiniSkillList :skills="topThreeSkills" />
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <v-card height="280">
+        <v-card outlined height="285">
           <ActivityFeed
             v-if="recentActivityData.length"
             :activity-data="recentActivityData"

@@ -1,5 +1,5 @@
 <template>
-  <v-card flat>
+  <div>
     <v-card-title
       >Active
       <span class="caption ml-2 grey--text">({{ categories.length }})</span>
@@ -8,7 +8,7 @@
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
-          label="Search active categories..."
+          label="Search active..."
           single-line
           clearable
           hide-details
@@ -90,7 +90,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-card>
+  </div>
 </template>
 
 <script>

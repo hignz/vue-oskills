@@ -6,6 +6,7 @@
     :disable-filtering="true"
     sort-by="total"
     sort-desc
+    dense
     :items-per-page="5"
     multi-sort
   >

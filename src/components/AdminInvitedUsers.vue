@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-list v-if="users.length" dense two-line>
+    <v-list v-if="users.length" dense two-line flat>
       <v-list-item-group>
         <v-list-item v-for="user in users" :key="user._id">
           <v-list-item-content>
@@ -51,9 +51,6 @@ export default {
     return {
       formatDistanceToNow
     };
-  },
-  created() {
-    console.log(this.users);
   }
 };
 </script>

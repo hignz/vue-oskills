@@ -1,5 +1,5 @@
 <template>
-  <v-card flat>
+  <div>
     <v-card-title
       >All
       <span class="caption ml-2 grey--text">({{ roles.length }})</span>
@@ -30,12 +30,11 @@
       multi-sort
     >
     </v-data-table>
-  </v-card>
+  </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
-import { formatRelative, lightFormat } from 'date-fns';
 import AddRoleDialog from './AddRoleDialog';
 
 export default {

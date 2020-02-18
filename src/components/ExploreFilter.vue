@@ -24,7 +24,7 @@
             :rules="requiredRules"
             return-object
             dense
-            solo
+            outlined
             required
             @change="populateSkills"
           ></v-select>
@@ -40,7 +40,7 @@
             multiple
             dense
             small-chips
-            solo
+            outlined
             return-object
             required
           ></v-select>
@@ -63,7 +63,8 @@
           >
         </v-form>
       </v-col>
-      <v-col cols="12" sm="12" md="10">
+      <v-col cols="12" sm="12" md="10" class="pt-0">
+        <RecentlyJoined v-if="!searched" />
         <p v-if="searched" class="grey--text">
           Results for <strong>{{ searchedSkills }}</strong> between
           {{ range[0] }} -
@@ -71,15 +72,15 @@
         </p>
 
         <div v-if="!results.length" class="grey--text text-center mt-12">
-          <v-icon x-large class="grey--text mb-2">{{
-            searched ? 'mdi-account-off' : 'mdi-account-search'
-          }}</v-icon>
+          <v-icon v-if="searched" x-large class="grey--text mb-2">
+            mdi-account-off
+          </v-icon>
           <p v-if="searched" class="title">
             No results found
           </p>
-          <p v-else class="title">
+          <!-- <p v-else class="title">
             Please search pls
-          </p>
+          </p> -->
         </div>
         <v-row v-else align="start" justify="start">
           <v-col v-for="result in results" :key="result._id" sm="12" md="4">
@@ -95,10 +96,12 @@
 import { mapActions } from 'vuex';
 import MiniProfile from './MiniProfile';
 import validationRules from '../mixins/validationRules';
+import RecentlyJoined from '../components/RecentlyJoined';
 
 export default {
   components: {
-    MiniProfile
+    MiniProfile,
+    RecentlyJoined
   },
   mixins: [validationRules],
   data() {

@@ -1,22 +1,12 @@
 <template>
   <div>
-    <v-row>
-      <v-col class="mb-0 pb-0">
-        <span class="grey--text">
-          <v-icon color="grey" class="pb-1">
-            mdi-account
-          </v-icon>
-          Recently joined</span
-        >
-      </v-col>
-    </v-row>
     <v-row v-if="users.length" class="mt-0 pt-0" justify="start" align="center">
       <v-col
-        v-for="user in users.slice(0, 4)"
+        v-for="user in users.slice(0, 3)"
         :key="user._id"
         cols="12"
         sm="12"
-        md="3"
+        md="4"
       >
         <MiniProfile :user="user" />
       </v-col>

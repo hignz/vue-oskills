@@ -1,5 +1,5 @@
 <template>
-  <v-card flat>
+  <div>
     <v-card-title
       >Invited
       <v-spacer></v-spacer>
@@ -132,7 +132,7 @@
         </v-card>
       </v-dialog>
     </template>
-  </v-card>
+  </div>
 </template>
 
 <script>
@@ -164,7 +164,7 @@ export default {
           text: 'Role',
           align: 'center',
           sortable: true,
-          value: 'role'
+          value: 'role.title'
         },
         {
           text: 'Invited',

@@ -83,7 +83,6 @@ export default {
         isAdmin: isAdmin
       })
         .then(() => {
-          console.log(email, role, isAdmin);
           this.close();
           this.toggleSnackbar({
             show: true,

@@ -8,7 +8,7 @@
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
-          label="Search archived skills..."
+          label="Search archived..."
           single-line
           clearable
           hide-details
@@ -46,8 +46,8 @@
           @update="updateArchivedSkill"
         ></EditSkillDialog>
         <v-btn icon>
-          <v-icon @click="openSkillProfile(item._id)">
-            mdi-star
+          <v-icon small @click="openSkillProfile(item._id)">
+            mdi-open-in-new
           </v-icon>
         </v-btn>
       </template>

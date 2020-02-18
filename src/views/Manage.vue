@@ -1,75 +1,98 @@
 <template>
   <v-container fluid>
-    <v-tabs v-model="tab" class="elevation-2" @change="load">
-      <v-tabs-slider></v-tabs-slider>
+    <v-card outlined="">
+      <v-tabs v-model="tab" @change="load">
+        <v-tabs-slider></v-tabs-slider>
 
-      <v-tab href="#0">
-        Users
-      </v-tab>
-      <v-tab href="#1">
-        Skills
-      </v-tab>
-      <v-tab href="#2">
-        Categories
-      </v-tab>
-      <v-tab href="#3">
-        Roles
-      </v-tab>
+        <v-tab href="#0">
+          Users
+        </v-tab>
+        <v-tab href="#1">
+          Skills
+        </v-tab>
+        <v-tab href="#2">
+          Categories
+        </v-tab>
+        <v-tab href="#3">
+          Roles
+        </v-tab>
 
-      <v-tabs-items v-model="tab">
-        <v-tab-item value="0" :transition="false" :reverse-transition="false">
-          <v-row v-if="loaded" justify="center" align="center">
-            <v-col cols="12" sm="12">
-              <ManageUsers :users="verifiedUsers" @userDeleted="deleteUser" />
-              <v-divider></v-divider>
-              <v-col cols="12" sm="12">
-                <InvitedUsers :users="invitedUsers" @invite="editInvite" />
-              </v-col>
-            </v-col>
-          </v-row>
-        </v-tab-item>
-        <v-tab-item value="1" :transition="false" :reverse-transition="false">
-          <v-row v-if="loaded" justify="center" align="center">
-            <v-col cols="12" sm="12">
-              <ManageSkills :skills="unarchivedSkills" @archive="archive" />
-              <v-divider></v-divider>
-            </v-col>
-            <v-col cols="12" sm="12">
-              <ManageArchivedSkills
-                :skills="archivedSkills"
-                @unarchive="unarchive"
-              />
-            </v-col>
-          </v-row>
-        </v-tab-item>
+        <v-tabs-items v-model="tab">
+          <v-card-text>
+            <v-tab-item
+              value="0"
+              :transition="false"
+              :reverse-transition="false"
+            >
+              <v-row v-if="loaded" justify="center" align="center">
+                <v-col cols="12" sm="12">
+                  <ManageUsers
+                    :users="verifiedUsers"
+                    @userDeleted="deleteUser"
+                  />
+                  <v-divider></v-divider>
+                  <v-col cols="12" sm="12">
+                    <InvitedUsers :users="invitedUsers" @invite="editInvite" />
+                  </v-col>
+                </v-col>
+              </v-row>
+            </v-tab-item>
+            <v-tab-item
+              value="1"
+              :transition="false"
+              :reverse-transition="false"
+            >
+              <v-row v-if="loaded" justify="center" align="center">
+                <v-col cols="12" sm="12">
+                  <ManageSkills :skills="unarchivedSkills" @archive="archive" />
+                  <v-divider></v-divider>
+                </v-col>
+                <v-col cols="12" sm="12">
+                  <ManageArchivedSkills
+                    :skills="archivedSkills"
+                    @unarchive="unarchive"
+                  />
+                </v-col>
+              </v-row>
+            </v-tab-item>
 
-        <v-tab-item value="2" :transition="false" :reverse-transition="false">
-          <v-row v-if="loaded" justify="center" align="center">
-            <v-col cols="12" sm="12">
-              <ManageCategories
-                :categories="unarchivedCategories"
-                @archive="archive"
-              />
-              <v-divider></v-divider>
-            </v-col>
-            <v-col cols="12" sm="12">
-              <ArchivedCategories
-                :categories="archivedCategories"
-                @unarchive="unarchive"
-              />
-            </v-col>
-          </v-row>
-        </v-tab-item>
-        <v-tab-item value="3" :transition="false" :reverse-transition="false">
-          <v-row v-if="loaded" justify="center" align="center">
-            <v-col cols="12" sm="12">
-              <ManageRoles :roles="allRoles" @roleAdded="updateRoles" />
-              <v-divider></v-divider>
-            </v-col>
-          </v-row>
-        </v-tab-item>
-      </v-tabs-items>
-    </v-tabs>
+            <v-tab-item
+              value="2"
+              :transition="false"
+              :reverse-transition="false"
+            >
+              <v-row v-if="loaded" justify="center" align="center">
+                <v-col cols="12" sm="12">
+                  <ManageCategories
+                    :categories="unarchivedCategories"
+                    @archive="archive"
+                  />
+                  <v-divider></v-divider>
+                </v-col>
+                <v-col cols="12" sm="12">
+                  <ArchivedCategories
+                    :categories="archivedCategories"
+                    @unarchive="unarchive"
+                  />
+                </v-col>
+              </v-row>
+            </v-tab-item>
+            <v-tab-item
+              value="3"
+              :transition="false"
+              :reverse-transition="false"
+            >
+              <v-row v-if="loaded" justify="center" align="center">
+                <v-col cols="12" sm="12">
+                  <ManageRoles :roles="allRoles" @roleAdded="updateRoles" />
+                  <v-divider></v-divider>
+                </v-col>
+              </v-row>
+            </v-tab-item>
+          </v-card-text>
+        </v-tabs-items>
+      </v-tabs>
+    </v-card>
   </v-container>
 </template>
 

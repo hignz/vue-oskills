@@ -11,8 +11,10 @@
           v-if="!isDark"
           :src="require('../assets/OrangeLogo_NoBG.png')"
         ></v-img>
-        <v-img v-if="isDark" :src="require('../assets/oskills.png')"></v-img>
-        <!-- <v-icon color="primary" class="animated rollIn">mdi-star</v-icon> -->
+        <v-img
+          v-if="isDark"
+          :src="require('../assets/WhiteLogo_NoBG.png')"
+        ></v-img>
       </v-list-item-avatar>
     </v-list-item>
 

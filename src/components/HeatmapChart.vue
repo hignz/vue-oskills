@@ -2,7 +2,7 @@
   <div id="chart">
     <apexchart
       type="heatmap"
-      height="350"
+      height="286"
       :options="chartOptions"
       :series="series"
     ></apexchart>
@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import VueApexCharts from 'vue-apexcharts';
 
 export default {
@@ -27,33 +28,26 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['isDark']),
     chartOptions() {
       return {
         chart: {
           height: 350,
           type: 'heatmap',
-          background: '#282c34'
+          background: this.isDark ? '#282c34' : '#fafafa'
         },
         plotOptions: {
           heatmap: {
-            shadeIntensity: 0.5,
-            polygons: {
-              fill: {
-                colors: ['#282c34']
-              }
-            }
+            shadeIntensity: 0.5
           }
         },
         dataLabels: {
           enabled: false
         },
         theme: {
-          mode: 'dark'
+          mode: this.isDark ? 'dark' : 'light'
         },
-        colors: [localStorage.getItem('accentColor')],
-        title: {
-          text: 'HeatMap'
-        }
+        colors: [localStorage.getItem('accentColor')]
       };
     },
     series() {

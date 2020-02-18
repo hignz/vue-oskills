@@ -31,9 +31,9 @@ http.interceptors.response.use(
   },
   error => {
     if (401 === error.response.status) {
-      localStorage.removeItem('accessToken');
-      store.state.accessToken = null;
-      router.push({ path: '/login' }).catch(() => {});
+      // localStorage.removeItem('accessToken');
+      // store.state.accessToken = null;
+      // router.push({ path: '/login' }).catch(() => {});
     }
     return Promise.reject(error);
   }
