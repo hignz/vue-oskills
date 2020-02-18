@@ -9,7 +9,7 @@
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
-            label="Search active skills..."
+            label="Search active..."
             single-line
             clearable
             hide-details
@@ -44,7 +44,7 @@
           ></EditSkillDialog>
           <v-btn icon>
             <v-icon small @click="openSkillProfile(item._id)">
-              mdi-star
+              mdi-open-in-new
             </v-icon>
           </v-btn>
         </template>

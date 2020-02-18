@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form" class="mt-4 mr-md-8" @submit.prevent>
+  <v-form ref="form" class="mt-7 mr-md-8" @submit.prevent>
     <v-autocomplete
       v-model="model"
       clearable
@@ -12,6 +12,7 @@
       item-text="name"
       item-value="_id"
       dense
+      outlined
       placeholder="Search..."
       prepend-inner-icon="mdi-magnify"
       return-object

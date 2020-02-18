@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     size() {
-      return this.fullSize ? '300px' : '14.5em';
+      return this.fullSize ? '269px' : '14.5em';
     }
   },
   created() {

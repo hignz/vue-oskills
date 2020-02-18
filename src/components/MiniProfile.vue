@@ -1,5 +1,5 @@
 <template>
-  <v-card height="310">
+  <v-card height="320" outlined="">
     <v-list-item dense @click="openProfile">
       <v-list-item-avatar>
         <v-avatar size="50">

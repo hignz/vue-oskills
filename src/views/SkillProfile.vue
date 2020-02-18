@@ -1,6 +1,6 @@
 <template>
   <v-container v-if="loaded" fluid>
-    <v-card>
+    <v-card outlined>
       <v-row justify="center" align="center">
         <v-col cols="12" sm="12" md="12">
           <v-row justify="center" align="center">
@@ -71,7 +71,7 @@
 
     <v-row>
       <v-col cols="12" sm="12" md="4">
-        <v-card height="345">
+        <v-card height="320" outlined>
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
               >USERS WITH THIS SKILL</v-toolbar-title
@@ -116,13 +116,13 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <v-card height="345">
+        <v-card height="320" outlined>
           <v-toolbar flat dense>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
               >Something will eventually go here</v-toolbar-title
             >
           </v-toolbar>
-          <v-card-text class=" grey--text"
+          <v-card-text class="grey--text"
             ><p class="text-center grey--text">
               We promise
             </p></v-card-text
@@ -130,10 +130,11 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <v-card v-if="skillActivityData.length">
+        <v-card v-if="skillActivityData.length" outlined>
           <ActivityFeed
             :activity-data="skillActivityData"
             :is-real-time="false"
+            full-size="true"
           ></ActivityFeed>
         </v-card>
         <v-card v-else>
@@ -142,7 +143,7 @@
               >Activity</v-toolbar-title
             >
           </v-toolbar>
-          <v-card-text class="text-center grey--text">
+          <v-card-text class="text-center grey--text" outlined>
             <p>This skill has no activity</p>
           </v-card-text>
         </v-card>

@@ -1,6 +1,6 @@
 <template>
   <v-container v-if="loaded" fluid>
-    <v-card>
+    <v-card outlined>
       <v-card-title>
         My skills
         <v-spacer></v-spacer>
@@ -8,11 +8,12 @@
         <v-form>
           <v-text-field
             v-model="searchTerm"
-            class="mb-5 mx-5"
-            prepend-inner-icon="mdi-magnify"
+            class="mx-5"
+            append-icon="mdi-magnify"
             label="Search skills..."
             single-line
             clearable
+            dense
             hide-details
           ></v-text-field>
         </v-form>
@@ -181,8 +182,4 @@ export default {
 };
 </script>
 
-<style>
-.theme--dark.v-data-table tbody tr:hover:not(.v-data-table__expanded__content) {
-  background: #363b46;
-}
-</style>
+<style></style>

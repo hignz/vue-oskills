@@ -78,4 +78,8 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.theme--dark.v-data-table tbody tr:hover:not(.v-data-table__expanded__content) {
+  background: #363b46;
+}
 </style>

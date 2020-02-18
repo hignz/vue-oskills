@@ -1,8 +1,8 @@
 <template>
   <v-container fluid>
-    <v-card>
+    <v-card outlined>
+      <v-subheader>Account</v-subheader>
       <v-card-text>
-        <v-subheader>Account</v-subheader>
         <v-row>
           <v-col sm="12">
             <v-row>
@@ -18,8 +18,11 @@
             </v-row>
           </v-col>
         </v-row>
+      </v-card-text>
+      <v-divider></v-divider>
+      <v-subheader class="mt-4">Appearance</v-subheader>
+      <v-card-text>
         <v-row>
-          <v-subheader>Appearance</v-subheader>
           <v-col sm="12">
             <v-row>
               <v-col cols="12" sm="12" md="6">

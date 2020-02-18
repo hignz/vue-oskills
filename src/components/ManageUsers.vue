@@ -1,13 +1,15 @@
 <template>
-  <v-card flat>
+  <div>
     <v-card-title
       >Registered
+      <span class="caption ml-2 grey--text">({{ users.length }})</span>
+
       <v-spacer></v-spacer>
       <v-form>
         <v-text-field
           v-model="searchTerm"
           append-icon="mdi-magnify"
-          label="Search"
+          label="Search registered..."
           single-line
           clearable
           hide-details
@@ -124,8 +126,6 @@
             delete this user this action will be irreversible
           </v-card-text>
 
-          <v-divider></v-divider>
-
           <v-card-actions>
             <v-spacer />
 
@@ -139,7 +139,7 @@
         </v-card>
       </v-dialog>
     </template>
-  </v-card>
+  </div>
 </template>
 
 <script>

@@ -2,7 +2,7 @@
   <div id="chart">
     <apexchart
       type="heatmap"
-      height="350"
+      height="286"
       :options="chartOptions"
       :series="series"
     ></apexchart>
@@ -45,7 +45,7 @@ export default {
           enabled: false
         },
         theme: {
-          mode: 'dark'
+          mode: this.isDark ? 'dark' : 'light'
         },
         colors: [localStorage.getItem('accentColor')]
       };
