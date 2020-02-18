@@ -41,16 +41,18 @@ export default {
   },
   computed: {
     icon() {
-      const index =
-        this.esteem <= 0 || Math.ceil(this.esteem % 5) <= 0
+      const i =
+        this.esteem >= 25
+          ? 6
+          : this.esteem <= 0 || Math.ceil(this.esteem % 5) <= 0
           ? 1
           : (this.esteem % 5) + 1;
 
-      return `mdi-hexagon-slice-${index}`;
+      return `mdi-hexagon-slice-${i}`;
     },
     color() {
       const i =
-        Math.floor(this.esteem / 5) <= 5 ? Math.floor(this.esteem / 5) : 5;
+        Math.floor(this.esteem / 5) <= 6 ? Math.floor(this.esteem / 5) : 5;
       return this.colors[i];
     },
     animatedClass() {
