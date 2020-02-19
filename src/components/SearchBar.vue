@@ -7,27 +7,25 @@
       :items="items"
       :loading="isLoading"
       :search-input.sync="search"
-      hide-no-data
       hide-selected
       item-text="name"
       item-value="_id"
       dense
       outlined
+      eager
       placeholder="Search..."
       prepend-inner-icon="mdi-magnify"
       return-object
       @change="navigateTo"
     >
-      <template v-slot:item="{ parent, item }">
+      <template v-slot:item="{ item }">
         <v-list-item-avatar>
           <v-icon v-if="item.category">mdi-star</v-icon>
           <v-img v-else-if="item.image" :src="item.image"></v-img>
           <v-icon v-else>mdi-account</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title
-            v-html="`${parent.genFilteredText(item.name)}`"
-          ></v-list-item-title>
+          <v-list-item-title v-text="item.name"></v-list-item-title>
           <v-list-item-subtitle class="grey--text">
             {{
               item.category ? item.category.name : item.role.title
@@ -62,6 +60,8 @@ export default {
 
   watch: {
     search(val) {
+      console.log(val);
+
       if (!val || val.trim() === '') {
         this.entries = [];
         return;
@@ -74,6 +74,7 @@ export default {
       this.fetchByName(val)
         .then(res => {
           this.entries = res.data;
+          console.log(this.entries);
         })
         .catch(() => {})
         .finally(() => (this.isLoading = false));
