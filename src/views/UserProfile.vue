@@ -198,7 +198,6 @@
 const EsteemBadge = () => import('../components/EsteemBadge');
 const RadarChart = () => import('../components/RadarChart');
 const ActivityFeed = () => import('../components/ActivityFeed');
-const ProfileBanner = () => import('../components/ProfileBanner');
 const Vote = () => import('../components/Vote');
 import { lightFormat } from 'date-fns';
 import { mapGetters, mapActions } from 'vuex';
@@ -208,7 +207,6 @@ export default {
     ActivityFeed,
     EsteemBadge,
     RadarChart,
-    ProfileBanner,
     Vote
   },
   data() {

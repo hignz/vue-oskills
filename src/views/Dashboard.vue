@@ -97,7 +97,7 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <v-card outlined height="370" outlined>
+        <v-card outlined height="370">
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text"
               >CATEGORIES</v-toolbar-title
@@ -172,7 +172,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 import RecentUsers from '../components/RecentUsers';
 import SimilarUsers from '../components/SimilarUsers';
@@ -215,6 +215,8 @@ export default {
     }
   },
   created() {
+    console.log(window.Apex);
+
     this.fetchUser().then(res => {
       this.user = res.data;
     });
@@ -222,6 +224,10 @@ export default {
       this.recentActivityData = res;
       this.loaded = true;
     });
+  },
+  beforeDestroy() {
+    this.$apexcharts.exec('barChart', 'destroy');
+    this.$apexcharts.exec('radarChart', 'destroy');
   },
   methods: {
     ...mapActions(['fetchUser', 'fetchRecentActivity']),

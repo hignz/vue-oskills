@@ -7,13 +7,11 @@
 </template>
 
 <script>
-import RecentlyJoined from '../components/RecentlyJoined';
 import RecentlyAddedSkills from '../components/RecentlyAddedSkills';
 import ExploreFilter from '../components/ExploreFilter';
 
 export default {
   components: {
-    RecentlyJoined,
     RecentlyAddedSkills,
     ExploreFilter
   },
