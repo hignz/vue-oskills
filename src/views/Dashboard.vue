@@ -215,8 +215,6 @@ export default {
     }
   },
   created() {
-    console.log(window.Apex);
-
     this.fetchUser().then(res => {
       this.user = res.data;
     });

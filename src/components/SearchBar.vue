@@ -60,8 +60,6 @@ export default {
 
   watch: {
     search(val) {
-      console.log(val);
-
       if (!val || val.trim() === '') {
         this.entries = [];
         return;
@@ -74,7 +72,6 @@ export default {
       this.fetchByName(val)
         .then(res => {
           this.entries = res.data;
-          console.log(this.entries);
         })
         .catch(() => {})
         .finally(() => (this.isLoading = false));
