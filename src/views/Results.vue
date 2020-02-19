@@ -48,9 +48,6 @@ export default {
     this.fetchByName(this.searchTerm)
       .then(response => {
         this.results = response.data;
-      })
-      .catch(error => {
-        console.error(error);
       });
   },
   methods: {
