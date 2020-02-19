@@ -53,7 +53,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['doLogin', 'toggleSnackbar']),
+    ...mapActions(['doLogin', 'toggleSnackbar', 'fetchUser']),
     login() {
       if (this.$refs.loginForm.validate()) {
         this.doLogin({
@@ -66,6 +66,10 @@ export default {
             this.$router.push(
               isAdmin ? { name: 'admin' } : { name: 'dashboard' }
             );
+
+            if (isAdmin) {
+              this.fetchUser();
+            }
           })
           .catch(() => {
             this.toggleSnackbar({
