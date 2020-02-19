@@ -79,7 +79,9 @@ a {
   background: #555;
 }
 
-.theme--dark.v-data-table tbody tr:hover:not(.v-data-table__expanded__content) {
+.theme--dark.v-data-table
+  tbody
+  tr:hover:not(.v-data-table__expanded__content):not(.v-data-table__empty-wrapper) {
   background: #363b46;
 }
 </style>
