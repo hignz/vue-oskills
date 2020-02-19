@@ -51,6 +51,7 @@ export default {
           mode: this.isDark ? 'dark' : 'light'
         },
         chart: {
+          id: 'barChart',
           background: this.isDark ? '#282c34' : '#fafafa',
           foreColor: this.isDark ? '#eeeeef' : '#5e5e5e'
         },

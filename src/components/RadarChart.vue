@@ -56,6 +56,7 @@ export default {
       return {
         chart: {
           type: 'radar',
+          id: 'radarChart',
           background: this.isDark ? '#282c34' : '#fafafa',
           dropShadow: {
             enabled: true,
