@@ -10,6 +10,10 @@
     :items-per-page="5"
     multi-sort
   >
+    <template v-slot:item.avg="{ item }">
+      {{ round(item.avg, 1) }}
+    </template>
+
     <template v-slot:item.action="{ item }">
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
@@ -39,11 +43,12 @@ export default {
           sortable: true,
           value: 'name'
         },
+        { text: 'People with', value: 'count', align: 'center' },
         { text: 'Average points', value: 'avg', align: 'center' },
         { text: 'Total points', value: 'total', align: 'center' },
         { text: 'Actions', value: 'action', align: 'center' }
       ],
-      topSkills: null
+      topSkills: []
     };
   },
   created() {
@@ -56,7 +61,9 @@ export default {
   methods: {
     ...mapActions(['fetchTopSkills']),
     initialize() {},
-
+    round(number, places) {
+      return number.toFixed(places);
+    },
     openSkillProfile(skillId) {
       this.$router.push({
         name: 'skillProfile',
