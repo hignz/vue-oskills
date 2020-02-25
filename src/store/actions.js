@@ -311,5 +311,13 @@ export default {
     return http.get('skill/userskills').then(res => {
       return res.data;
     });
+  },
+  fetchCategory({ commit }, categoryId) {
+    commit(constants.SET_LOADING, true);
+
+    return http.get(`/category/${categoryId}`).then(res => {
+      commit(constants.SET_LOADING, false);
+      return res.data;
+    });
   }
 };
