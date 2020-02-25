@@ -135,6 +135,11 @@ export default {
           });
 
           this.$emit('skillAdded', archived ? 0 : 1);
+          this.$emit('newSkill', {
+            name: this.skillName,
+            categoryId: this.selectedCategory.categoryId,
+            archived: this.archiveSkill
+          });
         })
         .catch(err => {
           this.toggleSnackbar({
