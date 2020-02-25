@@ -56,7 +56,7 @@ export default {
             color: 'success'
           });
 
-          this.$emit('categoryAdded');
+          this.$emit('categoryAdded', name);
         })
         .catch(() => {
           this.toggleSnackbar({
