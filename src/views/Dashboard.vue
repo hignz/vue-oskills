@@ -160,10 +160,16 @@
       </v-col>
       <v-col cols="12" md="4" sm="12">
         <v-card outlined height="285">
+          <v-toolbar flat dense>
+            <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
+              >Activity</v-toolbar-title
+            >
+          </v-toolbar>
           <ActivityFeed
             v-if="recentActivityData.length"
             :activity-data="recentActivityData"
             :is-real-time="true"
+            :height="235"
           ></ActivityFeed>
         </v-card>
       </v-col>

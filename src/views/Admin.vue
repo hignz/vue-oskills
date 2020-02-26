@@ -55,7 +55,7 @@
       </v-col>
 
       <v-col cols="12" sm="12" md="2">
-        <v-card outlined class="justi">
+        <v-card outlined>
           <v-card-subtitle class="title"
             ><span class="title font-weight-bold primary--text">
               {{ stats.roleCount }}
@@ -108,15 +108,18 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <v-card outlined height="100%">
-          <v-card-text>
-            <ActivityFeed
-              v-if="recentActivity.length"
-              :activity-data="recentActivity"
-              :is-real-time="true"
-              :full-size="true"
-            ></ActivityFeed>
-          </v-card-text>
+        <v-card outlined height="350">
+          <v-toolbar flat dense>
+            <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
+              >Activity</v-toolbar-title
+            >
+          </v-toolbar>
+          <ActivityFeed
+            v-if="recentActivity.length"
+            :activity-data="recentActivity"
+            :is-real-time="true"
+            :full-size="true"
+          ></ActivityFeed>
         </v-card>
       </v-col>
     </v-row>

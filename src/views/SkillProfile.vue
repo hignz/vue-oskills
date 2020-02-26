@@ -130,11 +130,16 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <v-card v-if="skillActivityData.length" outlined>
+        <v-card v-if="skillActivityData.length" height="320" outlined>
+          <v-toolbar flat dense>
+            <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
+              >Activity</v-toolbar-title
+            >
+          </v-toolbar>
           <ActivityFeed
             :activity-data="skillActivityData"
             :is-real-time="false"
-            full-size="true"
+            :height="270"
           ></ActivityFeed>
         </v-card>
         <v-card v-else>

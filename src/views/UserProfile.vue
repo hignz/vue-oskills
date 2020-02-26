@@ -137,7 +137,7 @@
           >
             <div v-for="(category, i) in categories" :key="category.name">
               <v-subheader
-                class="subtitle-2"
+                class="subtitle-2 primary--text"
                 inset
                 @click="navigateTo({ name: 'category', id: category._id })"
                 >{{ category.categoryName }}</v-subheader
@@ -175,14 +175,18 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="4">
-        <v-card outlined>
-          <v-card-text v-if="userActivity.length">
-            <ActivityFeed
-              :activity-data="userActivity"
-              :is-real-time="false"
-              :full-size="true"
-            ></ActivityFeed>
-          </v-card-text>
+        <v-card outlined height="380">
+          <v-toolbar flat dense>
+            <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
+              >Activity</v-toolbar-title
+            >
+          </v-toolbar>
+          <ActivityFeed
+            v-if="userActivity.length"
+            :activity-data="userActivity"
+            :is-real-time="false"
+            :height="330"
+          ></ActivityFeed>
           <v-card-text v-else>
             <p class="text-center grey--text mt-4">
               {{ user.name }} has no activity yet

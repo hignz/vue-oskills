@@ -43,7 +43,7 @@ export default {
           sortable: true,
           value: 'name'
         },
-        { text: 'People with', value: 'count', align: 'center' },
+        { text: 'Users', value: 'count', align: 'center' },
         { text: 'Average points', value: 'avg', align: 'center' },
         { text: 'Total points', value: 'total', align: 'center' },
         { text: 'Actions', value: 'action', align: 'center' }
