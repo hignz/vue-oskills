@@ -123,7 +123,7 @@
             >
           </v-toolbar>
           <v-card-text class="grey--text"
-            ><p class="text-center grey--text">
+            ><p class="text-center grey--text mt-12">
               We promise
             </p></v-card-text
           >
@@ -142,14 +142,14 @@
             :height="270"
           ></ActivityFeed>
         </v-card>
-        <v-card v-else>
+        <v-card v-else outlined height="320">
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text"
               >Activity</v-toolbar-title
             >
           </v-toolbar>
-          <v-card-text class="text-center grey--text" outlined>
-            <p>This skill has no activity</p>
+          <v-card-text class="text-center grey--text">
+            <p class="mt-12">This skill has no activity</p>
           </v-card-text>
         </v-card>
       </v-col>
