@@ -259,7 +259,6 @@ export default {
       return lightFormat(new Date(date), 'dd-MM-yyyy');
     },
     promoteToAdmin(user) {
-      console.log(user);
       this.addAdmin({
         uId: user._id,
         isAdmin: !user.isAdmin,
@@ -267,7 +266,6 @@ export default {
         email: user.email
       })
         .then(() => {
-          console.log(user._id, !user.isAdmin, this.vWeight, user.email);
           this.user.isAdmin = !this.user.isAdmin;
           this.toggleSnackbar({
             show: true,

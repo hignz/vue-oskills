@@ -98,11 +98,11 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 
-import ActivityFeed from '../components/ActivityFeed';
+// import ActivityFeed from '../components/ActivityFeed';
 
 export default {
   components: {
-    ActivityFeed
+    // ActivityFeed
   },
   data() {
     return {
@@ -121,7 +121,6 @@ export default {
     this.fetchCategory(categoryId).then(res => {
       this.category = res.category;
       this.skillsIn = res.skillsIn;
-      console.log(res);
       this.loaded = true;
     });
   },
