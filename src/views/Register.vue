@@ -7,10 +7,19 @@
         <span class="font-weight-light">Skills</span>
       </h1>
     </v-col>
-    <v-row v-if="verified && !completed" align="center" justify="center">
+    <v-row
+      v-if="verified && !completed && !isLoading"
+      align="center"
+      justify="center"
+    >
       <v-col sm="12" md="5">
         <v-card>
-          <v-form ref="form" v-model="valid" :lazy-validation="true">
+          <v-form
+            ref="form"
+            v-model="valid"
+            :lazy-validation="true"
+            @submit.prevent="onSubmit"
+          >
             <v-stepper v-model="n" vertical class="elevation-0">
               <v-stepper-step :complete="n > 1" :step="1" :editable="true">
                 Personal details
@@ -53,7 +62,7 @@
                   </v-autocomplete>
                   <v-file-input
                     v-model="image"
-                    :rules="rules"
+                    :rules="imageRules"
                     placeholder="Avatar"
                     accept="image/png, image/jpeg, image/bmp"
                     show-size
@@ -122,7 +131,6 @@
                     type="submit"
                     class="ml-2"
                     color="primary"
-                    @click="onComplete()"
                     >Complete</v-btn
                   >
                 </v-col>
@@ -132,20 +140,30 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row justify="center">
-      <v-col v-if="!verified && !completed" sm="4" class="text-center">
+    <v-row v-else justify="center">
+      <v-col
+        v-if="!verified && !completed && !isLoading"
+        sm="4"
+        class="text-center"
+      >
         <v-alert text color="error" icon="mdi-exclamation" border="left">
           User not found.
           <p class="my-0 py-0"></p>
         </v-alert>
       </v-col>
-      <v-col v-if="completed" sm="4" class="text-center">
-        <v-alert text color="primary" border="left">
-          <p>
-            Registration complete! Please login to continue.
-          </p>
-          <v-btn class="success mt-4" to="/login">Login</v-btn>
-        </v-alert>
+      <v-col v-if="verified && completed" sm="4" class="text-center">
+        <v-card outlined>
+          <v-card-text>
+            <p class="body-1 grey--text mt-6 text-center">
+              Registration complete! Please login to continue.
+            </p>
+            <v-card-actions>
+              <v-btn text block class="mt-4" color="success" to="/login"
+                >Login</v-btn
+              >
+            </v-card-actions>
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -178,42 +196,52 @@ export default {
       image: null,
       verified: null,
       completed: null,
+      isLoading: true,
       passwordRules: [
         v => !!v || 'Password is required',
         v => v === this.password || 'Passwords must match',
         v => v.length > 7 || 'Password must be at least 8 characters'
+      ],
+      imageRules: [
+        v => !v || v.size < 1000000 || 'Avatar size should be less than 1 MB!'
       ]
     };
   },
   created() {
     const token = this.$route.params.token;
-    this.verifyUser(token)
-      .then(() => {
-        this.verified = true;
+    if (!this.completed) {
+      this.verifyUser(token)
+        .then(() => {
+          this.verified = true;
 
-        this.fetchAllSkills()
-          .then(response => {
-            this.skills = response.skills.map(o => {
-              return {
-                text: o.name,
-                value: o._id
-              };
-            });
-          })
-          .catch(() => {});
-      })
-      .catch(() => {
-        this.verified = false;
-      });
+          this.fetchAllSkills()
+            .then(response => {
+              this.skills = response.skills.map(o => {
+                return {
+                  text: o.name,
+                  value: o._id
+                };
+              });
+            })
+            .catch(() => {});
+        })
+        .catch(() => {
+          this.setLoading(false);
+
+          this.verified = false;
+        })
+        .finally(() => (this.isLoading = false));
+    }
   },
   methods: {
     ...mapActions([
       'fetchAllSkills',
       'doRegister',
       'verifyUser',
-      'toggleSnackbar'
+      'toggleSnackbar',
+      'setLoading'
     ]),
-    onComplete() {
+    onSubmit() {
       if (this.$refs.form.validate()) {
         this.doRegister({
           name: `${this.firstName} ${this.lastName}`,

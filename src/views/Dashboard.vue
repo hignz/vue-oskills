@@ -107,16 +107,9 @@
             <RadarChart :skill-categories="skillCategories" />
           </v-card-text>
           <template v-else>
-            <v-card-text class="mt-12">
-              <p class="text-center grey--text">
-                A sexy ass chart will go here once you add some skills.
-              </p>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer />
+            <v-card-text class="text-center mt-12">
               <AddSkillDialog :is-icon="false"></AddSkillDialog>
-              <v-spacer />
-            </v-card-actions>
+            </v-card-text>
           </template>
         </v-card>
       </v-col>

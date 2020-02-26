@@ -88,7 +88,7 @@ export default {
           .catch(err => {
             this.toggleSnackbar({
               show: true,
-              text: err.response.data,
+              text: err.response.data.message,
               color: 'error'
             });
           });
