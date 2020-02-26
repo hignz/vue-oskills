@@ -45,13 +45,9 @@ export default {
   created() {
     this.searchTerm = this.$route.query.search;
 
-    this.fetchByName(this.searchTerm)
-      .then(response => {
-        this.results = response.data;
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    this.fetchByName(this.searchTerm).then(response => {
+      this.results = response.data;
+    });
   },
   methods: {
     ...mapActions(['fetchByName'])

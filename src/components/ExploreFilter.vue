@@ -17,7 +17,6 @@
           <v-select
             v-model="selectedCategory"
             label="Category"
-            class="mb-2"
             :items="categories"
             item-text="text"
             item-value="value"
@@ -35,7 +34,7 @@
             no-data-text="No skills found"
             :items="skills"
             autocomplete="off"
-            :rules="requiredRules"
+            :rules="arrayRules"
             clearable
             multiple
             dense
@@ -46,12 +45,12 @@
           ></v-select>
           <v-range-slider
             v-model="range"
+            label="Esteem"
             class="mb-2"
             step="1"
-            :max="20"
+            :max="30"
             thumb-label
             tick-size="4"
-            label="Esteem"
           ></v-range-slider>
           <v-btn
             block
@@ -66,9 +65,7 @@
       <v-col cols="12" sm="12" md="10" class="pt-0">
         <RecentlyJoined v-if="!searched" />
         <p v-if="searched" class="grey--text">
-          Results for <strong>{{ searchedSkills }}</strong> between
-          {{ range[0] }} -
-          {{ range[1] }}
+          {{ searchTerm }}
         </p>
 
         <div v-if="!results.length" class="grey--text text-center mt-12">
@@ -78,9 +75,6 @@
           <p v-if="searched" class="title">
             No results found
           </p>
-          <!-- <p v-else class="title">
-            Please search pls
-          </p> -->
         </div>
         <v-row v-else align="start" justify="start">
           <v-col v-for="result in results" :key="result._id" sm="12" md="4">
@@ -107,21 +101,22 @@ export default {
   data() {
     return {
       results: [],
-      range: [1, 10],
+      range: [0, 10],
       categories: [],
       skills: [],
       selectedCategory: null,
       selectedSkills: [],
       searched: false,
       valid: false,
-      searching: false
+      searching: false,
+      searchTerm: null
     };
   },
   computed: {
     noResults() {
       return this.results.length <= 0;
     },
-    searchedSkills() {
+    selectedSkillsToString() {
       return this.selectedSkills.map(el => el.text).join(', ');
     }
   },
@@ -159,6 +154,7 @@ export default {
     },
     doSearch() {
       if (this.$refs.form.validate()) {
+        this.searchTerm = `Results for ${this.selectedSkillsToString} between ${this.range[0]} - ${this.range[1]}`;
         this.searching = true;
         this.fetchUsersWithSkills({
           skillIds: this.selectedSkills.map(el => el.value),

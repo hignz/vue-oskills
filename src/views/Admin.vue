@@ -1,6 +1,6 @@
 <template>
   <v-container v-if="loaded" fluid>
-    <v-row class="text-center">
+    <v-row v-if="stats" class="text-center">
       <v-col cols="12" sm="12" md="4">
         <v-card outlined height="100%">
           <v-card-text>
@@ -149,7 +149,7 @@ export default {
   data() {
     return {
       loaded: false,
-      stats: {},
+      stats: null,
       users: [],
       recentActivity: [],
       categories: [],
@@ -168,7 +168,6 @@ export default {
 
     this.fetchCategories().then(res => {
       this.categories = res.categories;
-      this.loaded = true;
     });
 
     this.fetchInvitedUsersSlim('4').then(response => {

@@ -74,7 +74,7 @@ export default {
         this.fetchUnarchivedCategories();
       }
     },
-    showArchivedCategories(newValue, oldValue) {
+    showArchivedCategories(newValue) {
       if (newValue) {
         this.lockArchiveSkill = true;
         this.archiveSkill = true;

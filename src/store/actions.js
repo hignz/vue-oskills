@@ -107,7 +107,7 @@ export default {
       return res.data;
     });
   },
-  fetchDeleteSkill({ commit }, skillId) {
+  fetchDeleteSkill(_, skillId) {
     return http.post('/skill/remove-user-skill', { skillId }).then(res => {
       state.user.skills = state.user.skills.filter(s => s._id !== skillId);
       return res.data;
@@ -238,7 +238,7 @@ export default {
       return res.data;
     });
   },
-  fetchAdminDashboardData(_) {
+  fetchAdminDashboardData() {
     return http.get('/admin/').then(res => {
       return res.data;
     });

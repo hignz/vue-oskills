@@ -35,7 +35,7 @@
 
         <template v-slot:item.action="{ item }">
           <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
+            <template>
               <ResendInviteDialog :invited-user="item"></ResendInviteDialog>
             </template>
             <span>Resend invitation</span>

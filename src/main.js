@@ -5,6 +5,11 @@ import store from './store';
 import './registerServiceWorker';
 import vuetify from './plugins/vuetify';
 import '../src/scss/variables.scss';
+import VueApexCharts from 'vue-apexcharts';
+
+Vue.use(VueApexCharts);
+
+Vue.component('apexchart', VueApexCharts);
 
 Vue.config.productionTip = false;
 
