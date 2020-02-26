@@ -1,36 +1,34 @@
 <template>
-  <div>
-    <v-toolbar dense flat>
+  <!-- <v-toolbar dense flat>
       <v-toolbar-title class="subtitle-2 grey--text">ACTIVITY</v-toolbar-title>
       <v-spacer></v-spacer>
-    </v-toolbar>
+    </v-toolbar> -->
 
-    <v-list dense two-line class="overflow-y-auto" :max-height="size">
-      <v-list-item-group color="primary">
-        <v-list-item
-          v-for="(activity, i) in activities"
-          :key="i"
-          class="ml-0 pl-0"
-          @click="navigateTo(activity)"
-        >
-          <v-list-item-avatar>
-            <v-icon>mdi-circle-medium</v-icon>
-          </v-list-item-avatar>
+  <v-list dense two-line class="overflow-y-auto" :height="height">
+    <v-list-item-group color="primary">
+      <v-list-item
+        v-for="(activity, i) in activities"
+        :key="i"
+        class="ml-0 pl-0"
+        @click="navigateTo(activity)"
+      >
+        <v-list-item-avatar>
+          <v-icon>mdi-circle-medium</v-icon>
+        </v-list-item-avatar>
 
-          <v-list-item-content>
-            <v-list-item-title>{{ activity.message }}</v-list-item-title>
-            <v-list-item-subtitle class="grey--text">
-              {{
-                formatDistanceToNow(new Date(activity.logDate), {
-                  addSuffix: true
-                })
-              }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list-item-group>
-    </v-list>
-  </div>
+        <v-list-item-content>
+          <v-list-item-title>{{ activity.message }}</v-list-item-title>
+          <v-list-item-subtitle class="grey--text">
+            {{
+              formatDistanceToNow(new Date(activity.logDate), {
+                addSuffix: true
+              })
+            }}
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list-item-group>
+  </v-list>
 </template>
 
 <script>
@@ -52,6 +50,10 @@ export default {
     fullSize: {
       type: Boolean,
       default: false
+    },
+    height: {
+      type: Number,
+      default: 300
     }
   },
   data() {
@@ -64,7 +66,7 @@ export default {
   },
   computed: {
     size() {
-      return this.fullSize ? '269px' : '14.5em';
+      return this.fullSize ? '300px' : '14.5em';
     }
   },
   created() {

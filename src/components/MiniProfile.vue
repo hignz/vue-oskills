@@ -2,7 +2,7 @@
   <v-card height="320" outlined="">
     <v-list-item dense @click="openProfile">
       <v-list-item-avatar>
-        <v-avatar size="50">
+        <v-avatar size="100%">
           <v-img v-if="user.image" :src="user.image"></v-img>
           <v-icon v-else large>mdi-account-circle</v-icon>
         </v-avatar>

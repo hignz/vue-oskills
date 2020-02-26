@@ -9,7 +9,7 @@
       required
       @change="preview"
     ></v-file-input>
-    <img v-if="image" :src="imageURL" />
+    <v-img v-if="image" :src="imageURL" />
 
     <v-btn text color="primary" block @click="upload">Upload</v-btn>
   </v-form>
