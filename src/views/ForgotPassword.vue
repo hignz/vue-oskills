@@ -45,7 +45,7 @@
           </v-card-text>
 
           <v-card-actions>
-            <v-btn text block color="primary" @click="sent = !sent">
+            <v-btn text block color="primary" @click="login()">
               Return to login
             </v-btn>
           </v-card-actions>
@@ -79,6 +79,11 @@ export default {
         this.sent = true;
         this.sentText = res.message;
         this.$refs.form.reset();
+      });
+    },
+    login() {
+      this.$router.push({
+        name: 'login'
       });
     }
   }

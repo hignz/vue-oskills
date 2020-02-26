@@ -228,7 +228,12 @@ export default {
             text: 'User updated successfully',
             color: 'success'
           });
-          this.$emit('invite', inviteData._id);
+          this.$emit('invite', {
+            userId: inviteData._id,
+            email: this.email,
+            role: this.role,
+            isAdmin: this.isAdmin
+          });
         })
         .catch(err => {
           this.toggleSnackbar({

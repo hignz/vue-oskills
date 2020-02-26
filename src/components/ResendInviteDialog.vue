@@ -18,10 +18,10 @@
           :headers="[
             {
               text: 'Email',
-              align: 'center',
+              align: 'left',
               value: 'email'
             },
-            { text: 'Role', value: 'role.title', align: 'center' },
+            { text: 'Role', value: 'role.title', align: 'left' },
             { text: 'Admin', align: 'center' }
           ]"
           :items="[invitedUser]"

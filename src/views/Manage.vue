@@ -29,6 +29,7 @@
                   <ManageUsers
                     :users="verifiedUsers"
                     @userDeleted="deleteUser"
+                    @admin="userPromoted"
                   />
                   <v-divider></v-divider>
                   <v-col cols="12" sm="12">
@@ -44,7 +45,11 @@
             >
               <v-row v-if="loaded" justify="center" align="center">
                 <v-col cols="12" sm="12">
-                  <ManageSkills :skills="unarchivedSkills" @archive="archive" />
+                  <ManageSkills
+                    :skills="unarchivedSkills"
+                    @archive="archive"
+                    @newSkill="updateSkills"
+                  />
                   <v-divider></v-divider>
                 </v-col>
                 <v-col cols="12" sm="12">
@@ -66,6 +71,7 @@
                   <ManageCategories
                     :categories="unarchivedCategories"
                     @archive="archive"
+                    @categoryAdded="updateCategories"
                   />
                   <v-divider></v-divider>
                 </v-col>
@@ -198,10 +204,29 @@ export default {
       this.allUsers = this.allUsers.filter(el => el._id !== item);
     },
     editInvite(item) {
-      this.allUsers = this.allUsers.filter(el => el._id !== item);
+      this.allUsers.forEach(u => {
+        if (u._id === item.userId) {
+          u.email = item.email;
+          u.role = item.role;
+          u.isAdmin = item.isAdmin;
+        }
+      });
     },
     updateRoles(item) {
       this.allRoles.push(item);
+    },
+    updateSkills(item) {
+      this.allSkills.push(item);
+    },
+    updateCategories(item) {
+      this.allCategories.push(item);
+    },
+    userPromoted(item) {
+      this.allUsers.forEach(u => {
+        if (u._id === item.uId) {
+          u.isAdmin = item.isAdmin;
+        }
+      });
     }
   }
 };

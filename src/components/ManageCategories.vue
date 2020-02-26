@@ -4,9 +4,13 @@
       >Active
       <span class="caption ml-2 grey--text">({{ categories.length }})</span>
       <v-spacer></v-spacer>
+      <AdminAddCategoryDialog
+        @categoryAdded="emitCategoryAdded"
+      ></AdminAddCategoryDialog>
       <v-form>
         <v-text-field
           v-model="search"
+          class="mb-5 mx-5"
           append-icon="mdi-magnify"
           label="Search active..."
           single-line
@@ -95,12 +99,14 @@
 
 <script>
 import EditCategoryDialog from '../components/EditCategoryDialog';
+import AdminAddCategoryDialog from '../components/AdminAddCategoryDialog';
 import { mapActions } from 'vuex';
 import { formatRelative } from 'date-fns';
 
 export default {
   components: {
-    EditCategoryDialog
+    EditCategoryDialog,
+    AdminAddCategoryDialog
   },
   props: {
     categories: {
@@ -168,6 +174,10 @@ export default {
         name: 'category',
         params: { id: categoryId }
       });
+    },
+    emitCategoryAdded(item) {
+      // this.categories.push(item);
+      this.$emit('categoryAdded', item);
     }
   }
 };

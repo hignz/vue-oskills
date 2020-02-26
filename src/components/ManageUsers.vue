@@ -56,6 +56,32 @@
             </template>
             <span>User profile</span>
           </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                v-if="item.isAdmin"
+                icon
+                v-on="on"
+                @click="promoteToAdmin(item)"
+              >
+                <v-icon small>
+                  mdi-account-star
+                </v-icon>
+              </v-btn>
+              <v-btn
+                v-else-if="!item.isAdmin"
+                icon
+                v-on="on"
+                @click="promoteToAdmin(item)"
+              >
+                <v-icon small>
+                  mdi-account-star-outline
+                </v-icon>
+              </v-btn>
+            </template>
+            <span v-if="item.isAdmin">Demote</span>
+            <span v-if="!item.isAdmin">Promote</span>
+          </v-tooltip>
         </template>
 
         <template v-slot:expanded-item="{ item }">
@@ -191,11 +217,12 @@ export default {
         }
       ],
       selectedUser: {},
-      skillCategories: []
+      skillCategories: [],
+      vWeight: Number
     };
   },
   methods: {
-    ...mapActions(['toggleSnackbar', 'deleteUser']),
+    ...mapActions(['toggleSnackbar', 'deleteUser', 'addAdmin']),
     openUserProfile(userId) {
       this.$router.push({
         name: 'profile',
@@ -230,6 +257,34 @@ export default {
     },
     userDateJoined(date) {
       return lightFormat(new Date(date), 'dd-MM-yyyy');
+    },
+    promoteToAdmin(user) {
+      console.log(user);
+      this.addAdmin({
+        uId: user._id,
+        isAdmin: !user.isAdmin,
+        voteWeight: this.vWeight,
+        email: user.email
+      })
+        .then(() => {
+          console.log(user._id, !user.isAdmin, this.vWeight, user.email);
+          this.user.isAdmin = !this.user.isAdmin;
+          this.toggleSnackbar({
+            show: true,
+            text: this.user.isAdmin
+              ? `${this.user.name} has been promoted to admin`
+              : `${this.user.name} has been demoted from admin`,
+            color: this.user.isAdmin ? 'success' : 'orange darken-3'
+          });
+          this.$emit('admin', user);
+        })
+        .catch(() => {
+          this.toggleSnackbar({
+            show: true,
+            text: 'Something went wrong',
+            color: 'error'
+          });
+        });
     }
   }
 };
