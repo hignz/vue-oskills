@@ -41,7 +41,7 @@ export default {
         plotOptions: {
           bar: {
             horizontal: false,
-            barHeight: '60%'
+            barHeight: '50%'
           }
         },
         dataLabels: {
@@ -56,14 +56,11 @@ export default {
           foreColor: this.isDark ? '#eeeeef' : '#5e5e5e'
         },
         xaxis: {
-          categories: this.categories
+          categories: this.categories,
+          tickAmount: 1
         },
         yaxis: {
-          labels: {
-            formatter: function(val) {
-              return Math.floor(val);
-            }
-          }
+          tickAmount: 1
         },
         colors: [localStorage.getItem('accentColor')],
 
