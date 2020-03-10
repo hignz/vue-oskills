@@ -89,7 +89,7 @@ export default {
       const to =
         this.$router.currentRoute.name === 'skillProfile'
           ? { name: 'profile', params: { id: activity.participantId } }
-          : { name: 'skillProfile', params: { id: activity.skillId } };
+          : { name: 'skillProfile', params: { id: activity.skillId._id } };
 
       this.$router.push(to);
     }

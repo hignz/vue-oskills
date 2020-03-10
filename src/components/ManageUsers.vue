@@ -24,7 +24,7 @@
         :search="searchTerm"
         :single-expand="singleExpand"
         :expanded.sync="expanded"
-        item-key="name"
+        item-key="_id"
         no-data-text="No users loaded"
         no-results-text="No users found"
         show-expand
@@ -50,7 +50,7 @@
             <template v-slot:activator="{ on }">
               <v-btn icon v-on="on">
                 <v-icon small @click="openUserProfile(item._id)">
-                  mdi-account-card-details
+                  mdi-open-in-new
                 </v-icon>
               </v-btn>
             </template>

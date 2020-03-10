@@ -42,12 +42,12 @@ export default {
   },
   data() {
     return {
-      skillCategories: []
+      skillCategories: [],
+      max: null
     };
   },
-
   computed: {
-    ...mapGetters(['skills', 'isDark', 'accentColor']),
+    ...mapGetters(['isDark', 'accentColor']),
     ...mapState(['user']),
     chartSeries() {
       return this.series;
@@ -76,16 +76,21 @@ export default {
           opacity: 0.5
         },
         markers: {
-          size: 4,
-          strokeWidth: 0
+          size: 3,
+          stroke: 0,
+          hover: {
+            size: 9
+          }
         },
         yaxis: {
-          tickAmount: 3,
+          tickAmount: this.maxSkill < 1 ? 1 : this.maxSkill / 10,
           labels: {
             formatter: function(val) {
-              return Math.floor(val);
+              return val < 0 ? 0 : Math.floor(val);
             }
-          }
+          },
+          min: -1,
+          max: this.maxSkill === 0 ? 1 : this.maxSkill
         },
         theme: {
           mode: this.isDark ? 'dark' : 'light'
@@ -101,6 +106,18 @@ export default {
           }
         },
         labels: this.categoryLabels
+      };
+    },
+    yy() {
+      return {
+        tickAmount: this.maxSkill < 1 ? 1 : this.maxSkill / 10,
+        labels: {
+          formatter: function(val) {
+            return val < 0 ? 0 : Math.floor(val);
+          }
+        },
+        min: -1,
+        max: this.maxSkill <= 1 ? 1 : this.maxSkill
       };
     },
     categoryLabels() {
@@ -123,15 +140,30 @@ export default {
         : [{ name: 'You', data: this.categories(this.user.skills) }];
 
       return series;
+    },
+    maxSkill() {
+      return this.series
+        .map(el => el.data)
+        .flat()
+        .reduce((acc, curr) => (acc > curr ? acc : curr), 0);
     }
   },
+  watch: {},
   created() {
     this.fetchCategoriesArchived('false').then(res => {
       this.skillCategories = res.categories;
+
+      this.max = this.getMaxSkill();
     });
   },
   methods: {
     ...mapActions(['fetchCategoriesArchived']),
+    getMaxSkill() {
+      return this.series
+        .map(el => el.data)
+        .flat()
+        .reduce((acc, curr) => (acc > curr ? acc : curr), 0);
+    },
     categories(skills) {
       let categories = this.skillCategories
         .map(el => ({
@@ -141,7 +173,7 @@ export default {
         .sort((a, b) => b.name - a.name);
 
       return categories.map(el =>
-        el.skills.reduce((acc, curr) => acc + curr.esteem, 0.1)
+        el.skills.reduce((acc, curr) => acc + curr.esteem, 0)
       );
     }
   }
