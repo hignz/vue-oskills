@@ -57,10 +57,15 @@ export default {
         },
         xaxis: {
           categories: this.categories,
-          tickAmount: 1
+          tickAmount: this.tickCount
         },
         yaxis: {
-          tickAmount: 1
+          tickAmount: this.tickCount,
+          labels: {
+            formatter: function(val) {
+              return Math.floor(val);
+            }
+          }
         },
         colors: [localStorage.getItem('accentColor')],
 
@@ -73,9 +78,24 @@ export default {
             formatter: function(val) {
               return val;
             }
-          }
+          },
+          shared: true,
+          intersect: false
         }
       };
+    },
+    maxSkill() {
+      return this.user.skills.reduce(
+        (acc, curr) => (acc.rating > curr.rating ? acc : curr),
+        0
+      );
+    },
+    tickCount() {
+      return this.maxSkill.rating < 10
+        ? this.maxSkill.rating
+        : this.maxSkill.rating / 10 < 1
+        ? Math.ceil(this.maxSkill.rating / 10)
+        : this.maxSkill.rating / 10;
     }
   }
 };
