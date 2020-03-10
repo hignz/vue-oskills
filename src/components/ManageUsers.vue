@@ -276,9 +276,7 @@ export default {
           });
           this.$emit('admin', user);
         })
-        .catch(err => {
-          console.log(err);
-
+        .catch(() => {
           this.toggleSnackbar({
             show: true,
             text: 'Something went wrong',
