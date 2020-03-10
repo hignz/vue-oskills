@@ -104,7 +104,7 @@
             >
           </v-toolbar>
           <v-card-text v-if="user.skills.length">
-            <RadarChart :skill-categories="skillCategories" />
+            <RadarChart />
           </v-card-text>
           <template v-else>
             <v-card-text class="text-center mt-12">
