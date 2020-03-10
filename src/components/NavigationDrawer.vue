@@ -110,7 +110,7 @@ export default {
           route: '/explore'
         },
         {
-          icon: 'mdi-settings',
+          icon: 'mdi-cog',
           text: 'Settings',
           route: '/settings'
         }
