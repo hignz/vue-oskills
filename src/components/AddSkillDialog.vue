@@ -24,6 +24,7 @@
             @change="populateSkills"
           ></v-select>
           <v-autocomplete
+            :key="selectedSkill"
             v-model="selectedSkill"
             label="Skill"
             no-data-text="No skills available"
