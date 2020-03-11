@@ -1,13 +1,14 @@
 <template>
   <v-card flat>
     <v-card-title
-      >Archived skills <span class="caption ml-2">({{ skills.length }})</span>
+      >Archived
+      <span class="caption ml-2 grey--text">({{ skills.length }})</span>
       <v-spacer></v-spacer>
       <v-form>
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
-          label="Search"
+          label="Search archived..."
           single-line
           clearable
           hide-details
@@ -25,6 +26,10 @@
       no-results-text="No archived skills found"
       multi-sort
     >
+      <template v-slot:item.dateArchived="{ item }">
+        {{ formatRelative(new Date(item.dateArchived), Date.now()) }}
+      </template>
+
       <template v-slot:item.action="{ item }">
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
@@ -36,6 +41,15 @@
           </template>
           <span>Unarchive</span>
         </v-tooltip>
+        <EditSkillDialog
+          :skill="item"
+          @update="updateArchivedSkill"
+        ></EditSkillDialog>
+        <v-btn icon>
+          <v-icon small @click="openSkillProfile(item._id)">
+            mdi-open-in-new
+          </v-icon>
+        </v-btn>
       </template>
     </v-data-table>
     <v-dialog v-model="archivedDialog" width="500" @input="v => v || close()">
@@ -81,8 +95,13 @@
 
 <script>
 import { mapActions } from 'vuex';
+import { formatRelative } from 'date-fns';
+import EditSkillDialog from './EditSkillDialog';
 
 export default {
+  components: {
+    EditSkillDialog
+  },
   props: {
     skills: {
       type: Array,
@@ -101,10 +120,12 @@ export default {
           value: 'name'
         },
         { text: 'Category', value: 'category.name' },
+        { text: 'Archived', value: 'dateArchived' },
         { text: 'Actions', value: 'action', sortable: false, align: 'center' }
       ],
       selectedSkill: {},
-      archivedDialog: false
+      archivedDialog: false,
+      formatRelative
     };
   },
   computed: {
@@ -132,6 +153,20 @@ export default {
     },
     closeDialog() {
       this.archivedDialog = !this.archivedDialog;
+    },
+    updateArchivedSkill(e) {
+      this.skills.forEach(s => {
+        if (s._id === e.skillId) {
+          s.name = e.name;
+          s.category.name = e.categoryName;
+        }
+      });
+    },
+    openSkillProfile(skillId) {
+      this.$router.push({
+        name: 'skillProfile',
+        params: { id: skillId }
+      });
     }
   }
 };

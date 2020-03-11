@@ -21,11 +21,14 @@
             clearable
           ></v-text-field>
           <v-select
-            v-model="role"
+            v-model="selectedRole"
             label="Role"
             prepend-icon="mdi-account"
-            :items="['Senior Developer', 'Junior Developer']"
+            item-text="title"
+            item-value="_id"
+            :items="roles"
             :rules="requiredRules"
+            return-object
           ></v-select>
           <v-checkbox v-model="isAdmin" label="Admin"></v-checkbox>
         </v-form>
@@ -52,18 +55,26 @@ export default {
     return {
       valid: false,
       email: '',
-      role: '',
+      selectedRole: '',
+      roles: [],
       isAdmin: false,
       dialog: false
     };
   },
+  watch: {
+    dialog: function() {
+      this.fetchRoles().then(res => {
+        this.roles = res.roles;
+      });
+    }
+  },
   methods: {
-    ...mapActions(['inviteUser', 'toggleSnackbar']),
+    ...mapActions(['inviteUser', 'toggleSnackbar', 'fetchRoles']),
     onSubmit() {
       if (this.$refs.form.validate()) {
         this.inviteUser({
           email: this.email,
-          role: this.role,
+          roleId: this.selectedRole._id,
           isAdmin: this.isAdmin
         })
           .then(() => {
@@ -77,7 +88,7 @@ export default {
           .catch(err => {
             this.toggleSnackbar({
               show: true,
-              text: err.response.data,
+              text: err.response.data.message,
               color: 'error'
             });
           });

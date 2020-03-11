@@ -42,7 +42,7 @@
       <v-card-actions>
         <v-spacer />
         <v-btn text @click="close()">Close</v-btn>
-        <v-btn color="primary" :disabled="!valid" @click="addNewSkill">
+        <v-btn color="success" :disabled="!valid" @click="addNewSkill">
           Add</v-btn
         >
       </v-card-actions>
@@ -69,7 +69,12 @@ export default {
     };
   },
   watch: {
-    showArchivedCategories(newValue, oldValue) {
+    dialog(opened) {
+      if (opened) {
+        this.fetchUnarchivedCategories();
+      }
+    },
+    showArchivedCategories(newValue) {
       if (newValue) {
         this.lockArchiveSkill = true;
         this.archiveSkill = true;
@@ -84,9 +89,6 @@ export default {
         this.fetchUnarchivedCategories();
       }
     }
-  },
-  created() {
-    this.fetchUnarchivedCategories();
   },
   methods: {
     ...mapActions([
@@ -133,6 +135,11 @@ export default {
           });
 
           this.$emit('skillAdded', archived ? 0 : 1);
+          this.$emit('newSkill', {
+            name: this.skillName,
+            categoryId: this.selectedCategory.categoryId,
+            archived: this.archiveSkill
+          });
         })
         .catch(err => {
           this.toggleSnackbar({

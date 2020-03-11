@@ -1,53 +1,147 @@
 <template>
   <v-container v-if="loaded" fluid>
-    <v-card>
-      <v-row justify="center" align="center">
-        <v-col cols="12" sm="12">
-          <ProfileBanner :user="user" />
-        </v-col>
-      </v-row>
-    </v-card>
+    <v-row class="fill-height mt-md-12" justify="center" align="center">
+      <v-col cols="12" sm="2">
+        <v-card outlined height="222">
+          <v-card-text class="text-center">
+            <v-avatar v-if="user.image" size="128">
+              <v-img :src="user.image" max-height="175" max-width="175">
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="grey lighten-5"
+                    ></v-progress-circular>
+                  </v-row>
+                </template>
+              </v-img>
+            </v-avatar>
+            <v-avatar v-else size="128">
+              <v-icon x-large>mdi-account-circle</v-icon>
+            </v-avatar>
+          </v-card-text>
+          <v-card-text class="text-center">
+            <v-tooltip v-if="user.isAdmin" bottom>
+              <template v-slot:activator="{ on }">
+                <v-icon class="pa-1" left color="primary" v-on="on"
+                  >mdi-account-tie</v-icon
+                >
+              </template>
+              <span>OSkills admin.</span>
+            </v-tooltip>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" sm="10">
+        <v-card outlined>
+          <v-row align="center">
+            <v-col cols="12" sm="12" md="4">
+              <v-col cols="12" sm="12">
+                <v-card-text class="title pb-0">
+                  {{ user.name }}
+                </v-card-text>
+                <v-card-text>
+                  <div class="subtitle-2 grey--text">
+                    {{ user.role.title }}
+                  </div>
+                </v-card-text>
+              </v-col>
 
-    <v-row>
-      <v-col cols="12" sm="12" md="4">
-        <v-card>
-          <v-toolbar dense flat>
-            <v-toolbar-title class="subtitle-2 grey--text"
-              >CATEGORIES</v-toolbar-title
-            >
-          </v-toolbar>
-          <RadarChart
-            v-if="user.skills.length"
-            :user-skills="user.skills"
-            :size="120"
-            :height="330"
-            :skill-categories="skillCategories"
-            class="pr-2"
-          ></RadarChart>
+              <v-col cols="12" sm="12" class="text-center text-md-left">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-chip class="ma-2" v-on="on">
+                      <v-icon class="pa-1" left>mdi-calendar-range</v-icon>
+                      {{ joinedAt }}
+                    </v-chip>
+                  </template>
+                  <span>When {{ user.name }} joined OSkills.</span>
+                </v-tooltip>
+                <v-tooltip v-if="bestSkill" bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-chip class="ma-2" v-on="on">
+                      <v-icon class="pa-1" left>mdi-star</v-icon>
+                      {{ bestSkill.skill.name }}
+                    </v-chip>
+                  </template>
+                  <span>{{ user.name }}'s' best skill.</span>
+                </v-tooltip>
+              </v-col>
+            </v-col>
+            <v-col cols="12" sm="12" md="8">
+              <v-row v-if="topThreeSkills.length">
+                <v-col
+                  v-for="skill in topThreeSkills"
+                  :key="skill._id"
+                  md="3"
+                  class="text-center"
+                >
+                  <v-card-text>
+                    <EsteemBadge :esteem="skill.esteem" />
+                    <p class="body-2 grey--text mt-2">
+                      {{ skill.skill.name }}
+                    </p>
+                  </v-card-text>
+                </v-col>
+              </v-row>
+              <v-row v-else>
+                <v-col v-for="i in 3" :key="i" md="3" class="text-center">
+                  <v-card-text>
+                    <EsteemBadge :placeholder="true" />
+                    <p class="body-2 grey--text mt-2">
+                      N/A
+                    </p>
+                  </v-card-text>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row class="fill-height">
+      <v-col cols="12" sm="4">
+        <v-card outlined>
+          <v-card-text v-if="user.skills.length">
+            <RadarChart
+              v-if="user.skills.length"
+              :user-skills="user.skills"
+              :size="120"
+              :height="330"
+              :skill-categories="skillCategories"
+              class="pr-2"
+            ></RadarChart>
+          </v-card-text>
           <v-card-text v-else>
-            <p class="text-center grey--text">
-              This user has not added any skills yet
+            <p class="text-center grey--text mt-4">
+              {{ user.name }} has not added any skills yet
             </p>
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="12" md="4">
-        <v-card>
-          <v-toolbar dense flat>
-            <v-toolbar-title class="subtitle-2 grey--text"
-              >SKILLS</v-toolbar-title
-            >
-          </v-toolbar>
-
+      <v-col cols="12" sm="4">
+        <v-card outlined>
+          <v-card-text v-if="user.skills.length">
+            Skills
+          </v-card-text>
           <v-list
             v-if="categories.length"
             subheader
             class="overflow-y-auto"
             dense
-            style="max-height: 345px"
+            style="max-height: 325px"
           >
             <div v-for="(category, i) in categories" :key="category.name">
-              <v-subheader inset>{{ category.categoryName }}</v-subheader>
+              <v-subheader
+                class="subtitle-2 primary--text"
+                inset
+                @click="navigateTo({ name: 'category', id: category._id })"
+                >{{ category.categoryName }}</v-subheader
+              >
 
               <v-list-item
                 v-for="skill in category.skills"
@@ -66,15 +160,7 @@
                 </v-list-item-content>
 
                 <v-list-item-action>
-                  <v-btn icon @click="vote(skill)" @click.stop>
-                    <v-icon
-                      v-if="!skill.votedBy.includes(getUser._id)"
-                      color="grey lighten-1"
-                      >mdi-arrow-up-bold-outline</v-icon
-                    >
-
-                    <v-icon v-else color="primary">mdi-arrow-up-bold</v-icon>
-                  </v-btn>
+                  <Vote :skill="skill" @voted="updateSkills" />
                 </v-list-item-action>
               </v-list-item>
 
@@ -82,22 +168,29 @@
             </div>
           </v-list>
           <v-card-text v-else>
-            <p class="text-center grey--text">
-              This user has not added any skills yet
+            <p class="text-center grey--text mt-4">
+              {{ user.name }} has not added any skills yet
             </p>
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="12" md="4">
-        <v-card>
+      <v-col cols="12" sm="4">
+        <v-card outlined height="380">
+          <v-toolbar flat dense>
+            <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
+              >Activity</v-toolbar-title
+            >
+          </v-toolbar>
           <ActivityFeed
             v-if="userActivity.length"
             :activity-data="userActivity"
             :is-real-time="false"
+            :height="330"
           ></ActivityFeed>
-
           <v-card-text v-else>
-            <p>dsadsa</p>
+            <p class="text-center grey--text mt-4">
+              {{ user.name }} has no activity yet
+            </p>
           </v-card-text>
         </v-card>
       </v-col>
@@ -109,8 +202,8 @@
 const EsteemBadge = () => import('../components/EsteemBadge');
 const RadarChart = () => import('../components/RadarChart');
 const ActivityFeed = () => import('../components/ActivityFeed');
-const ProfileBanner = () => import('../components/ProfileBanner');
-import { lightFormat, parseISO } from 'date-fns';
+const Vote = () => import('../components/Vote');
+import { lightFormat } from 'date-fns';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -118,7 +211,7 @@ export default {
     ActivityFeed,
     EsteemBadge,
     RadarChart,
-    ProfileBanner
+    Vote
   },
   data() {
     return {
@@ -128,16 +221,12 @@ export default {
       similarUsers: [],
       skillCategories: [],
       userActivity: [],
-      lightFormat,
-      parseISO
+      lightFormat
     };
   },
   computed: {
     ...mapGetters(['getUser']),
     categories() {
-      if (!this.user.skills.length) {
-        return [];
-      }
       const arr = [
         ...new Set(this.user.skills.flat().map(el => el.skill.category.name))
       ];
@@ -148,9 +237,28 @@ export default {
       }));
 
       return categories;
+    },
+    joinedAt() {
+      return lightFormat(new Date(this.user.joinedAt), 'dd-MM-yyyy');
+    },
+    bestSkill() {
+      return this.user.skills.reduce(
+        (prev, current) => (prev.esteem > current.esteem ? prev : current),
+        0
+      );
+    },
+    topThreeSkills() {
+      return this.user.skills
+        .concat()
+        .sort((a, b) => b.esteem - a.esteem)
+        .slice(0, 3);
     }
   },
   created() {
+    if (this.$router.currentRoute.params.id === this.getUser._id) {
+      return this.$router.push({ name: 'dashboard' });
+    }
+
     this.fetchUserById(this.$route.params.id).then(response => {
       this.user = response.data;
       this.loaded = true;
@@ -168,43 +276,21 @@ export default {
     ...mapActions([
       'fetchUserById',
       'fetchCategoriesArchived',
-      'voteSkill',
-      'fetchParticipantActivity',
-      'toggleSnackbar'
+      'fetchParticipantActivity'
     ]),
-    vote(skill) {
-      this.voteSkill(skill._id)
-        .then(response => {
-          const remainingVotes = response.remainingVotes;
-          const snackbarText = response.upvoted
-            ? `Voted! Remaining votes: ${remainingVotes}`
-            : `Vote removed! Remaining votes ${remainingVotes}`;
-
-          this.toggleSnackbar({
-            show: true,
-            text: snackbarText,
-            color: response.upvoted ? 'success' : 'orange'
-          });
-
-          const skill = response.skill;
-
-          this.user.skills = this.user.skills.map(x =>
-            x._id == skill._id ? skill.skill : x
-          );
-        })
-        .catch(() => {
-          this.toggleSnackbar({
-            show: true,
-            text: 'You have no votes left for this week.',
-            color: 'error'
-          });
-        });
-    },
     openSkillProfile(skillId) {
       this.$router.push({
         name: 'skillProfile',
         params: { id: skillId }
       });
+    },
+    navigateTo(route) {
+      this.$router.push(route);
+    },
+    updateSkills(skill) {
+      this.user.skills = this.user.skills.map(el =>
+        el._id === skill._id ? skill : el
+      );
     }
   }
 };

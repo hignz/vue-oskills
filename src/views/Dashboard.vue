@@ -1,6 +1,6 @@
 <template>
-  <v-container v-if="loaded" fluid>
-    <v-card class="mb-3">
+  <v-container v-if="user" fluid>
+    <v-card outlined class="mb-3">
       <v-row align="center" justify="center">
         <v-col cols="12" sm="12" md="3" class="text-center">
           <v-row>
@@ -10,10 +10,7 @@
                 align="center"
                 justify="center"
                 justify-md="start"
-                >Hello, {{ user.name.split(' ')[0] }}
-                <v-icon v-if="user.isAdmin" class="ml-2 mb-1"
-                  >mdi-account-tie</v-icon
-                >
+                >Hello, {{ firstName }}
               </v-row>
               <v-row
                 class="subtitle-2 ml-md-12"
@@ -26,7 +23,7 @@
                 class="caption grey--text ml-md-12 font-weight-bold"
                 justify="center"
                 justify-md="start"
-                >{{ user.role }}</v-row
+                >{{ user.role.title }}</v-row
               >
               <v-row
                 class="caption grey--text ml-md-12 font-weight-bold"
@@ -40,64 +37,87 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col
-          v-for="(s, i) in topThreeSkills"
-          :key="i"
-          sm="12"
-          md="3"
-          cols="12"
-          class="text-center"
-        >
-          <v-row v-if="s.skill" align="center" justify="center">
-            <v-col sm="6" class="text-center">
-              <v-row class="caption grey--text" justify="end" justify-md="end">
-                {{ s.skill.name }}
-              </v-row>
-              <v-row class="headline mr-md-2" justify="end" justify-md="end">{{
-                s.rating
-              }}</v-row>
-            </v-col>
-            <v-col sm="6" class="text-center">
-              <v-row justify="start" class="mt-3">
-                <EsteemBadge :esteem="s.esteem" />
-              </v-row>
-            </v-col>
-          </v-row>
-        </v-col>
+        <template v-if="topThreeSkills.length">
+          <v-col v-for="(s, i) in topThreeSkills" :key="i" sm="3" md="3">
+            <v-row justify="center" align="end" align-md="center">
+              <v-col cols="12" sm="4" class="text-center">
+                <p class="body-2 grey--text mb-0">
+                  {{ s.skill.name }}
+                </p>
+                <p class="title mb-0">
+                  {{ s.rating }}
+                </p>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-row justify="center" justify-md="start" class="mt-md-3">
+                  <EsteemBadge :esteem="s.esteem" />
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-col>
+        </template>
+
+        <template v-else>
+          <v-col v-for="(s, i) in 3" :key="i" sm="3" md="3">
+            <v-row justify="center" align="end" align-md="center">
+              <v-col cols="12" sm="4" class="text-center">
+                <p class="body-2 grey--text mb-0">
+                  N/A
+                </p>
+                <p class="title mb-0">
+                  N/A
+                </p>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-row justify="center" justify-md="start" class="mt-md-3">
+                  <EsteemBadge :placeholder="true" />
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-col>
+        </template>
       </v-row>
-      <v-card-actions class="pt-0 ml-8">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <v-btn icon :to="{ path: 'admin' }" v-on="on">
-              <v-icon large>
-                mdi-swap-horizontal
-              </v-icon>
-            </v-btn>
-          </template>
-          <span>Admin</span>
-        </v-tooltip>
-      </v-card-actions>
     </v-card>
 
     <v-row>
-      <v-col v-if="user.skills.length" cols="12" md="8" sm="12">
-        <BarChart :skills="user.skills" class="pr-2"></BarChart>
+      <v-col cols="12" md="8" sm="12">
+        <v-card outlined height="370">
+          <v-toolbar dense flat>
+            <v-toolbar-title class="subtitle-2 grey--text"
+              >SKILLS</v-toolbar-title
+            >
+          </v-toolbar>
+
+          <v-card-text>
+            <BarChart
+              v-if="user.skills.length"
+              :skills="user.skills"
+            ></BarChart>
+          </v-card-text>
+        </v-card>
       </v-col>
-      <v-col v-if="user.skills.length" cols="12" md="4" sm="12">
-        <v-card>
+      <v-col cols="12" md="4" sm="12">
+        <v-card outlined height="370">
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text"
               >CATEGORIES</v-toolbar-title
             >
           </v-toolbar>
-          <RadarChart :skill-categories="skillCategories" />
+          <v-card-text v-if="user.skills.length">
+            <RadarChart />
+          </v-card-text>
+          <template v-else>
+            <v-card-text class="text-center mt-12">
+              <AddSkillDialog :is-icon="false"></AddSkillDialog>
+            </v-card-text>
+          </template>
         </v-card>
       </v-col>
     </v-row>
 
     <v-row>
       <v-col cols="12" md="4" sm="12">
-        <v-card>
+        <v-card outlined height="285">
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
               >{{ usersCardTitle }}
@@ -123,20 +143,26 @@
             </v-menu>
           </v-toolbar>
           <RecentUsers v-if="usersMenuIndex === 0" />
+          <SimilarUsers v-if="usersMenuIndex === 1" />
         </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <SkillList
-          :skills="topThreeSkills"
-          :skill-categories="skillCategories"
-        ></SkillList>
+        <v-card outlined height="285">
+          <MiniSkillList :skills="topThreeSkills" />
+        </v-card>
       </v-col>
       <v-col cols="12" md="4" sm="12">
-        <v-card>
+        <v-card outlined height="285">
+          <v-toolbar flat dense>
+            <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
+              >Activity</v-toolbar-title
+            >
+          </v-toolbar>
           <ActivityFeed
             v-if="recentActivityData.length"
             :activity-data="recentActivityData"
             :is-real-time="true"
+            :height="235"
           ></ActivityFeed>
         </v-card>
       </v-col>
@@ -145,26 +171,31 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 import RecentUsers from '../components/RecentUsers';
-import SkillList from '../components/SkillList';
+import SimilarUsers from '../components/SimilarUsers';
+import MiniSkillList from '../components/MiniSkillList';
 import ActivityFeed from '../components/ActivityFeed';
 import EsteemBadge from '../components/EsteemBadge';
 import BarChart from '../components/BarChart';
 import RadarChart from '../components/RadarChart';
+import AddSkillDialog from '../components/AddSkillDialog';
 
 export default {
   components: {
     ActivityFeed,
     EsteemBadge,
     RecentUsers,
-    SkillList,
+    MiniSkillList,
     BarChart,
-    RadarChart
+    RadarChart,
+    SimilarUsers,
+    AddSkillDialog
   },
   data() {
     return {
+      user: null,
       loaded: false,
       usersMenuItems: [
         { title: 'Recently Joined' },
@@ -177,29 +208,26 @@ export default {
     };
   },
   computed: {
-    ...mapState(['user']),
-    ...mapGetters(['topThreeSkills', 'skills'])
+    ...mapGetters(['topThreeSkills', 'skills']),
+    firstName() {
+      return this.user.name.split(' ')[0];
+    }
   },
   created() {
-    this.fetchUser().then(() => {
-      this.loaded = true;
+    this.fetchUser().then(res => {
+      this.user = res.data;
     });
-
-    this.fetchCategoriesArchived('false').then(res => {
-      this.skillCategories = res.categories;
-    });
-
     this.fetchRecentActivity().then(res => {
       this.recentActivityData = res;
+      this.loaded = true;
     });
   },
+  beforeDestroy() {
+    this.$apexcharts.exec('barChart', 'destroy');
+    this.$apexcharts.exec('radarChart', 'destroy');
+  },
   methods: {
-    ...mapActions([
-      'fetchCategoriesArchived',
-      'fetchUser',
-      'toggleSnackbar',
-      'fetchRecentActivity'
-    ]),
+    ...mapActions(['fetchUser', 'fetchRecentActivity']),
     switchUsersList(menuItem, i) {
       this.usersCardTitle = menuItem.title;
       this.usersMenuIndex = i;

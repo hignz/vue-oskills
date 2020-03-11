@@ -1,12 +1,7 @@
 <template>
-  <v-col sm="8" md="4">
-    <v-card class="elevation-12">
+  <v-col sm="6" md="4" lg="3">
+    <v-card outlined>
       <v-form ref="loginForm" v-model="valid" @submit.prevent="login">
-        <v-toolbar flat>
-          <v-toolbar-title>
-            Sign in to OSkills
-          </v-toolbar-title>
-        </v-toolbar>
         <v-card-text>
           <v-text-field
             v-model="email"
@@ -28,6 +23,9 @@
             @click:append="() => (hidePassword = !hidePassword)"
           >
           </v-text-field>
+          <v-btn text small color="primary" :to="{ path: 'forgot-password' }"
+            >Forgot password?</v-btn
+          >
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -55,7 +53,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['doLogin', 'toggleSnackbar']),
+    ...mapActions(['doLogin', 'toggleSnackbar', 'fetchUser']),
     login() {
       if (this.$refs.loginForm.validate()) {
         this.doLogin({
@@ -68,6 +66,10 @@ export default {
             this.$router.push(
               isAdmin ? { name: 'admin' } : { name: 'dashboard' }
             );
+
+            if (isAdmin) {
+              this.fetchUser();
+            }
           })
           .catch(() => {
             this.toggleSnackbar({

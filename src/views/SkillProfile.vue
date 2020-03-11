@@ -1,6 +1,6 @@
 <template>
   <v-container v-if="loaded" fluid>
-    <v-card>
+    <v-card outlined>
       <v-row justify="center" align="center">
         <v-col cols="12" sm="12" md="12">
           <v-row justify="center" align="center">
@@ -71,52 +71,86 @@
 
     <v-row>
       <v-col cols="12" sm="12" md="4">
-        <v-card>
+        <v-card height="320" outlined>
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
               >USERS WITH THIS SKILL</v-toolbar-title
             >
           </v-toolbar>
 
-          <v-list two-line class="overflow-y-auto" style="max-height: 345px">
+          <v-list
+            v-if="skill.owners && skill.owners.length"
+            two-line
+            class="overflow-y-auto"
+            style="max-height: 345px"
+            dense
+          >
             <v-list-item
-              v-for="(owner, i) in skill.owners"
-              :key="owner._id"
+              v-for="o in skill.owners"
+              :key="o.owner._id"
               link
-              @click="openProfile(owner._id)"
+              @click="openProfile(o.owner._id)"
             >
               <v-list-item-avatar>
-                <v-img
-                  :src="`https://randomuser.me/api/portraits/men/${i}.jpg`"
-                ></v-img>
+                <v-img v-if="o.owner.image" :src="o.owner.image"></v-img>
+                <v-icon v-else large>mdi-account-circle</v-icon>
               </v-list-item-avatar>
 
               <v-list-item-content>
-                <v-list-item-title v-text="owner.name"></v-list-item-title>
+                <v-list-item-title v-text="o.owner.name"></v-list-item-title>
                 <v-list-item-subtitle
                   class="grey--text"
-                  v-text="owner.role"
+                  v-text="o.owner.role.title"
                 ></v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
-                <EsteemBadge :esteem="owner.esteem"></EsteemBadge>
+                <EsteemBadge :esteem="o.esteem"></EsteemBadge>
               </v-list-item-action>
             </v-list-item>
           </v-list>
+          <v-card-text v-else>
+            <p class="text-center grey--text mt-12">
+              No users have added this skill to their profile
+            </p>
+          </v-card-text>
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <v-card>
-          <v-card-title class=" grey--text">Under construction</v-card-title>
+        <v-card height="320" outlined>
+          <v-toolbar flat dense>
+            <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
+              >Something will eventually go here</v-toolbar-title
+            >
+          </v-toolbar>
+          <v-card-text class="grey--text"
+            ><p class="text-center grey--text mt-12">
+              We promise
+            </p></v-card-text
+          >
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <v-card>
+        <v-card v-if="skillActivityData.length" height="320" outlined>
+          <v-toolbar flat dense>
+            <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
+              >Activity</v-toolbar-title
+            >
+          </v-toolbar>
           <ActivityFeed
-            v-if="skillActivityData.length"
             :activity-data="skillActivityData"
             :is-real-time="false"
+            :height="270"
           ></ActivityFeed>
+        </v-card>
+        <v-card v-else outlined height="320">
+          <v-toolbar dense flat>
+            <v-toolbar-title class="subtitle-2 grey--text"
+              >Activity</v-toolbar-title
+            >
+          </v-toolbar>
+          <v-card-text class="text-center grey--text">
+            <p class="mt-12">This skill has no activity</p>
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
@@ -124,7 +158,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 import ActivityFeed from '../components/ActivityFeed';
 import EsteemBadge from '../components/EsteemBadge';
@@ -142,7 +176,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user']),
+    ...mapState(['user']),
     isAdded() {
       return (
         !this.user.skills.filter(e => e.skillId === this.skill._id).length > 0
@@ -152,28 +186,20 @@ export default {
   created() {
     const skillId = this.$route.params.id;
 
-    this.fetchSkillInfo(skillId)
-      .then(res => {
-        this.skill = res;
-        this.loaded = true;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.fetchSkill(skillId).then(res => {
+      this.skill = res;
+      this.loaded = true;
+    });
 
-    this.fetchSkillActivity(skillId)
-      .then(res => {
-        this.skillActivityData = res;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.fetchSkillActivity(skillId).then(res => {
+      this.skillActivityData = res;
+    });
   },
   methods: {
     ...mapActions([
       'addSkillToUser',
       'setLoading',
-      'fetchSkillInfo',
+      'fetchSkill',
       'toggleSnackbar',
       'fetchSkillActivity'
     ]),
@@ -195,8 +221,6 @@ export default {
         });
     },
     openProfile(ownerId) {
-      this.setLoading(true);
-
       this.$router.push({
         name: 'profile',
         params: { id: ownerId }

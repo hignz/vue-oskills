@@ -1,9 +1,27 @@
 <template>
-  <v-color-picker
-    v-model="color"
-    mode="hexa"
-    :hide-mode-switch="true"
-  ></v-color-picker>
+  <div>
+    <v-chip-group v-model="colorSelection" class="mb-2" mandatory>
+      <v-chip
+        v-for="c in colors"
+        :key="c.value"
+        pill
+        @click="changeAccentColor(c)"
+      >
+        <v-avatar left :color="c.value"></v-avatar>
+        {{ c.name }}
+      </v-chip>
+      <v-chip pill @click="showColorPicker = !showColorPicker">
+        Custom
+      </v-chip>
+    </v-chip-group>
+
+    <v-color-picker
+      v-if="showColorPicker"
+      v-model="color"
+      mode="hexa"
+      :hide-mode-switch="true"
+    ></v-color-picker>
+  </div>
 </template>
 
 <script>
@@ -13,7 +31,18 @@ export default {
   data() {
     return {
       type: 'hex',
-      hex: '#696969'
+      hex: '',
+      showColorPicker: false,
+      colorSelection: 0,
+      colors: [
+        { name: 'Overstock red', value: '#ff1f2c' },
+        { name: 'Cyan', value: '#41D1AB' },
+        { name: 'Blue', value: '#72DDF7' },
+        { name: 'Purple', value: '#BD93F9' },
+        { name: 'Coral', value: '#EF596F' },
+        { name: 'Orange', value: '#ffb86c' },
+        { name: 'Yellow', value: '#F1FA8C' }
+      ]
     };
   },
   computed: {
@@ -37,6 +66,15 @@ export default {
     this.hex = vuetify.framework.theme.isDark
       ? vuetify.framework.theme.themes.dark.primary
       : vuetify.framework.theme.themes.light.primary;
+  },
+  methods: {
+    changeAccentColor(c) {
+      const value = c.value;
+      this.color = c.value;
+      vuetify.framework.theme.themes.dark.primary = value;
+      vuetify.framework.theme.themes.light.primary = value;
+      localStorage.setItem('accentColor', value);
+    }
   }
 };
 </script>

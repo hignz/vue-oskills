@@ -9,7 +9,8 @@
     <template v-slot:activator="{ on }" class="d-none d-md-flex">
       <v-btn class="mr-sm-5 d-none d-md-flex mb-2" small fab v-on="on">
         <v-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/52.jpg"></v-img>
+          <v-img v-if="user.image" :src="user.image"></v-img>
+          <v-icon v-else large>mdi-account-circle</v-icon>
         </v-avatar>
       </v-btn>
     </template>
@@ -18,15 +19,16 @@
       <v-list dense>
         <v-list-item>
           <v-list-item-avatar>
-            <img src="https://randomuser.me/api/portraits/men/52.jpg" />
+            <v-img v-if="user.image" :src="user.image" />
+            <v-icon v-else large>mdi-account-circle</v-icon>
           </v-list-item-avatar>
 
           <v-list-item-content>
             <v-list-item-title class="subtitle-1">{{
               user.name
             }}</v-list-item-title>
-            <v-list-item-subtitle class="caption grey--text">{{
-              user.role
+            <v-list-item-subtitle v-if="user.role" class="caption grey--text">{{
+              user.role.title
             }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -34,7 +36,7 @@
 
       <v-divider></v-divider>
 
-      <v-list>
+      <v-list dense>
         <v-list-item @click="toggleDarkMode()">
           <v-list-item-icon>
             <v-icon>mdi-theme-light-dark</v-icon>
@@ -43,7 +45,7 @@
             <v-list-item-title>Dark mode</v-list-item-title>
           </v-list-item-content>
           <v-list-item-action @click.stop>
-            <v-switch v-model="darkMode" color="primary"></v-switch>
+            <v-switch v-model="darkMode" color="primary" dense></v-switch>
           </v-list-item-action>
         </v-list-item>
         <v-list-item @click="logout">

@@ -9,6 +9,9 @@ export default {
   [constants.SET_USER](state, user) {
     state.user = user;
   },
+  [constants.SET_USER_AVATAR](state, url) {
+    state.user.image = url;
+  },
   [constants.SET_SKILLS](state, skills) {
     state.user.skills = skills;
   },

@@ -30,12 +30,12 @@ export default {
     Snackbar
   },
   computed: {
-    ...mapState(['accessToken', 'loading', 'isDark'])
+    ...mapState(['accessToken', 'loading', 'isDark', 'user'])
   },
   created() {
     vuetify.framework.theme.dark = this.isDark;
 
-    if (this.accessToken) {
+    if (this.accessToken && !this.user.length) {
       this.fetchUser();
     }
   },
@@ -77,5 +77,11 @@ a {
 /* handle:hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.theme--dark.v-data-table
+  tbody
+  tr:hover:not(.v-data-table__expanded__content):not(.v-data-table__empty-wrapper) {
+  background: #363b46;
 }
 </style>

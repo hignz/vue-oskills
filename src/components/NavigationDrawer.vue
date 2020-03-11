@@ -5,12 +5,17 @@
     mini-variant-width="80"
     app
   >
-    <v-list-item>
-      <v-list-item-avatar size="47">
-        <v-icon color="primary" class="animated rollIn">mdi-star</v-icon>
+    <v-list-item class="mt-1">
+      <v-list-item-avatar size="40">
+        <v-img
+          v-if="!isDark"
+          :src="require('../assets/OrangeLogo_NoBG.png')"
+        ></v-img>
+        <v-img
+          v-if="isDark"
+          :src="require('../assets/WhiteLogo_NoBG.png')"
+        ></v-img>
       </v-list-item-avatar>
-
-      <v-list-item-title>Welcome</v-list-item-title>
     </v-list-item>
 
     <v-list dense nav>
@@ -58,6 +63,13 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
+    <template v-slot:append>
+      <div class="pa-2 d-md-none">
+        <v-btn block text @click="logout()">
+          <v-icon>mdi-logout-variant</v-icon>
+        </v-btn>
+      </div>
+    </template>
   </v-navigation-drawer>
 </template>
 
@@ -98,7 +110,7 @@ export default {
           route: '/explore'
         },
         {
-          icon: 'mdi-settings',
+          icon: 'mdi-cog',
           text: 'Settings',
           route: '/settings'
         }
@@ -107,7 +119,7 @@ export default {
   },
   computed: {
     ...mapState(['user']),
-    ...mapGetters(['expandedNavDrawer']),
+    ...mapGetters(['expandedNavDrawer', 'isDark']),
     filteredLinks() {
       return this.links.filter(
         e => !e.requiresAdmin || (this.user.isAdmin && e.requiresAdmin)

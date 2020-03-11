@@ -1,18 +1,19 @@
 <template>
   <v-container v-if="loaded" fluid>
-    <v-card>
+    <v-card outlined>
       <v-card-title>
         My skills
         <v-spacer></v-spacer>
-        <AddSkillDialog :skill-categories="skillCategories" />
+        <AddSkillDialog />
         <v-form>
           <v-text-field
             v-model="searchTerm"
-            class="mb-5 mx-5"
-            prepend-inner-icon="mdi-magnify"
+            class="mx-5"
+            append-icon="mdi-magnify"
             label="Search skills..."
             single-line
             clearable
+            dense
             hide-details
           ></v-text-field>
         </v-form>
@@ -27,7 +28,7 @@
         :sort-desc="true"
       >
         <template v-slot:item.action="{ item }">
-          <v-tooltip bottom>
+          <v-tooltip left>
             <template v-slot:activator="{ on }">
               <v-btn icon v-on="on">
                 <v-icon small @click="showDeleteDialog(item)">
@@ -37,16 +38,19 @@
             </template>
             <span>Delete</span>
           </v-tooltip>
-          <v-tooltip bottom>
+          <v-tooltip right>
             <template v-slot:activator="{ on }">
               <v-btn icon v-on="on">
                 <v-icon small @click="openSkillProfile(item.skill._id)">
-                  mdi-file-star-outline
+                  mdi-open-in-new
                 </v-icon>
               </v-btn>
             </template>
-            <span>Skill profile</span>
+            <span>Open</span>
           </v-tooltip>
+        </template>
+        <template v-slot:item.esteem="{ item }">
+          <EsteemBadge :esteem="item.esteem" />
         </template>
       </v-data-table>
       <v-dialog v-model="deleteDialog" width="500">
@@ -59,14 +63,15 @@
             <v-data-table
               v-if="loaded"
               class="mb-4"
+              disable-sort
               :headers="[
                 {
                   text: 'Skill',
-                  align: 'center',
+                  align: 'left',
                   value: 'skill.name'
                 },
-                { text: 'Rating', value: 'rating', align: 'center' },
                 { text: 'Esteem', value: 'esteem', align: 'center' },
+                { text: 'Esteem Points', value: 'rating', align: 'center' },
                 {
                   text: 'Category',
                   value: 'skill.category.name',
@@ -76,6 +81,9 @@
               :items="[selectedSkill]"
               hide-default-footer
             >
+              <template v-slot:item.esteem="{ item }">
+                <EsteemBadge :esteem="item.esteem" />
+              </template>
             </v-data-table>
             Are you sure you want to delete {{ selectedSkill.name }}? This
             action is irreversible, all esteem gained will be lost.
@@ -101,10 +109,12 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import AddSkillDialog from '../components/AddSkillDialog';
+import EsteemBadge from '../components/EsteemBadge';
 
 export default {
   components: {
-    AddSkillDialog
+    AddSkillDialog,
+    EsteemBadge
   },
   data() {
     return {
@@ -118,9 +128,9 @@ export default {
           sortable: true,
           value: 'skill.name'
         },
-        { text: 'Esteem', value: 'esteem', align: 'center' },
-        { text: 'Esteem Points', value: 'rating', align: 'center' },
-        { text: 'Category', value: 'skill.category.name', align: 'center' },
+        { text: 'Esteem', value: 'esteem', align: 'left' },
+        { text: 'Esteem Points', value: 'rating', align: 'left' },
+        { text: 'Category', value: 'skill.category.name', align: 'left' },
         { text: 'Actions', value: 'action', sortable: false, align: 'center' }
       ],
       searchTerm: '',
@@ -136,13 +146,7 @@ export default {
         this.initialize();
         this.loaded = true;
       })
-      .catch(err => console.log(err));
-
-    this.fetchCategoriesArchived('false')
-      .then(res => {
-        this.skillCategories = res.categories;
-      })
-      .catch(err => console.log(err));
+      .catch(() => {});
   },
   methods: {
     ...mapActions([
@@ -166,7 +170,7 @@ export default {
             color: 'success'
           });
         })
-        .catch(err => console.log(err));
+        .catch(() => {});
     },
     openSkillProfile(skillId) {
       this.$router.push({
@@ -178,8 +182,4 @@ export default {
 };
 </script>
 
-<style>
-.theme--dark.v-data-table tbody tr:hover:not(.v-data-table__expanded__content) {
-  background: #363b46;
-}
-</style>
+<style></style>

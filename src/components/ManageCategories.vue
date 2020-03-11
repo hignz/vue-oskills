@@ -1,14 +1,18 @@
 <template>
-  <v-card flat>
+  <div>
     <v-card-title
-      >Categories <span class="caption ml-2">({{ categories.length }})</span>
+      >Active
+      <span class="caption ml-2 grey--text">({{ categories.length }})</span>
       <v-spacer></v-spacer>
-      <EditCategoryDialog></EditCategoryDialog>
+      <AdminAddCategoryDialog
+        @categoryAdded="emitCategoryAdded"
+      ></AdminAddCategoryDialog>
       <v-form>
         <v-text-field
           v-model="search"
+          class="mb-5 mx-5"
           append-icon="mdi-magnify"
-          label="Search"
+          label="Search active..."
           single-line
           clearable
           hide-details
@@ -23,17 +27,11 @@
       no-data-text="No categories loaded"
       no-results-text="No categories found"
     >
+      <template v-slot:item.dateAdded="{ item }">
+        {{ formatRelative(new Date(item.dateAdded), Date.now()) }}
+      </template>
+
       <template v-slot:item.action="{ item }">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <v-btn icon v-on="on">
-              <v-icon small @click="showEditDialog(item)">
-                mdi-pencil
-              </v-icon>
-            </v-btn>
-          </template>
-          <span>Edit</span>
-        </v-tooltip>
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn icon v-on="on">
@@ -44,6 +42,15 @@
           </template>
           <span>Archive</span>
         </v-tooltip>
+        <EditCategoryDialog
+          :category="item"
+          @update="updateCategory"
+        ></EditCategoryDialog>
+        <v-btn icon>
+          <v-icon @click="openCategoryProfile(item._id)">
+            mdi-star
+          </v-icon>
+        </v-btn>
       </template>
     </v-data-table>
     <v-dialog v-model="archiveDialog" width="500" @input="v => v || close()">
@@ -52,25 +59,27 @@
           Are you sure?
         </v-card-title>
 
-        <v-card-text>
-          <v-data-table
-            class="mb-4"
-            disable-sort
-            :headers="[
-              {
-                text: 'Name',
-                align: 'left',
-                value: 'name'
-              }
-            ]"
-            :items="[selectedCategory]"
-            hide-default-footer
-          >
-          </v-data-table>
-          Are you sure you want to archive {{ selectedCategory.name }}? This
-          action will also archive all skills under this category, thus
+        <v-card-text class="text-center">
+          Are you sure you want to archive
+          <strong>{{ selectedCategory.name }}</strong
+          >? This action will also archive all skills under this category, thus
           rendering them unavailable to users.
         </v-card-text>
+        <!-- 
+        <v-data-table
+          class="mb-4"
+          disable-sort
+          :headers="[
+            {
+              text: 'Name',
+              align: 'left',
+              value: 'name'
+            }
+          ]"
+          :items="[selectedCategory]"
+          hide-default-footer
+        >
+        </v-data-table> -->
 
         <v-divider></v-divider>
 
@@ -85,16 +94,19 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-card>
+  </div>
 </template>
 
 <script>
 import EditCategoryDialog from '../components/EditCategoryDialog';
+import AdminAddCategoryDialog from '../components/AdminAddCategoryDialog';
 import { mapActions } from 'vuex';
+import { formatRelative } from 'date-fns';
 
 export default {
   components: {
-    EditCategoryDialog
+    EditCategoryDialog,
+    AdminAddCategoryDialog
   },
   props: {
     categories: {
@@ -112,6 +124,7 @@ export default {
           sortable: true,
           value: 'name'
         },
+        { text: 'Added', value: 'dateAdded' },
         {
           text: 'Actions',
           value: 'action',
@@ -120,7 +133,8 @@ export default {
         }
       ],
       archiveDialog: false,
-      selectedCategory: {}
+      selectedCategory: {},
+      formatRelative
     };
   },
   methods: {
@@ -128,6 +142,9 @@ export default {
     showArchiveDialog(item) {
       this.selectedCategory = item;
       this.archiveDialog = true;
+    },
+    showEditDialog(item) {
+      this.selectedCategory = item;
     },
     doArchiveCategory() {
       this.archiveCategory(this.selectedCategory._id).then(res => {
@@ -137,12 +154,30 @@ export default {
           text: res.message
         });
 
+        this.selectedCategory.dateArchived = Date.now();
         this.$emit('archive', this.selectedCategory);
         this.closeDialog();
       });
     },
     closeDialog() {
       this.archiveDialog = !this.archiveDialog;
+    },
+    updateCategory(i) {
+      this.categories.forEach(e => {
+        if (e._id === i.categoryId) {
+          e.name = i.name;
+        }
+      });
+    },
+    openCategoryProfile(categoryId) {
+      this.$router.push({
+        name: 'category',
+        params: { id: categoryId }
+      });
+    },
+    emitCategoryAdded(item) {
+      // this.categories.push(item);
+      this.$emit('categoryAdded', item);
     }
   }
 };

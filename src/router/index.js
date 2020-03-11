@@ -85,7 +85,18 @@ const routes = [
     component: () => import('@/views/Manage'),
     meta: { requiresAdmin: true }
   },
-
+  {
+    path: '/forgot-password',
+    name: 'forgotpassword',
+    component: () => import('@/views/ForgotPassword'),
+    meta: { requiresVisitor: true }
+  },
+  {
+    path: '/change-password/:resetToken',
+    name: 'changePassword',
+    component: () => import('@/views/ChangePassword'),
+    meta: { requiresVisitor: true }
+  },
   {
     path: '*',
     redirect: '/'
@@ -120,18 +131,28 @@ router.beforeEach((to, from, next) => {
       next();
     }
   } else if (to.matched.some(record => record.meta.requiresAdmin)) {
-    store
-      .dispatch('fetchUser')
-      .then(() => {
-        if (!store.getters.getUser.isAdmin) {
-          next({
-            path: '/dashboard'
-          });
-        } else {
-          next();
-        }
-      })
-      .catch(err => console.log(err));
+    if (!Object.keys(store.getters.getUser).length) {
+      store
+        .dispatch('fetchUser')
+        .then(() => {
+          if (!store.getters.getUser.isAdmin) {
+            next({
+              path: '/dashboard'
+            });
+          } else {
+            next();
+          }
+        })
+        .catch(() => {});
+    } else {
+      if (!store.getters.getUser.isAdmin) {
+        next({
+          path: '/dashboard'
+        });
+      } else {
+        next();
+      }
+    }
   } else {
     next();
   }

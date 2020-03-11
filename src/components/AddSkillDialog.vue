@@ -1,8 +1,11 @@
 <template>
   <v-dialog v-model="dialog" max-width="500" @input="v => v || close()">
     <template v-slot:activator="{ on }">
-      <v-btn icon v-on="on">
+      <v-btn v-if="isIcon" icon v-on="on">
         <v-icon>mdi-plus</v-icon>
+      </v-btn>
+      <v-btn v-else text color="primary" v-on="on">
+        Add a skill
       </v-btn>
     </template>
     <v-card>
@@ -11,40 +14,36 @@
       </v-card-title>
       <v-card-text>
         <v-form ref="form">
-          <v-row>
-            <v-col cols="12">
-              <v-select
-                label="Category"
-                :items="categories"
-                item-text="text"
-                item-value="value"
-                prepend-inner-icon="mdi-playlist-star"
-                required
-                @change="populateSkills"
-              ></v-select>
-            </v-col>
-            <v-col cols="12">
-              <v-autocomplete
-                v-model="selectedSkill"
-                label="Skill"
-                no-data-text="No skills available"
-                :items="skills"
-                autocomplete="off"
-                auto-select-first
-                :loading="loadingSkills"
-                clearable
-                prepend-inner-icon="mdi-star"
-                required
-              ></v-autocomplete>
-            </v-col>
-          </v-row>
+          <v-select
+            label="Category"
+            :items="categories"
+            item-text="text"
+            item-value="value"
+            prepend-inner-icon="mdi-playlist-star"
+            required
+            @change="populateSkills"
+          ></v-select>
+          <v-autocomplete
+            :key="selectedSkill"
+            v-model="selectedSkill"
+            label="Skill"
+            no-data-text="No skills available"
+            :items="skills"
+            autocomplete="off"
+            auto-select-first
+            spellcheck="false"
+            :loading="loadingSkills"
+            clearable
+            prepend-inner-icon="mdi-star"
+            required
+          ></v-autocomplete>
         </v-form>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text @click="close()">Close</v-btn>
         <v-btn
-          color="primary"
+          color="success"
           :disabled="selectedSkill ? false : true"
           :loading="addSkillLoading"
           @click="addSkill"
@@ -61,9 +60,9 @@ import { mapActions } from 'vuex';
 
 export default {
   props: {
-    skillCategories: {
-      type: Array,
-      default: () => []
+    isIcon: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -72,7 +71,8 @@ export default {
       selectedSkill: null,
       dialog: false,
       loadingSkills: false,
-      addSkillLoading: false
+      addSkillLoading: false,
+      skillCategories: []
     };
   },
   computed: {
@@ -85,17 +85,26 @@ export default {
       });
     }
   },
-  created() {},
+  watch: {
+    dialog(opened) {
+      if (opened) {
+        this.fetchCategoriesArchived('false').then(res => {
+          this.skillCategories = res.categories;
+        });
+      }
+    }
+  },
   methods: {
     ...mapActions([
       'fetchSkillsByCategory',
       'addSkillToUser',
-      'toggleSnackbar'
+      'toggleSnackbar',
+      'fetchCategoriesArchived'
     ]),
     populateSkills(categoryId) {
       this.loadingSkills = true;
-      this.skills = [];
-      this.fetchSkillsByCategory(categoryId)
+
+      this.fetchSkillsByCategory({ categoryId, filter: true })
         .then(response => {
           this.skills = response.skills.map(o => {
             return {
@@ -104,9 +113,7 @@ export default {
             };
           });
         })
-        .catch(err => {
-          console.log(err);
-        })
+        .catch(() => {})
         .finally(() => (this.loadingSkills = false));
     },
     addSkill() {
@@ -115,8 +122,10 @@ export default {
         skillId: this.selectedSkill
       })
         .then(() => {
-          this.$refs.form.reset();
-          this.skills = [];
+          if (this.$refs.form) {
+            this.$refs.form.reset();
+          }
+
           this.toggleSnackbar({
             show: true,
             text: 'Skill added successfully',

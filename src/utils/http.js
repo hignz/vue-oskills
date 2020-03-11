@@ -2,8 +2,11 @@ import axios from 'axios';
 import router from '../router/index.js';
 import store from '../store';
 
+// const devURL = 'http://localhost:1111';
+const prodURL = 'https://oskills-api.herokuapp.com';
+
 const http = axios.create({
-  baseURL: 'http://localhost:1111'
+  baseURL: prodURL
 });
 
 http.interceptors.request.use(

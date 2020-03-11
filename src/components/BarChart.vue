@@ -1,18 +1,12 @@
 <template>
-  <v-card>
-    <v-toolbar dense flat>
-      <v-toolbar-title class="subtitle-2 grey--text">SKILLS</v-toolbar-title>
-    </v-toolbar>
-
-    <div id="chart">
-      <apexcharts
-        type="bar"
-        height="300"
-        :options="barChartOptions"
-        :series="barChartSeries"
-      />
-    </div>
-  </v-card>
+  <div id="chart">
+    <apexcharts
+      type="bar"
+      height="300"
+      :options="barChartOptions"
+      :series="barChartSeries"
+    />
+  </div>
 </template>
 
 <script>
@@ -26,18 +20,17 @@ export default {
   computed: {
     ...mapGetters(['isDark', 'accentColor']),
     ...mapState(['user']),
-    bestSkill() {
-      return this.user.skills.reduce(
-        (prev, current) => (prev.rating > current.rating ? prev : current),
-        0
-      );
+    sortedSkills() {
+      return [...this.user.skills].sort((a, b) => b.rating - a.rating);
     },
-
+    categories() {
+      return this.sortedSkills.map(el => el.skill.name);
+    },
     barChartSeries() {
       return [
         {
-          name: 'Esteem level',
-          data: this.user.skills.map(e => {
+          name: 'Esteem Points',
+          data: this.sortedSkills.map(e => {
             return e.rating;
           })
         }
@@ -47,45 +40,62 @@ export default {
       return {
         plotOptions: {
           bar: {
-            horizontal: true
+            horizontal: false,
+            barHeight: '50%'
           }
         },
         dataLabels: {
-          enabled: true
+          enabled: false
         },
         theme: {
           mode: this.isDark ? 'dark' : 'light'
         },
         chart: {
-          background: this.isDark ? '#282c34' : '#ffffff',
-          foreColor: this.isDark ? '#ffffff' : '#424242'
-        },
-        stroke: {
-          show: true,
-          width: 1,
-          colors: ['transparent']
+          id: 'barChart',
+          background: this.isDark ? '#282c34' : '#fafafa',
+          foreColor: this.isDark ? '#eeeeef' : '#5e5e5e'
         },
         xaxis: {
-          title: {
-            text: 'Esteem Points'
-          },
-          categories: this.user.skills.map(el => {
-            return el.skill.name;
-          })
+          categories: this.categories,
+          tickAmount: this.tickCount
         },
-        yaxis: {},
+        yaxis: {
+          tickAmount: this.tickCount,
+          labels: {
+            formatter: function(val) {
+              return Math.floor(val);
+            }
+          }
+        },
+        colors: [localStorage.getItem('accentColor')],
+
         fill: {
-          opacity: 0.7,
+          opacity: 0.5,
           colors: [localStorage.getItem('accentColor')]
         },
         tooltip: {
           y: {
             formatter: function(val) {
-              return Math.ceil(val / 5);
+              return val;
             }
-          }
+          },
+          shared: true,
+          intersect: false
         }
       };
+    },
+    maxSkill() {
+      return this.user.skills.reduce(
+        (acc, curr) => (acc.rating > curr.rating ? acc : curr),
+        0
+      );
+    },
+    tickCount() {
+      return this.maxSkill.rating < 10
+        ? this.maxSkill.rating
+        : this.maxSkill.rating / 10 < 1
+        ? Math.ceil(this.maxSkill.rating / 10)
+        : this.maxSkill.rating / 10;
     }
   }
 };
