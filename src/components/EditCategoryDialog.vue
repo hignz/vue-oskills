@@ -1,39 +1,44 @@
 <template>
-  <v-dialog
-    v-model="editCategoryDialog"
-    max-width="500"
-    @input="v => v || close()"
-  >
-    <template v-slot:activator="{ on }">
-      <v-btn icon v-on="on">
-        <v-icon small>
-          mdi-pencil
-        </v-icon>
-      </v-btn>
-    </template>
-    <v-card>
-      <v-card-title class="mb-4">Edit Category</v-card-title>
+  <placeholder>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on }">
+        <v-btn icon v-on="on">
+          <v-icon small>
+            mdi-pencil
+          </v-icon>
+        </v-btn>
+      </template>
+      <span>Edit Category</span>
+    </v-tooltip>
+    <v-dialog
+      v-model="editCategoryDialog"
+      max-width="500"
+      @input="v => v || close()"
+    >
+      <v-card>
+        <v-card-title class="mb-4">Edit Category</v-card-title>
 
-      <v-form ref="form" v-model="valid" @submit.prevent="onSubmit">
-        <v-card-text>
-          <v-text-field
-            v-model="name"
-            label="Name"
-            :rules="requiredRules"
-            clearable
-          ></v-text-field>
-        </v-card-text>
+        <v-form ref="form" v-model="valid" @submit.prevent="onSubmit">
+          <v-card-text>
+            <v-text-field
+              v-model="name"
+              label="Name"
+              :rules="requiredRules"
+              clearable
+            ></v-text-field>
+          </v-card-text>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn text @click="close()">Close</v-btn>
-          <v-btn color="success" :disabled="!valid" type="submit"
-            >Edit Name</v-btn
-          >
-        </v-card-actions>
-      </v-form>
-    </v-card>
-  </v-dialog>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text @click="close()">Close</v-btn>
+            <v-btn color="success" :disabled="!valid" type="submit"
+              >Edit Name</v-btn
+            >
+          </v-card-actions>
+        </v-form>
+      </v-card>
+    </v-dialog>
+  </placeholder>
 </template>
 
 <script>

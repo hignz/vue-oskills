@@ -42,11 +42,16 @@
           :category="item"
           @update="updateArchivedCategory"
         ></EditCategoryDialog>
-        <v-btn icon>
-          <v-icon @click="openCategoryProfile(item._id)">
-            mdi-star
-          </v-icon>
-        </v-btn>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn icon text v-on="on">
+              <v-icon small @click="openCategoryProfile(item._id)">
+                mdi-open-in-new
+              </v-icon>
+            </v-btn>
+          </template>
+          <span>Category Profile</span>
+        </v-tooltip>
       </template>
     </v-data-table>
     <v-dialog v-model="unarchiveDialog" width="500" @input="v => v || close()">

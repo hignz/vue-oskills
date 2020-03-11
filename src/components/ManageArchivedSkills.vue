@@ -45,11 +45,16 @@
           :skill="item"
           @update="updateArchivedSkill"
         ></EditSkillDialog>
-        <v-btn icon>
-          <v-icon small @click="openSkillProfile(item._id)">
-            mdi-open-in-new
-          </v-icon>
-        </v-btn>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn icon text v-on="on">
+              <v-icon small @click="openSkillProfile(item._id)">
+                mdi-open-in-new
+              </v-icon>
+            </v-btn>
+          </template>
+          <span>Skill Profile</span>
+        </v-tooltip>
       </template>
     </v-data-table>
     <v-dialog v-model="archivedDialog" width="500" @input="v => v || close()">

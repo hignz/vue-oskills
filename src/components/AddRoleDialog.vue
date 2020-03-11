@@ -1,48 +1,53 @@
 <template>
-  <v-dialog v-model="dialog" max-width="500" @input="v => v || close()">
-    <template v-slot:activator="{ on }">
-      <v-btn icon v-on="on">
-        <v-icon>mdi-account-multiple-plus</v-icon>
-      </v-btn>
-    </template>
-    <v-card>
-      <v-card-title class="mb-4">Add role</v-card-title>
-      <v-card-text>
-        <v-form ref="form" v-model="valid">
-          <v-text-field
-            v-model="roleName"
-            label="Title"
-            :rules="[minLength(2)]"
-            clearable
-            required
-          ></v-text-field>
-          <v-slider
-            v-model="voteCount"
-            class="mt-4"
-            label="Vote count"
-            type="number"
-            dense
-            thumb-label
-          />
-          <v-slider
-            v-model="voteWeight"
-            class="mt-4"
-            label="Vote weight"
-            type="number"
-            dense
-            thumb-label
-          />
-        </v-form>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-        <v-btn text @click="close()">Close</v-btn>
-        <v-btn color="success" :disabled="!valid" @click="addNewRole"
-          >Add</v-btn
-        >
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+  <placeholder>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on }">
+        <v-btn icon v-on="on">
+          <v-icon>mdi-account-multiple-plus</v-icon>
+        </v-btn>
+      </template>
+      <span>Add Role</span>
+    </v-tooltip>
+    <v-dialog v-model="dialog" max-width="500" @input="v => v || close()">
+      <v-card>
+        <v-card-title class="mb-4">Add role</v-card-title>
+        <v-card-text>
+          <v-form ref="form" v-model="valid">
+            <v-text-field
+              v-model="roleName"
+              label="Title"
+              :rules="[minLength(2)]"
+              clearable
+              required
+            ></v-text-field>
+            <v-slider
+              v-model="voteCount"
+              class="mt-4"
+              label="Vote count"
+              type="number"
+              dense
+              thumb-label
+            />
+            <v-slider
+              v-model="voteWeight"
+              class="mt-4"
+              label="Vote weight"
+              type="number"
+              dense
+              thumb-label
+            />
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn text @click="close()">Close</v-btn>
+          <v-btn color="success" :disabled="!valid" @click="addNewRole"
+            >Add</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </placeholder>
 </template>
 
 <script>

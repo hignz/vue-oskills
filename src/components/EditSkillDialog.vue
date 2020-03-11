@@ -1,48 +1,53 @@
 <template>
-  <v-dialog
-    v-model="editSkillDialog"
-    max-width="500"
-    @input="v => v || close()"
-  >
-    <template v-slot:activator="{ on }">
-      <v-btn icon v-on="on">
-        <v-icon small>
-          mdi-pencil
-        </v-icon>
-      </v-btn>
-    </template>
-    <v-card>
-      <v-form ref="form" v-model="valid" @submit.prevent="onSubmit">
-        <v-card-title class="mb-4">Edit Skill</v-card-title>
-        <v-card-text>
-          <v-select
-            v-model="category"
-            label="Category"
-            :items="skillCategories"
-            item-text="text"
-            item-value="value"
-            prepend-inner-icon="mdi-playlist-star"
-            return-object
-            required
-          ></v-select>
-          <v-text-field
-            v-model="name"
-            label="Name"
-            :rules="requiredRules"
-            prepend-inner-icon="mdi-square-edit-outline"
-            clearable
-          ></v-text-field>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn text @click="close()">Close</v-btn>
-          <v-btn color="success" :disabled="!valid" type="submit"
-            >Edit Skill</v-btn
-          >
-        </v-card-actions>
-      </v-form>
-    </v-card>
-  </v-dialog>
+  <placeholder>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on }">
+        <v-btn icon v-on="on" @click="editSkillDialog = !editSkillDialog">
+          <v-icon small>
+            mdi-pencil
+          </v-icon>
+        </v-btn>
+      </template>
+      <span>Edit Skill</span>
+    </v-tooltip>
+    <v-dialog
+      v-model="editSkillDialog"
+      max-width="500"
+      @input="v => v || close()"
+    >
+      <v-card>
+        <v-form ref="form" v-model="valid" @submit.prevent="onSubmit">
+          <v-card-title class="mb-4">Edit Skill</v-card-title>
+          <v-card-text>
+            <v-select
+              v-model="category"
+              label="Category"
+              :items="skillCategories"
+              item-text="text"
+              item-value="value"
+              prepend-inner-icon="mdi-playlist-star"
+              return-object
+              required
+            ></v-select>
+            <v-text-field
+              v-model="name"
+              label="Name"
+              :rules="requiredRules"
+              prepend-inner-icon="mdi-square-edit-outline"
+              clearable
+            ></v-text-field>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text @click="close()">Close</v-btn>
+            <v-btn color="success" :disabled="!valid" type="submit"
+              >Edit Skill</v-btn
+            >
+          </v-card-actions>
+        </v-form>
+      </v-card>
+    </v-dialog>
+  </placeholder>
 </template>
 
 <script>
