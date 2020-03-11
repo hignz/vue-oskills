@@ -79,7 +79,10 @@
               >Description</v-toolbar-title
             >
           </v-toolbar>
-          <v-card-text v-if="category.description" class="grey--text">
+          <v-card-text
+            v-if="category.description"
+            class="text-center grey--text mt-md-6"
+          >
             {{ category.description }}</v-card-text
           >
           <v-card-text v-else class="text-center grey--text">
@@ -97,7 +100,7 @@
           <ActivityFeed
             :activity-data="categoryActivityData"
             :is-real-time="false"
-            :height="270"
+            :height="350"
           ></ActivityFeed>
         </v-card>
         <v-card v-else outlined height="320">

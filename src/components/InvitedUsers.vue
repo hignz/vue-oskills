@@ -27,6 +27,8 @@
         no-data-text="No users loaded"
         no-results-text="No users found"
         :items-per-page="10"
+        sort-by="invitedAt"
+        sort-desc
       >
         <template v-slot:item.invitedAt="{ item }">
           {{
@@ -51,7 +53,7 @@
                 </v-icon>
               </v-btn>
             </template>
-            <span>Delete user</span>
+            <span>Revoke invitation</span>
           </v-tooltip>
         </template>
       </v-data-table>
@@ -68,9 +70,9 @@
 
           <v-card-text class="mt-4">
             <v-form ref="form" v-model="valid">
-              Are you sure you want to delete invitation for
+              Are you sure you want to revoke this invitation for
               {{ deleteInvite.email }} ? This action is irreversible
-              <p class="mt-3 mb-0">
+              <p class="mt-3">
                 Please type
                 <span class="font-weight-bold error--text">
                   {{ deleteInvite.email }}
@@ -80,7 +82,7 @@
               <v-text-field
                 v-model="confirmUser"
                 class="pt-0"
-                required
+                :rules="requiredRules"
               ></v-text-field>
             </v-form>
           </v-card-text>
@@ -94,7 +96,7 @@
               :disabled="!valid"
               @click="deleteUserInvite(deleteInvite)"
             >
-              Delete
+              Revoke
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -109,6 +111,7 @@ import { formatDistanceToNow } from 'date-fns';
 import ResendInviteDialog from '../components/ResendInviteDialog';
 import EditInviteDialog from '../components/EditInviteDialog';
 import InviteUserDialog from '../components/InviteUserDialog';
+import validationRules from '../mixins/validationRules';
 
 export default {
   components: {
@@ -116,6 +119,7 @@ export default {
     EditInviteDialog,
     InviteUserDialog
   },
+  mixins: [validationRules],
   props: {
     users: {
       type: Array,

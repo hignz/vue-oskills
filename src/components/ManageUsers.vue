@@ -30,6 +30,8 @@
         show-expand
         expand-icon="mdi-chevron-down"
         :items-per-page="10"
+        sort-by="joinedAt"
+        sort-desc
       >
         <template v-slot:item.joinedAt="{ item }">
           {{ userDateJoined(item.joinedAt) }}
@@ -161,7 +163,7 @@
               <v-text-field
                 v-model="confirmUser"
                 class="pt-0"
-                required
+                :rules="requiredRules"
               ></v-text-field>
             </v-form>
           </v-card-text>
@@ -189,12 +191,14 @@ import { mapActions } from 'vuex';
 import RadarChart from '../components/RadarChart';
 import EsteemBadge from '../components/EsteemBadge';
 import { lightFormat } from 'date-fns';
+import validationRules from '../mixins/validationRules';
 
 export default {
   components: {
     RadarChart,
     EsteemBadge
   },
+  mixins: [validationRules],
   props: {
     users: {
       type: Array,

@@ -28,9 +28,6 @@
         <p class="grey--text text-center">
           We can't find any pending invitations.
         </p>
-        <p class="grey--text text-center">
-          You can add new user by creating new invitation.
-        </p>
       </v-card-text>
     </template>
   </div>

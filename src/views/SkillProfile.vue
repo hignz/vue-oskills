@@ -71,7 +71,7 @@
 
     <v-row>
       <v-col cols="12" sm="12" md="4">
-        <v-card height="320" outlined>
+        <v-card height="410" outlined>
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
               >USERS WITH THIS SKILL</v-toolbar-title
@@ -82,7 +82,7 @@
             v-if="skill.owners && skill.owners.length"
             two-line
             class="overflow-y-auto"
-            style="max-height: 345px"
+            style="max-height: 360px"
             dense
           >
             <v-list-item
@@ -116,14 +116,14 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <v-card height="320" outlined>
+        <v-card height="410" outlined>
           <v-toolbar flat dense>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
               >Description</v-toolbar-title
             >
           </v-toolbar>
           <v-card-text class="grey--text"
-            ><p v-if="skill.description" class="text-center grey--text">
+            ><p v-if="skill.description" class="text-center grey--text mt-md-6">
               {{ skill.description }}
             </p>
             <p v-else class="text-center mt-12">Not available</p>
@@ -131,7 +131,7 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <v-card v-if="skillActivityData.length" height="320" outlined>
+        <v-card v-if="skillActivityData.length" height="410" outlined>
           <v-toolbar flat dense>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
               >Activity</v-toolbar-title
@@ -140,10 +140,10 @@
           <ActivityFeed
             :activity-data="skillActivityData"
             :is-real-time="false"
-            :height="270"
+            :height="360"
           ></ActivityFeed>
         </v-card>
-        <v-card v-else outlined height="320">
+        <v-card v-else outlined height="410">
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text"
               >Activity</v-toolbar-title
