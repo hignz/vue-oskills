@@ -259,8 +259,6 @@ export default {
       return lightFormat(new Date(date), 'dd-MM-yyyy');
     },
     promoteToAdmin(user) {
-      console.log(user);
-
       this.addAdmin({
         uId: user._id,
         isAdmin: !user.isAdmin,
@@ -278,9 +276,7 @@ export default {
           });
           this.$emit('admin', user);
         })
-        .catch(err => {
-          console.log(err);
-
+        .catch(() => {
           this.toggleSnackbar({
             show: true,
             text: 'Something went wrong',
