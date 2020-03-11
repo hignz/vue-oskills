@@ -43,8 +43,8 @@
           @update="updateArchivedCategory"
         ></EditCategoryDialog>
         <v-btn icon>
-          <v-icon @click="openCategoryProfile(item._id)">
-            mdi-star
+          <v-icon small @click="openCategoryProfile(item._id)">
+            mdi-open-in-new
           </v-icon>
         </v-btn>
       </template>
