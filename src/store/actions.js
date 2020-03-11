@@ -319,5 +319,10 @@ export default {
       commit(constants.SET_LOADING, false);
       return res.data;
     });
+  },
+  fetchCategoryActivity(_, categoryId) {
+    return http.post('/activity/category', { categoryId }).then(res => {
+      return res.data;
+    });
   }
 };

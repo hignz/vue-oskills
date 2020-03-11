@@ -29,10 +29,18 @@
                 class="caption grey--text ml-md-12 font-weight-bold"
                 justify="center"
                 justify-md="start"
-                >Remaining votes:
-                <span class="font-weight-bold ml-1">
-                  {{ user.remainingVotes }}</span
-                >
+              >
+                <v-tooltip right open-delay="100">
+                  <template v-slot:activator="{ on }">
+                    <span v-on="on">
+                      Remaining votes:
+                      <span class="primary--text">{{
+                        user.remainingVotes
+                      }}</span>
+                    </span>
+                  </template>
+                  <span>Resets every Monday</span>
+                </v-tooltip>
               </v-row>
             </v-col>
           </v-row>

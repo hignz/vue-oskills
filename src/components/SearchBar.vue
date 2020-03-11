@@ -46,7 +46,8 @@ export default {
       entries: [],
       isLoading: false,
       model: null,
-      search: null
+      search: null,
+      timerId: null
     };
   },
 
@@ -59,22 +60,31 @@ export default {
   },
 
   watch: {
-    search(val) {
-      if (!val || val.trim() === '') {
-        this.entries = [];
-        return;
-      }
+    search(val, oldVal) {
+      clearTimeout(this._timerId);
 
-      if (this.items.length > 0 || this.isLoading) return;
+      // debounce - delay new calls by 500ms
+      this._timerId = setTimeout(() => {
+        if (!val || val.trim() === '') {
+          this.entries = [];
+          return;
+        }
 
-      this.isLoading = true;
+        if (val !== oldVal) {
+          this.entries = [];
+        }
 
-      this.fetchByName(val)
-        .then(res => {
-          this.entries = res.data;
-        })
-        .catch(() => {})
-        .finally(() => (this.isLoading = false));
+        if (this.items.length > 0 || this.isLoading) return;
+
+        this.isLoading = true;
+
+        this.fetchByName(val)
+          .then(res => {
+            this.entries = res.data;
+          })
+          .catch(() => {})
+          .finally(() => (this.isLoading = false));
+      }, 500);
     }
   },
   methods: {

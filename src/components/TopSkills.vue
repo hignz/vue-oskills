@@ -15,11 +15,11 @@
     </template>
 
     <template v-slot:item.action="{ item }">
-      <v-tooltip bottom>
+      <v-tooltip left>
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on">
             <v-icon small @click="openSkillProfile(item._id)">
-              mdi-file-star-outline
+              mdi-open-in-new
             </v-icon>
           </v-btn>
         </template>

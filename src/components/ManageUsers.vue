@@ -54,7 +54,7 @@
                 v-on="on"
                 @click="promoteToAdmin(item)"
               >
-                <v-icon small>
+                <v-icon small color="primary">
                   mdi-account-star
                 </v-icon>
               </v-btn>
@@ -293,13 +293,13 @@ export default {
         email: user.email
       })
         .then(() => {
-          this.user.isAdmin = !this.user.isAdmin;
+          user.isAdmin = !user.isAdmin;
           this.toggleSnackbar({
             show: true,
-            text: this.user.isAdmin
-              ? `${this.user.name} has been promoted to admin`
-              : `${this.user.name} has been demoted from admin`,
-            color: this.user.isAdmin ? 'success' : 'orange darken-3'
+            text: user.isAdmin
+              ? `${user.name} has been promoted to admin`
+              : `${user.name} has been demoted from admin`,
+            color: user.isAdmin ? 'success' : 'orange darken-3'
           });
           this.$emit('admin', user);
         })

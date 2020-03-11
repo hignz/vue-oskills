@@ -3,8 +3,8 @@
     v-if="user"
     v-model="menu"
     :close-on-content-click="false"
-    :nudge-width="200"
     offset-x
+    max-width="300"
   >
     <template v-slot:activator="{ on }" class="d-none d-md-flex">
       <v-btn class="mr-sm-5 d-none d-md-flex mb-2" small fab v-on="on">
@@ -16,7 +16,7 @@
     </template>
 
     <v-card>
-      <v-list dense>
+      <v-list dense two-line="">
         <v-list-item>
           <v-list-item-avatar>
             <v-img v-if="user.image" :src="user.image" />
@@ -30,6 +30,12 @@
             <v-list-item-subtitle v-if="user.role" class="caption grey--text">{{
               user.role.title
             }}</v-list-item-subtitle>
+            <v-list-item-subtitle v-if="user.role" class="caption grey--text"
+              >Remaining votes:
+              <span class="primary--text">{{
+                user.remainingVotes
+              }}</span></v-list-item-subtitle
+            >
           </v-list-item-content>
         </v-list-item>
       </v-list>
