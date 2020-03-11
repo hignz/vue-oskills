@@ -83,14 +83,13 @@ export default {
           }
         },
         yaxis: {
-          tickAmount: this.maxSkill < 1 ? 1 : this.maxSkill / 10,
+          tickAmount: 3,
           labels: {
             formatter: function(val) {
               return val < 0 ? 0 : Math.floor(val);
             }
           },
-          min: -1,
-          max: this.maxSkill === 0 ? 1 : this.maxSkill
+          min: -1
         },
         theme: {
           mode: this.isDark ? 'dark' : 'light'
