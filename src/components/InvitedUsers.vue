@@ -80,7 +80,7 @@
               <v-text-field
                 v-model="confirmUser"
                 class="pt-0"
-                required
+                :rules="requiredRules"
               ></v-text-field>
             </v-form>
           </v-card-text>
@@ -109,6 +109,7 @@ import { formatDistanceToNow } from 'date-fns';
 import ResendInviteDialog from '../components/ResendInviteDialog';
 import EditInviteDialog from '../components/EditInviteDialog';
 import InviteUserDialog from '../components/InviteUserDialog';
+import validationRules from '../mixins/validationRules';
 
 export default {
   components: {
@@ -116,6 +117,7 @@ export default {
     EditInviteDialog,
     InviteUserDialog
   },
+  mixins: [validationRules],
   props: {
     users: {
       type: Array,
