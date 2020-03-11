@@ -46,7 +46,8 @@ export default {
       entries: [],
       isLoading: false,
       model: null,
-      search: null
+      search: null,
+      timerId: null
     };
   },
 
@@ -59,35 +60,35 @@ export default {
   },
 
   watch: {
-    search(val) {
-      if (!val || val.trim() === '') {
-        this.entries = [];
-        return;
-      }
-
-      if (this.items.length > 0 || this.isLoading) return;
-
-      this.isLoading = true;
-
-      this.fetchResults(val);
-    }
-  },
-  methods: {
-    ...mapActions(['fetchByName']),
-    fetchResults(val) {
-      // cancel pending call
+    search(val, oldVal) {
       clearTimeout(this._timerId);
 
-      // delay new call 500ms
+      // debounce - delay new calls by 500ms
       this._timerId = setTimeout(() => {
+        if (!val || val.trim() === '') {
+          this.entries = [];
+          return;
+        }
+
+        if (val !== oldVal) {
+          this.entries = [];
+        }
+
+        if (this.items.length > 0 || this.isLoading) return;
+
+        this.isLoading = true;
+
         this.fetchByName(val)
           .then(res => {
             this.entries = res.data;
           })
           .catch(() => {})
           .finally(() => (this.isLoading = false));
-      }, 200);
-    },
+      }, 500);
+    }
+  },
+  methods: {
+    ...mapActions(['fetchByName']),
     navigateTo() {
       if (this.model) {
         const route = this.model.category
