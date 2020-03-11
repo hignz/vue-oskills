@@ -48,7 +48,14 @@
             style="max-height: 345px"
             dense
           >
-            <v-list-item v-for="s in skillsIn" :key="s._id">
+            <v-list-item
+              v-for="s in skillsIn"
+              :key="s._id"
+              :to="{
+                name: 'skillProfile',
+                params: { id: s._id }
+              }"
+            >
               <v-list-item-avatar>
                 <v-icon>mdi-circle-medium</v-icon>
               </v-list-item-avatar>
@@ -60,7 +67,7 @@
           </v-list>
           <v-card-text v-else>
             <p class="text-center grey--text mt-12">
-              No users have added this skill to their profile
+              No skills found
             </p>
           </v-card-text>
         </v-card>
@@ -69,14 +76,15 @@
         <v-card height="100%" outlined>
           <v-toolbar flat dense>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
-              >Top Skills</v-toolbar-title
+              >Description</v-toolbar-title
             >
           </v-toolbar>
-          <v-card-text class="grey--text"
-            ><p class="text-center grey--text">
-              Under construction
-            </p></v-card-text
+          <v-card-text v-if="category.description" class="grey--text">
+            {{ category.description }}</v-card-text
           >
+          <v-card-text v-else class="text-center grey--text">
+            No description found
+          </v-card-text>
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
@@ -109,7 +117,6 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-
 import ActivityFeed from '../components/ActivityFeed';
 
 export default {

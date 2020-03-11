@@ -2,10 +2,13 @@
   <div>
     <v-card-title
       >Invited
+      <span class="caption ml-2 grey--text">({{ users.length }})</span>
       <v-spacer></v-spacer>
+      <InviteUserDialog @newInvite="updateUsers" />
       <v-form>
         <v-text-field
           v-model="searchTerm"
+          class="mb-5 mx-5"
           append-icon="mdi-magnify"
           label="Search"
           single-line
@@ -34,22 +37,12 @@
         </template>
 
         <template v-slot:item.action="{ item }">
-          <v-tooltip bottom>
-            <template>
-              <ResendInviteDialog :invited-user="item"></ResendInviteDialog>
-            </template>
-            <span>Resend invitation</span>
-          </v-tooltip>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-btn icon v-on="on" @click="showEditInviteDialog(item)">
-                <v-icon small>
-                  mdi-pencil
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Edit</span>
-          </v-tooltip>
+          <ResendInviteDialog :invited-user="item"></ResendInviteDialog>
+
+          <EditInviteDialog
+            :invite="item"
+            @update="emitEditInvite"
+          ></EditInviteDialog>
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <v-btn icon v-on="on" @click="showDeleteInviteDialog(item)">
@@ -64,45 +57,6 @@
       </v-data-table>
 
       <v-dialog
-        v-model="editInviteDialog"
-        width="500"
-        @input="v => v || closeEdit()"
-      >
-        <v-card>
-          <v-card-title class="headline" primary-title>
-            Edit
-          </v-card-title>
-          <v-spacer></v-spacer>
-          <v-card-text>
-            <v-divider></v-divider>
-            <v-text-field
-              v-model="email"
-              label="Email"
-              placeholder="Email"
-              class="mt-3"
-            ></v-text-field>
-            <v-select
-              v-model="role"
-              label="Role"
-              :items="['Senior Developer', 'Junior Developer']"
-            ></v-select>
-            <v-checkbox v-model="isAdmin" label="Admin"></v-checkbox>
-            <v-spacer></v-spacer>
-          </v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn text @click="closeEdit()">
-              Close
-            </v-btn>
-            <v-btn color="error" @click="editInvite(newInvite)">
-              Edit
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-
-      <v-dialog
         v-model="deleteInviteDialog"
         width="500"
         @input="v => v || closeDelete()"
@@ -111,21 +65,35 @@
           <v-card-title class="headline" primary-title>
             Are you sure?
           </v-card-title>
-          <v-divider></v-divider>
+
           <v-card-text class="mt-4">
-            Are you sure you want to delete invitation for
-            {{ deleteInvite.email }} ? This action is irreversible
+            <v-form ref="form" v-model="valid">
+              Are you sure you want to delete invitation for
+              {{ deleteInvite.email }} ? This action is irreversible
+              <p class="mt-3 mb-0">
+                Please type
+                <span class="font-weight-bold error--text">
+                  {{ deleteInvite.email }}
+                </span>
+                to confirm:
+              </p>
+              <v-text-field
+                v-model="confirmUser"
+                class="pt-0"
+                required
+              ></v-text-field>
+            </v-form>
           </v-card-text>
-
-          <v-divider></v-divider>
-
           <v-card-actions>
             <v-spacer />
-
             <v-btn text @click="closeDelete()">
               Close
             </v-btn>
-            <v-btn color="error" @click="deleteUserInvite(deleteInvite._id)">
+            <v-btn
+              color="error"
+              :disabled="!valid"
+              @click="deleteUserInvite(deleteInvite)"
+            >
               Delete
             </v-btn>
           </v-card-actions>
@@ -139,10 +107,14 @@
 import { mapActions } from 'vuex';
 import { formatDistanceToNow } from 'date-fns';
 import ResendInviteDialog from '../components/ResendInviteDialog';
+import EditInviteDialog from '../components/EditInviteDialog';
+import InviteUserDialog from '../components/InviteUserDialog';
 
 export default {
   components: {
-    ResendInviteDialog
+    ResendInviteDialog,
+    EditInviteDialog,
+    InviteUserDialog
   },
   props: {
     users: {
@@ -180,22 +152,14 @@ export default {
       ],
       newInvite: {},
       deleteInvite: {},
-      editInviteDialog: false,
       deleteInviteDialog: false,
       email: null,
       role: null,
       isAdmin: false,
-      formatDistanceToNow
+      formatDistanceToNow,
+      confirmUser: '',
+      valid: false
     };
-  },
-  watch: {
-    editInviteDialog(opened) {
-      if (opened) {
-        this.email = this.newInvite.email;
-        this.role = this.newInvite.role;
-        this.isAdmin = this.newInvite.isAdmin;
-      }
-    }
   },
   methods: {
     ...mapActions([
@@ -210,67 +174,49 @@ export default {
         params: { id: userId }
       });
     },
-    showEditInviteDialog(item) {
-      this.newInvite = item;
-      this.editInviteDialog = true;
-    },
-    editInvite(inviteData) {
-      this.updateInvite({
-        userId: inviteData._id,
-        email: this.email,
-        role: this.role,
-        isAdmin: this.isAdmin
-      })
-        .then(() => {
-          this.closeEdit();
-          this.toggleSnackbar({
-            show: true,
-            text: 'User updated successfully',
-            color: 'success'
-          });
-          this.$emit('invite', {
-            userId: inviteData._id,
-            email: this.email,
-            role: this.role,
-            isAdmin: this.isAdmin
-          });
-        })
-        .catch(err => {
-          this.toggleSnackbar({
-            show: true,
-            text: err.response.data,
-            color: 'error'
-          });
-        });
-    },
     showDeleteInviteDialog(item) {
       this.deleteInvite = item;
       this.deleteInviteDialog = true;
     },
-    deleteUserInvite(userId) {
-      this.deleteUser({ userId: userId })
-        .then(() => {
-          this.closeDelete();
-          this.toggleSnackbar({
-            show: true,
-            text: 'Invitation deleted successfully',
-            color: 'success'
+    deleteUserInvite(user) {
+      if (user.email == this.confirmUser) {
+        this.deleteUser({ userId: user._id })
+          .then(() => {
+            this.closeDelete();
+            this.toggleSnackbar({
+              show: true,
+              text: 'Invitation deleted successfully',
+              color: 'success'
+            });
+            this.$emit('invite', user._id);
+          })
+          .catch(err => {
+            this.toggleSnackbar({
+              show: true,
+              text: err.response.data.error,
+              color: 'error'
+            });
           });
-          this.$emit('invite', userId);
-        })
-        .catch(err => {
-          this.toggleSnackbar({
-            show: true,
-            text: err.response.data.error,
-            color: 'error'
-          });
+      } else {
+        this.toggleSnackbar({
+          show: true,
+          text: 'Invalid user data entered',
+          color: 'error'
         });
+      }
     },
     closeEdit() {
       this.editInviteDialog = !this.editInviteDialog;
     },
     closeDelete() {
+      this.$refs.form.reset();
       this.deleteInviteDialog = !this.deleteInviteDialog;
+    },
+    emitEditInvite(item) {
+      this.$emit('invite', item);
+    },
+    updateUsers(item) {
+      this.users.push(item);
     }
   }
 };

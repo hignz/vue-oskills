@@ -3,6 +3,9 @@
     <v-list v-if="users.length" dense two-line flat>
       <v-list-item-group>
         <v-list-item v-for="user in users" :key="user._id">
+          <v-list-item-avatar>
+            <v-icon>mdi-circle-medium</v-icon>
+          </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title v-text="user.email"></v-list-item-title>
             <v-list-item-subtitle class="grey--text">

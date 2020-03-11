@@ -71,12 +71,13 @@ export default {
   methods: {
     ...mapActions(['inviteUser', 'toggleSnackbar', 'fetchRoles']),
     onSubmit() {
+      const addInvite = {
+        email: this.email,
+        roleId: this.selectedRole._id,
+        isAdmin: this.isAdmin
+      };
       if (this.$refs.form.validate()) {
-        this.inviteUser({
-          email: this.email,
-          roleId: this.selectedRole._id,
-          isAdmin: this.isAdmin
-        })
+        this.inviteUser(addInvite)
           .then(() => {
             this.$refs.form.reset();
             this.toggleSnackbar({
@@ -84,6 +85,7 @@ export default {
               text: 'Invite has been sent',
               color: 'success'
             });
+            this.$emit('newInvite', addInvite);
           })
           .catch(err => {
             this.toggleSnackbar({

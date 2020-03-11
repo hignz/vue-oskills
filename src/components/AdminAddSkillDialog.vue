@@ -120,12 +120,12 @@ export default {
     },
     addNewSkill() {
       const archived = this.archiveSkill;
-
-      this.addSkill({
+      const addSkill = {
         name: this.skillName,
         categoryId: this.selectedCategory.categoryId,
         archived: this.archiveSkill
-      })
+      };
+      this.addSkill(addSkill)
         .then(() => {
           this.close();
           this.toggleSnackbar({
@@ -135,11 +135,7 @@ export default {
           });
 
           this.$emit('skillAdded', archived ? 0 : 1);
-          this.$emit('newSkill', {
-            name: this.skillName,
-            categoryId: this.selectedCategory.categoryId,
-            archived: this.archiveSkill
-          });
+          this.$emit('newSkill', addSkill);
         })
         .catch(err => {
           this.toggleSnackbar({

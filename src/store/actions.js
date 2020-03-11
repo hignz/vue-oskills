@@ -170,7 +170,7 @@ export default {
     });
   },
   addCategory(_, categoryData) {
-    return http.post('/category/add', { name: categoryData.name }).then(res => {
+    return http.post('/category/add', categoryData).then(res => {
       return res.data;
     });
   },

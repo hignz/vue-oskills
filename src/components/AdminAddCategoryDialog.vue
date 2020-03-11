@@ -16,6 +16,12 @@
             clearable
             required
           ></v-text-field>
+          <v-textarea
+            v-model="categoryDescription"
+            label="Description"
+            outlined
+            clearable
+          ></v-textarea>
         </v-form>
       </v-card-text>
       <v-card-actions>
@@ -38,6 +44,7 @@ export default {
   data() {
     return {
       categoryName: null,
+      categoryDescription: null,
       dialog: false,
       valid: false
     };
@@ -45,9 +52,11 @@ export default {
   methods: {
     ...mapActions(['addCategory', 'toggleSnackbar']),
     addNewCategory() {
-      this.addCategory({
-        name: this.categoryName
-      })
+      const newCategory = {
+        name: this.categoryName,
+        description: this.categoryDescription
+      };
+      this.addCategory(newCategory)
         .then(() => {
           this.close();
           this.toggleSnackbar({
@@ -56,7 +65,7 @@ export default {
             color: 'success'
           });
 
-          this.$emit('categoryAdded', name);
+          this.$emit('newCategory', newCategory);
         })
         .catch(() => {
           this.toggleSnackbar({
