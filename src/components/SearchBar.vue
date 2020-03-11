@@ -69,16 +69,25 @@ export default {
 
       this.isLoading = true;
 
-      this.fetchByName(val)
-        .then(res => {
-          this.entries = res.data;
-        })
-        .catch(() => {})
-        .finally(() => (this.isLoading = false));
+      this.fetchResults(val);
     }
   },
   methods: {
     ...mapActions(['fetchByName']),
+    fetchResults(val) {
+      // cancel pending call
+      clearTimeout(this._timerId);
+
+      // delay new call 500ms
+      this._timerId = setTimeout(() => {
+        this.fetchByName(val)
+          .then(res => {
+            this.entries = res.data;
+          })
+          .catch(() => {})
+          .finally(() => (this.isLoading = false));
+      }, 200);
+    },
     navigateTo() {
       if (this.model) {
         const route = this.model.category
