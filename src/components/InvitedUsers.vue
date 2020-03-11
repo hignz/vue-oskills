@@ -51,7 +51,7 @@
                 </v-icon>
               </v-btn>
             </template>
-            <span>Delete user</span>
+            <span>Revoke invitation</span>
           </v-tooltip>
         </template>
       </v-data-table>
@@ -68,9 +68,9 @@
 
           <v-card-text class="mt-4">
             <v-form ref="form" v-model="valid">
-              Are you sure you want to delete invitation for
+              Are you sure you want to revoke this invitation for
               {{ deleteInvite.email }} ? This action is irreversible
-              <p class="mt-3 mb-0">
+              <p class="mt-3">
                 Please type
                 <span class="font-weight-bold error--text">
                   {{ deleteInvite.email }}
@@ -79,7 +79,9 @@
               </p>
               <v-text-field
                 v-model="confirmUser"
-                class="pt-0"
+                dense
+                label="Confirm"
+                outlined
                 required
               ></v-text-field>
             </v-form>
@@ -94,7 +96,7 @@
               :disabled="!valid"
               @click="deleteUserInvite(deleteInvite)"
             >
-              Delete
+              Revoke
             </v-btn>
           </v-card-actions>
         </v-card>
