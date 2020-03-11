@@ -50,7 +50,7 @@
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <v-btn
-                      v-if="user && isAdded"
+                      v-if="user && !isAdded"
                       icon
                       small
                       color="primary"
@@ -119,14 +119,15 @@
         <v-card height="320" outlined>
           <v-toolbar flat dense>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
-              >Something will eventually go here</v-toolbar-title
+              >Description</v-toolbar-title
             >
           </v-toolbar>
           <v-card-text class="grey--text"
-            ><p class="text-center grey--text mt-12">
-              We promise
-            </p></v-card-text
-          >
+            ><p v-if="skill.description" class="text-center grey--text">
+              {{ skill.description }}
+            </p>
+            <p v-else class="text-center mt-12">Not available</p>
+          </v-card-text>
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
@@ -178,9 +179,7 @@ export default {
   computed: {
     ...mapState(['user']),
     isAdded() {
-      return (
-        !this.user.skills.filter(e => e.skillId === this.skill._id).length > 0
-      );
+      return this.user.skills.some(e => e.skill._id === this.skill._id);
     }
   },
   created() {
