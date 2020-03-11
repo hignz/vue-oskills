@@ -30,6 +30,8 @@
         show-expand
         expand-icon="mdi-chevron-down"
         :items-per-page="10"
+        sort-by="joinedAt"
+        sort-desc
       >
         <template v-slot:item.joinedAt="{ item }">
           {{ userDateJoined(item.joinedAt) }}

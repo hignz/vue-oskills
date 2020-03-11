@@ -27,6 +27,8 @@
         no-data-text="No users loaded"
         no-results-text="No users found"
         :items-per-page="10"
+        sort-by="invitedAt"
+        sort-desc
       >
         <template v-slot:item.invitedAt="{ item }">
           {{
