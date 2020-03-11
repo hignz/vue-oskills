@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div postion:relative>
     <v-card-title
       >Active
       <span class="caption ml-2 grey--text">({{ skills.length }})</span>
@@ -40,11 +40,16 @@
           <span>Archive</span>
         </v-tooltip>
         <EditSkillDialog :skill="item" @update="updateSkill"></EditSkillDialog>
-        <v-btn icon>
-          <v-icon small @click="openSkillProfile(item._id)">
-            mdi-open-in-new
-          </v-icon>
-        </v-btn>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn icon text v-on="on">
+              <v-icon small @click="openSkillProfile(item._id)">
+                mdi-open-in-new
+              </v-icon>
+            </v-btn>
+          </template>
+          <span>Skill Profile</span>
+        </v-tooltip>
       </template>
       <template v-slot:item.dateAdded="{ item }">
         {{ formatRelative(new Date(item.dateAdded), Date.now()) }}

@@ -1,53 +1,58 @@
 <template>
-  <v-dialog v-model="dialog" max-width="500" @input="v => v || close()">
-    <template v-slot:activator="{ on }">
-      <v-btn icon v-on="on">
-        <v-icon>mdi-flask-plus-outline</v-icon>
-      </v-btn>
-    </template>
-    <v-card>
-      <v-card-title class="mb-4">Add skill</v-card-title>
-      <v-card-text>
-        <v-form ref="form" v-model="valid">
-          <v-select
-            v-model="selectedCategory"
-            label="Category"
-            :items="categories"
-            item-text="categoryName"
-            item-value="categoryId"
-            :rules="requiredRules"
-            return-object
+  <placeholder>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on }">
+        <v-btn icon v-on="on" @click="dialog = !dialog">
+          <v-icon>mdi-flask-plus-outline</v-icon>
+        </v-btn>
+      </template>
+      <span>Add Skill</span>
+    </v-tooltip>
+    <v-dialog v-model="dialog" max-width="500" @input="v => v || close()">
+      <v-card>
+        <v-card-title class="mb-4">Add skill</v-card-title>
+        <v-card-text>
+          <v-form ref="form" v-model="valid">
+            <v-select
+              v-model="selectedCategory"
+              label="Category"
+              :items="categories"
+              item-text="categoryName"
+              item-value="categoryId"
+              :rules="requiredRules"
+              return-object
+            >
+            </v-select>
+            <v-checkbox
+              v-model="showArchivedCategories"
+              label="Show archived categories"
+              input-value="false"
+              value
+            ></v-checkbox>
+            <v-text-field
+              v-model="skillName"
+              label="Skill"
+              :rules="requiredRules"
+            ></v-text-field>
+            <v-checkbox
+              v-model="archiveSkill"
+              label="Archive"
+              :disabled="lockArchiveSkill"
+              input-value="false"
+              value
+            ></v-checkbox>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn text @click="close()">Close</v-btn>
+          <v-btn color="success" :disabled="!valid" @click="addNewSkill">
+            Add</v-btn
           >
-          </v-select>
-          <v-checkbox
-            v-model="showArchivedCategories"
-            label="Show archived categories"
-            input-value="false"
-            value
-          ></v-checkbox>
-          <v-text-field
-            v-model="skillName"
-            label="Skill"
-            :rules="requiredRules"
-          ></v-text-field>
-          <v-checkbox
-            v-model="archiveSkill"
-            label="Archive"
-            :disabled="lockArchiveSkill"
-            input-value="false"
-            value
-          ></v-checkbox>
-        </v-form>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-        <v-btn text @click="close()">Close</v-btn>
-        <v-btn color="success" :disabled="!valid" @click="addNewSkill">
-          Add</v-btn
-        >
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </placeholder>
 </template>
 
 <script>
