@@ -80,14 +80,26 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <v-card outlined height="100%">
+        <v-card v-if="categoryActivityData.length" outlined height="100%">
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
               >Activity</v-toolbar-title
             >
           </v-toolbar>
-          <v-card-text class="text-center grey--text" outlined>
-            <p>This category has no activity</p>
+          <ActivityFeed
+            :activity-data="categoryActivityData"
+            :is-real-time="false"
+            :height="270"
+          ></ActivityFeed>
+        </v-card>
+        <v-card v-else outlined height="320">
+          <v-toolbar dense flat>
+            <v-toolbar-title class="subtitle-2 grey--text"
+              >Activity</v-toolbar-title
+            >
+          </v-toolbar>
+          <v-card-text class="text-center grey--text">
+            <p class="mt-12">This category has no activity</p>
           </v-card-text>
         </v-card>
       </v-col>
@@ -98,11 +110,11 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 
-// import ActivityFeed from '../components/ActivityFeed';
+import ActivityFeed from '../components/ActivityFeed';
 
 export default {
   components: {
-    // ActivityFeed
+    ActivityFeed
   },
   data() {
     return {
@@ -122,6 +134,10 @@ export default {
       this.category = res.category;
       this.skillsIn = res.skillsIn;
       this.loaded = true;
+    });
+
+    this.fetchCategoryActivity(categoryId).then(res => {
+      this.categoryActivityData = res;
     });
   },
   methods: {
