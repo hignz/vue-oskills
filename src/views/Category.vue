@@ -125,7 +125,6 @@ export default {
       this.category = res.category;
       this.skillsIn = res.skillsIn;
       this.loaded = true;
-      console.log(res);
     });
   },
   methods: {
