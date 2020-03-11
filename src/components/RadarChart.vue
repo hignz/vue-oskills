@@ -141,8 +141,6 @@ export default {
       return series;
     },
     maxSkill() {
-      console.log('jhasjh');
-
       return this.series
         .map(el => el.data)
         .flat()
@@ -155,8 +153,6 @@ export default {
       this.skillCategories = res.categories;
 
       this.max = this.getMaxSkill();
-
-      console.log(this.max < 1 ? 1 : this.max);
     });
   },
   methods: {
