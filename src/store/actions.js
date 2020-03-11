@@ -170,7 +170,7 @@ export default {
     });
   },
   addCategory(_, categoryData) {
-    return http.post('/category/add', { name: categoryData.name }).then(res => {
+    return http.post('/category/add', categoryData).then(res => {
       return res.data;
     });
   },
@@ -317,6 +317,11 @@ export default {
 
     return http.get(`/category/${categoryId}`).then(res => {
       commit(constants.SET_LOADING, false);
+      return res.data;
+    });
+  },
+  fetchCategoryActivity(_, categoryId) {
+    return http.post('/activity/category', { categoryId }).then(res => {
       return res.data;
     });
   }

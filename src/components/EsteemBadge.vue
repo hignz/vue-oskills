@@ -34,7 +34,7 @@ export default {
         '#FFC914',
         '#5EEB5B',
         '#3DD6D0',
-        '#BD93F9'
+        '#961bff'
       ],
       upvoted: null
     };
@@ -52,7 +52,7 @@ export default {
     },
     color() {
       const i =
-        Math.floor(this.esteem / 5) <= 6 ? Math.floor(this.esteem / 5) : 5;
+        Math.floor(this.esteem / 5) < 6 ? Math.floor(this.esteem / 5) : 5;
       return this.colors[i];
     },
     animatedClass() {

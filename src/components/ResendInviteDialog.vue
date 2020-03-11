@@ -22,7 +22,7 @@
               value: 'email'
             },
             { text: 'Role', value: 'role.title', align: 'left' },
-            { text: 'Admin', align: 'center' }
+            { text: 'Admin', value: 'isAdmin', align: 'center' }
           ]"
           :items="[invitedUser]"
           hide-default-footer

@@ -48,23 +48,13 @@
           </v-tooltip>
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-btn icon v-on="on">
-                <v-icon small @click="openUserProfile(item._id)">
-                  mdi-open-in-new
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>User profile</span>
-          </v-tooltip>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
               <v-btn
                 v-if="item.isAdmin"
                 icon
                 v-on="on"
                 @click="promoteToAdmin(item)"
               >
-                <v-icon small>
+                <v-icon small color="primary">
                   mdi-account-star
                 </v-icon>
               </v-btn>
@@ -81,6 +71,16 @@
             </template>
             <span v-if="item.isAdmin">Demote</span>
             <span v-if="!item.isAdmin">Promote</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn icon v-on="on">
+                <v-icon small @click="openUserProfile(item._id)">
+                  mdi-open-in-new
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>User profile</span>
           </v-tooltip>
         </template>
 
@@ -148,17 +148,33 @@
           </v-card-title>
 
           <v-card-text>
-            Are you sure you want to delete {{ selectedUser.name }} ? Once you
-            delete this user this action will be irreversible
+            <v-form ref="form" v-model="valid">
+              Are you sure you want to delete {{ selectedUser.name }} ? Once you
+              delete this user this action will be irreversible
+              <p class="mt-3 mb-0">
+                Please type
+                <span class="font-weight-bold error--text">
+                  {{ selectedUser.name }}
+                </span>
+                confirm:
+              </p>
+              <v-text-field
+                v-model="confirmUser"
+                class="pt-0"
+                required
+              ></v-text-field>
+            </v-form>
           </v-card-text>
-
           <v-card-actions>
             <v-spacer />
-
             <v-btn text @click="close()">
               Close
             </v-btn>
-            <v-btn color="error" @click="removeUser(selectedUser._id)">
+            <v-btn
+              color="error"
+              :disabled="!valid"
+              @click="removeUser(selectedUser)"
+            >
               Delete
             </v-btn>
           </v-card-actions>
@@ -218,7 +234,9 @@ export default {
       ],
       selectedUser: {},
       skillCategories: [],
-      vWeight: Number
+      vWeight: Number,
+      confirmUser: '',
+      valid: false
     };
   },
   methods: {
@@ -233,26 +251,35 @@ export default {
       this.selectedUser = item;
       this.deleteDialog = true;
     },
-    removeUser(userId) {
-      this.deleteUser({ userId: userId })
-        .then(() => {
-          this.close();
-          this.toggleSnackbar({
-            show: true,
-            text: 'User deleted successfully',
-            color: 'success'
+    removeUser(selectedUser) {
+      if (selectedUser.name === this.confirmUser) {
+        this.deleteUser({ userId: selectedUser._id })
+          .then(() => {
+            this.close();
+            this.toggleSnackbar({
+              show: true,
+              text: 'User deleted successfully',
+              color: 'success'
+            });
+            this.$emit('userDeleted', selectedUser._id);
+          })
+          .catch(err => {
+            this.toggleSnackbar({
+              show: true,
+              text: err.response.data.error,
+              color: 'error'
+            });
           });
-          this.$emit('userDeleted', userId);
-        })
-        .catch(err => {
-          this.toggleSnackbar({
-            show: true,
-            text: err.response.data.error,
-            color: 'error'
-          });
+      } else {
+        this.toggleSnackbar({
+          show: true,
+          text: 'Invalid user data entered',
+          color: 'error'
         });
+      }
     },
     close() {
+      this.$refs.form.reset();
       this.deleteDialog = !this.deleteDialog;
     },
     userDateJoined(date) {
@@ -266,13 +293,13 @@ export default {
         email: user.email
       })
         .then(() => {
-          this.user.isAdmin = !this.user.isAdmin;
+          user.isAdmin = !user.isAdmin;
           this.toggleSnackbar({
             show: true,
-            text: this.user.isAdmin
-              ? `${this.user.name} has been promoted to admin`
-              : `${this.user.name} has been demoted from admin`,
-            color: this.user.isAdmin ? 'success' : 'orange darken-3'
+            text: user.isAdmin
+              ? `${user.name} has been promoted to admin`
+              : `${user.name} has been demoted from admin`,
+            color: user.isAdmin ? 'success' : 'orange darken-3'
           });
           this.$emit('admin', user);
         })

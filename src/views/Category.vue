@@ -48,7 +48,14 @@
             style="max-height: 345px"
             dense
           >
-            <v-list-item v-for="s in skillsIn" :key="s._id">
+            <v-list-item
+              v-for="s in skillsIn"
+              :key="s._id"
+              :to="{
+                name: 'skillProfile',
+                params: { id: s._id }
+              }"
+            >
               <v-list-item-avatar>
                 <v-icon>mdi-circle-medium</v-icon>
               </v-list-item-avatar>
@@ -60,7 +67,7 @@
           </v-list>
           <v-card-text v-else>
             <p class="text-center grey--text mt-12">
-              No users have added this skill to their profile
+              No skills found
             </p>
           </v-card-text>
         </v-card>
@@ -69,25 +76,38 @@
         <v-card height="100%" outlined>
           <v-toolbar flat dense>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
-              >Top Skills</v-toolbar-title
+              >Description</v-toolbar-title
             >
           </v-toolbar>
-          <v-card-text class="grey--text"
-            ><p class="text-center grey--text">
-              Under construction
-            </p></v-card-text
+          <v-card-text v-if="category.description" class="grey--text">
+            {{ category.description }}</v-card-text
           >
+          <v-card-text v-else class="text-center grey--text">
+            No description found
+          </v-card-text>
         </v-card>
       </v-col>
       <v-col cols="12" sm="12" md="4">
-        <v-card outlined height="100%">
+        <v-card v-if="categoryActivityData.length" outlined height="100%">
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
               >Activity</v-toolbar-title
             >
           </v-toolbar>
-          <v-card-text class="text-center grey--text" outlined>
-            <p>This category has no activity</p>
+          <ActivityFeed
+            :activity-data="categoryActivityData"
+            :is-real-time="false"
+            :height="270"
+          ></ActivityFeed>
+        </v-card>
+        <v-card v-else outlined height="320">
+          <v-toolbar dense flat>
+            <v-toolbar-title class="subtitle-2 grey--text"
+              >Activity</v-toolbar-title
+            >
+          </v-toolbar>
+          <v-card-text class="text-center grey--text">
+            <p class="mt-12">This category has no activity</p>
           </v-card-text>
         </v-card>
       </v-col>
@@ -97,12 +117,11 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-
-// import ActivityFeed from '../components/ActivityFeed';
+import ActivityFeed from '../components/ActivityFeed';
 
 export default {
   components: {
-    // ActivityFeed
+    ActivityFeed
   },
   data() {
     return {
@@ -122,6 +141,10 @@ export default {
       this.category = res.category;
       this.skillsIn = res.skillsIn;
       this.loaded = true;
+    });
+
+    this.fetchCategoryActivity(categoryId).then(res => {
+      this.categoryActivityData = res;
     });
   },
   methods: {

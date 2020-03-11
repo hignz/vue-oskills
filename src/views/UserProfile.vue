@@ -175,19 +175,20 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="4">
-        <v-card outlined height="380">
+        <v-card v-if="userActivity.length" outlined height="380">
           <v-toolbar flat dense>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
               >Activity</v-toolbar-title
             >
           </v-toolbar>
           <ActivityFeed
-            v-if="userActivity.length"
             :activity-data="userActivity"
             :is-real-time="false"
             :height="330"
           ></ActivityFeed>
-          <v-card-text v-else>
+        </v-card>
+        <v-card v-else outlined>
+          <v-card-text>
             <p class="text-center grey--text mt-4">
               {{ user.name }} has no activity yet
             </p>
