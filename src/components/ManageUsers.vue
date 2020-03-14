@@ -163,7 +163,7 @@
               <v-text-field
                 v-model="confirmUser"
                 class="pt-0"
-                :rules="requiredRules"
+                :rules="deleteRules"
               ></v-text-field>
             </v-form>
           </v-card-text>
@@ -175,7 +175,7 @@
             <v-btn
               color="error"
               :disabled="!valid"
-              @click="removeUser(selectedUser)"
+              @click="removeUser(selectedUser._id)"
             >
               Delete
             </v-btn>
@@ -240,7 +240,11 @@ export default {
       skillCategories: [],
       vWeight: Number,
       confirmUser: '',
-      valid: false
+      valid: false,
+      deleteRules: [
+        v => !!v || 'Required',
+        v => v === this.selectedUser.name || 'User name must match'
+      ]
     };
   },
   methods: {
@@ -256,31 +260,23 @@ export default {
       this.deleteDialog = true;
     },
     removeUser(selectedUser) {
-      if (selectedUser.name === this.confirmUser) {
-        this.deleteUser({ userId: selectedUser._id })
-          .then(() => {
-            this.close();
-            this.toggleSnackbar({
-              show: true,
-              text: 'User deleted successfully',
-              color: 'success'
-            });
-            this.$emit('userDeleted', selectedUser._id);
-          })
-          .catch(err => {
-            this.toggleSnackbar({
-              show: true,
-              text: err.response.data.error,
-              color: 'error'
-            });
+      this.deleteUser({ userId: selectedUser })
+        .then(() => {
+          this.close();
+          this.toggleSnackbar({
+            show: true,
+            text: 'User deleted successfully',
+            color: 'success'
           });
-      } else {
-        this.toggleSnackbar({
-          show: true,
-          text: 'Invalid user data entered',
-          color: 'error'
+          this.$emit('userDeleted', selectedUser);
+        })
+        .catch(err => {
+          this.toggleSnackbar({
+            show: true,
+            text: err.response.data.error,
+            color: 'error'
+          });
         });
-      }
     },
     close() {
       this.$refs.form.reset();

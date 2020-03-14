@@ -82,7 +82,7 @@
               <v-text-field
                 v-model="confirmUser"
                 class="pt-0"
-                :rules="requiredRules"
+                :rules="deleteRules"
               ></v-text-field>
             </v-form>
           </v-card-text>
@@ -94,7 +94,7 @@
             <v-btn
               color="error"
               :disabled="!valid"
-              @click="deleteUserInvite(deleteInvite)"
+              @click="deleteUserInvite(deleteInvite._id)"
             >
               Revoke
             </v-btn>
@@ -162,7 +162,11 @@ export default {
       isAdmin: false,
       formatDistanceToNow,
       confirmUser: '',
-      valid: false
+      valid: false,
+      deleteRules: [
+        v => !!v || 'Required',
+        v => v === this.deleteInvite.email || 'Email must match'
+      ]
     };
   },
   methods: {
@@ -183,31 +187,23 @@ export default {
       this.deleteInviteDialog = true;
     },
     deleteUserInvite(user) {
-      if (user.email == this.confirmUser) {
-        this.deleteUser({ userId: user._id })
-          .then(() => {
-            this.closeDelete();
-            this.toggleSnackbar({
-              show: true,
-              text: 'Invitation deleted successfully',
-              color: 'success'
-            });
-            this.$emit('invite', user._id);
-          })
-          .catch(err => {
-            this.toggleSnackbar({
-              show: true,
-              text: err.response.data.error,
-              color: 'error'
-            });
+      this.deleteUser({ userId: user })
+        .then(() => {
+          this.closeDelete();
+          this.toggleSnackbar({
+            show: true,
+            text: 'Invitation deleted successfully',
+            color: 'success'
           });
-      } else {
-        this.toggleSnackbar({
-          show: true,
-          text: 'Invalid user data entered',
-          color: 'error'
+          this.$emit('invite', user);
+        })
+        .catch(err => {
+          this.toggleSnackbar({
+            show: true,
+            text: err.response.data.error,
+            color: 'error'
+          });
         });
-      }
     },
     closeEdit() {
       this.editInviteDialog = !this.editInviteDialog;
