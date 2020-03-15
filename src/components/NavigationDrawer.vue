@@ -1,10 +1,5 @@
 <template>
-  <v-navigation-drawer
-    v-model="expandedNavDrawer"
-    :mini-variant="mini"
-    mini-variant-width="80"
-    app
-  >
+  <v-navigation-drawer mini-variant mini-variant-width="80" app>
     <v-list-item class="mt-1">
       <v-list-item-avatar size="40">
         <v-img
@@ -19,7 +14,7 @@
     </v-list-item>
 
     <v-list dense nav>
-      <v-list-item-group value="true">
+      <v-list-item-group v-model="selectedAdminItem" value="true">
         <v-list-item
           v-for="item in adminLinks"
           :key="item.title"
@@ -41,7 +36,7 @@
         </v-list-item>
       </v-list-item-group>
       <v-divider v-if="adminLinks.length" class="my-4" />
-      <v-list-item-group value="true">
+      <v-list-item-group v-model="selectedItem" value="true">
         <v-list-item
           v-for="item in memberLinks"
           :key="item.title"
@@ -75,46 +70,16 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
+import navigationItems from '../mixins/navigationItems';
 
 export default {
+  mixins: [navigationItems],
   data() {
     return {
       showDrawer: true,
       mini: true,
-      links: [
-        {
-          icon: 'mdi-account-tie',
-          text: 'Admin',
-          route: '/admin',
-          requiresAdmin: true
-        },
-        {
-          icon: 'mdi-account-details',
-          text: 'Manage',
-          route: '/manage',
-          requiresAdmin: true
-        },
-        {
-          icon: 'mdi-view-dashboard',
-          text: 'Dashboard',
-          route: '/dashboard'
-        },
-        {
-          icon: 'mdi-star-circle',
-          text: 'Skills',
-          route: '/skills'
-        },
-        {
-          icon: 'mdi-magnify',
-          text: 'Explore',
-          route: '/explore'
-        },
-        {
-          icon: 'mdi-cog',
-          text: 'Settings',
-          route: '/settings'
-        }
-      ]
+      selectedItem: null,
+      selectedAdminItem: null
     };
   },
   computed: {
@@ -130,14 +95,6 @@ export default {
     },
     memberLinks() {
       return this.links.filter(e => !e.requiresAdmin);
-    },
-    expandedNavDrawer: {
-      get: function() {
-        return this.$store.getters.expandedNavDrawer;
-      },
-      set: function(value) {
-        return this.$store.dispatch('toggleDrawer', value);
-      }
     }
   },
   methods: {

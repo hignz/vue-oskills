@@ -12,12 +12,14 @@
       <router-view :key="$route.fullPath"></router-view>
     </v-content>
     <Snackbar />
+    <BottomNavBar />
   </v-app>
 </template>
 
 <script>
 import Navbar from './components/Navbar';
 import NavigationDrawer from './components/NavigationDrawer';
+import BottomNavBar from './components/BottomNavBar';
 import Snackbar from './components/Snackbar';
 import vuetify from './plugins/vuetify';
 import { mapState, mapActions } from 'vuex';
@@ -27,7 +29,8 @@ export default {
   components: {
     Navbar,
     NavigationDrawer,
-    Snackbar
+    Snackbar,
+    BottomNavBar
   },
   computed: {
     ...mapState(['accessToken', 'loading', 'isDark', 'user'])
@@ -82,6 +85,14 @@ a {
 .theme--dark.v-data-table
   tbody
   tr:hover:not(.v-data-table__expanded__content):not(.v-data-table__empty-wrapper) {
-  background: #363b46;
+  background: #363b46 !important;
+}
+
+.link {
+  cursor: pointer;
+}
+
+.v-tooltip__content {
+  background-color: #474f57ff;
 }
 </style>
