@@ -38,6 +38,7 @@
         </template>
 
         <template v-slot:item.action="{ item }">
+          <EditUserDialog :user="item" @update="emitEditUser"></EditUserDialog>
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <v-btn icon v-on="on">
@@ -192,11 +193,13 @@ import RadarChart from '../components/RadarChart';
 import EsteemBadge from '../components/EsteemBadge';
 import { lightFormat } from 'date-fns';
 import validationRules from '../mixins/validationRules';
+import EditUserDialog from '../components/EditUserDialog';
 
 export default {
   components: {
     RadarChart,
-    EsteemBadge
+    EsteemBadge,
+    EditUserDialog
   },
   mixins: [validationRules],
   props: {
@@ -310,6 +313,9 @@ export default {
             color: 'error'
           });
         });
+    },
+    emitEditUser(item) {
+      this.$emit('update', item);
     }
   }
 };
