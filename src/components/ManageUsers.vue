@@ -64,7 +64,7 @@
                 @click="promoteToAdmin(item)"
               >
                 <v-icon small color="primary">
-                  mdi-account-star
+                  mdi-account-tie
                 </v-icon>
               </v-btn>
               <v-btn
@@ -74,7 +74,7 @@
                 @click="promoteToAdmin(item)"
               >
                 <v-icon small>
-                  mdi-account-star-outline
+                  mdi-account-tie-outline
                 </v-icon>
               </v-btn>
             </template>
