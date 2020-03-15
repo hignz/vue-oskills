@@ -16,18 +16,29 @@
                 {{ skill.name }}
               </v-row>
               <v-row
-                class="subtitle-2 grey--text link"
+                class="subtitle-2 grey--text"
                 justify="center"
                 align="center"
-                @click="openCategoryProfile(skill.category._id)"
               >
-                {{ skill.category.name }}
+                <p
+                  class="link"
+                  @click="openCategoryProfile(skill.category._id)"
+                >
+                  {{ skill.category.name }}
+                </p>
+
+                <p
+                  v-if="skill.description"
+                  class="text-center grey--text mt-md-6 mx-4"
+                >
+                  {{ skill.description }}
+                </p>
               </v-row>
 
-              <v-row class="mt-5" justify="center" align="center">
+              <v-row justify="center" align="center">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-chip class="ma-2" v-on="on">
+                    <v-chip class="ma-2" outlined v-on="on">
                       <v-icon class="pa-1 mb-1" left>mdi-account-group</v-icon>
                       {{ skill.usersWith }}
                     </v-chip>
@@ -37,9 +48,9 @@
 
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-chip class="ma-2" v-on="on">
+                    <v-chip class="ma-2" outlined v-on="on">
                       <v-icon class="pa-1" left>mdi-division</v-icon>
-                      {{ skill.averageEsteem.toFixed(1) }}
+                      {{ averageRounded }}
                     </v-chip>
                   </template>
                   <span>Average Esteem level</span>
@@ -74,7 +85,7 @@
         <v-card height="410" outlined>
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
-              >USERS WITH THIS SKILL</v-toolbar-title
+              >USERS WITH {{ skill.name }}</v-toolbar-title
             >
           </v-toolbar>
 
@@ -180,6 +191,9 @@ export default {
     ...mapState(['user']),
     isAdded() {
       return this.user.skills.some(e => e.skill._id === this.skill._id);
+    },
+    averageRounded() {
+      return Math.round(this.skill.averageEsteem * 10) / 10;
     }
   },
   created() {
@@ -235,8 +249,4 @@ export default {
 };
 </script>
 
-<style>
-.link {
-  cursor: pointer;
-}
-</style>
+<style></style>
