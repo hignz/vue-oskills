@@ -49,9 +49,9 @@
         </v-btn>
       </template>
     </v-data-table>
-    <v-dialog v-model="unarchiveDialog" width="500" @input="v => v || close()">
+    <v-dialog v-model="unarchiveDialog" width="650" @input="v => v || close()">
       <v-card>
-        <v-card-title class="headline" primary-title>
+        <v-card-title class="headline">
           Are you sure?
         </v-card-title>
 
@@ -64,15 +64,27 @@
                 text: 'Name',
                 align: 'left',
                 value: 'name'
-              }
+              },
+              { text: 'Added', value: 'dateAdded' },
+              { text: 'Archived', value: 'dateArchived' }
             ]"
             :items="[selectedCategory]"
             hide-default-footer
           >
+            <template v-slot:item.dateAdded="{ item }">
+              {{ formatRelative(new Date(item.dateAdded), Date.now()) }}
+            </template>
+            <template v-slot:item.dateArchived="{ item }">
+              {{ formatRelative(new Date(item.dateArchived), Date.now()) }}
+            </template>
           </v-data-table>
-          Are you sure you want to unarchive {{ selectedCategory.name }}? This
-          action will also unarchive all skills under this category, making them
-          available for users.
+
+          Are you sure you want to unarchive
+          <span class="font-weight-bold error--text">{{
+            selectedCategory.name
+          }}</span>
+          ? This action will also unarchive all skills under this category,
+          making them available for users.
         </v-card-text>
 
         <v-divider></v-divider>
@@ -117,7 +129,6 @@ export default {
           value: 'name'
         },
         { text: 'Archived', value: 'dateArchived' },
-
         {
           text: 'Actions',
           value: 'action',

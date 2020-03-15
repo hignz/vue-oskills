@@ -57,37 +57,37 @@
         </v-card-title>
 
         <v-card-text>
-          Are you sure you want to archive
-          <strong>{{ selectedSkill.name }}</strong
-          >? Archived skills are no longer available to users, but can be
-          unarchived at any time.
+          <v-data-table
+            class="mb-4"
+            disable-sort
+            :headers="[
+              {
+                text: 'Skill',
+                value: 'name',
+                align: 'left'
+              },
+              { text: 'Category', value: 'category.name' },
+              {
+                text: 'Added',
+                value: 'dateAdded'
+              }
+            ]"
+            :items="[selectedSkill]"
+            hide-default-footer
+          >
+            <template v-slot:item.dateAdded="{ item }">
+              {{ formatRelative(new Date(item.dateAdded), Date.now()) }}
+            </template>
+          </v-data-table>
+          <p>
+            Are you sure you want to archive
+            <span class="font-weight-bold error--text">{{
+              selectedSkill.name
+            }}</span
+            >? Archived skills are no longer available to users, but can be
+            unarchived at any time.
+          </p>
         </v-card-text>
-
-        <v-data-table
-          class="mb-4"
-          disable-sort
-          :headers="[
-            {
-              text: 'Skill',
-              value: 'name',
-              align: 'center'
-            },
-            { text: 'Category', value: 'category.name', align: 'center' },
-            {
-              text: 'Added',
-              value: 'dateAdded',
-              align: 'left'
-            }
-          ]"
-          :items="[selectedSkill]"
-          hide-default-footer
-        >
-          <template v-slot:item.dateAdded="{ item }">
-            {{ formatRelative(new Date(item.dateAdded), Date.now()) }}
-          </template>
-        </v-data-table>
-
-        <v-divider></v-divider>
 
         <v-card-actions>
           <v-spacer />

@@ -65,16 +65,26 @@
             :headers="[
               {
                 text: 'Skill',
-                align: 'center',
+                align: 'left',
                 value: 'name'
               },
-              { text: 'Category', value: 'categoryName', align: 'left' }
+              { text: 'Category', value: 'category.name', align: 'left' },
+              { text: 'Archived', value: 'dateArchived', align: 'left' }
             ]"
             :items="[selectedSkill]"
             hide-default-footer
           >
+            <template v-slot:item.dateArchived="{ item }">
+              {{ formatRelative(new Date(item.dateArchived), Date.now()) }}
+            </template>
           </v-data-table>
-          Are you sure you want to unarchive {{ selectedSkill.name }}?
+          <p>
+            Are you sure you want to unarchive
+            <span class="font-weight-bold error--text">{{
+              selectedSkill.name
+            }}</span
+            >? Unarchived skills are available to users.
+          </p>
         </v-card-text>
 
         <v-divider></v-divider>
