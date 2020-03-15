@@ -29,7 +29,12 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn class="primary" primary :disabled="!valid" type="submit"
+          <v-btn
+            class="primary"
+            primary
+            :disabled="!valid || isLoggingIn"
+            type="submit"
+            :loading="isLoggingIn"
             >Sign In</v-btn
           >
         </v-card-actions>
@@ -49,13 +54,16 @@ export default {
       valid: false,
       email: '',
       password: '',
-      hidePassword: true
+      hidePassword: true,
+      isLoggingIn: false
     };
   },
   methods: {
     ...mapActions(['doLogin', 'toggleSnackbar', 'fetchUser']),
     login() {
       if (this.$refs.loginForm.validate()) {
+        this.isLoggingIn = true;
+
         this.doLogin({
           email: this.email,
           password: this.password
@@ -77,7 +85,8 @@ export default {
               text: 'Email or password is incorrect',
               color: 'error'
             });
-          });
+          })
+          .finally(() => (this.isLoggingIn = false));
       }
     }
   }
