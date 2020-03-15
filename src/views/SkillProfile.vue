@@ -26,13 +26,6 @@
                 >
                   {{ skill.category.name }}
                 </p>
-
-                <p
-                  v-if="skill.description"
-                  class="text-center grey--text mt-md-6 mx-4"
-                >
-                  {{ skill.description }}
-                </p>
               </v-row>
 
               <v-row justify="center" align="center">
