@@ -11,7 +11,7 @@
     multi-sort
   >
     <template v-slot:item.avg="{ item }">
-      {{ round(item.avg, 1) }}
+      {{ round(item.avg) }}
     </template>
 
     <template v-slot:item.action="{ item }">
@@ -61,8 +61,8 @@ export default {
   methods: {
     ...mapActions(['fetchTopSkills']),
     initialize() {},
-    round(number, places) {
-      return number.toFixed(places);
+    round(number) {
+      return Math.round(number * 10) / 10;
     },
     openSkillProfile(skillId) {
       this.$router.push({
