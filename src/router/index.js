@@ -76,7 +76,7 @@ const routes = [
   {
     path: '/admin',
     name: 'admin',
-    component: () => import('@/views/Admin'),
+    component: () => import('@/views/AdminDashboard'),
     meta: { requiresAdmin: true }
   },
   {

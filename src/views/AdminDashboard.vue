@@ -4,13 +4,20 @@
       <v-col cols="12" sm="12" md="4">
         <v-card outlined height="100%">
           <v-card-text>
-            <p>Hello, admin</p>
-            <p>
-              Unused votes this week:
-              <span class="font-weight-bold primary--text">{{
-                stats.totalRemainingVotes[0].total
-              }}</span>
-            </p>
+            <v-row>
+              <v-col sm="12" md="6" class="py-0">
+                <p>Hello, admin</p>
+                <p>
+                  Unused votes this week:
+                  <span class="font-weight-bold primary--text">{{
+                    stats.totalRemainingVotes[0].total
+                  }}</span>
+                </p>
+              </v-col>
+              <v-col sm="12" md="6">
+                <ReportsDownloadBtn />
+              </v-col>
+            </v-row>
           </v-card-text>
         </v-card>
       </v-col>
@@ -83,14 +90,14 @@
         <v-card outlined height="100%">
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
-              >Recently invited
+              >Pending invites
             </v-toolbar-title>
           </v-toolbar>
 
-          <AdminInvitedUsers
+          <PendingInvitesList
             :users="users"
             @invited="invited"
-          ></AdminInvitedUsers>
+          ></PendingInvitesList>
         </v-card>
       </v-col>
     </v-row>
@@ -103,7 +110,7 @@
             </v-toolbar-title>
           </v-toolbar>
           <v-card-text class="py-0">
-            <Heatmap :categories="categories" :skills="userSkills" />
+            <Heatmap :categories="categories" :skills="activeSkills" />
           </v-card-text>
         </v-card>
       </v-col>
@@ -133,21 +140,23 @@ import AdminAddSkillDialog from '../components/AdminAddSkillDialog';
 import AddRoleDialog from '../components/AddRoleDialog';
 import TopSkills from '../components/TopSkills';
 import Heatmap from '../components/HeatmapChart';
-import AdminInvitedUsers from '../components/AdminInvitedUsers';
-const ActivityFeed = () => import('../components/ActivityFeed');
+import PendingInvitesList from '../components/PendingInvitesList';
+import ActivityFeed from '../components/ActivityFeed';
+import ReportsDownloadBtn from '../components/ReportsDownloadBtn';
 
 import { mapActions } from 'vuex';
 
 export default {
   components: {
-    InviteUserDialog,
+    ActivityFeed,
+    AddRoleDialog,
     AdminAddCategoryDialog,
     AdminAddSkillDialog,
-    ActivityFeed,
-    AdminInvitedUsers,
-    AddRoleDialog,
-    TopSkills,
-    Heatmap
+    InviteUserDialog,
+    Heatmap,
+    PendingInvitesList,
+    ReportsDownloadBtn,
+    TopSkills
   },
   data() {
     return {
@@ -156,7 +165,7 @@ export default {
       users: [],
       recentActivity: [],
       categories: [],
-      userSkills: []
+      activeSkills: []
     };
   },
   created() {
@@ -177,8 +186,8 @@ export default {
       this.users = response.users;
     });
 
-    this.fetchAllUserSkills().then(res => {
-      this.userSkills = res;
+    this.fetchAllActiveSkills().then(res => {
+      this.activeSkills = res;
     });
   },
   methods: {
@@ -187,7 +196,7 @@ export default {
       'fetchAdminDashboardData',
       'fetchInvitedUsersSlim',
       'fetchCategories',
-      'fetchAllUserSkills'
+      'fetchAllActiveSkills'
     ]),
     incrementSkillCount(value) {
       this.stats.skillCount += value;
