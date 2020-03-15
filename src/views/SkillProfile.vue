@@ -26,6 +26,12 @@
                 >
                   {{ skill.category.name }}
                 </p>
+
+                <v-card-text>
+                  <p class="text-center grey--text d-md-none">
+                    {{ skill.description }}
+                  </p>
+                </v-card-text>
               </v-row>
 
               <v-row justify="center" align="center">
@@ -119,7 +125,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="12" md="4">
+      <v-col cols="12" sm="12" md="4" class="d-none d-sm-flex">
         <v-card height="410" outlined>
           <v-toolbar flat dense>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
