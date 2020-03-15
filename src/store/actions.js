@@ -215,6 +215,11 @@ export default {
       return res.data;
     });
   },
+  adminUpdateUser(_, userData) {
+    return http.post('/admin/update-user', userData).then(res => {
+      return res.data;
+    });
+  },
   toggleSnackbar({ commit }, snackbarData) {
     commit(constants.TOGGLE_SNACKBAR, snackbarData);
   },
