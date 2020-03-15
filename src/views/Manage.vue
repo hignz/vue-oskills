@@ -30,6 +30,7 @@
                     :users="verifiedUsers"
                     @userDeleted="deleteUser"
                     @admin="userPromoted"
+                    @update="userUpdated"
                   />
                   <v-divider></v-divider>
                   <v-col cols="12" sm="12">
@@ -206,6 +207,16 @@ export default {
     editInvite(item) {
       this.allUsers.forEach(u => {
         if (u._id === item.userId) {
+          u.email = item.email;
+          u.role = item.role;
+          u.isAdmin = item.isAdmin;
+        }
+      });
+    },
+    userUpdated(item) {
+      this.allUsers.forEach(u => {
+        if (u._id === item.userId) {
+          u.name = item.name;
           u.email = item.email;
           u.role = item.role;
           u.isAdmin = item.isAdmin;
