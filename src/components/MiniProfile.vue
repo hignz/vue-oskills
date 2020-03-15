@@ -1,5 +1,5 @@
 <template>
-  <v-card height="320" outlined="">
+  <v-card height="320" outlined>
     <v-list-item dense @click="openProfile">
       <v-list-item-avatar>
         <v-avatar size="100%">
@@ -8,9 +8,12 @@
         </v-avatar>
       </v-list-item-avatar>
       <v-list-item-content>
-        <v-list-item-title class="title">{{ user.name }}</v-list-item-title>
+        <v-list-item-title class="title">{{ user.name }} </v-list-item-title>
         <v-list-item-subtitle>{{ user.role.title }}</v-list-item-subtitle>
       </v-list-item-content>
+      <v-icon v-if="user.isAdmin" color="white" class="mr-1"
+        >mdi-account-tie</v-icon
+      >
     </v-list-item>
 
     <v-list v-if="sortedSkills.length" dense nav>
@@ -25,7 +28,10 @@
             <EsteemBadge :esteem="skill.esteem"></EsteemBadge>
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title v-text="skill.skill.name"></v-list-item-title>
+            <v-list-item-title>{{ skill.skill.name }}</v-list-item-title>
+            <v-list-item-subtitle class="grey--text">{{
+              skill.skill.category.name
+            }}</v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-action>
             <Vote :skill="skill" @voted="updateSkills" />
@@ -88,9 +94,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.title:hover {
-  cursor: pointer;
-}
-</style>

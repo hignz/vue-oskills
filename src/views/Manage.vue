@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-card outlined>
+    <v-card outlined :loading="isLoading" loader-height="2">
       <v-tabs v-model="tab" @change="load">
         <v-tabs-slider></v-tabs-slider>
 
@@ -33,7 +33,10 @@
                   />
                   <v-divider></v-divider>
                   <v-col cols="12" sm="12">
-                    <InvitedUsers :users="invitedUsers" @invite="editInvite" />
+                    <ManageInvitedUsers
+                      :users="invitedUsers"
+                      @invite="editInvite"
+                    />
                   </v-col>
                 </v-col>
               </v-row>
@@ -109,7 +112,7 @@ import ManageArchivedSkills from '../components/ManageArchivedSkills';
 import ManageCategories from '../components/ManageCategories';
 import ArchivedCategories from '../components/ArchivedCategories';
 import ManageUsers from '../components/ManageUsers';
-import InvitedUsers from '../components/InvitedUsers';
+import ManageInvitedUsers from '../components/ManageInvitedUsers';
 import ManageRoles from '../components/ManageRoles';
 
 export default {
@@ -119,7 +122,7 @@ export default {
     ManageArchivedSkills,
     ArchivedCategories,
     ManageUsers,
-    InvitedUsers,
+    ManageInvitedUsers,
     ManageRoles
   },
   data() {
@@ -129,7 +132,8 @@ export default {
       allUsers: [],
       allRoles: [],
       loaded: false,
-      tab: null
+      tab: null,
+      isLoading: false
     };
   },
   computed: {
@@ -160,27 +164,43 @@ export default {
       'fetchAllRoles'
     ]),
     fetchUsers() {
+      this.isLoading = true;
+
       this.fetchAllUsers().then(res => {
         this.allUsers = res.users;
+
         this.loaded = true;
+        this.isLoading = false;
       });
     },
     fetchSkills() {
+      this.isLoading = true;
+
       this.fetchAllSkills().then(res => {
         this.allSkills = res.skills;
+
         this.loaded = true;
+        this.isLoading = false;
       });
     },
     fetchAllCategories() {
+      this.isLoading = true;
+
       this.fetchCategories().then(res => {
         this.allCategories = res.categories;
+
+        this.isLoading = false;
         this.loaded = true;
       });
     },
     fetchRoles() {
+      this.isLoading = true;
+
       this.fetchAllRoles().then(res => {
         this.allRoles = res.roles;
         this.loaded = true;
+
+        this.isLoading = false;
       });
     },
     unarchive(item) {

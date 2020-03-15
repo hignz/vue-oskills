@@ -1,10 +1,6 @@
 <template>
   <nav>
     <v-app-bar flat app>
-      <v-app-bar-nav-icon
-        class="d-md-none"
-        @click="toggleDrawer"
-      ></v-app-bar-nav-icon>
       <router-link to="/dashboard">
         <v-toolbar-title class="text-uppercase ml-sm-5">
           <span class="font-weight-bold primary--text">O</span>
@@ -12,7 +8,7 @@
         </v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
-      <SearchBar class="pl-6 pr-md-8" />
+      <SearchBar class="px-6" />
       <ProfileMenu />
     </v-app-bar>
   </nav>

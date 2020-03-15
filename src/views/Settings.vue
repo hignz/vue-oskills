@@ -13,7 +13,7 @@
                 <ChangePassword />
               </v-col>
               <v-col cols="12" sm="12" md="2" class="text-center">
-                <ChangeProfilePicture />
+                <UploadProfilePicture />
               </v-col>
             </v-row>
           </v-col>
@@ -51,7 +51,7 @@ import DarkThemeSwitch from '../components/DarkThemeSwitch';
 import { mapState } from 'vuex';
 import ChangeEmail from '../components/ChangeEmail';
 import ChangePassword from '../components/ChangePassword';
-import ChangeProfilePicture from '../components/ChangeProfilePicture';
+import UploadProfilePicture from '../components/UploadProfilePicture';
 
 export default {
   components: {
@@ -59,7 +59,7 @@ export default {
     DarkThemeSwitch,
     ChangePassword,
     ChangeEmail,
-    ChangeProfilePicture
+    UploadProfilePicture
   },
   data() {
     return {};

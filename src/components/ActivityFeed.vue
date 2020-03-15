@@ -1,10 +1,5 @@
 <template>
-  <!-- <v-toolbar dense flat>
-      <v-toolbar-title class="subtitle-2 grey--text">ACTIVITY</v-toolbar-title>
-      <v-spacer></v-spacer>
-    </v-toolbar> -->
-
-  <v-list dense two-line class="overflow-y-auto" :height="height">
+  <v-list dense two-line nav class="overflow-y-auto" :height="height">
     <v-list-item-group color="primary">
       <v-list-item
         v-for="(activity, i) in activities"
@@ -17,7 +12,18 @@
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title>{{ activity.message }}</v-list-item-title>
+          <v-list-item-title v-if="getSkillName(activity).length"
+            >{{ getMessage(activity)[0] }}
+            <span
+              v-if="getSkillName(activity).length"
+              class="primary--text font-weight-bold"
+              >{{ getSkillName(activity) }}</span
+            >
+            <span v-if="getMessage(activity).length">{{
+              getMessage(activity)[1]
+            }}</span>
+          </v-list-item-title>
+          <v-list-item-title v-else>{{ activity.message }}</v-list-item-title>
           <v-list-item-subtitle class="grey--text">
             {{
               formatDistanceToNow(new Date(activity.logDate), {
@@ -92,6 +98,26 @@ export default {
           : { name: 'skillProfile', params: { id: activity.skillId._id } };
 
       this.$router.push(to);
+    },
+    getSkillName(activity) {
+      let skillName;
+      if (activity.skillId && activity.skillId.name) {
+        skillName = activity.skillId.name;
+      } else if (activity.categoryId && activity.categoryId.name) {
+        skillName = activity.categoryId.name;
+      }
+
+      return skillName || '';
+    },
+    getMessage(activity) {
+      const message = activity.message;
+      const skillName = this.getSkillName(activity);
+      const indexOfSkill = message.indexOf(skillName);
+
+      return [
+        message.substring(0, indexOfSkill),
+        message.substring(indexOfSkill + skillName.length, message.length)
+      ];
     }
   }
 };

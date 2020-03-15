@@ -8,9 +8,14 @@ $oskillsDark: (
   'lighten-2': #474f57,
   'darken-1': #343a40,
 );
+$oskillsLight: (
+  'base': #ffffff,
+  'darken-1': #fafafa,
+);
 
 $colors: (
   'oskillsDark': $oskillsDark,
+  'oskillsLight': $oskillsLight
 ) !default;
 
 $material-dark: map-merge(
@@ -22,15 +27,16 @@ $material-dark: map-merge(
     'chips': map-get($oskillsDark, 'lighten-2'),
     'navigation-drawer': map-get($oskillsDark, 'base'),
     'toolbar': map-get($oskillsDark, 'lighten-1'),
+    'bottom-navigation': map-get($oskillsDark, 'lighten-1'),
   )
 );
 
 $material-light: (
-  'app-bar': #ffffff, 
-  'background': #ffffff, 
-  'navigation-drawer': #ffffff,
-  
-  'toolbar': #fafafa,
-  'cards': #fafafa,
-  'chips': #fafafa,
+  'app-bar': map-get($oskillsLight, 'base'), 
+  'background': map-get($oskillsLight, 'base'), 
+  'cards': map-get($oskillsLight, 'darken-1'),
+  'chips': map-get($oskillsLight, 'darken-1'),
+  'navigation-drawer': map-get($oskillsLight, 'base'), 
+  'toolbar': map-get($oskillsLight, 'darken-1'),
+  'bottom-navigation': map-get($oskillsLight, 'base'),
 );

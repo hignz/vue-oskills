@@ -40,7 +40,10 @@ export default {
       return {
         plotOptions: {
           bar: {
-            horizontal: false,
+            horizontal:
+              this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
+                ? false
+                : true,
             barHeight: '50%'
           }
         },
@@ -63,7 +66,7 @@ export default {
           tickAmount: this.tickCount,
           labels: {
             formatter: function(val) {
-              return Math.floor(val);
+              return val;
             }
           }
         },

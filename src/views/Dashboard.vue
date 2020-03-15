@@ -34,7 +34,7 @@
                   <template v-slot:activator="{ on }">
                     <span v-on="on">
                       Remaining votes:
-                      <span class="primary--text">{{
+                      <span class="font-weight-bold primary--text">{{
                         user.remainingVotes
                       }}</span>
                     </span>

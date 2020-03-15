@@ -18,9 +18,6 @@ export default {
   [constants.SET_LOADING](state, isLoading) {
     state.loading = isLoading;
   },
-  [constants.SET_EXPANDED_DRAWER](state, isExpanded) {
-    state.expandedNavDrawer = isExpanded;
-  },
   [constants.TOGGLE_DARK_THEME](state, value) {
     state.isDark = value;
     vuetify.framework.theme.dark = value;
@@ -30,5 +27,8 @@ export default {
     state.snackbar.show = value.show;
     state.snackbar.text = value.text;
     state.snackbar.color = value.color;
+  },
+  [constants.SET_UPLOAD_PROGRESS](state, value) {
+    state.uploadProgress = value;
   }
 };

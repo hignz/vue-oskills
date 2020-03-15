@@ -34,7 +34,14 @@
         sort-desc
       >
         <template v-slot:item.joinedAt="{ item }">
-          {{ userDateJoined(item.joinedAt) }}
+          {{ formatDate(item.joinedAt) }}
+        </template>
+
+        <template v-slot:item.isAdmin="{ item }">
+          <v-simple-checkbox
+            v-model="item.isAdmin"
+            disabled
+          ></v-simple-checkbox>
         </template>
 
         <template v-slot:item.action="{ item }">
@@ -127,9 +134,11 @@
                   no-data-text="No skills loaded"
                   no-results-text="No skills found"
                   :items-per-page="5"
+                  sort-by="esteem"
+                  sort-desc
                 >
-                  <template v-slot:item.esteem="{ item }">
-                    <EsteemBadge :esteem="item.esteem"></EsteemBadge>
+                  <template v-slot:item.esteem="{ item: i }">
+                    <EsteemBadge :esteem="i.esteem"></EsteemBadge>
                   </template>
                 </v-data-table>
               </v-col>
@@ -225,6 +234,12 @@ export default {
           value: 'role.title'
         },
         {
+          text: 'Admin',
+          align: 'center',
+          sortable: true,
+          value: 'isAdmin'
+        },
+        {
           text: 'Date Joined',
           align: 'center',
           sortable: true,
@@ -238,7 +253,6 @@ export default {
       ],
       selectedUser: {},
       skillCategories: [],
-      vWeight: Number,
       confirmUser: '',
       valid: false
     };
@@ -286,14 +300,13 @@ export default {
       this.$refs.form.reset();
       this.deleteDialog = !this.deleteDialog;
     },
-    userDateJoined(date) {
-      return lightFormat(new Date(date), 'dd-MM-yyyy');
+    formatDate(date) {
+      return lightFormat(new Date(date), 'dd/MM/yyyy');
     },
     promoteToAdmin(user) {
       this.addAdmin({
         uId: user._id,
         isAdmin: !user.isAdmin,
-        voteWeight: this.vWeight,
         email: user.email
       })
         .then(() => {
@@ -305,6 +318,7 @@ export default {
               : `${user.name} has been demoted from admin`,
             color: user.isAdmin ? 'success' : 'orange darken-3'
           });
+
           this.$emit('admin', user);
         })
         .catch(() => {

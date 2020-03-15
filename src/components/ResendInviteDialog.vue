@@ -9,7 +9,7 @@
     </template>
     <v-card>
       <v-card-title class="headline" primary-title>
-        Resend Invitation
+        Resend invitation
       </v-card-title>
       <v-card-text>
         <v-data-table
@@ -43,7 +43,7 @@
           Close
         </v-btn>
         <v-btn
-          color="error"
+          color="success"
           @click="
             resendInvite(
               invitedUser.email,
@@ -52,7 +52,7 @@
             )
           "
         >
-          Send
+          Resend
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -86,7 +86,7 @@ export default {
           this.close();
           this.toggleSnackbar({
             show: true,
-            text: 'Invite has been sent',
+            text: 'Invite has been resent',
             color: 'success'
           });
         })

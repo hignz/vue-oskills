@@ -116,7 +116,7 @@ export default {
       const data = [];
 
       let iteration = 0;
-      for (let index = 0; index < 26; index += 5) {
+      for (let index = 0; index < 40; index += 5) {
         data.push({
           x: `${index}-${index + 4}`,
           y: 0

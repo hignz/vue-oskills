@@ -18,9 +18,12 @@
           ></v-text-field>
           <v-textarea
             v-model="categoryDescription"
+            class="mt-3"
             label="Description"
             outlined
             clearable
+            auto-grow
+            counter
           ></v-textarea>
         </v-form>
       </v-card-text>

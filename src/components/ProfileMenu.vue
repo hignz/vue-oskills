@@ -5,9 +5,10 @@
     :close-on-content-click="false"
     offset-x
     max-width="300"
+    transition="slide-y-transition"
   >
-    <template v-slot:activator="{ on }" class="d-none d-md-flex">
-      <v-btn class="mr-sm-5 d-none d-md-flex mb-2" small fab v-on="on">
+    <template v-slot:activator="{ on }">
+      <v-btn class="mx-sm-5 mb-2" small fab v-on="on">
         <v-avatar>
           <v-img v-if="user.image" :src="user.image"></v-img>
           <v-icon v-else large>mdi-account-circle</v-icon>
@@ -16,7 +17,7 @@
     </template>
 
     <v-card>
-      <v-list dense two-line="">
+      <v-list dense two-line>
         <v-list-item>
           <v-list-item-avatar>
             <v-img v-if="user.image" :src="user.image" />
@@ -44,21 +45,31 @@
 
       <v-list dense>
         <v-list-item @click="toggleDarkMode()">
-          <v-list-item-icon>
+          <v-list-item-avatar>
             <v-icon>mdi-theme-light-dark</v-icon>
-          </v-list-item-icon>
+          </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>Dark mode</v-list-item-title>
           </v-list-item-content>
-          <v-list-item-action @click.stop>
+          <v-list-item-action-text @click.stop>
             <v-switch v-model="darkMode" color="primary" dense></v-switch>
-          </v-list-item-action>
+          </v-list-item-action-text>
+        </v-list-item>
+        <v-list-item @click="navigateTo('/settings')">
+          <v-list-item-avatar>
+            <v-icon>mdi-cog</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>Settings</v-list-item-title>
+          </v-list-item-content>
         </v-list-item>
         <v-list-item @click="logout">
-          <v-list-item-icon>
+          <v-list-item-avatar>
             <v-icon>mdi-logout</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-card>
@@ -92,6 +103,10 @@ export default {
     },
     toggleDarkMode() {
       this.darkMode = !this.darkMode;
+    },
+    navigateTo(path) {
+      this.menu = false;
+      this.$router.push({ path }).catch(() => {});
     }
   }
 };

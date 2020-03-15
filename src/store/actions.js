@@ -193,9 +193,6 @@ export default {
   updateUserAvatar({ commit }, url) {
     commit(constants.SET_USER_AVATAR, url);
   },
-  toggleDrawer({ commit }, showDrawer) {
-    commit(constants.SET_EXPANDED_DRAWER, showDrawer);
-  },
   toggleDarkMode({ commit }, value) {
     commit(constants.TOGGLE_DARK_THEME, value);
   },
@@ -238,8 +235,12 @@ export default {
       return res.data;
     });
   },
-  fetchAdminDashboardData() {
-    return http.get('/admin/').then(res => {
+  fetchAdminDashboardData({ commit }) {
+    commit(constants.SET_LOADING, true);
+
+    return http.get('/admin').then(res => {
+      commit(constants.SET_LOADING, false);
+
       return res.data;
     });
   },
@@ -278,17 +279,23 @@ export default {
       return res.data;
     });
   },
-  uploadProfilePicture(_, file) {
+  uploadProfilePicture({ commit }, file) {
     const formData = new FormData();
     formData.append('image', file);
-    return http.post('/upload', formData).then(res => {
-      return res.data;
-    });
-  },
-  fetchRoles() {
-    return http.get('/role').then(res => {
-      return res.data;
-    });
+    return http
+      .post('/upload', formData, {
+        onUploadProgress: ProgressEvent => {
+          commit(
+            constants.SET_UPLOAD_PROGRESS,
+            Math.round((ProgressEvent.loaded / ProgressEvent.total) * 100)
+          );
+        }
+      })
+      .then(res => {
+        commit(constants.SET_UPLOAD_PROGRESS, null);
+
+        return res.data;
+      });
   },
   fetchInvitedUsersSlim(_, amount) {
     return http
@@ -303,12 +310,12 @@ export default {
     });
   },
   fetchAllRoles() {
-    return http.get('role/').then(res => {
+    return http.get('/role').then(res => {
       return res.data;
     });
   },
-  fetchAllUserSkills() {
-    return http.get('skill/userskills').then(res => {
+  fetchAllActiveSkills() {
+    return http.get('/skill/active').then(res => {
       return res.data;
     });
   },
@@ -324,5 +331,21 @@ export default {
     return http.post('/activity/category', { categoryId }).then(res => {
       return res.data;
     });
+  },
+  fetchReport(_, type) {
+    return http
+      .get(`/admin/report?type=${type}`, { responseType: 'blob' })
+      .then(res => {
+        const fileURL = window.URL.createObjectURL(new Blob([res.data]));
+        const fileLink = document.createElement('a');
+        fileLink.href = fileURL;
+        fileLink.setAttribute('download', `oskills_report_${type}.xlsx`);
+
+        document.body.appendChild(fileLink);
+        fileLink.click();
+        document.body.removeChild(fileLink);
+
+        return res.data;
+      });
   }
 };

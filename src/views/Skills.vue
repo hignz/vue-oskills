@@ -27,6 +27,10 @@
         no-results-text="No matching skills found"
         :sort-desc="true"
       >
+        <template v-slot:item.dateAdded="{ item }">
+          {{ formatDate(item.dateAdded) }}
+        </template>
+
         <template v-slot:item.action="{ item }">
           <v-tooltip left>
             <template v-slot:activator="{ on }">
@@ -108,6 +112,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import { formatDistanceToNow } from 'date-fns';
 import AddSkillDialog from '../components/AddSkillDialog';
 import EsteemBadge from '../components/EsteemBadge';
 
@@ -131,6 +136,7 @@ export default {
         { text: 'Esteem', value: 'esteem', align: 'left' },
         { text: 'Esteem Points', value: 'rating', align: 'left' },
         { text: 'Category', value: 'skill.category.name', align: 'left' },
+        { text: 'Added', value: 'dateAdded', align: 'left' },
         { text: 'Actions', value: 'action', sortable: false, align: 'center' }
       ],
       searchTerm: '',
@@ -176,6 +182,11 @@ export default {
       this.$router.push({
         name: 'skillProfile',
         params: { id: skillId }
+      });
+    },
+    formatDate(date) {
+      return formatDistanceToNow(new Date(date), {
+        addSuffix: true
       });
     }
   }

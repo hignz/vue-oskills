@@ -1,13 +1,16 @@
 <template>
   <div>
-    <v-list v-if="users.length" dense two-line flat>
+    <v-list v-if="users.length" dense two-line flat nav>
       <v-list-item-group>
-        <v-list-item v-for="user in users" :key="user._id">
+        <v-list-item v-for="user in users" :key="user._id" class="ml-0 pl-0">
           <v-list-item-avatar>
             <v-icon>mdi-circle-medium</v-icon>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title v-text="user.email"></v-list-item-title>
+            <v-list-item-subtitle class="grey--text mb-2">
+              {{ user.role.title }}
+            </v-list-item-subtitle>
             <v-list-item-subtitle class="grey--text">
               invited
               {{
@@ -17,9 +20,9 @@
               }}</v-list-item-subtitle
             >
           </v-list-item-content>
-          <v-list-item-action-text>
+          <v-list-item-action>
             <ResendInviteDialog :invited-user="user"></ResendInviteDialog>
-          </v-list-item-action-text>
+          </v-list-item-action>
         </v-list-item>
       </v-list-item-group>
     </v-list>

@@ -28,7 +28,11 @@
           <v-list-item-title v-text="item.name"></v-list-item-title>
           <v-list-item-subtitle class="grey--text">
             {{
-              item.category ? item.category.name : item.role.title
+              item.category
+                ? item.category.name
+                : item.role
+                ? item.role.title
+                : item.name
             }}</v-list-item-subtitle
           >
         </v-list-item-content>
@@ -92,12 +96,15 @@ export default {
     navigateTo() {
       if (this.model) {
         const route = this.model.category
-          ? { name: 'skillProfile', params: { id: this.model._id } }
-          : {
-              name: 'profile',
-              params: { id: this.model._id }
-            };
-        this.$router.push(route);
+          ? 'skillProfile'
+          : this.model.role
+          ? 'profile'
+          : 'category';
+
+        this.$router
+          .push({ name: route, params: { id: this.model._id } })
+          .catch(() => {});
+
         this.$refs.form.reset();
       }
     }

@@ -19,12 +19,12 @@
               <v-row class="mt-5" justify="center" align="center">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-chip class="ma-2" v-on="on">
-                      <v-icon class="pa-1 mb-1" left>mdi-star-circle</v-icon>
+                    <v-chip class="ma-2" outlined v-on="on">
+                      <v-icon class="pa-1" left>mdi-star</v-icon>
                       {{ skillsIn.length }}
                     </v-chip>
                   </template>
-                  <span>Amount of skils in this category</span>
+                  <span>Amount of skills in this category</span>
                 </v-tooltip>
               </v-row>
             </v-col>
@@ -38,7 +38,7 @@
         <v-card height="100%" outlined>
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
-              >Skills in category</v-toolbar-title
+              >Skills in {{ category.name }}</v-toolbar-title
             >
           </v-toolbar>
 
@@ -103,7 +103,7 @@
             :height="350"
           ></ActivityFeed>
         </v-card>
-        <v-card v-else outlined height="320">
+        <v-card v-else outlined height="100%">
           <v-toolbar dense flat>
             <v-toolbar-title class="subtitle-2 grey--text"
               >Activity</v-toolbar-title
@@ -161,8 +161,4 @@ export default {
 };
 </script>
 
-<style>
-.link {
-  cursor: pointer;
-}
-</style>
+<style></style>

@@ -40,7 +40,7 @@ export default {
         { name: 'Blue', value: '#72DDF7' },
         { name: 'Purple', value: '#BD93F9' },
         { name: 'Coral', value: '#EF596F' },
-        { name: 'Orange', value: '#ffb86c' },
+        { name: 'Orange', value: '#ff3d00' },
         { name: 'Yellow', value: '#F1FA8C' }
       ]
     };
@@ -70,7 +70,7 @@ export default {
   methods: {
     changeAccentColor(c) {
       const value = c.value;
-      this.color = c.value;
+      this.color = value;
       vuetify.framework.theme.themes.dark.primary = value;
       vuetify.framework.theme.themes.light.primary = value;
       localStorage.setItem('accentColor', value);

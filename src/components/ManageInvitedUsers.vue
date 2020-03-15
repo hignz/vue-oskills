@@ -38,6 +38,13 @@
           }}
         </template>
 
+        <template v-slot:item.isAdmin="{ item }">
+          <v-simple-checkbox
+            v-model="item.isAdmin"
+            disabled
+          ></v-simple-checkbox>
+        </template>
+
         <template v-slot:item.action="{ item }">
           <ResendInviteDialog :invited-user="item"></ResendInviteDialog>
 
@@ -141,6 +148,12 @@ export default {
           align: 'center',
           sortable: true,
           value: 'role.title'
+        },
+        {
+          text: 'Admin',
+          align: 'center',
+          sortable: true,
+          value: 'isAdmin'
         },
         {
           text: 'Invited',
