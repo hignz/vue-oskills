@@ -2,7 +2,7 @@
   <v-container v-if="loaded" fluid>
     <v-row class="fill-height mt-md-12" justify="center" align="center">
       <v-col cols="12" sm="2">
-        <v-card outlined height="222">
+        <v-card outlined height="100%">
           <v-card-text class="text-center">
             <v-avatar v-if="user.image" size="128">
               <v-img :src="user.image" max-height="175" max-width="175">
@@ -33,6 +33,15 @@
               </template>
               <span>OSkills admin.</span>
             </v-tooltip>
+
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn icon @click="openEmailClient()">
+                  <v-icon v-on="on">mdi-mail</v-icon>
+                </v-btn>
+              </template>
+              <span>Email {{ user.name }}</span>
+            </v-tooltip>
           </v-card-text>
         </v-card>
       </v-col>
@@ -41,20 +50,18 @@
           <v-row align="center">
             <v-col cols="12" sm="12" md="4">
               <v-col cols="12" sm="12">
-                <v-card-text class="title pb-0">
-                  {{ user.name }}
-                </v-card-text>
-                <v-card-text>
-                  <div class="subtitle-2 grey--text">
+                <v-card-text class="title">
+                  <p class="mb-1">{{ user.name }}</p>
+                  <p class="subtitle-2 grey--text">
                     {{ user.role.title }}
-                  </div>
+                  </p>
                 </v-card-text>
               </v-col>
 
               <v-col cols="12" sm="12" class="text-center text-md-left">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-chip class="ma-2" v-on="on">
+                    <v-chip class="ma-2" outlined v-on="on">
                       <v-icon class="pa-1" left>mdi-calendar-range</v-icon>
                       {{ joinedAt }}
                     </v-chip>
@@ -63,7 +70,7 @@
                 </v-tooltip>
                 <v-tooltip v-if="bestSkill" bottom>
                   <template v-slot:activator="{ on }">
-                    <v-chip class="ma-2" v-on="on">
+                    <v-chip class="ma-2" outlined v-on="on">
                       <v-icon class="pa-1" left>mdi-star</v-icon>
                       {{ bestSkill.skill.name }}
                     </v-chip>
@@ -111,7 +118,7 @@
               v-if="user.skills.length"
               :user-skills="user.skills"
               :size="120"
-              :height="330"
+              :height="325"
               :skill-categories="skillCategories"
               class="pr-2"
             ></RadarChart>
@@ -129,17 +136,22 @@
             Skills
           </v-card-text>
           <v-list
-            v-if="categories.length"
+            v-if="skillsCategorized.length"
             subheader
             class="overflow-y-auto"
             dense
-            style="max-height: 325px"
+            style="max-height: 320px"
           >
-            <div v-for="(category, i) in categories" :key="category.name">
+            <div
+              v-for="(category, i) in skillsCategorized"
+              :key="category.name"
+            >
               <v-subheader
-                class="subtitle-2 primary--text"
+                class="subtitle-2 primary--text link"
                 inset
-                @click="navigateTo({ name: 'category', id: category._id })"
+                @click="
+                  navigateTo({ name: 'category', params: { id: category._id } })
+                "
                 >{{ category.categoryName }}</v-subheader
               >
 
@@ -164,7 +176,7 @@
                 </v-list-item-action>
               </v-list-item>
 
-              <v-divider v-if="i !== categories.length - 1"></v-divider>
+              <v-divider v-if="i !== skillsCategorized.length - 1"></v-divider>
             </div>
           </v-list>
           <v-card-text v-else>
@@ -175,7 +187,7 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="4">
-        <v-card v-if="userActivity.length" outlined height="380">
+        <v-card v-if="userActivity.length" outlined height="375">
           <v-toolbar flat dense>
             <v-toolbar-title class="subtitle-2 grey--text text-uppercase"
               >Activity</v-toolbar-title
@@ -184,7 +196,7 @@
           <ActivityFeed
             :activity-data="userActivity"
             :is-real-time="false"
-            :height="330"
+            :height="325"
           ></ActivityFeed>
         </v-card>
         <v-card v-else outlined>
@@ -227,17 +239,29 @@ export default {
   },
   computed: {
     ...mapGetters(['getUser']),
-    categories() {
-      const arr = [
-        ...new Set(this.user.skills.flat().map(el => el.skill.category.name))
-      ];
+    skillsCategorized() {
+      const uniqueCategories = this.user.skills
+        .filter(
+          (v, i, a) =>
+            a.findIndex(t => t.skill.category._id === v.skill.category._id) ===
+            i
+        )
+        .map(el => {
+          return {
+            name: el.skill.category.name,
+            _id: el.skill.category._id
+          };
+        });
 
-      const categories = arr.map(el => ({
-        categoryName: el,
-        skills: this.user.skills.filter(elm => elm.skill.category.name === el)
+      const arr = uniqueCategories.map(el => ({
+        _id: el._id,
+        categoryName: el.name,
+        skills: this.user.skills.filter(
+          elm => elm.skill.category.name === el.name
+        )
       }));
 
-      return categories;
+      return arr;
     },
     joinedAt() {
       return lightFormat(new Date(this.user.joinedAt), 'dd-MM-yyyy');
@@ -292,6 +316,9 @@ export default {
       this.user.skills = this.user.skills.map(el =>
         el._id === skill._id ? skill : el
       );
+    },
+    openEmailClient() {
+      location.href = `mailto:${this.user.email}`;
     }
   }
 };
