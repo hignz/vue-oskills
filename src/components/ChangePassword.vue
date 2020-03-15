@@ -38,6 +38,7 @@
       hint="Make sure it's at least 8 characters."
       :append-icon="hidePasswordConfirm ? 'mdi-eye-off' : 'mdi-eye'"
       :type="hidePasswordConfirm ? 'password' : 'text'"
+      counter
       required
       @click:append="hidePasswordConfirm = !hidePasswordConfirm"
     >

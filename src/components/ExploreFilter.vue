@@ -6,7 +6,7 @@
           <v-icon color="grey" class="pb-1">
             mdi-account-search
           </v-icon>
-          Discover</span
+          Find</span
         >
       </v-col>
     </v-row>
@@ -57,6 +57,7 @@
             text
             color="primary"
             :loading="searching"
+            :disabled="!valid"
             @click="doSearch()"
             >Search</v-btn
           >

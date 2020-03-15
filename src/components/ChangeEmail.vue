@@ -24,28 +24,26 @@
       @click="showNewEmailInput = !showNewEmailInput"
       >Change email</v-btn
     >
-    <div class="">
-      <v-btn-toggle dense class="ml-7">
-        <v-btn
-          v-if="showNewEmailInput"
-          text
-          @click="showNewEmailInput = !showNewEmailInput"
-        >
-          <v-icon color="error">
-            mdi-close
-          </v-icon>
-        </v-btn>
-        <v-btn
-          v-if="showNewEmailInput"
-          color="success"
-          text
-          block
-          :disabled="!valid"
-          @click="showNewEmailInput = !showNewEmailInput"
-          >Update</v-btn
-        >
-      </v-btn-toggle>
-    </div>
+    <v-btn-toggle dense class="ml-7 mt-4">
+      <v-btn
+        v-if="showNewEmailInput"
+        text
+        @click="showNewEmailInput = !showNewEmailInput"
+      >
+        <v-icon color="error">
+          mdi-close
+        </v-icon>
+      </v-btn>
+      <v-btn
+        v-if="showNewEmailInput"
+        color="success"
+        text
+        block
+        :disabled="!valid"
+        @click="showNewEmailInput = !showNewEmailInput"
+        >Update</v-btn
+      >
+    </v-btn-toggle>
   </v-form>
 </template>
 
