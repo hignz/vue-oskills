@@ -5,56 +5,64 @@
         <v-col cols="12" sm="12" md="12">
           <v-row justify="center" align="center">
             <v-col cols="12" sm="12" md="4">
-              <v-row justify="center" align="center" class="mb-6">
-                <v-avatar color="primary" size="62">
-                  <span v-if="skill.name" class="white--text headline">{{
-                    skill.name[0]
-                  }}</span>
-                </v-avatar>
-              </v-row>
-              <v-row class="subheading-1" justify="center" align="center">
-                {{ skill.name }}
-              </v-row>
-              <v-row
-                class="subtitle-2 grey--text"
-                justify="center"
-                align="center"
-              >
-                <p
-                  class="link"
-                  @click="openCategoryProfile(skill.category._id)"
+              <v-card-text class="text-center">
+                <v-row justify="center" align="center" class="mb-5">
+                  <v-avatar color="primary" size="62">
+                    <span class="secondary--text headline">{{
+                      skill.name[0]
+                    }}</span>
+                  </v-avatar>
+                </v-row>
+                <v-icon ref="skillIcon" class="mb-4" color="primary" x-large
+                  >mdi-{{ iconName }}</v-icon
                 >
-                  {{ skill.category.name }}
-                </p>
+                <v-icon ref="skillIcon" class="mb-4" color="primary" x-large
+                  >mdi-language-{{ iconName }}</v-icon
+                >
+                <v-row class="subtitle-1" justify="center" align="center">
+                  {{ skill.name }}
+                </v-row>
+                <v-row
+                  class="subtitle-2 grey--text"
+                  justify="center"
+                  align="center"
+                >
+                  <p
+                    class="link"
+                    @click="openCategoryProfile(skill.category._id)"
+                  >
+                    {{ skill.category.name }}
+                  </p>
 
-                <v-card-text>
-                  <p class="text-center grey--text d-md-none">
+                  <p class="grey--text d-md-none">
                     {{ skill.description }}
                   </p>
-                </v-card-text>
-              </v-row>
+                </v-row>
 
-              <v-row justify="center" align="center">
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-chip class="ma-2" outlined v-on="on">
-                      <v-icon class="pa-1 mb-1" left>mdi-account-group</v-icon>
-                      {{ skill.usersWith }}
-                    </v-chip>
-                  </template>
-                  <span>Amount of users with this skill</span>
-                </v-tooltip>
+                <v-row justify="center" align="center">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-chip class="ma-2" outlined v-on="on">
+                        <v-icon class="pa-1 mb-1" left
+                          >mdi-account-group</v-icon
+                        >
+                        {{ skill.usersWith }}
+                      </v-chip>
+                    </template>
+                    <span>Amount of users with this skill</span>
+                  </v-tooltip>
 
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-chip class="ma-2" outlined v-on="on">
-                      <v-icon class="pa-1" left>mdi-division</v-icon>
-                      {{ averageRounded }}
-                    </v-chip>
-                  </template>
-                  <span>Average Esteem level</span>
-                </v-tooltip>
-              </v-row>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-chip class="ma-2" outlined v-on="on">
+                        <v-icon class="pa-1" left>mdi-division</v-icon>
+                        {{ averageRounded }}
+                      </v-chip>
+                    </template>
+                    <span>Average Esteem level</span>
+                  </v-tooltip>
+                </v-row>
+              </v-card-text>
 
               <v-row align="center" justify="center" class="mt-2">
                 <v-tooltip bottom>
@@ -193,6 +201,9 @@ export default {
     },
     averageRounded() {
       return Math.round(this.skill.averageEsteem * 10) / 10;
+    },
+    iconName() {
+      return this.skill.name.toLowerCase().replace(/\./g, '');
     }
   },
   created() {
