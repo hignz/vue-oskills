@@ -28,7 +28,7 @@
             <v-tooltip v-if="user.isAdmin" bottom>
               <template v-slot:activator="{ on }">
                 <v-icon class="pa-1" left color="primary" v-on="on"
-                  >mdi-account-tie</v-icon
+                  >mdi-shield-account</v-icon
                 >
               </template>
               <span>OSkills admin.</span>
