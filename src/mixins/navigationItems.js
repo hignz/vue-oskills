@@ -3,8 +3,8 @@ export default {
     return {
       links: [
         {
-          icon: 'mdi-account-tie',
-          iconOutline: 'mdi-account-tie-outline',
+          icon: 'mdi-shield-account',
+          iconOutline: 'mdi-shield-account-outline',
           text: 'Admin',
           route: '/admin',
           requiresAdmin: true

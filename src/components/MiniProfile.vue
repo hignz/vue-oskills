@@ -12,7 +12,7 @@
         <v-list-item-subtitle>{{ user.role.title }}</v-list-item-subtitle>
       </v-list-item-content>
       <v-icon v-if="user.isAdmin" color="white" class="mr-1"
-        >mdi-account-tie</v-icon
+        >mdi-shield-account</v-icon
       >
     </v-list-item>
 

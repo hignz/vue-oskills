@@ -37,7 +37,7 @@
       <v-card-actions>
         <v-spacer />
         <v-btn text @click="close()">Close</v-btn>
-        <v-btn color="primary" :disabled="!valid" @click="onSubmit"
+        <v-btn color="primary" :disabled="!valid" @click="onSubmit()"
           >Invite</v-btn
         >
       </v-card-actions>
@@ -63,13 +63,13 @@ export default {
   },
   watch: {
     dialog: function() {
-      this.fetchRoles().then(res => {
+      this.fetchAllRoles().then(res => {
         this.roles = res.roles;
       });
     }
   },
   methods: {
-    ...mapActions(['inviteUser', 'toggleSnackbar', 'fetchRoles']),
+    ...mapActions(['inviteUser', 'toggleSnackbar', 'fetchAllRoles']),
     onSubmit() {
       const addInvite = {
         email: this.email,

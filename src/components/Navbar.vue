@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <v-app-bar flat app>
+    <v-app-bar flat app :hide-on-scroll="isMobile">
       <router-link to="/dashboard">
         <v-toolbar-title class="text-uppercase ml-sm-5">
           <span class="font-weight-bold primary--text">O</span>
@@ -30,7 +30,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['accessToken'])
+    ...mapGetters(['accessToken']),
+    isMobile() {
+      return this.$vuetify.breakpoint.xs ? true : false;
+    }
   },
   methods: {
     toggleDrawer() {

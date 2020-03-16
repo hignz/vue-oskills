@@ -64,11 +64,35 @@
           Are you sure?
         </v-card-title>
 
-        <v-card-text class="text-center">
-          Are you sure you want to archive
-          <strong>{{ selectedCategory.name }}</strong
-          >? This action will also archive all skills under this category, thus
-          rendering them unavailable to users.
+        <v-card-text>
+          <v-data-table
+            class="mb-4"
+            disable-sort
+            :headers="[
+              {
+                text: 'Name',
+                align: 'left',
+                sortable: true,
+                value: 'name'
+              },
+              { text: 'Added', value: 'dateAdded' }
+            ]"
+            :items="[selectedCategory]"
+            hide-default-footer
+          >
+            <template v-slot:item.dateAdded="{ item }">
+              {{ formatRelative(new Date(item.dateAdded), Date.now()) }}
+            </template>
+          </v-data-table>
+
+          <p>
+            Are you sure you want to archive
+            <span class="font-weight-bold error--text">{{
+              selectedCategory.name
+            }}</span
+            >? This action will also archive all skills under this category,
+            thus rendering them unavailable to users.
+          </p>
         </v-card-text>
 
         <v-divider></v-divider>

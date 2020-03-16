@@ -27,7 +27,7 @@ $material-dark: map-merge(
     'chips': map-get($oskillsDark, 'lighten-2'),
     'navigation-drawer': map-get($oskillsDark, 'base'),
     'toolbar': map-get($oskillsDark, 'lighten-1'),
-    'bottom-navigation': map-get($oskillsDark, 'lighten-1'),
+    'bottom-navigation': map-get($oskillsDark, 'base'),
   )
 );
 

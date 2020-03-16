@@ -21,7 +21,7 @@
             <v-tooltip v-if="user.admin" bottom>
               <template v-slot:activator="{ on }">
                 <v-chip class="ma-2" v-on="on">
-                  <v-icon class="pa-1" left>mdi-account-tie</v-icon>
+                  <v-icon class="pa-1" left>mdi-shield-account</v-icon>
                   Admin
                 </v-chip>
               </template>
