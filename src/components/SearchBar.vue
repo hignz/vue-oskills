@@ -20,20 +20,13 @@
     >
       <template v-slot:item="{ item }">
         <v-list-item-avatar>
-          <v-icon v-if="item.category">mdi-star</v-icon>
-          <v-img v-else-if="item.image" :src="item.image"></v-img>
-          <v-icon v-else>mdi-account</v-icon>
+          <v-img v-if="item.image" :src="item.image"></v-img>
+          <v-icon v-else>{{ getIcon(item) }}</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title v-text="item.name"></v-list-item-title>
           <v-list-item-subtitle class="grey--text">
-            {{
-              item.category
-                ? item.category.name
-                : item.role
-                ? item.role.title
-                : item.name
-            }}</v-list-item-subtitle
+            {{ getItemSubtitle(item) }}</v-list-item-subtitle
           >
         </v-list-item-content>
       </template>
@@ -107,6 +100,31 @@ export default {
 
         this.$refs.form.reset();
       }
+    },
+    getIconName(name) {
+      if (!name) return undefined;
+      return this.$vuetify.icons.values[
+        name
+          .toLowerCase()
+          .replace(/\./g, '')
+          .replace(/\s/g, '')
+      ];
+    },
+    getItemSubtitle(item) {
+      return item.category
+        ? item.category.name
+        : item.role
+        ? item.role.title
+        : item.name;
+    },
+    getIcon(item) {
+      return this.getIconName(item.name)
+        ? this.getIconName(item.name)
+        : item.category
+        ? 'mdi-star'
+        : !item.image && item.name && !item.cateogry
+        ? 'mdi-school'
+        : 'mdi-account';
     }
   }
 };
