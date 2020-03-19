@@ -7,18 +7,19 @@
             <v-col cols="12" sm="12" md="4">
               <v-card-text class="text-center">
                 <v-row justify="center" align="center" class="mb-5">
-                  <v-avatar color="primary" size="62">
+                  <v-icon
+                    v-if="iconName && iconName.length"
+                    ref="skillIcon"
+                    color="primary"
+                    x-large
+                    >{{ iconName }}</v-icon
+                  >
+                  <v-avatar v-else color="primary" size="62">
                     <span class="secondary--text headline">{{
                       skill.name[0]
                     }}</span>
                   </v-avatar>
                 </v-row>
-                <v-icon ref="skillIcon" class="mb-4" color="primary" x-large
-                  >mdi-{{ iconName }}</v-icon
-                >
-                <v-icon ref="skillIcon" class="mb-4" color="primary" x-large
-                  >mdi-language-{{ iconName }}</v-icon
-                >
                 <v-row class="subtitle-1" justify="center" align="center">
                   {{ skill.name }}
                 </v-row>
@@ -203,7 +204,12 @@ export default {
       return Math.round(this.skill.averageEsteem * 10) / 10;
     },
     iconName() {
-      return this.skill.name.toLowerCase().replace(/\./g, '');
+      return this.$vuetify.icons.values[
+        this.skill.name
+          .toLowerCase()
+          .replace(/\./g, '')
+          .replace(/\s/g, '')
+      ];
     }
   },
   created() {
