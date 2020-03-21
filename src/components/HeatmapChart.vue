@@ -38,11 +38,12 @@ export default {
         },
         plotOptions: {
           heatmap: {
-            shadeIntensity: 0,
+            enableShades: false,
+            distributed: true,
             colorScale: {
               ranges: [
                 {
-                  from: -1,
+                  from: 0,
                   to: 1,
                   color: this.isDark ? '#282c34' : '#fafafa',
                   name: 'low'
