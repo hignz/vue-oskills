@@ -1,6 +1,7 @@
 <template>
   <v-form ref="form" class="mt-7 mr-md-8" @submit.prevent>
     <v-autocomplete
+      ref="autocomplete"
       v-model="model"
       clearable
       autocomplete="off"
@@ -99,6 +100,7 @@ export default {
           .catch(() => {});
 
         this.$refs.form.reset();
+        this.$refs.autocomplete.blur();
       }
     },
     getIconName(name) {
