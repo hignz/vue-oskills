@@ -3,11 +3,12 @@
     <v-card-title
       >Registered
       <span class="caption ml-2 grey--text">({{ users.length }})</span>
-
       <v-spacer></v-spacer>
+      <InviteUserDialog />
       <v-form>
         <v-text-field
           v-model="searchTerm"
+          class="mb-5 mx-5"
           append-icon="mdi-magnify"
           label="Search registered..."
           single-line
@@ -197,15 +198,17 @@
 
 <script>
 import { mapActions } from 'vuex';
+import { lightFormat } from 'date-fns';
 import RadarChart from '../components/RadarChart';
 import EsteemBadge from '../components/EsteemBadge';
-import { lightFormat } from 'date-fns';
+import InviteUserDialog from '../components/InviteUserDialog';
 import validationRules from '../mixins/validationRules';
 
 export default {
   components: {
     RadarChart,
-    EsteemBadge
+    EsteemBadge,
+    InviteUserDialog
   },
   mixins: [validationRules],
   props: {

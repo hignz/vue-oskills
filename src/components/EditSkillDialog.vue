@@ -15,30 +15,28 @@
       <v-form ref="form" v-model="valid" @submit.prevent="onSubmit">
         <v-card-title class="mb-4">Edit Skill</v-card-title>
         <v-card-text>
+          <v-text-field
+            v-model="name"
+            label="Name"
+            :rules="requiredRules"
+            prepend-icon="mdi-pencil"
+            clearable
+          ></v-text-field>
           <v-select
             v-model="category"
             label="Category"
             :items="skillCategories"
             item-text="text"
             item-value="value"
-            prepend-inner-icon="mdi-playlist-star"
+            prepend-icon="mdi-playlist-star"
             return-object
             required
           ></v-select>
-          <v-text-field
-            v-model="name"
-            label="Name"
-            :rules="requiredRules"
-            prepend-inner-icon="mdi-square-edit-outline"
-            clearable
-          ></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn text @click="close()">Close</v-btn>
-          <v-btn color="success" :disabled="!valid" type="submit"
-            >Edit Skill</v-btn
-          >
+          <v-btn color="success" :disabled="!valid" type="submit">Edit</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>

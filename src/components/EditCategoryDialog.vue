@@ -19,6 +19,7 @@
           <v-text-field
             v-model="name"
             label="Name"
+            prepend-icon="mdi-pencil"
             :rules="requiredRules"
             clearable
           ></v-text-field>
@@ -27,9 +28,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn text @click="close()">Close</v-btn>
-          <v-btn color="success" :disabled="!valid" type="submit"
-            >Edit Name</v-btn
-          >
+          <v-btn color="success" :disabled="!valid" type="submit">Edit</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
