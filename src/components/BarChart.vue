@@ -44,11 +44,16 @@ export default {
               this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
                 ? false
                 : true,
-            barHeight: '50%'
+            barHeight: '50%',
+            dataLabels: {
+              position: 'top',
+              maxItems: 100,
+              orientation: 'horizontal'
+            }
           }
         },
         dataLabels: {
-          enabled: false
+          enabled: true
         },
         theme: {
           mode: this.isDark ? 'dark' : 'light'
@@ -73,7 +78,7 @@ export default {
         colors: [localStorage.getItem('accentColor')],
 
         fill: {
-          opacity: 0.5,
+          opacity: 0.7,
           colors: [localStorage.getItem('accentColor')]
         },
         tooltip: {
