@@ -124,8 +124,8 @@ export default {
         ? this.getIconName(item.name)
         : item.category
         ? 'mdi-star'
-        : !item.image && item.name && !item.cateogry
-        ? 'mdi-school'
+        : !item.image && !item.category && item.name && !item.role
+        ? 'mdi-playlist-star'
         : 'mdi-account';
     }
   }
