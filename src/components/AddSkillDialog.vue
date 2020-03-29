@@ -132,10 +132,10 @@ export default {
             color: 'success'
           });
         })
-        .catch(() => {
+        .catch(res => {
           this.toggleSnackbar({
             show: true,
-            text: 'Something went wrong',
+            text: res.message,
             color: 'error'
           });
         })
