@@ -35,6 +35,18 @@ export default new Vuetify({
     }
   },
   icons: {
-    iconfont: 'mdi'
+    iconfont: 'mdi',
+    values: {
+      javascript: 'mdi-language-javascript',
+      java: 'mdi-language-java',
+      nodejs: 'mdi-nodejs',
+      docker: 'mdi-docker',
+      php: 'mdi-language-php',
+      vuejs: 'mdi-vuejs',
+      awssns: 'mdi-aws',
+      awslambda: 'mdi-aws',
+      react: 'mdi-react',
+      kubernetes: 'mdi-kubernetes'
+    }
   }
 });

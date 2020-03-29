@@ -94,7 +94,6 @@
               <v-row v-if="loaded" justify="center" align="center">
                 <v-col cols="12" sm="12">
                   <ManageRoles :roles="allRoles" @roleAdded="updateRoles" />
-                  <v-divider></v-divider>
                 </v-col>
               </v-row>
             </v-tab-item>

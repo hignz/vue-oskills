@@ -38,6 +38,7 @@
             clearable
             multiple
             dense
+            :disabled="!selectedCategory"
             small-chips
             outlined
             return-object

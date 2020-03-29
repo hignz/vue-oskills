@@ -73,7 +73,7 @@ export default {
         },
         colors: [localStorage.getItem('accentColor'), '#BD93F9'],
         fill: {
-          opacity: 0.5
+          opacity: 0.7
         },
         markers: {
           size: 3,

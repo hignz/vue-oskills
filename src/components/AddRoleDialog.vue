@@ -30,6 +30,7 @@
             label="Vote weight"
             type="number"
             dense
+            min="1"
             thumb-label
           />
         </v-form>

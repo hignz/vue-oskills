@@ -178,7 +178,7 @@ export default {
       this.recentActivity = res;
     });
 
-    this.fetchCategories().then(res => {
+    this.fetchCategoriesArchived(false).then(res => {
       this.categories = res.categories;
     });
 
@@ -195,7 +195,7 @@ export default {
       'fetchRecentActivity',
       'fetchAdminDashboardData',
       'fetchInvitedUsersSlim',
-      'fetchCategories',
+      'fetchCategoriesArchived',
       'fetchAllActiveSkills'
     ]),
     incrementSkillCount(value) {

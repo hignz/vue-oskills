@@ -30,7 +30,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            class="primary"
+            class="primary black--text"
             primary
             :disabled="!valid || isLoggingIn"
             type="submit"
